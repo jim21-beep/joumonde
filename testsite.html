@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joumonde - Premium Fashion Shop - Old Money & Streetwear</title>
+    <link rel="icon" type="image/png" href="assets/images/Zeichenfläche 1.png">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <!-- Navigation Bar (Schnelleiste) -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <img src="assets/images/joumonde.png" alt="Joumonde Logo" class="logo-image">
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#old-money">Old Money</a></li>
+                <li><a href="#streetwear">Streetwear</a></li>
+                <li><a href="#about">Über Uns</a></li>
+                <li><a href="#contact">Kontakt</a></li>
+            </ul>
+            <div class="nav-icons">
+                <select class="currency-selector" id="currency-selector" onchange="changeCurrency(this.value)">
+                    <option value="CHF" selected>CHF</option>
+                    <option value="EUR">EUR</option>
+                    <option value="USD">USD</option>
+                </select>
+                <select class="language-selector" id="language-selector" onchange="changeLanguage(this.value)">
+                    <option value="de" selected>DE</option>
+                    <option value="en">EN</option>
+                    <option value="fr">FR</option>
+                </select>
+                <button class="search-btn" aria-label="Suche" onclick="toggleSearch()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </button>
+                <button class="wishlist-btn" aria-label="Wunschliste" onclick="toggleWishlist()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    <span class="wishlist-count">0</span>
+                </button>
+                <button class="account-btn" aria-label="Konto" onclick="toggleAccount()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </button>
+                <button class="cart-btn" aria-label="Warenkorb" onclick="toggleCart()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <img src="assets/images/Zeichenfläche 1.png" alt="JM Logo" class="hero-logo">
+            <h2>Entdecke Deinen Style</h2>
+            <p>Premium Fashion - Von klassischem Old Money bis modernem Streetwear</p>
+            <button class="cta-btn" onclick="document.getElementById('old-money').scrollIntoView({behavior: 'smooth'})">Jetzt Shoppen</button>
+        </div>
+    </section>
+
+    <!-- Old Money Collection -->
+    <section id="old-money" class="collection-section">
+        <div class="container">
+            <img src="assets/images/joumonde.png" alt="Joumonde" class="section-logo">
+            <h2 class="section-title">Old Money Collection</h2>
+            <p class="section-subtitle">Zeitlose Eleganz und klassischer Luxus</p>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-image" style="background: linear-gradient(135deg, #f5f5dc 0%, #d3d3d3 100%);">
+                        <span class="product-badge badge-new">NEU</span>
+                        <button class="product-wishlist-btn" onclick="toggleWishlistItem('Klassischer Blazer', 79.99, 'linear-gradient(135deg, #f5f5dc 0%, #d3d3d3 100%)', this)">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
+                        <span class="product-placeholder">Bild</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Klassischer Blazer</h3>
+                        <p class="product-description">Eleganter Woll-Blazer in Navy</p>
+                        <div class="product-rating">
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="rating-count">(48)</span>
+                        </div>
+                        <p class="product-price" data-price="79.99">CHF 79.90</p>
+                        <div class="size-selector">
+                            <label>Größe:</label>
+                            <select class="size-select">
+                                <option>S</option>
+                                <option selected>M</option>
+                                <option>L</option>
+                                <option>XL</option>
+                            </select>
+                            <a class="size-guide-link" onclick="openSizeGuide()">Größentabelle</a>
+                        </div>
+                        <button class="add-to-cart-btn" onclick="addToCart('Klassischer Blazer', 79.99)">In den Warenkorb</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ffffff 0%, #e8e8e8 100%);">
+                        <button class="product-wishlist-btn" onclick="toggleWishlistItem('Polo Hemd', 34.99, 'linear-gradient(135deg, #ffffff 0%, #e8e8e8 100%)', this)">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
+                        <span class="product-placeholder">Bild</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Polo Hemd</h3>
+                        <p class="product-description">Premium Baumwolle in Weiß</p>
+                        <div class="product-rating">
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star">★</span>
+                            <span class="rating-count">(32)</span>
+                        </div>
+                        <p class="product-price" data-price="34.99">CHF 34.90</p>
+                        <div class="size-selector">
+                            <label>Größe:</label>
+                            <select class="size-select">
+                                <option>S</option>
+                                <option selected>M</option>
+                                <option>L</option>
+                                <option>XL</option>
+                            </select>
+                            <a class="size-guide-link" onclick="openSizeGuide()">Größentabelle</a>
+                        </div>
+                        <button class="add-to-cart-btn" onclick="addToCart('Polo Hemd', 34.99)">In den Warenkorb</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image" style="background: linear-gradient(135deg, #8b7355 0%, #6b5645 100%);">
+                        <span class="product-badge badge-sale">SALE -20%</span>
+                        <button class="product-wishlist-btn" onclick="toggleWishlistItem('Chino Hose', 51.99, 'linear-gradient(135deg, #8b7355 0%, #6b5645 100%)', this)">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
+                        <span class="product-placeholder">Bild</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Chino Hose</h3>
+                        <p class="product-description">Slim-Fit in Khaki</p>
+                        <div class="product-rating">
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="rating-count">(56)</span>
+                        </div>
+                        <p class="product-price" data-price="51.99" data-original-price="64.99"><span class="old-price">CHF 64.90</span> CHF 51.90</p>
+                        <div class="size-selector">
+                            <label>Größe:</label>
+                            <select class="size-select">
+                                <option>30</option>
+                                <option>32</option>
+                                <option selected>34</option>
+                                <option>36</option>
+                            </select>
+                            <a class="size-guide-link" onclick="openSizeGuide()">Größentabelle</a>
+                        </div>
+                        <button class="add-to-cart-btn" onclick="addToCart('Chino Hose', 51.99)">In den Warenkorb</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image" style="background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);">
+                        <button class="product-wishlist-btn" onclick="toggleWishlistItem('Strickpullover', 89.99, 'linear-gradient(135deg, #2c3e50 0%, #1a252f 100%)', this)">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
+                        <span class="product-placeholder">Bild</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Strickpullover</h3>
+                        <p class="product-description">Kaschmir in Dunkelblau</p>
+                        <div class="product-rating">
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star">★</span>
+                            <span class="rating-count">(41)</span>
+                        </div>
+                        <p class="product-price" data-price="89.99">CHF 89.90</p>
+                        <div class="size-selector">
+                            <label>Größe:</label>
+                            <select class="size-select">
+                                <option>S</option>
+                                <option selected>M</option>
+                                <option>L</option>
+                                <option>XL</option>
+                            </select>
+                            <a class="size-guide-link" onclick="openSizeGuide()">Größentabelle</a>
+                        </div>
+                        <button class="add-to-cart-btn" onclick="addToCart('Strickpullover', 89.99)">In den Warenkorb</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Streetwear Collection -->
+    <section id="streetwear" class="collection-section streetwear-section">
+        <div class="container">
+            <img src="assets/images/Zeichenfläche 1.png" alt="JM" class="section-logo section-logo-jm">
+            <h2 class="section-title">Streetwear Collection</h2>
+            <p class="section-subtitle">Urban Fashion mit Attitude</p>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-image" style="background: linear-gradient(135deg, #000000 0%, #434343 100%);">
+                        <span class="product-badge badge-limited">LIMITED</span>
+                        <button class="product-wishlist-btn" onclick="toggleWishlistItem('Oversized Hoodie', 49.99, 'linear-gradient(135deg, #000000 0%, #434343 100%)', this)">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
+                        <span class="product-placeholder">Bild</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Oversized Hoodie</h3>
+                        <p class="product-description">Premium Cotton in Schwarz</p>
+                        <div class="product-rating">
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="rating-count">(89)</span>
+                        </div>
+                        <p class="product-price" data-price="49.99">CHF 49.90</p>
+                        <div class="size-selector">
+                            <label>Größe:</label>
+                            <select class="size-select">
+                                <option>S</option>
+                                <option>M</option>
+                                <option selected>L</option>
+                                <option>XL</option>
+                            </select>
+                            <a class="size-guide-link" onclick="openSizeGuide()">Größentabelle</a>
+                        </div>
+                        <button class="add-to-cart-btn" onclick="addToCart('Oversized Hoodie', 49.99)">In den Warenkorb</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);">
+                        <span class="product-badge badge-new">NEU</span>
+                        <button class="product-wishlist-btn" onclick="toggleWishlistItem('Graphic T-Shirt', 24.99, 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%)', this)">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
+                        <span class="product-placeholder">Bild</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Graphic T-Shirt</h3>
+                        <p class="product-description">Limited Edition Print</p>
+                        <div class="product-rating">
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star">★</span>
+                            <span class="rating-count">(23)</span>
+                        </div>
+                        <p class="product-price" data-price="24.99">CHF 24.90</p>
+                        <div class="size-selector">
+                            <label>Größe:</label>
+                            <select class="size-select">
+                                <option>S</option>
+                                <option selected>M</option>
+                                <option>L</option>
+                                <option>XL</option>
+                            </select>
+                            <a class="size-guide-link" onclick="openSizeGuide()">Größentabelle</a>
+                        </div>
+                        <button class="add-to-cart-btn" onclick="addToCart('Graphic T-Shirt', 24.99)">In den Warenkorb</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image" style="background: linear-gradient(135deg, #4a69bd 0%, #3c5aa6 100%);">
+                        <button class="product-wishlist-btn" onclick="toggleWishlistItem('Cargo Pants', 59.99, 'linear-gradient(135deg, #4a69bd 0%, #3c5aa6 100%)', this)">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
+                        <span class="product-placeholder">Bild</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Cargo Pants</h3>
+                        <p class="product-description">Multi-Pocket Design</p>
+                        <div class="product-rating">
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="rating-count">(67)</span>
+                        </div>
+                        <p class="product-price" data-price="59.99">CHF 59.90</p>
+                        <div class="size-selector">
+                            <label>Größe:</label>
+                            <select class="size-select">
+                                <option>30</option>
+                                <option selected>32</option>
+                                <option>34</option>
+                                <option>36</option>
+                            </select>
+                            <a class="size-guide-link" onclick="openSizeGuide()">Größentabelle</a>
+                        </div>
+                        <button class="add-to-cart-btn" onclick="addToCart('Cargo Pants', 59.99)">In den Warenkorb</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                        <button class="product-wishlist-btn" onclick="toggleWishlistItem('Trainerhose', 44.99, 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', this)">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
+                        <span class="product-placeholder">Bild</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Trainerhose</h3>
+                        <p class="product-description">Perfekt für Tracksuit Kombination</p>
+                        <div class="product-rating">
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star">★</span>
+                            <span class="rating-count">(76)</span>
+                        </div>
+                        <p class="product-price" data-price="44.99">CHF 44.90</p>
+                        <div class="size-selector">
+                            <label>Größe:</label>
+                            <select class="size-select">
+                                <option>S</option>
+                                <option>M</option>
+                                <option selected>L</option>
+                                <option>XL</option>
+                            </select>
+                            <a class="size-guide-link" onclick="openSizeGuide()">Größentabelle</a>
+                        </div>
+                        <button class="add-to-cart-btn" onclick="addToCart('Trainerhose', 44.99)">In den Warenkorb</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2 class="section-title">Über Uns</h2>
+            <div class="about-content">
+                <p>Willkommen bei Joumonde - Ihrer Destination für exklusive Mode. Wir vereinen die zeitlose Eleganz des Old Money Styles mit der dynamischen Energie moderner Streetwear.</p>
+                <p>Unsere Mission ist es, hochwertige Fashion für jeden Geschmack anzubieten - von klassischer Raffinesse bis zu urbaner Coolness.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2 class="section-title">Über Joumonde</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Unsere Geschichte</h3>
+                    <p>Joumonde wurde 2025 mit der Vision gegründet, zeitlose Eleganz mit modernem Streetwear zu verbinden. Unser Name vereint das französische "Jour" (Tag) mit "Monde" (Welt) - jeden Tag die Welt der Mode neu interpretieren.</p>
+                    <p>Wir glauben an Qualität, Nachhaltigkeit und zeitloses Design. Jedes unserer Stücke wird sorgfältig ausgewählt und kombiniert Old Money Ästhetik mit urbaner Streetwear-Kultur.</p>
+                </div>
+                <div class="about-values">
+                    <div class="value-item">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+                        <h4>Premium Qualität</h4>
+                        <p>Hochwertige Materialien und erstklassige Verarbeitung</p>
+                    </div>
+                    <div class="value-item">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                        <h4>Nachhaltigkeit</h4>
+                        <p>Verantwortungsvolle Produktion und faire Arbeitsbedingungen</p>
+                    </div>
+                    <div class="value-item">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                        <h4>Kundenservice</h4>
+                        <p>Persönliche Beratung und erstklassiger Support</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+        <div class="container">
+            <h2 class="section-title">Das sagen unsere Kunden</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                    </div>
+                    <p class="testimonial-text">"Hervorragende Qualität und perfekte Passform! Der Blazer ist jeden Cent wert. Fühle mich wie ein Gentleman."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MS</div>
+                        <div>
+                            <p class="author-name">Markus S.</p>
+                            <p class="author-location">Zürich, Schweiz</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                    </div>
+                    <p class="testimonial-text">"Die Streetwear-Kollektion ist einfach fire! Premium Qualität zu fairen Preisen. Delivery war super schnell."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">LM</div>
+                        <div>
+                            <p class="author-name">Laura M.</p>
+                            <p class="author-location">Basel, Schweiz</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-rating">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                    </div>
+                    <p class="testimonial-text">"Endlich ein Shop, der Old Money Style versteht! Der Kundenservice ist ausgezeichnet und die Retoure war problemlos."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">TK</div>
+                        <div>
+                            <p class="author-name">Thomas K.</p>
+                            <p class="author-location">Genf, Schweiz</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instagram Feed Section -->
+    <section class="instagram-section">
+        <div class="container">
+            <h2 class="section-title">Folge uns auf Instagram @joumonde</h2>
+            <div class="instagram-grid">
+                <div class="insta-item">
+                    <div class="insta-placeholder">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    </div>
+                    <div class="insta-overlay">
+                        <div class="insta-stats">
+                            <span>❤️ 234</span>
+                            <span>💬 12</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="insta-item">
+                    <div class="insta-placeholder">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    </div>
+                    <div class="insta-overlay">
+                        <div class="insta-stats">
+                            <span>❤️ 189</span>
+                            <span>💬 8</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="insta-item">
+                    <div class="insta-placeholder">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    </div>
+                    <div class="insta-overlay">
+                        <div class="insta-stats">
+                            <span>❤️ 312</span>
+                            <span>💬 18</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="insta-item">
+                    <div class="insta-placeholder">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    </div>
+                    <div class="insta-overlay">
+                        <div class="insta-stats">
+                            <span>❤️ 267</span>
+                            <span>💬 15</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="insta-item">
+                    <div class="insta-placeholder">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    </div>
+                    <div class="insta-overlay">
+                        <div class="insta-stats">
+                            <span>❤️ 445</span>
+                            <span>💬 24</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="insta-item">
+                    <div class="insta-placeholder">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    </div>
+                    <div class="insta-overlay">
+                        <div class="insta-stats">
+                            <span>❤️ 198</span>
+                            <span>💬 9</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="faq-section">
+        <div class="container">
+            <h2 class="section-title">Häufig gestellte Fragen</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Wie lange dauert der Versand?</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Innerhalb der Schweiz beträgt die Lieferzeit 1-3 Werktage. Für internationale Sendungen 5-7 Werktage. Express-Versand ist gegen Aufpreis verfügbar.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Welche Zahlungsmethoden akzeptieren Sie?</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Wir akzeptieren TWINT, Kreditkarte (Visa, Mastercard), PayPal, Rechnung (Klarna) und Vorkasse.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Kann ich Artikel zurücksenden?</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Ja, Sie haben 14 Tage Rückgaberecht ab Erhalt der Ware. Artikel müssen ungetragen und mit Etikett sein. Retouren sind innerhalb der Schweiz kostenlos.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Wie fallen die Größen aus?</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Unsere Größen entsprechen den europäischen Standards. Bei jedem Produkt finden Sie eine detaillierte Größentabelle. Bei Fragen beraten wir Sie gerne persönlich.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Sind die Produkte nachhaltig produziert?</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Ja, Nachhaltigkeit ist uns wichtig. Wir arbeiten nur mit Lieferanten zusammen, die faire Arbeitsbedingungen und umweltfreundliche Produktionsmethoden garantieren.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Gibt es einen Newsletter-Rabatt?</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Ja! Bei Anmeldung zu unserem Newsletter erhalten Sie 10% Rabatt auf Ihre erste Bestellung sowie exklusive Angebote und frühzeitigen Zugang zu neuen Kollektionen.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shipping Info Section -->
+    <section id="shipping" class="shipping-section">
+        <div class="container">
+            <h2 class="section-title">Versand & Retouren</h2>
+            <div class="shipping-grid">
+                <div class="shipping-card">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                    <h3>Versandkosten</h3>
+                    <ul>
+                        <li><strong>Schweiz:</strong> CHF 7.90 (Gratis ab CHF 100.-)</li>
+                        <li><strong>EU:</strong> CHF 15.90 (Gratis ab CHF 150.-)</li>
+                        <li><strong>Express:</strong> +CHF 12.-</li>
+                    </ul>
+                </div>
+                <div class="shipping-card">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    <h3>Lieferzeiten</h3>
+                    <ul>
+                        <li><strong>Schweiz:</strong> 1-3 Werktage</li>
+                        <li><strong>EU:</strong> 5-7 Werktage</li>
+                        <li><strong>Express:</strong> 24h (CH) / 2-3 Tage (EU)</li>
+                    </ul>
+                </div>
+                <div class="shipping-card">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                    <h3>Rückgaberecht</h3>
+                    <ul>
+                        <li><strong>14 Tage</strong> Rückgaberecht</li>
+                        <li><strong>Kostenlos</strong> in der Schweiz</li>
+                        <li>Artikel ungetragen mit Etikett</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <h2 class="section-title">Kontakt</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <h3>Email</h3>
+                    <p>info@joumonde.com</p>
+                </div>
+                <div class="contact-item">
+                    <h3>Telefon</h3>
+                    <p>+41 44 123 45 67</p>
+                </div>
+                <div class="contact-item">
+                    <h3>Adresse</h3>
+                    <p>Bahnhofstrasse 123<br>8001 Zürich, Schweiz</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 3rem;">
+                <button onclick="openContactForm()" class="contact-cta-btn">Nachricht senden</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form Modal -->
+    <div class="contact-modal" id="contact-modal">
+        <div class="contact-modal-content">
+            <button class="contact-close" onclick="closeContactForm()">&times;</button>
+            <h2>Kontaktformular</h2>
+            <form class="contact-form" onsubmit="submitContactForm(event)">
+                <div class="form-group">
+                    <input type="text" placeholder="Name *" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Email *" required>
+                </div>
+                <div class="form-group">
+                    <input type="tel" placeholder="Telefon">
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="Betreff *" required>
+                </div>
+                <div class="form-group">
+                    <textarea placeholder="Ihre Nachricht *" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="submit-contact-btn">Nachricht senden</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="assets/images/joumonde.png" alt="Joumonde Logo" class="footer-logo">
+                    <p>Premium Fashion Shop</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="#old-money">Old Money</a></li>
+                        <li><a href="#streetwear">Streetwear</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Informationen</h4>
+                    <ul>
+                        <li><a href="#about">Über Uns</a></li>
+                        <li><a href="#contact">Kontakt</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#shipping">Versand & Retouren</a></li>
+                        <li><a href="#">AGB</a></li>
+                        <li><a href="#">Datenschutz</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Newsletter</h4>
+                    <p>Erhalte exklusive Angebote & Neuigkeiten</p>
+                    <form class="newsletter-form" onsubmit="submitNewsletter(event)">
+                        <input type="email" id="newsletter-email" placeholder="Deine E-Mail" required>
+                        <button type="submit">Abonnieren</button>
+                    </form>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Instagram"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                        <a href="#" aria-label="Facebook"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+                        <a href="#" aria-label="TikTok"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a>
+                    </div>
+                </div>
+            </div>
+            <div class="trust-badges">
+                <div class="badge-item">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <span>SSL Verschlüsselt</span>
+                </div>
+                <div class="badge-item">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    <span>Sichere Zahlung</span>
+                </div>
+                <div class="badge-item">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    <span>Schneller Versand</span>
+                </div>
+                <div class="badge-item">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    <span>14 Tage Rückgaberecht</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Joumonde. Alle Rechte vorbehalten.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Sidebar -->
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h2>Warenkorb</h2>
+            <button class="close-cart-btn" onclick="toggleCart()">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <p class="empty-cart-message">Ihr Warenkorb ist leer</p>
+        </div>
+        <div class="cart-footer">
+            <button class="clear-cart-btn" onclick="clearCart()">Warenkorb leeren</button>
+            <div class="cart-total">
+                <span>Gesamt:</span>
+                <span id="cart-total">CHF 0.00</span>
+            </div>
+            <button class="checkout-btn" onclick="openCheckout()">Zur Kasse</button>
+        </div>
+    </div>
+
+    <!-- Chatbot Widget -->
+    <div class="chatbot-widget" id="chatbot-widget">
+        <div class="chatbot-header" onclick="toggleChatbot()">
+            <span>💬 Hilfe?</span>
+        </div>
+        <div class="chatbot-content" id="chatbot-content">
+            <div class="chatbot-content-header">
+                <span>Chat Support</span>
+                <button class="chatbot-close-btn" onclick="toggleChatbot()">&times;</button>
+            </div>
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="bot-message">
+                    <p>Hallo! Wie kann ich Ihnen helfen?</p>
+                </div>
+            </div>
+            <div class="chatbot-input-area">
+                <input type="text" id="chatbot-input" placeholder="Nachricht eingeben..." onkeypress="handleChatKeypress(event)">
+                <button onclick="sendChatMessage()">Senden</button>
+            </div>
+            <div class="chatbot-footer">
+                <button class="reset-chat-btn" onclick="resetConversation()">🔄 Neue Konversation starten</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wishlist Sidebar -->
+    <div id="wishlist-sidebar" class="cart-sidebar wishlist-sidebar">
+        <div class="cart-header">
+            <h2>Wunschliste</h2>
+            <button class="close-cart-btn" onclick="toggleWishlist()">&times;</button>
+        </div>
+        <div class="cart-items" id="wishlist-items">
+            <div class="empty-cart">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <p>Deine Wunschliste ist leer</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Modal -->
+    <div id="account-modal" class="contact-modal account-modal">
+        <div class="contact-modal-content">
+            <button class="contact-close" onclick="toggleAccount()">&times;</button>
+            <div class="account-tabs">
+                <button class="account-tab active" onclick="switchAccountTab('login')">Anmelden</button>
+                <button class="account-tab" onclick="switchAccountTab('register')">Registrieren</button>
+            </div>
+            
+            <div id="login-form" class="account-form">
+                <h2>Willkommen zurück</h2>
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <input type="email" placeholder="E-Mail *" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" placeholder="Passwort *" required>
+                    </div>
+                    <div class="form-group" style="text-align: left;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem;">
+                            <input type="checkbox"> Angemeldet bleiben
+                        </label>
+                    </div>
+                    <button type="submit" class="btn-primary">Anmelden</button>
+                    <p style="text-align: center; margin-top: 1rem; font-size: 0.9rem;">
+                        <a href="#" style="color: var(--gold); text-decoration: underline;">Passwort vergessen?</a>
+                    </p>
+                </form>
+            </div>
+
+            <div id="register-form" class="account-form" style="display: none;">
+                <h2>Konto erstellen</h2>
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <input type="text" placeholder="Vorname *" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="Nachname *" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="E-Mail *" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" placeholder="Passwort *" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" placeholder="Passwort wiederholen *" required>
+                    </div>
+                    <div class="form-group" style="text-align: left;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem;">
+                            <input type="checkbox" required> Ich akzeptiere die <a href="#" style="color: var(--gold); text-decoration: underline;">AGB</a> und <a href="#" style="color: var(--gold); text-decoration: underline;">Datenschutz</a>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn-primary">Registrieren</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Size Guide Modal -->
+    <div id="size-guide-modal" class="contact-modal">
+        <div class="contact-modal-content">
+            <button class="contact-close" onclick="closeSizeGuide()">&times;</button>
+            <h2>Größentabelle</h2>
+            <div class="size-guide-content">
+                <table class="size-table">
+                    <thead>
+                        <tr>
+                            <th>Größe</th>
+                            <th>Brust (cm)</th>
+                            <th>Taille (cm)</th>
+                            <th>Hüfte (cm)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>XS</td>
+                            <td>86-89</td>
+                            <td>66-69</td>
+                            <td>92-95</td>
+                        </tr>
+                        <tr>
+                            <td>S</td>
+                            <td>90-93</td>
+                            <td>70-73</td>
+                            <td>96-99</td>
+                        </tr>
+                        <tr>
+                            <td>M</td>
+                            <td>94-97</td>
+                            <td>74-77</td>
+                            <td>100-103</td>
+                        </tr>
+                        <tr>
+                            <td>L</td>
+                            <td>98-101</td>
+                            <td>78-81</td>
+                            <td>104-107</td>
+                        </tr>
+                        <tr>
+                            <td>XL</td>
+                            <td>102-105</td>
+                            <td>82-85</td>
+                            <td>108-111</td>
+                        </tr>
+                        <tr>
+                            <td>XXL</td>
+                            <td>106-110</td>
+                            <td>86-90</td>
+                            <td>112-116</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 1.5rem; text-align: center; font-size: 0.9rem;">
+                    Deine Größe nicht dabei? <a href="#" onclick="openContactForm(); closeSizeGuide();" style="color: var(--gold); text-decoration: underline;">Schicke uns deine Wunschgröße</a> und wir kümmern uns darum.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookie Banner -->
+    <div id="cookie-banner" class="cookie-banner">
+        <div class="cookie-content">
+            <div class="cookie-text">
+                <h3>🍪 Cookies & Datenschutz</h3>
+                <p>Wir verwenden Cookies, um dir das beste Einkaufserlebnis zu bieten. Mit dem Klick auf "Akzeptieren" stimmst du der Verwendung aller Cookies zu.</p>
+            </div>
+            <div class="cookie-buttons">
+                <button onclick="acceptCookies()" class="btn-accept">Alle akzeptieren</button>
+                <button onclick="rejectCookies()" class="btn-reject">Nur notwendige</button>
+                <a href="#" style="color: var(--gold); text-decoration: underline; white-space: nowrap;">Mehr erfahren</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top" onclick="scrollToTop()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="19" x2="12" y2="5"></line>
+            <polyline points="5 12 12 5 19 12"></polyline>
+        </svg>
+    </button>
+
+    <script src="assets/js/script.js"></script>
+
+</body>
+</html>
