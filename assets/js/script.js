@@ -1,3 +1,192 @@
+// Dropdown-Logik für alle Old Money Produkte
+function toggleBlazerColorDropdown() {
+    const btn = document.getElementById('blazer-color-dropdown-btn');
+    const list = document.getElementById('blazer-color-dropdown-list');
+    const expanded = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', !expanded);
+    list.style.display = expanded ? 'none' : 'block';
+}
+function toggleChinoColorDropdown() {
+    const btn = document.getElementById('chino-color-dropdown-btn');
+    const list = document.getElementById('chino-color-dropdown-list');
+    const expanded = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', !expanded);
+    list.style.display = expanded ? 'none' : 'block';
+}
+function togglePulloverColorDropdown() {
+    const btn = document.getElementById('pullover-color-dropdown-btn');
+    const list = document.getElementById('pullover-color-dropdown-list');
+    const expanded = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', !expanded);
+    list.style.display = expanded ? 'none' : 'block';
+}
+function togglePoloColorDropdown() {
+    const btn = document.getElementById('polo-color-dropdown-btn');
+    const list = document.getElementById('polo-color-dropdown-list');
+    const expanded = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', !expanded);
+    list.style.display = expanded ? 'none' : 'block';
+}
+
+// Schließe alle Dropdowns bei Klick außerhalb
+document.addEventListener('click', function(e) {
+    const dropdowns = [
+        ['blazer-color-dropdown-btn', 'blazer-color-dropdown-list'],
+        ['chino-color-dropdown-btn', 'chino-color-dropdown-list'],
+        ['pullover-color-dropdown-btn', 'pullover-color-dropdown-list'],
+        ['polo-color-dropdown-btn', 'polo-color-dropdown-list'],
+        ['hoodie-color-dropdown-btn', 'hoodie-color-dropdown-list']
+    ];
+    dropdowns.forEach(([btnId, listId]) => {
+        const btn = document.getElementById(btnId);
+        const list = document.getElementById(listId);
+        if (!btn || !list) return;
+        if (!btn.contains(e.target) && !list.contains(e.target)) {
+            btn.setAttribute('aria-expanded', 'false');
+            list.style.display = 'none';
+        }
+    });
+});
+// Farbauswahl Dropdown für Hoodie
+function toggleHoodieColorDropdown() {
+    const btn = document.getElementById('hoodie-color-dropdown-btn');
+    const list = document.getElementById('hoodie-color-dropdown-list');
+    const expanded = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', !expanded);
+    list.style.display = expanded ? 'none' : 'block';
+}
+
+function selectHoodieColorDropdown(color, hex, label) {
+    // Set global value
+    window.selectedHoodieColor = label;
+    // Update color square
+    document.getElementById('hoodie-color-square').style.background = hex;
+    // Update label
+    document.getElementById('hoodie-color-selected-label').textContent = label;
+    // Close dropdown
+    document.getElementById('hoodie-color-dropdown-list').style.display = 'none';
+    document.getElementById('hoodie-color-dropdown-btn').setAttribute('aria-expanded', 'false');
+    // Produktbild-Hintergrund anpassen
+    var bgMap = {
+        black: 'linear-gradient(135deg, #000000 0%, #434343 100%)',
+        white: 'linear-gradient(135deg, #ffffff 0%, #e8e8e8 100%)',
+        gray: 'linear-gradient(135deg, #808080 0%, #b0b0b0 100%)',
+        navy: 'linear-gradient(135deg, #001f3f 0%, #223355 100%)',
+        olive: 'linear-gradient(135deg, #556B2F 0%, #7a9a5b 100%)',
+        beige: 'linear-gradient(135deg, #f5f5dc 0%, #e0dbc3 100%)'
+    };
+    var descMap = {
+        black: 'Premium Cotton in Schwarz',
+        white: 'Premium Cotton in Weiß',
+        gray: 'Premium Cotton in Grau',
+        navy: 'Premium Cotton in Navy',
+        olive: 'Premium Cotton in Olive',
+        beige: 'Premium Cotton in Beige'
+    };
+    var imgMap = {
+        black: 'assets/images/hoodie-mockup.png',
+        white: 'assets/images/hoodie-mockup-white.png',
+        gray: 'assets/images/hoodie-mockup-gray.png',
+        navy: 'assets/images/hoodie-mockup-navy.png',
+        olive: 'assets/images/hoodie-mockup-olive.png',
+        beige: 'assets/images/hoodie-mockup-beige.png'
+    };
+    // Setze Hintergrund
+    var hoodieImage = document.getElementById('hoodie-image');
+    if (hoodieImage && bgMap[color]) hoodieImage.style.background = bgMap[color];
+    // Setze Beschreibung
+    var desc = document.getElementById('hoodie-desc');
+    if (desc && descMap[color]) desc.textContent = descMap[color];
+    // Setze Bild (wenn vorhanden)
+    var img = document.getElementById('hoodie-img');
+    if (img && imgMap[color]) img.src = imgMap[color];
+}
+
+// Dropdown schließt bei Klick außerhalb
+document.addEventListener('click', function(e) {
+    const btn = document.getElementById('hoodie-color-dropdown-btn');
+    const list = document.getElementById('hoodie-color-dropdown-list');
+    if (!btn || !list) return;
+    if (!btn.contains(e.target) && !list.contains(e.target)) {
+        btn.setAttribute('aria-expanded', 'false');
+        list.style.display = 'none';
+    }
+});
+// Farbauswahl für Blazer (Old Money)
+window.selectedBlazerColor = 'Schwarz';
+function selectBlazerColor(color) {
+    const colorLabel = document.getElementById('blazer-color-label');
+    let colorName = 'Schwarz';
+    switch (color) {
+        case 'white': colorName = 'Weiß'; break;
+        case 'navy': colorName = 'Navy'; break;
+        case 'gray': colorName = 'Grau'; break;
+        case 'beige': colorName = 'Beige'; break;
+        case 'burgundy': colorName = 'Burgundy'; break;
+        case 'camel': colorName = 'Camel'; break;
+    }
+    colorLabel.textContent = 'Farbe: ' + colorName;
+    window.selectedBlazerColor = colorName;
+}
+// Elegante Farbauswahl für Hoodie (Streetwear)
+window.selectedHoodieColor = 'Schwarz';
+function selectHoodieColor(color, btn) {
+    const hoodieImg = document.getElementById('hoodie-img');
+    const hoodieImageDiv = document.getElementById('hoodie-image');
+    const colorLabel = document.getElementById('hoodie-color-label');
+    const desc = document.getElementById('hoodie-desc');
+    let colorName = 'Schwarz';
+    let bg = 'linear-gradient(135deg, #000000 0%, #434343 100%)';
+    let img = 'assets/images/hoodie-mockup.png';
+    let descText = 'Premium Cotton in Schwarz';
+    switch (color) {
+        case 'white':
+            colorName = 'Weiß';
+            bg = 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)';
+            img = 'assets/images/hoodie-mockup-white.png';
+            descText = 'Premium Cotton in Weiß';
+            break;
+        case 'gray':
+            colorName = 'Grau';
+            bg = 'linear-gradient(135deg, #808080 0%, #b0b0b0 100%)';
+            img = 'assets/images/hoodie-mockup-gray.png';
+            descText = 'Premium Cotton in Grau';
+            break;
+        case 'navy':
+            colorName = 'Navy';
+            bg = 'linear-gradient(135deg, #001f3f 0%, #3a3a60 100%)';
+            img = 'assets/images/hoodie-mockup-navy.png';
+            descText = 'Premium Cotton in Navy';
+            break;
+        case 'olive':
+            colorName = 'Olive';
+            bg = 'linear-gradient(135deg, #556B2F 0%, #8FBC8F 100%)';
+            img = 'assets/images/hoodie-mockup-olive.png';
+            descText = 'Premium Cotton in Olive';
+            break;
+        case 'beige':
+            colorName = 'Beige';
+            bg = 'linear-gradient(135deg, #f5f5dc 0%, #e9e4c9 100%)';
+            img = 'assets/images/hoodie-mockup-beige.png';
+            descText = 'Premium Cotton in Beige';
+            break;
+    }
+    hoodieImageDiv.style.background = bg;
+    hoodieImg.src = img;
+    colorLabel.textContent = 'Farbe: ' + colorName;
+    if (desc) desc.textContent = descText;
+    window.selectedHoodieColor = colorName;
+
+    // Swatch-Highlight: Nur ein Button aktiv
+    document.querySelectorAll('.hoodie-swatches .color-swatch-btn').forEach(b => b.classList.remove('selected'));
+    if (btn) btn.classList.add('selected');
+}
+
+// Initial-Highlight für Schwarz setzen
+document.addEventListener('DOMContentLoaded', function() {
+    const firstBtn = document.querySelector('.hoodie-swatches .color-swatch-btn[data-color="black"]');
+    if (firstBtn) firstBtn.classList.add('selected');
+});
 // Shopping Cart State
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let currentCurrency = localStorage.getItem('currency') || 'CHF';
@@ -49,7 +238,7 @@ const translations = {
         sweaterDesc: 'Kaschmir in Dunkelblau',
         oversizedHoodie: 'Oversized Hoodie',
         hoodieDesc: 'Premium Cotton in Schwarz',
-        graphicTee: 'Graphic T-Shirt',
+        graphicTee: 'T-Shirt',
         teeDesc: 'Limited Edition Print',
         cargoPants: 'Cargo Pants',
         cargoDesc: 'Multi-Pocket Design',
@@ -140,7 +329,7 @@ const translations = {
         sweaterDesc: 'Cashmere in Dark Blue',
         oversizedHoodie: 'Oversized Hoodie',
         hoodieDesc: 'Premium Cotton in Black',
-        graphicTee: 'Graphic T-Shirt',
+        graphicTee: 'T-Shirt',
         teeDesc: 'Limited Edition Print',
         cargoPants: 'Cargo Pants',
         cargoDesc: 'Multi-Pocket Design',
@@ -518,23 +707,52 @@ function updateCart() {
     `).join('');
     
     // Calculate subtotal
-    let total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    let subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    let total = subtotal;
+    
+    // Update subtotal display
+    const subtotalElement = document.getElementById('cart-subtotal');
+    if (subtotalElement) {
+        subtotalElement.textContent = formatPrice(subtotal);
+    }
+    
+    // Apply discount code if exists
+    const appliedDiscount = parseFloat(localStorage.getItem('appliedDiscountAmount')) || 0;
+    const discountCode = localStorage.getItem('appliedDiscountCode') || '';
+    
+    if (appliedDiscount > 0 && discountCode) {
+        const discountRow = document.getElementById('discountRow');
+        const discountAmount = document.getElementById('cart-discount');
+        const discountCodeLabel = document.getElementById('discountCodeApplied');
+        
+        if (discountRow && discountAmount && discountCodeLabel) {
+            discountRow.style.display = 'flex';
+            discountAmount.textContent = '- ' + formatPrice(appliedDiscount);
+            discountCodeLabel.textContent = discountCode;
+            total -= appliedDiscount;
+        }
+    } else {
+        const discountRow = document.getElementById('discountRow');
+        if (discountRow) {
+            discountRow.style.display = 'none';
+        }
+    }
     
     // Check for Tracksuit combo discount (Hoodie + Trainerhose = 5% off)
     const hasHoodie = cart.some(item => item.name === 'Oversized Hoodie');
     const hasTrainerhose = cart.some(item => item.name === 'Trainerhose');
-    let discount = 0;
+    let comboDiscount = 0;
     
     if (hasHoodie && hasTrainerhose) {
-        discount = total * 0.05;
+        comboDiscount = total * 0.05;
         const discountHTML = `
             <div class="cart-discount">
                 <span>${t('tracksuit')}</span>
-                <span>-${formatPrice(discount)}</span>
+                <span>-${formatPrice(comboDiscount)}</span>
             </div>
         `;
         cartItemsContainer.innerHTML += discountHTML;
-        total -= discount;
+        total -= comboDiscount;
     }
     
     // Update total with label
@@ -593,6 +811,26 @@ function clearCart() {
     
     modal.querySelector('.modal-confirm').onclick = () => {
         cart = [];
+        localStorage.removeItem('appliedDiscountCode');
+        localStorage.removeItem('appliedDiscountAmount');
+        
+        // Re-enable discount input
+        const codeInput = document.getElementById('discountCode');
+        const applyBtn = document.querySelector('.apply-discount-btn');
+        if (codeInput) {
+            codeInput.disabled = false;
+            codeInput.value = '';
+        }
+        if (applyBtn) {
+            applyBtn.disabled = false;
+            applyBtn.textContent = 'Anwenden';
+        }
+        
+        const discountMsg = document.getElementById('discountMessage');
+        if (discountMsg) {
+            discountMsg.textContent = '';
+        }
+        
         updateCart();
         showNotification(t('cleared'));
         modal.classList.remove('active');
@@ -873,6 +1111,160 @@ let chatbotContext = {
     userName: null
 };
 
+// Chatbot Learning System
+let chatbotAnalytics = JSON.parse(localStorage.getItem('chatbotAnalytics')) || {
+    frequentQuestions: {},
+    unknownQueries: [],
+    totalQueries: 0,
+    resolvedQueries: 0
+};
+
+// Levenshtein Distance Algorithm for typo correction
+function levenshteinDistance(str1, str2) {
+    const len1 = str1.length;
+    const len2 = str2.length;
+    const matrix = Array(len1 + 1).fill(null).map(() => Array(len2 + 1).fill(null));
+    
+    for (let i = 0; i <= len1; i++) matrix[i][0] = i;
+    for (let j = 0; j <= len2; j++) matrix[0][j] = j;
+    
+    for (let i = 1; i <= len1; i++) {
+        for (let j = 1; j <= len2; j++) {
+            const cost = str1[i - 1] === str2[j - 1] ? 0 : 1;
+            matrix[i][j] = Math.min(
+                matrix[i - 1][j] + 1,      // deletion
+                matrix[i][j - 1] + 1,      // insertion
+                matrix[i - 1][j - 1] + cost // substitution
+            );
+        }
+    }
+    
+    return matrix[len1][len2];
+}
+
+// Find closest matching keyword with typo tolerance
+function findClosestMatch(input, keywords, threshold = 3) {
+    let bestMatch = null;
+    let bestDistance = Infinity;
+    
+    const normalizedInput = input.toLowerCase().trim();
+    
+    for (const keyword of keywords) {
+        const distance = levenshteinDistance(normalizedInput, keyword.toLowerCase());
+        if (distance < bestDistance && distance <= threshold) {
+            bestDistance = distance;
+            bestMatch = keyword;
+        }
+    }
+    
+    return bestMatch;
+}
+
+// Common typo corrections for Joumonde-specific terms
+const typoCorrections = {
+    // Product typos
+    'blaiser': 'blazer', 'blaser': 'blazer', 'blasier': 'blazer',
+    'hodie': 'hoodie', 'hody': 'hoodie', 'hudie': 'hoodie', 'hoodi': 'hoodie',
+    'polo': 'polo', 'pollo': 'polo', 'polu': 'polo',
+    'chino': 'chino', 'kino': 'chino', 'schino': 'chino',
+    'cargo': 'cargo', 'kargo': 'cargo', 'carco': 'cargo',
+    'pullover': 'pullover', 'pulover': 'pullover', 'pullofer': 'pullover',
+    
+    // Common shop terms
+    'versand': 'versand', 'fersand': 'versand', 'versant': 'versand', 'versnd': 'versand',
+    'lieferung': 'lieferung', 'liferung': 'lieferung', 'lieferng': 'lieferung',
+    'bestellung': 'bestellung', 'bestelung': 'bestellung', 'bestllung': 'bestellung',
+    'ruckgabe': 'rückgabe', 'ruckabe': 'rückgabe', 'ruckgbe': 'rückgabe',
+    'umtausch': 'umtausch', 'umtaush': 'umtausch', 'umtausch': 'umtausch',
+    'zahlung': 'zahlung', 'zalung': 'zahlung', 'zahlunh': 'zahlung',
+    'grosse': 'größe', 'grose': 'größe', 'groese': 'größe', 'groeße': 'größe',
+    'rabatt': 'rabatt', 'rabat': 'rabatt', 'rabbatt': 'rabatt',
+    'gutschein': 'gutschein', 'gutschien': 'gutschein', 'gutshein': 'gutschein',
+    
+    // Greetings
+    'halo': 'hallo', 'hallo': 'hallo', 'haloo': 'hallo',
+    'tschuss': 'tschüss', 'tschuess': 'tschüss', 'tschuss': 'tschüss',
+    
+    // Common words
+    'hilfe': 'hilfe', 'hilfe': 'hilfe', 'hilffe': 'hilfe',
+    'preis': 'preis', 'prais': 'preis', 'pries': 'preis',
+    'kosten': 'kosten', 'kosten': 'kosten', 'kosten': 'kosten'
+};
+
+// Auto-correct user input
+function autoCorrectInput(message) {
+    let corrected = message.toLowerCase().trim();
+    const words = corrected.split(/\s+/);
+    
+    const correctedWords = words.map(word => {
+        // Remove punctuation for matching
+        const cleanWord = word.replace(/[?!.,]/g, '');
+        
+        // Check direct typo corrections
+        if (typoCorrections[cleanWord]) {
+            return typoCorrections[cleanWord];
+        }
+        
+        // Check Levenshtein distance against common keywords
+        const commonKeywords = Object.values(typoCorrections);
+        const match = findClosestMatch(cleanWord, commonKeywords, 2);
+        
+        return match || word;
+    });
+    
+    return correctedWords.join(' ');
+}
+
+// Track analytics
+function trackChatbotQuery(query, wasResolved) {
+    chatbotAnalytics.totalQueries++;
+    if (wasResolved) chatbotAnalytics.resolvedQueries++;
+    
+    // Track frequent questions
+    const normalizedQuery = query.toLowerCase().trim();
+    if (!chatbotAnalytics.frequentQuestions[normalizedQuery]) {
+        chatbotAnalytics.frequentQuestions[normalizedQuery] = 0;
+    }
+    chatbotAnalytics.frequentQuestions[normalizedQuery]++;
+    
+    // Track unknown queries
+    if (!wasResolved) {
+        chatbotAnalytics.unknownQueries.push({
+            query: query,
+            timestamp: new Date().toISOString()
+        });
+        
+        // Keep only last 50 unknown queries
+        if (chatbotAnalytics.unknownQueries.length > 50) {
+            chatbotAnalytics.unknownQueries = chatbotAnalytics.unknownQueries.slice(-50);
+        }
+    }
+    
+    localStorage.setItem('chatbotAnalytics', JSON.stringify(chatbotAnalytics));
+}
+
+// Get chatbot analytics (for admin dashboard)
+function getChatbotAnalytics() {
+    const sortedQuestions = Object.entries(chatbotAnalytics.frequentQuestions)
+        .sort(([,a], [,b]) => b - a)
+        .slice(0, 10);
+    
+    return {
+        totalQueries: chatbotAnalytics.totalQueries,
+        resolvedQueries: chatbotAnalytics.resolvedQueries,
+        resolutionRate: chatbotAnalytics.totalQueries > 0 
+            ? ((chatbotAnalytics.resolvedQueries / chatbotAnalytics.totalQueries) * 100).toFixed(1) + '%'
+            : '0%',
+        topQuestions: sortedQuestions,
+        recentUnknown: chatbotAnalytics.unknownQueries.slice(-10).reverse()
+    };
+}
+
+// Console log analytics (for debugging/admin view)
+if (typeof window !== 'undefined') {
+    window.viewChatbotAnalytics = getChatbotAnalytics;
+}
+
 function toggleChatbot() {
     const chatbotContent = document.getElementById('chatbot-content');
     chatbotOpen = !chatbotOpen;
@@ -948,7 +1340,9 @@ function addChatMessage(message, sender) {
 }
 
 function generateBotResponse(userMessage) {
-    const message = userMessage.toLowerCase().trim();
+    // Auto-correct typos
+    const correctedMessage = autoCorrectInput(userMessage);
+    const message = correctedMessage.toLowerCase().trim();
     
     // Normalize common typos and variations
     const normalizedMessage = message
@@ -959,121 +1353,158 @@ function generateBotResponse(userMessage) {
     // Helper function to check if message contains any keywords
     const containsAny = (keywords) => keywords.some(keyword => normalizedMessage.includes(keyword));
     
+    let response = null;
+    let wasResolved = false;
+    
+    // SCOPE RESTRICTION: Only answer Joumonde shop-related questions
+    const joumondeScopeKeywords = [
+        'bestellung', 'versand', 'lieferung', 'paket', 'tracking', 'status',
+        'ruckgabe', 'umtausch', 'retoure', 'zurück',
+        'zahlung', 'bezahlen', 'preis', 'kosten', 'rabatt', 'gutschein',
+        'grosse', 'größe', 'passt', 'masse',
+        'blazer', 'hoodie', 'polo', 'chino', 'cargo', 'pullover', 'shirt',
+        'old money', 'streetwear', 'produkt', 'artikel',
+        'kontakt', 'email', 'telefon', 'hilfe', 'support',
+        'verfugbar', 'lager', 'stock', 'ausverkauft',
+        'material', 'qualitat', 'stoff', 'baumwolle',
+        'hallo', 'hi', 'hey', 'guten tag', 'servus',
+        'danke', 'tschuss', 'bye', 'joumonde'
+    ];
+    
+    const isJoumondeRelated = containsAny(joumondeScopeKeywords);
+    
+    // If not Joumonde-related, politely decline
+    if (!isJoumondeRelated && normalizedMessage.length > 5) {
+        trackChatbotQuery(userMessage, false);
+        return '😊 Ich bin der Joumonde Shopping-Assistent und kann Ihnen nur bei Fragen zu unserem Shop helfen.\n\nIch kann Sie unterstützen bei:\n• Bestellungen & Tracking\n• Produktinformationen\n• Versand & Rücksendungen\n• Größenberatung\n• Zahlungsmethoden\n\nWie kann ich Ihnen bei Joumonde weiterhelfen?';
+    }
+    
     // Handle order number context
     if (chatbotContext.awaitingOrderNumber) {
         chatbotContext.awaitingOrderNumber = false;
         const orderNumber = userMessage.match(/\d+/);
         if (orderNumber) {
-            return trackOrder(orderNumber[0]);
+            wasResolved = true;
+            response = trackOrder(orderNumber[0]);
         } else {
-            return 'Entschuldigung, ich konnte keine Bestellnummer erkennen. Bitte geben Sie eine gültige Bestellnummer ein (z.B. 12345).';
+            response = 'Entschuldigung, ich konnte keine Bestellnummer erkennen. Bitte geben Sie eine gültige Bestellnummer ein (z.B. 12345).';
         }
+        trackChatbotQuery(userMessage, wasResolved);
+        return response;
     }
     
     // Greetings - expanded
     if (containsAny(['hallo', 'hi', 'hey', 'guten tag', 'moin', 'servus', 'gruss', 'tag', 'morgen', 'abend'])) {
-        return 'Hallo! 👋 Willkommen bei Joumonde. Ich bin Ihr virtueller Assistent. Wie kann ich Ihnen heute helfen?\n\nIch kann Ihnen bei folgenden Themen helfen:\n• Bestellstatus verfolgen\n• Versand & Lieferung\n• Rückgabe & Umtausch\n• Größenberatung\n• Zahlungsmethoden\n• Produktinformationen';
+        wasResolved = true;
+        response = 'Hallo! 👋 Willkommen bei Joumonde. Ich bin Ihr virtueller Assistent. Wie kann ich Ihnen heute helfen?\n\nIch kann Ihnen bei folgenden Themen helfen:\n• Bestellstatus verfolgen\n• Versand & Lieferung\n• Rückgabe & Umtausch\n• Größenberatung\n• Zahlungsmethoden\n• Produktinformationen';
     }
     
     // Order tracking - expanded variations
     if (containsAny(['bestellung', 'sendung', 'paket', 'tracking', 'status', 'wo ist', 'lieferstatus', 
                      'verfolg', 'bestell', 'order', 'shipment', 'geliefert', 'angekommen', 'kommt',
                      'erhalten', 'bekommen', 'lieferung'])) {
-        
+        wasResolved = true;
         chatbotContext.awaitingOrderNumber = true;
         chatbotContext.lastQuestion = 'tracking';
-        return 'Ich helfe Ihnen gerne, Ihre Bestellung zu verfolgen! 📦\n\nBitte geben Sie Ihre Bestellnummer ein. Sie finden diese in Ihrer Bestätigungs-E-Mail (Format: z.B. JM12345).';
+        response = 'Ich helfe Ihnen gerne, Ihre Bestellung zu verfolgen! 📦\n\nBitte geben Sie Ihre Bestellnummer ein. Sie finden diese in Ihrer Bestätigungs-E-Mail (Format: z.B. JM12345).';
     }
-    
     // Delivery issues - expanded
-    if (containsAny(['problem', 'nicht angekommen', 'fehlt', 'verspatet', 'verzoger', 'defekt', 
+    else if (containsAny(['problem', 'nicht angekommen', 'fehlt', 'verspatet', 'verzoger', 'defekt', 
                      'kaputt', 'falsch', 'beschadigt', 'reklamation', 'beschwerde', 'complaint',
                      'issue', 'hilfe', 'help'])) {
-        return [
+        wasResolved = true;
+        response = [
             'Es tut mir leid zu hören, dass es Probleme gibt. 😔 Ich helfe Ihnen gerne weiter!',
             'Um Ihr Problem zu lösen, benötige ich folgende Informationen:\n\n1. Ihre Bestellnummer\n2. Was genau ist das Problem?\n   • Paket nicht angekommen?\n   • Falsche Artikel?\n   • Beschädigte Ware?\n\nFür dringende Fälle erreichen Sie unseren Kundenservice direkt:\n📧 info@joumonde.com\n📞 +41 44 123 45 67 (Mo-Fr 9-18 Uhr)'
         ];
     }
-    
     // Shipping & delivery time - expanded
-    if (containsAny(['versand', 'lieferung', 'lieferzeit', 'dauer', 'lange dauert', 'shipping', 
+    else if (containsAny(['versand', 'lieferung', 'lieferzeit', 'dauer', 'lange dauert', 'shipping', 
                      'delivery', 'kosten', 'gebuhren', 'porto', 'wann', 'wie lange', 'schnell'])) {
-        return '📦 Versandinformationen:\n\n• Standardversand: 2-4 Werktage (kostenlos ab CHF 50)\n• Expressversand: 1-2 Werktage (CHF 8.90)\n• Versand innerhalb CH: CHF 4.90\n• Versand EU: ab CHF 9.90\n\nBestellungen bis 14 Uhr werden noch am selben Tag bearbeitet!\n\nMöchten Sie eine bestehende Bestellung verfolgen? Geben Sie einfach Ihre Bestellnummer ein!';
+        wasResolved = true;
+        response = '📦 Versandinformationen:\n\n• Standardversand: 2-4 Werktage (kostenlos ab CHF 50)\n• Expressversand: 1-2 Werktage (CHF 8.90)\n• Versand innerhalb CH: CHF 4.90\n• Versand EU: ab CHF 9.90\n\nBestellungen bis 14 Uhr werden noch am selben Tag bearbeitet!\n\nMöchten Sie eine bestehende Bestellung verfolgen? Geben Sie einfach Ihre Bestellnummer ein!';
     }
-    
     // Returns & exchange - expanded
-    if (containsAny(['ruckgabe', 'umtausch', 'zuruckschicken', 'zuruckgeben', 'retoure', 'return',
+    else if (containsAny(['ruckgabe', 'umtausch', 'zuruckschicken', 'zuruckgeben', 'retoure', 'return',
                      'exchange', 'zuruck', 'retour', 'nicht passen', 'passt nicht', 'gefalt nicht'])) {
-        return '↩️ Rückgabe & Umtausch:\n\n✓ 30 Tage Rückgaberecht\n✓ Kostenloser Rückversand innerhalb CH\n✓ Artikel müssen ungetragen mit Etikett sein\n\nSo funktioniert\'s:\n1. Retourenschein ausfüllen (liegt jeder Sendung bei)\n2. Artikel sicher verpacken\n3. Kostenlos bei Post abgeben\n4. Rückerstattung innerhalb 5-7 Werktagen\n\nRückgabelabel erstellen: www.joumonde.com/retoure\n\nBrauchen Sie eine andere Größe? Wir tauschen gerne um!';
+        wasResolved = true;
+        response = '↩️ Rückgabe & Umtausch:\n\n✓ 30 Tage Rückgaberecht\n✓ Kostenloser Rückversand innerhalb CH\n✓ Artikel müssen ungetragen mit Etikett sein\n\nSo funktioniert\'s:\n1. Retourenschein ausfüllen (liegt jeder Sendung bei)\n2. Artikel sicher verpacken\n3. Kostenlos bei Post abgeben\n4. Rückerstattung innerhalb 5-7 Werktagen\n\nRückgabelabel erstellen: www.joumonde.com/retoure\n\nBrauchen Sie eine andere Größe? Wir tauschen gerne um!';
     }
-    
     // Payment methods - expanded
-    if (containsAny(['zahlung', 'bezahlen', 'zahlungsmethode', 'payment', 'kreditkarte', 'paypal',
+    else if (containsAny(['zahlung', 'bezahlen', 'zahlungsmethode', 'payment', 'kreditkarte', 'paypal',
                      'twint', 'rechnung', 'uberweisung', 'karte', 'bezahl', 'pay'])) {
-        return '💳 Zahlungsmethoden:\n\n✓ Kreditkarte (Visa, Mastercard, Amex)\n✓ PayPal\n✓ TWINT (Schweizer Mobile Payment)\n✓ Rechnung (Klarna)\n✓ Apple Pay & Google Pay\n\nAlle Zahlungen sind SSL-verschlüsselt und sicher! 🔒';
+        wasResolved = true;
+        response = '💳 Zahlungsmethoden:\n\n✓ Kreditkarte (Visa, Mastercard, Amex)\n✓ PayPal\n✓ TWINT (Schweizer Mobile Payment)\n✓ Rechnung (Klarna)\n✓ Apple Pay & Google Pay\n\nAlle Zahlungen sind SSL-verschlüsselt und sicher! 🔒';
     }
-    
     // Sizing - expanded
-    if (containsAny(['grosse', 'passt', 'grossentabelle', 'grossenberatung', 'sizing', 'size',
+    else if (containsAny(['grosse', 'passt', 'grossentabelle', 'grossenberatung', 'sizing', 'size',
                      'mass', 'ausmessen', 'welche grosse', 'fit', 'zu gross', 'zu klein', 'lang', 'kurz'])) {
-        return '📏 Größenberatung:\n\nUnsere Größen fallen normal aus. Bei jedem Produkt finden Sie:\n• Detaillierte Größentabelle\n• Maßangaben (Brust, Taille, Hüfte, Länge)\n• Trageempfehlungen\n\nTipp: Bei Unsicherheit zwischen zwei Größen empfehlen wir die größere Variante.\n\nBrauchen Sie Hilfe bei einem bestimmten Artikel? Nennen Sie mir das Produkt!';
+        wasResolved = true;
+        response = '📏 Größenberatung:\n\nUnsere Größen fallen normal aus. Bei jedem Produkt finden Sie:\n• Detaillierte Größentabelle\n• Maßangaben (Brust, Taille, Hüfte, Länge)\n• Trageempfehlungen\n\nTipp: Bei Unsicherheit zwischen zwei Größen empfehlen wir die größere Variante.\n\nBrauchen Sie Hilfe bei einem bestimmten Artikel? Nennen Sie mir das Produkt!';
     }
-    
     // Products - Old Money - expanded
-    if (containsAny(['old money', 'blazer', 'elegant', 'klassisch', 'chino', 'polo', 'strickpullover',
+    else if (containsAny(['old money', 'blazer', 'elegant', 'klassisch', 'chino', 'polo', 'strickpullover',
                      'business', 'formal', 'schick', 'anzug', 'hemd'])) {
-        return '🎩 Old Money Collection:\n\nUnsere Old Money Kollektion steht für zeitlose Eleganz und Qualität:\n\n• Premium Blazer aus italienischer Wolle\n• Polo-Hemden aus ägyptischer Baumwolle\n• Perfekt geschnittene Chinos\n• Kaschmir-Pullover\n\nDer klassische Look, der nie aus der Mode kommt. Investieren Sie in Qualität, die bleibt!\n\nZur Kollektion: Scrollen Sie zu "Old Money Collection"';
+        wasResolved = true;
+        response = '🎩 Old Money Collection:\n\nUnsere Old Money Kollektion steht für zeitlose Eleganz und Qualität:\n\n• Premium Blazer aus italienischer Wolle\n• Polo-Hemden aus ägyptischer Baumwolle\n• Perfekt geschnittene Chinos\n• Kaschmir-Pullover\n\nDer klassische Look, der nie aus der Mode kommt. Investieren Sie in Qualität, die bleibt!\n\nZur Kollektion: Scrollen Sie zu "Old Money Collection"';
     }
-    
     // Products - Streetwear - expanded
-    if (containsAny(['streetwear', 'hoodie', 'sneaker', 'urban', 'cargo', 'trainerhose', 'jogger',
+    else if (containsAny(['streetwear', 'hoodie', 'sneaker', 'urban', 'cargo', 'trainerhose', 'jogger',
                      'street', 'oversized', 'graphic', 'print', 'tee', 'shirt', 'sporty', 'casual'])) {
-        return '🔥 Streetwear Collection:\n\nUnsere Streetwear kombiniert urbanen Style mit Premium-Qualität:\n\n• Oversized Hoodies aus 100% Baumwolle\n• Exklusive Graphic Tees (Limited Edition)\n• Cargo Pants mit Multi-Pocket Design\n• Premium Sneakers\n\nFür alle, die Statement setzen wollen!\n\nZur Kollektion: Scrollen Sie zu "Streetwear Collection"';
+        wasResolved = true;
+        response = '🔥 Streetwear Collection:\n\nUnsere Streetwear kombiniert urbanen Style mit Premium-Qualität:\n\n• Oversized Hoodies aus 100% Baumwolle\n• Exklusive Graphic Tees (Limited Edition)\n• Cargo Pants mit Multi-Pocket Design\n• Premium Sneakers\n\nFür alle, die Statement setzen wollen!\n\nZur Kollektion: Scrollen Sie zu "Streetwear Collection"';
     }
-    
     // Price questions - new
-    if (containsAny(['preis', 'kosten', 'teuer', 'billig', 'gunstig', 'price', 'kostet', 'viel', 'wert'])) {
-        return '💰 Unsere Preise:\n\nOld Money Collection: CHF 79.90 - CHF 89.90\nStreetwear Collection: CHF 24.90 - CHF 79.90\n\n✓ Premium Qualität zu fairen Preisen\n✓ Kostenloser Versand ab CHF 50\n✓ 10% Newsletter-Rabatt für Neukunden\n\nAlle Preise sind bereits in CHF, EUR oder USD verfügbar (siehe Währungsauswahl oben rechts).';
+    else if (containsAny(['preis', 'kosten', 'teuer', 'billig', 'gunstig', 'price', 'kostet', 'viel', 'wert'])) {
+        wasResolved = true;
+        response = '💰 Unsere Preise:\n\nOld Money Collection: CHF 79.90 - CHF 89.90\nStreetwear Collection: CHF 24.90 - CHF 79.90\n\n✓ Premium Qualität zu fairen Preisen\n✓ Kostenloser Versand ab CHF 50\n✓ 10% Newsletter-Rabatt für Neukunden\n\nAlle Preise sind bereits in CHF, EUR oder USD verfügbar (siehe Währungsauswahl oben rechts).';
     }
-    
     // Contact - expanded
-    if (containsAny(['kontakt', 'email', 'telefon', 'erreichen', 'anruf', 'contact', 'mail',
+    else if (containsAny(['kontakt', 'email', 'telefon', 'erreichen', 'anruf', 'contact', 'mail',
                      'sprechen', 'mitarbeiter', 'kunde', 'support', 'service'])) {
-        return '📞 Kontakt:\n\nSie erreichen unser Team:\n\n📧 E-Mail:\n• info@joumonde.com\n• Antwort innerhalb 24h\n\n☎️ Telefon:\n• +41 44 123 45 67\n• Mo-Fr: 9:00 - 18:00 Uhr\n\n📍 Adresse:\n• Musterstrasse 123, 8000 Zürich, Schweiz\n• Termine nach Vereinbarung';
+        wasResolved = true;
+        response = '📞 Kontakt:\n\nSie erreichen unser Team:\n\n📧 E-Mail:\n• info@joumonde.com\n• Antwort innerhalb 24h\n\n☎️ Telefon:\n• +41 44 123 45 67\n• Mo-Fr: 9:00 - 18:00 Uhr\n\n📍 Adresse:\n• Musterstrasse 123, 8000 Zürich, Schweiz\n• Termine nach Vereinbarung';
     }
-    
     // Stock/availability - expanded
-    if (containsAny(['verfugbar', 'lager', 'lieferbar', 'stock', 'ausverkauft', 'available',
+    else if (containsAny(['verfugbar', 'lager', 'lieferbar', 'stock', 'ausverkauft', 'available',
                      'vorratig', 'sofort', 'wieder', 'nachschub'])) {
-        return 'Die Verfügbarkeit sehen Sie direkt beim jeweiligen Produkt.\n\nBei ausverkauften Artikeln bieten wir:\n✓ E-Mail-Benachrichtigung bei Wiederverfügbarkeit\n✓ Alternative Produktvorschläge\n\nWelcher Artikel interessiert Sie?';
+        wasResolved = true;
+        response = 'Die Verfügbarkeit sehen Sie direkt beim jeweiligen Produkt.\n\nBei ausverkauften Artikeln bieten wir:\n✓ E-Mail-Benachrichtigung bei Wiederverfügbarkeit\n✓ Alternative Produktvorschläge\n\nWelcher Artikel interessiert Sie?';
     }
-    
     // Discount/promo codes - expanded
-    if (containsAny(['rabatt', 'gutschein', 'code', 'prozent', 'angebot', 'sale', 'discount',
+    else if (containsAny(['rabatt', 'gutschein', 'code', 'prozent', 'angebot', 'sale', 'discount',
                      'aktion', 'spar', 'reduziert', 'nachlass', 'voucher', 'coupon'])) {
-        return '🎁 Aktuelle Angebote:\n\n• Newsletter-Anmeldung: 10% Rabatt auf erste Bestellung\n• Kostenloser Versand ab CHF 50\n• Combo-Angebot: Hoodie + Trainerhose = -5%\n\nGutschein-Code im Warenkorb eingeben!\n\nNewsletter abonnieren: www.joumonde.com/newsletter';
+        wasResolved = true;
+        response = '🎁 Aktuelle Angebote:\n\n• Newsletter-Anmeldung: 10% Rabatt auf erste Bestellung\n• Kostenloser Versand ab CHF 50\n• Combo-Angebot: Hoodie + Trainerhose = -5%\n\nGutschein-Code im Warenkorb eingeben!\n\nNewsletter abonnieren: www.joumonde.com/newsletter';
     }
-    
     // Material/quality questions - new
-    if (containsAny(['material', 'qualitat', 'stoff', 'baumwolle', 'cotton', 'wolle', 'leder',
+    else if (containsAny(['material', 'qualitat', 'stoff', 'baumwolle', 'cotton', 'wolle', 'leder',
                      'herstellung', 'produziert', 'gemacht', 'fabric', 'quality'])) {
-        return '✨ Qualität & Materialien:\n\n• Premium-Materialien aus Europa\n• Old Money: Italienische Wolle, Ägyptische Baumwolle, Kaschmir\n• Streetwear: 100% Baumwolle, nachhaltige Produktion\n• Fair Trade zertifiziert\n• Langlebig & pflegeleicht\n\nWir setzen auf höchste Qualität für maximale Zufriedenheit!';
+        wasResolved = true;
+        response = '✨ Qualität & Materialien:\n\n• Premium-Materialien aus Europa\n• Old Money: Italienische Wolle, Ägyptische Baumwolle, Kaschmir\n• Streetwear: 100% Baumwolle, nachhaltige Produktion\n• Fair Trade zertifiziert\n• Langlebig & pflegeleicht\n\nWir setzen auf höchste Qualität für maximale Zufriedenheit!';
     }
-    
     // Thanks - expanded
-    if (containsAny(['danke', 'vielen dank', 'super', 'perfekt', 'toll', 'thanks', 'thank',
+    else if (containsAny(['danke', 'vielen dank', 'super', 'perfekt', 'toll', 'thanks', 'thank',
                      'gut', 'klasse', 'prima', 'genial', 'top'])) {
-        return 'Sehr gerne! 😊 Kann ich Ihnen noch bei etwas anderem helfen?\n\nViel Freude beim Shoppen bei Joumonde!';
+        wasResolved = true;
+        response = 'Sehr gerne! 😊 Kann ich Ihnen noch bei etwas anderem helfen?\n\nViel Freude beim Shoppen bei Joumonde!';
     }
-    
     // Goodbye - expanded
-    if (containsAny(['tschuss', 'auf wiedersehen', 'bye', 'ciao', 'ade', 'adieu', 'bis bald'])) {
+    else if (containsAny(['tschuss', 'auf wiedersehen', 'bye', 'ciao', 'ade', 'adieu', 'bis bald'])) {
+        wasResolved = true;
         chatbotContext = { awaitingOrderNumber: false, lastQuestion: null, userName: null };
-        return 'Auf Wiedersehen! 👋 Danke, dass Sie Joumonde besucht haben. Bei Fragen bin ich jederzeit für Sie da!';
+        response = 'Auf Wiedersehen! 👋 Danke, dass Sie Joumonde besucht haben. Bei Fragen bin ich jederzeit für Sie da!';
+    }
+    // Default response with helpful suggestions
+    else {
+        wasResolved = false;
+        response = 'Ich bin mir nicht sicher, wie ich Ihnen da helfen kann. 🤔\n\nHäufig gestellte Fragen:\n\n1️⃣ Bestellung verfolgen\n2️⃣ Rücksendung\n3️⃣ Versandkosten & -dauer\n4️⃣ Größenberatung\n5️⃣ Kontakt zum Kundenservice\n6️⃣ Preise & Angebote\n\nGeben Sie einfach ein Stichwort ein oder kontaktieren Sie uns direkt:\n📧 info@joumonde.com\n📞 +41 44 123 45 67';
     }
     
-    // Default response with helpful suggestions
-    return 'Ich bin mir nicht sicher, wie ich Ihnen da helfen kann. 🤔\n\nHäufig gestellte Fragen:\n\n1️⃣ Bestellung verfolgen\n2️⃣ Rücksendung\n3️⃣ Versandkosten & -dauer\n4️⃣ Größenberatung\n5️⃣ Kontakt zum Kundenservice\n6️⃣ Preise & Angebote\n\nGeben Sie einfach ein Stichwort ein oder kontaktieren Sie uns direkt:\n📧 info@joumonde.com\n📞 +41 44 123 45 67';
+    // Track analytics
+    trackChatbotQuery(userMessage, wasResolved);
+    
+    return response;
 }
 
 function trackOrder(orderNumber) {
@@ -1302,46 +1733,16 @@ function updateWishlistDisplay() {
 }
 
 // ===== ACCOUNT MODAL =====
-function toggleAccount() {
-    const modal = document.getElementById('account-modal');
-    modal.classList.toggle('active');
-}
-
-function switchAccountTab(tab) {
-    const tabs = document.querySelectorAll('.account-tab');
-    const loginForm = document.getElementById('login-form');
-    const registerForm = document.getElementById('register-form');
-    
-    tabs.forEach(t => t.classList.remove('active'));
-    
-    if (tab === 'login') {
-        tabs[0].classList.add('active');
-        loginForm.style.display = 'block';
-        registerForm.style.display = 'none';
-    } else {
-        tabs[1].classList.add('active');
-        loginForm.style.display = 'none';
-        registerForm.style.display = 'block';
-    }
-}
-
-function handleLogin(e) {
-    e.preventDefault();
-    showNotification('Login erfolgreich! (Demo - Backend erforderlich)');
-    toggleAccount();
-}
-
-function handleRegister(e) {
-    e.preventDefault();
-    showNotification('Registrierung erfolgreich! (Demo - Backend erforderlich)');
-    switchAccountTab('login');
-}
+// Account functions are now in account-system.js
+// This section is kept for backward compatibility with click-outside-to-close
 
 // Close account modal when clicking outside
 document.addEventListener('click', function(e) {
     const modal = document.getElementById('account-modal');
-    if (e.target === modal) {
-        toggleAccount();
+    if (e.target === modal && modal.classList.contains('active')) {
+        if (typeof toggleAccount === 'function') {
+            toggleAccount();
+        }
     }
 });
 
@@ -1413,26 +1814,6 @@ function rejectCookies() {
     showNotification('Nur notwendige Cookies werden verwendet');
 }
 
-// ===== BACK TO TOP BUTTON =====
-function scrollToTop() {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-}
-
-// Show/hide back to top button
-window.addEventListener('scroll', function() {
-    const backToTopBtn = document.getElementById('back-to-top');
-    if (backToTopBtn) {
-        if (window.pageYOffset > 300) {
-            backToTopBtn.classList.add('visible');
-        } else {
-            backToTopBtn.classList.remove('visible');
-        }
-    }
-});
-
 // ===== COUNTDOWN TIMER (PREPARED BUT NOT ACTIVE) =====
 function startCountdown(endDate, elementId) {
     const countdownElement = document.getElementById(elementId);
@@ -1486,3 +1867,243 @@ function markWishlistButtons() {
         }
     });
 }
+
+// Filter System Functions
+function toggleFilters() {
+    const sidebar = document.getElementById('filterSidebar');
+    sidebar.classList.toggle('active');
+}
+
+function toggleFiltersStreetwear() {
+    const sidebar = document.getElementById('filterSidebarStreetwear');
+    sidebar.classList.toggle('active');
+}
+
+function updatePriceRange(value) {
+    document.getElementById('rangeValue').textContent = value;
+    document.getElementById('maxPrice').value = value;
+    applyFilters();
+}
+
+function applyFilters() {
+    const minPrice = parseFloat(document.getElementById('minPrice').value) || 0;
+    const maxPrice = parseFloat(document.getElementById('maxPrice').value) || Infinity;
+    
+    const selectedSizes = Array.from(document.querySelectorAll('#filterSidebar .filter-checkbox input:checked'))
+        .map(cb => cb.value);
+    
+    const selectedColors = Array.from(document.querySelectorAll('#filterSidebar .color-checkbox input:checked'))
+        .map(cb => cb.value);
+    
+    const products = document.querySelectorAll('#old-money .product-card');
+    
+    products.forEach(product => {
+        const priceText = product.querySelector('.product-price').getAttribute('data-price');
+        const price = parseFloat(priceText);
+        
+        let show = true;
+        
+        // Price filter
+        if (price < minPrice || price > maxPrice) {
+            show = false;
+        }
+        
+        // Size filter (if any size is selected)
+        if (selectedSizes.length > 0) {
+            const productSizes = Array.from(product.querySelectorAll('.size-select option')).map(opt => opt.value);
+            const hasMatchingSize = selectedSizes.some(size => productSizes.includes(size));
+            if (!hasMatchingSize) {
+                show = false;
+            }
+        }
+        
+        product.style.display = show ? '' : 'none';
+    });
+}
+
+function applyFiltersStreetwear() {
+    const minPrice = parseFloat(document.getElementById('minPriceStreet').value) || 0;
+    const maxPrice = parseFloat(document.getElementById('maxPriceStreet').value) || Infinity;
+    
+    const selectedSizes = Array.from(document.querySelectorAll('#filterSidebarStreetwear .filter-checkbox input:checked'))
+        .map(cb => cb.value);
+    
+    const products = document.querySelectorAll('#streetwear .product-card');
+    
+    products.forEach(product => {
+        const priceText = product.querySelector('.product-price').getAttribute('data-price');
+        const price = parseFloat(priceText);
+        
+        let show = true;
+        
+        if (price < minPrice || price > maxPrice) {
+            show = false;
+        }
+        
+        if (selectedSizes.length > 0) {
+            const productSizes = Array.from(product.querySelectorAll('.size-select option')).map(opt => opt.value);
+            const hasMatchingSize = selectedSizes.some(size => productSizes.includes(size));
+            if (!hasMatchingSize) {
+                show = false;
+            }
+        }
+        
+        product.style.display = show ? '' : 'none';
+    });
+}
+
+function resetFilters() {
+    document.getElementById('minPrice').value = '';
+    document.getElementById('maxPrice').value = '';
+    document.getElementById('priceRange').value = 500;
+    document.getElementById('rangeValue').textContent = '500';
+    
+    document.querySelectorAll('#filterSidebar input[type="checkbox"]').forEach(cb => cb.checked = false);
+    
+    applyFilters();
+}
+
+function resetFiltersStreetwear() {
+    document.getElementById('minPriceStreet').value = '';
+    document.getElementById('maxPriceStreet').value = '';
+    
+    document.querySelectorAll('#filterSidebarStreetwear input[type="checkbox"]').forEach(cb => cb.checked = false);
+    
+    applyFiltersStreetwear();
+}
+
+function sortProducts(sortBy) {
+    const grid = document.querySelector('#old-money .product-grid');
+    const products = Array.from(grid.children);
+    
+    products.sort((a, b) => {
+        switch(sortBy) {
+            case 'price-asc':
+                return parseFloat(a.querySelector('.product-price').getAttribute('data-price')) - 
+                       parseFloat(b.querySelector('.product-price').getAttribute('data-price'));
+            case 'price-desc':
+                return parseFloat(b.querySelector('.product-price').getAttribute('data-price')) - 
+                       parseFloat(a.querySelector('.product-price').getAttribute('data-price'));
+            case 'name-asc':
+                return a.querySelector('h3').textContent.localeCompare(b.querySelector('h3').textContent);
+            case 'newest':
+                return a.querySelector('.product-badge')?.classList.contains('badge-new') ? -1 : 1;
+            default:
+                return 0;
+        }
+    });
+    
+    products.forEach(product => grid.appendChild(product));
+}
+
+function sortProductsStreetwear(sortBy) {
+    const grid = document.querySelector('#streetwear .product-grid');
+    const products = Array.from(grid.children);
+    
+    products.sort((a, b) => {
+        switch(sortBy) {
+            case 'price-asc':
+                return parseFloat(a.querySelector('.product-price').getAttribute('data-price')) - 
+                       parseFloat(b.querySelector('.product-price').getAttribute('data-price'));
+            case 'price-desc':
+                return parseFloat(b.querySelector('.product-price').getAttribute('data-price')) - 
+                       parseFloat(a.querySelector('.product-price').getAttribute('data-price'));
+            case 'name-asc':
+                return a.querySelector('h3').textContent.localeCompare(b.querySelector('h3').textContent);
+            case 'newest':
+                return a.querySelector('.product-badge')?.classList.contains('badge-new') ? -1 : 1;
+            default:
+                return 0;
+        }
+    });
+    
+    products.forEach(product => grid.appendChild(product));
+}
+
+// Discount Code System
+const validDiscountCodes = {
+    'WELCOME10': { type: 'percentage', value: 10, description: '10% Willkommensrabatt' },
+    'SAVE20': { type: 'percentage', value: 20, description: '20% Rabatt' },
+    'SUMMER25': { type: 'percentage', value: 25, description: '25% Sommerrabatt' },
+    'FIXED15': { type: 'fixed', value: 15, description: '15 CHF Rabatt' },
+    'VIP30': { type: 'percentage', value: 30, description: '30% VIP-Rabatt' }
+};
+
+function applyDiscountCode() {
+    const codeInput = document.getElementById('discountCode');
+    const messageElement = document.getElementById('discountMessage');
+    const code = codeInput.value.trim().toUpperCase();
+    
+    if (!code) {
+        showDiscountMessage('Bitte geben Sie einen Rabattcode ein.', 'error');
+        return;
+    }
+    
+    const discountInfo = validDiscountCodes[code];
+    
+    if (!discountInfo) {
+        showDiscountMessage('Ung�ltiger Rabattcode. Bitte versuchen Sie es erneut.', 'error');
+        return;
+    }
+    
+    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    let discountAmount = 0;
+    
+    if (discountInfo.type === 'percentage') {
+        discountAmount = subtotal * (discountInfo.value / 100);
+    } else if (discountInfo.type === 'fixed') {
+        discountAmount = Math.min(discountInfo.value, subtotal);
+    }
+    
+    localStorage.setItem('appliedDiscountCode', code);
+    localStorage.setItem('appliedDiscountAmount', discountAmount.toString());
+    
+    showDiscountMessage(' ' + discountInfo.description + ' erfolgreich angewendet!', 'success');
+    updateCart();
+    
+    codeInput.disabled = true;
+    document.querySelector('.apply-discount-btn').textContent = 'Angewendet';
+    document.querySelector('.apply-discount-btn').disabled = true;
+}
+
+function showDiscountMessage(message, type) {
+    const messageElement = document.getElementById('discountMessage');
+    messageElement.textContent = message;
+    messageElement.className = 'discount-message ' + type;
+    
+    if (type === 'error') {
+        setTimeout(function() {
+            messageElement.textContent = '';
+            messageElement.className = 'discount-message';
+        }, 3000);
+    }
+}
+
+// Loading Animations
+function showLoadingSpinner() {
+    const overlay = document.createElement('div');
+    overlay.className = 'loading-overlay';
+    overlay.innerHTML = '<div class="loading-spinner"></div>';
+    overlay.id = 'loadingOverlay';
+    document.body.appendChild(overlay);
+    return overlay;
+}
+
+function hideLoadingSpinner() {
+    const overlay = document.getElementById('loadingOverlay');
+    if (overlay) {
+        overlay.remove();
+    }
+}
+
+// Add fade-in animation to product cards on load
+document.addEventListener('DOMContentLoaded', function() {
+    const productCards = document.querySelectorAll('.product-card');
+    productCards.forEach(function(card, index) {
+        card.style.opacity = '0';
+        setTimeout(function() {
+            card.classList.add('fade-in');
+            card.style.opacity = '1';
+        }, index * 100);
+    });
+});

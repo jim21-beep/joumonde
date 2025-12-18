@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Über Uns - Joumonde Fashion</title>
+    <link rel="icon" type="image/png" href="assets/images/Zeichenfläche 1.png">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="testsite.html">
+                    <img src="assets/images/joumonde.png" alt="Joumonde Logo" class="logo-image">
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="testsite.html#home">Home</a></li>
+                <li><a href="testsite.html#old-money">Old Money</a></li>
+                <li><a href="testsite.html#streetwear">Streetwear</a></li>
+                <li><a href="about.html" class="active">Über Uns</a></li>
+                <li><a href="testsite.html#contact">Kontakt</a></li>
+            </ul>
+            <div class="nav-icons">
+                <select class="currency-selector" id="currency-selector" onchange="changeCurrency(this.value)">
+                    <option value="CHF" selected>CHF</option>
+                    <option value="EUR">EUR</option>
+                    <option value="USD">USD</option>
+                </select>
+                <select class="language-selector" id="language-selector" onchange="changeLanguage(this.value)">
+                    <option value="de" selected>DE</option>
+                    <option value="en">EN</option>
+                    <option value="fr">FR</option>
+                </select>
+                <button class="search-btn" aria-label="Suche" onclick="toggleSearch()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </button>
+                <button class="wishlist-btn" aria-label="Wunschliste" onclick="toggleWishlist()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    <span class="wishlist-count">0</span>
+                </button>
+                <button class="account-btn" aria-label="Account" onclick="toggleAccount()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </button>
+                <button class="cart-btn" aria-label="Warenkorb" onclick="toggleCart()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- About Hero Section -->
+    <section class="about-hero">
+        <div class="container">
+            <h1>Über Joumonde</h1>
+            <p class="hero-subtitle">Wo Eleganz auf Streetwear trifft</p>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="container">
+            <div class="about-cards">
+                <div class="about-card">
+                    <div class="card-icon">
+                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <h2>Unsere Geschichte</h2>
+                    <div class="card-divider"></div>
+                    <p>Joumonde wurde 2025 mit der Vision gegründet, zeitlose Eleganz mit modernem Streetwear zu verbinden. Unser Name vereint das französische "Jour" (Tag) mit "Monde" (Welt) - jeden Tag die Welt der Mode neu interpretieren.</p>
+                    <p>Wir glauben an Qualität, Nachhaltigkeit und zeitloses Design. Jedes unserer Stücke wird sorgfältig ausgewählt und kombiniert Old Money Ästhetik mit urbaner Streetwear-Kultur.</p>
+                </div>
+                
+                <div class="about-card">
+                    <div class="card-icon">
+                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                            <path d="M2 17l10 5 10-5"></path>
+                            <path d="M2 12l10 5 10-5"></path>
+                        </svg>
+                    </div>
+                    <h2>Unsere Mission</h2>
+                    <div class="card-divider"></div>
+                    <p>Bei Joumonde geht es nicht nur um Mode - es geht um einen Lifestyle. Wir möchten Menschen dabei helfen, ihren individuellen Stil zu finden und sich selbstbewusst zu fühlen, egal ob im Business-Meeting oder beim Street-Festival.</p>
+                    <p>Unsere Kollektionen werden von den besten Manufakturen produziert, mit Fokus auf faire Arbeitsbedingungen und nachhaltige Materialien. Premium-Qualität bedeutet für uns nicht nur erstklassige Stoffe, sondern auch Verantwortung gegenüber Mensch und Umwelt.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="values-section">
+        <div class="container">
+            <h2 class="section-title">Unsere Werte</h2>
+            <div class="about-values">
+                <div class="value-item">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5"></path>
+                        <path d="M2 12l10 5 10-5"></path>
+                    </svg>
+                    <h4>Premium Qualität</h4>
+                    <p>Hochwertige Materialien und erstklassige Verarbeitung für langlebige Fashion-Pieces</p>
+                </div>
+                <div class="value-item">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                    <h4>Nachhaltigkeit</h4>
+                    <p>Verantwortungsvolle Produktion, faire Arbeitsbedingungen und umweltbewusste Materialauswahl</p>
+                </div>
+                <div class="value-item">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+                    <h4>Kundenservice</h4>
+                    <p>Persönliche Beratung, schneller Versand und erstklassiger Support für ein perfektes Shopping-Erlebnis</p>
+                </div>
+                <div class="value-item">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+                        <path d="M12 6v6l4 2"></path>
+                    </svg>
+                    <h4>Zeitloses Design</h4>
+                    <p>Klassische Eleganz trifft moderne Trends - Mode die nicht mit der Saison verschwindet</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Instagram Section -->
+    <section class="instagram-section">
+        <div class="container">
+            <h2 class="section-title">Folge uns auf Instagram</h2>
+            <p class="instagram-subtitle">Entdecke unsere neuesten Styles und werde Teil der Joumonde Community</p>
+            <a href="https://www.instagram.com/joumonde" target="_blank" rel="noopener noreferrer" class="instagram-handle">@joumonde</a>
+            <div class="instagram-cta">
+                <a href="https://www.instagram.com/joumonde" target="_blank" rel="noopener noreferrer" class="btn-primary">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    Folge uns auf Instagram
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Joumonde</h4>
+                    <p>Premium Fashion - Old Money meets Streetwear</p>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Instagram"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                        <a href="#" aria-label="Facebook"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+                        <a href="#" aria-label="TikTok"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="testsite.html#old-money">Old Money</a></li>
+                        <li><a href="testsite.html#streetwear">Streetwear</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Informationen</h4>
+                    <ul>
+                        <li><a href="about.html">Über Uns</a></li>
+                        <li><a href="testsite.html#contact">Kontakt</a></li>
+                        <li><a href="testsite.html#faq">FAQ</a></li>
+                        <li><a href="testsite.html#shipping">Versand & Retouren</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Newsletter</h4>
+                    <p>Erhalte exklusive Angebote & Neuigkeiten</p>
+                    <form class="newsletter-form" onsubmit="submitNewsletter(event)">
+                        <input type="email" id="newsletter-email" placeholder="Deine E-Mail" required>
+                        <button type="submit">Abonnieren</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Joumonde. Alle Rechte vorbehalten.</p>
+                <div class="trust-badges">
+                    <span class="trust-badge">🔒 SSL Verschlüsselt</span>
+                    <span class="trust-badge">💳 Sichere Zahlung</span>
+                    <span class="trust-badge">🚚 Schneller Versand</span>
+                    <span class="trust-badge">↩️ 14 Tage Rückgabe</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/account-system.js"></script>
+</body>
+</html>
