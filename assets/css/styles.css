@@ -155,10 +155,16 @@ body {
     width: auto;
     transition: transform 0.3s ease;
     margin-top: -10px;
+    display: block;
+    object-fit: contain;
+    object-position: center;
+    /* Kompensiere Whitespace im Bild */
+    transform: scale(1.1);
+    transform-origin: center;
 }
 
 .logo-image:hover {
-    transform: scale(1.05);
+    transform: scale(1.15);
 }
 
 .nav-links {
@@ -2132,6 +2138,8 @@ body {
     .logo-image {
         height: 100px;
         margin-top: -5px;
+        margin-left: 0;
+        display: block;
     }
     
     .nav-icons {
@@ -2377,6 +2385,7 @@ body {
     
     .logo-image {
         height: 80px;
+        margin-left: 0;
     }
 }
 
