@@ -341,12 +341,148 @@ body::after {
 }
 
 @media (max-width: 600px) {
-    .coming-soon-title { font-size: 2.5rem; }
-    .collections-teaser { grid-template-columns: 1fr; }
-    .button-group { flex-direction: column; }
-    .shop-link, .insta-link { width: 100%; }
-    .newsletter-form { flex-direction: column; }
-    .countdown-timer { grid-template-columns: repeat(2, 1fr); }
+    body {
+        padding: 20px 15px;
+    }
+    
+    .coming-soon-wrapper {
+        padding: 30px 20px;
+    }
+    
+    .joumonde-logo img {
+        max-width: 140px;
+    }
+    
+    .coming-soon-title { 
+        font-size: 2.5rem;
+        letter-spacing: 0.08em;
+    }
+    
+    .coming-soon-subtitle {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .coming-soon-text {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+    }
+    
+    .joumonde-info {
+        font-size: 0.95rem;
+        padding: 30px 20px;
+        margin-bottom: 2rem;
+        line-height: 1.8;
+    }
+    
+    .collections-teaser { 
+        grid-template-columns: 1fr;
+        gap: 15px;
+        margin-bottom: 2rem;
+    }
+    
+    .collection-card {
+        padding: 30px 20px;
+    }
+    
+    .collection-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+    }
+    
+    .collection-card h3 {
+        font-size: 1.2rem;
+    }
+    
+    .collection-card p {
+        font-size: 0.9rem;
+    }
+    
+    .countdown-section {
+        margin-bottom: 2rem;
+        padding: 25px 15px;
+    }
+    
+    .countdown-label {
+        font-size: 1rem;
+        margin-bottom: 15px;
+    }
+    
+    .countdown-timer { 
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .countdown-value {
+        font-size: 2rem;
+    }
+    
+    .countdown-unit {
+        font-size: 0.75rem;
+    }
+    
+    .newsletter-section {
+        padding: 30px 20px;
+        margin-bottom: 2rem;
+    }
+    
+    .newsletter-title {
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+    }
+    
+    .newsletter-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+    }
+    
+    .newsletter-form { 
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .newsletter-form input,
+    .newsletter-form button {
+        width: 100%;
+        font-size: 0.95rem;
+    }
+    
+    .button-group { 
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 2rem;
+    }
+    
+    .shop-link, .insta-link { 
+        width: 100%;
+        font-size: 0.9rem;
+        padding: 14px 24px;
+    }
+    
+    .footer-note {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .coming-soon-title {
+        font-size: 2rem;
+    }
+    
+    .joumonde-logo img {
+        max-width: 120px;
+    }
+    
+    .countdown-value {
+        font-size: 1.5rem;
+    }
+    
+    .newsletter-form input,
+    .newsletter-form button {
+        font-size: 0.9rem;
+        padding: 12px;
+    }
 }
 
 /* Admin Modal */
