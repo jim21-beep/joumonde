@@ -3,7 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Über Uns - Joumonde Fashion</title>
+    <title>Über Uns - Joumonde Fashion | Unsere Geschichte & Mission</title>
+    <meta name="description" content="Erfahre mehr über Joumonde - Unsere Vision von zeitloser Eleganz und modernem Streetwear. Qualität, Nachhaltigkeit & Premium-Service seit 2025.">
+    <meta name="keywords" content="Joumonde About, Fashion Brand Story, Sustainable Fashion Swiss, Premium Quality, Old Money Lifestyle">
+    <meta name="author" content="Joumonde">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://joumonde.com/about.html">
+    <meta property="og:title" content="Über Joumonde - Unsere Geschichte">
+    <meta property="og:description" content="Wo Eleganz auf Streetwear trifft. Entdecke die Vision hinter Joumonde.">
+    <meta property="og:image" content="https://joumonde.com/assets/images/joumonde.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://joumonde.com/about.html">
+    <meta property="twitter:title" content="Über Joumonde - Unsere Geschichte">
+    <meta property="twitter:description" content="Wo Eleganz auf Streetwear trifft. Entdecke die Vision hinter Joumonde.">
+    <meta property="twitter:image" content="https://joumonde.com/assets/images/joumonde.png">
+    
     <link rel="icon" type="image/png" href="assets/images/Zeichenfläche 1.png">
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
@@ -12,16 +30,23 @@
     <nav class="navbar">
         <div class="container">
             <div class="logo">
-                <a href="testsite.html">
+                <a href="shop.html">
                     <img src="assets/images/joumonde.png" alt="Joumonde Logo" class="logo-image">
                 </a>
             </div>
+            <button class="mobile-menu-btn" aria-label="Menü" onclick="toggleMobileMenu()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
             <ul class="nav-links">
-                <li><a href="testsite.html#home">Home</a></li>
-                <li><a href="testsite.html#old-money">Old Money</a></li>
-                <li><a href="testsite.html#streetwear">Streetwear</a></li>
+                <li><a href="shop.html#home">Home</a></li>
+                <li><a href="shop.html#old-money">Old Money</a></li>
+                <li><a href="shop.html#streetwear">Streetwear</a></li>
                 <li><a href="about.html" class="active">Über Uns</a></li>
-                <li><a href="testsite.html#contact">Kontakt</a></li>
+                <li><a href="shop.html#contact">Kontakt</a></li>
             </ul>
             <div class="nav-icons">
                 <select class="currency-selector" id="currency-selector" onchange="changeCurrency(this.value)">
@@ -179,17 +204,17 @@
                 <div class="footer-section">
                     <h4>Shop</h4>
                     <ul>
-                        <li><a href="testsite.html#old-money">Old Money</a></li>
-                        <li><a href="testsite.html#streetwear">Streetwear</a></li>
+                        <li><a href="shop.html#old-money">Old Money</a></li>
+                        <li><a href="shop.html#streetwear">Streetwear</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h4>Informationen</h4>
                     <ul>
                         <li><a href="about.html">Über Uns</a></li>
-                        <li><a href="testsite.html#contact">Kontakt</a></li>
-                        <li><a href="testsite.html#faq">FAQ</a></li>
-                        <li><a href="testsite.html#shipping">Versand & Retouren</a></li>
+                        <li><a href="shop.html#contact">Kontakt</a></li>
+                        <li><a href="shop.html#faq">FAQ</a></li>
+                        <li><a href="shop.html#shipping">Versand & Retouren</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -215,5 +240,25 @@
 
     <script src="assets/js/script.js"></script>
     <script src="assets/js/account-system.js"></script>
+    <script>
+        // Load saved language on page load and update content
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLanguage = localStorage.getItem('language') || 'de';
+            const languageSelector = document.getElementById('language-selector');
+            if (languageSelector) {
+                languageSelector.value = savedLanguage;
+                currentLanguage = savedLanguage;
+            }
+            // Update about page content with correct language
+            updateAboutPageContent();
+        });
+        
+        // Override changeLanguage to also update about page
+        const originalChangeLanguage = changeLanguage;
+        changeLanguage = function(lang) {
+            originalChangeLanguage(lang);
+            updateAboutPageContent();
+        };
+    </script>
 </body>
 </html>

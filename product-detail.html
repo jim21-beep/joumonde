@@ -14,12 +14,19 @@
             <div class="logo">
                 <img src="assets/images/joumonde.png" alt="Joumonde Logo" class="logo-image">
             </div>
+            <button class="mobile-menu-btn" aria-label="Menü" onclick="toggleMobileMenu()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
             <ul class="nav-links">
-                <li><a href="testsite.html#home">Home</a></li>
-                <li><a href="testsite.html#old-money">Old Money</a></li>
-                <li><a href="testsite.html#streetwear">Streetwear</a></li>
+                <li><a href="index.html#home">Home</a></li>
+                <li><a href="index.html#old-money">Old Money</a></li>
+                <li><a href="index.html#streetwear">Streetwear</a></li>
                 <li><a href="about.html">Über Uns</a></li>
-                <li><a href="testsite.html#contact">Kontakt</a></li>
+                <li><a href="shop.html#contact">Kontakt</a></li>
             </ul>
             <div class="nav-icons">
                 <select class="currency-selector" id="currency-selector" onchange="changeCurrency(this.value)">
@@ -67,9 +74,9 @@
         <div class="container">
             <!-- Breadcrumb -->
             <div class="breadcrumb">
-                <a href="testsite.html">Home</a> 
+                <a href="index.html">Home</a> 
                 <span>/</span> 
-                <a href="testsite.html#old-money">Old Money</a> 
+                <a href="index.html#old-money">Old Money</a> 
                 <span>/</span> 
                 <span>Klassischer Blazer</span>
             </div>
@@ -537,17 +544,17 @@
                 <div class="footer-section">
                     <h4>Shop</h4>
                     <ul>
-                        <li><a href="testsite.html#old-money">Old Money</a></li>
-                        <li><a href="testsite.html#streetwear">Streetwear</a></li>
+                        <li><a href="index.html#old-money">Old Money</a></li>
+                        <li><a href="index.html#streetwear">Streetwear</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h4>Informationen</h4>
                     <ul>
                         <li><a href="about.html">Über Uns</a></li>
-                        <li><a href="testsite.html#contact">Kontakt</a></li>
-                        <li><a href="testsite.html#faq">FAQ</a></li>
-                        <li><a href="testsite.html#shipping">Versand & Retouren</a></li>
+                        <li><a href="shop.html#contact">Kontakt</a></li>
+                        <li><a href="shop.html#faq">FAQ</a></li>
+                        <li><a href="shop.html#shipping">Versand & Retouren</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -668,6 +675,74 @@
     <script src="assets/js/script.js"></script>
     <script src="assets/js/product-detail.js"></script>
     <script src="assets/js/account-system.js"></script>
+    
+    <script>
+    // Load product data from sessionStorage
+    document.addEventListener('DOMContentLoaded', function() {
+        const productData = JSON.parse(sessionStorage.getItem('selectedProduct'));
+        
+        if (productData) {
+            // Update page title
+            document.title = productData.name + ' - Joumonde';
+            
+            // Update product title and description
+            const titleEl = document.querySelector('.product-detail-title');
+            const subtitleEl = document.querySelector('.product-detail-subtitle');
+            if (titleEl) titleEl.textContent = productData.name;
+            if (subtitleEl) subtitleEl.textContent = productData.description;
+            
+            // Update breadcrumb
+            const breadcrumbSpan = document.querySelector('.breadcrumb span:last-child');
+            if (breadcrumbSpan) breadcrumbSpan.textContent = productData.name;
+            
+            // Update price
+            const currentPriceEl = document.querySelector('.current-price');
+            if (currentPriceEl) {
+                const currency = localStorage.getItem('selectedCurrency') || 'CHF';
+                const rates = { CHF: 1, EUR: 0.95, USD: 1.1 };
+                const convertedPrice = (productData.price * rates[currency]).toFixed(2);
+                currentPriceEl.textContent = currency + ' ' + convertedPrice;
+                currentPriceEl.setAttribute('data-price', productData.price);
+            }
+            
+            // Update sizes if provided
+            if (productData.sizes && productData.sizes.length > 0) {
+                const sizeButtons = document.querySelectorAll('.size-btn');
+                const sizeContainer = document.querySelector('.size-buttons');
+                if (sizeContainer) {
+                    sizeContainer.innerHTML = '';
+                    productData.sizes.forEach((size, index) => {
+                        const btn = document.createElement('button');
+                        btn.className = 'size-btn' + (index === 1 ? ' active' : '');
+                        btn.textContent = size;
+                        btn.onclick = function() { selectSize(this); };
+                        sizeContainer.appendChild(btn);
+                    });
+                }
+            }
+            
+            // Update colors if provided
+            if (productData.colors && productData.colors.length > 0) {
+                const colorContainer = document.querySelector('.color-buttons');
+                if (colorContainer) {
+                    colorContainer.innerHTML = '';
+                    productData.colors.forEach((color, index) => {
+                        const btn = document.createElement('button');
+                        btn.className = 'color-btn' + (index === 0 ? ' active' : '');
+                        btn.textContent = color;
+                        btn.onclick = function() { selectColor(this); };
+                        colorContainer.appendChild(btn);
+                    });
+                    const selectedColorSpan = document.getElementById('selectedColor');
+                    if (selectedColorSpan) selectedColorSpan.textContent = productData.colors[0];
+                }
+            }
+            
+            // Clear sessionStorage to avoid persisting data
+            // sessionStorage.removeItem('selectedProduct');
+        }
+    });
+    </script>
 
 </body>
 </html>
