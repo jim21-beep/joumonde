@@ -151,21 +151,17 @@ body {
 }
 
 .logo-image {
-    height: 140px;
+    height: 100px;
     width: auto;
     transition: transform 0.3s ease;
-    margin-top: -10px;
+    margin-top: -5px;
     display: block;
     object-fit: contain;
     object-position: center;
-    /* Kompensiere ungleiche Ränder im Bild */
-    margin-left: -15px;
-    transform: scale(1.15);
-    transform-origin: center;
 }
 
 .logo-image:hover {
-    transform: scale(1.15);
+    transform: scale(1.05);
 }
 
 .nav-links {
@@ -2137,8 +2133,8 @@ body {
     }
     
     .logo-image {
-        height: 100px;
-        margin-top: -5px;
+        height: 70px;
+        margin-top: -3px;
         margin-left: 0;
         display: block;
     }
@@ -2385,7 +2381,7 @@ body {
     }
     
     .logo-image {
-        height: 80px;
+        height: 60px;
         margin-left: 0;
     }
 }
