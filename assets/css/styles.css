@@ -158,8 +158,9 @@ body {
     display: block;
     object-fit: contain;
     object-position: center;
-    /* Kompensiere Whitespace im Bild */
-    transform: scale(1.1);
+    /* Kompensiere ungleiche Ränder im Bild */
+    margin-left: -15px;
+    transform: scale(1.15);
     transform-origin: center;
 }
 
