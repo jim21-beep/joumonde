@@ -2233,7 +2233,7 @@ body {
     }
     
     .hero {
-        padding: 6rem 1rem 4rem;
+        padding: 4rem 1rem 3rem;
     }
     
     .hero-logo {
@@ -2251,6 +2251,11 @@ body {
         font-size: 2rem;
         letter-spacing: 3px;
         padding: 0 15px;
+        margin-bottom: 2rem;
+    }
+    
+    section {
+        padding: 3rem 0;
     }
     
     .product-grid {
@@ -2354,7 +2359,7 @@ body {
     }
     
     .hero {
-        padding: 5rem 0.75rem 3rem;
+        padding: 3rem 0.75rem 2rem;
     }
     
     .section-title {
