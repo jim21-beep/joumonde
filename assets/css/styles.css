@@ -2991,16 +2991,33 @@ body {
     .cookie-content {
         flex-direction: column;
         text-align: center;
+        gap: 1rem;
+    }
+    
+    .cookie-banner {
+        padding: 1rem;
+    }
+    
+    .cookie-text h3 {
+        font-size: 1rem;
+        margin-bottom: 0.3rem;
+    }
+    
+    .cookie-text p {
+        font-size: 0.85rem;
     }
     
     .cookie-buttons {
         flex-direction: column;
         width: 100%;
+        gap: 0.5rem;
     }
     
     .cookie-buttons button,
     .cookie-buttons a {
         width: 100%;
+        padding: 0.7rem 1rem;
+        font-size: 0.9rem;
     }
     
     .trust-badges {
