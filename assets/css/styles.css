@@ -2356,13 +2356,16 @@ body {
     
     .chatbot-widget {
         bottom: 80px;
-        right: 10px;
+        right: 20px;
+        left: auto;
+        width: auto;
     }
     
     .chatbot-header {
-        padding: 0.8rem 1.2rem;
-        font-size: 0.85rem;
+        padding: 0.8rem 1.5rem;
+        font-size: 0.9rem;
         letter-spacing: 1px;
+        white-space: nowrap;
     }
     
     .chatbot-content {
