@@ -326,6 +326,10 @@ const translations = {
         poloDesc: 'Premium Baumwolle in Weiß',
         chinosPants: 'Chino Hose',
         chinosDesc: 'Slim-Fit in Khaki',
+        elegantVest: 'Elegante Weste',
+        vestDesc: 'Premium Woll-Weste in Creme',
+        quarterZipPullover: 'Quarter Zipper Pullover',
+        quarterZipDesc: 'Kaschmir-Mix mit Reißverschluss',
         knitSweater: 'Strickpullover',
         sweaterDesc: 'Kaschmir in Dunkelblau',
         oversizedHoodie: 'Oversized Hoodie',
@@ -465,6 +469,10 @@ const translations = {
         poloDesc: 'Premium Cotton in White',
         chinosPants: 'Chino Pants',
         chinosDesc: 'Slim-Fit in Khaki',
+        elegantVest: 'Elegant Vest',
+        vestDesc: 'Premium Wool Vest in Cream',
+        quarterZipPullover: 'Quarter Zip Pullover',
+        quarterZipDesc: 'Cashmere Blend with Zipper',
         knitSweater: 'Knit Sweater',
         sweaterDesc: 'Cashmere in Dark Blue',
         oversizedHoodie: 'Oversized Hoodie',
@@ -604,6 +612,10 @@ const translations = {
         poloDesc: 'Coton Premium en Blanc',
         chinosPants: 'Pantalon Chino',
         chinosDesc: 'Coupe Slim en Kaki',
+        elegantVest: 'Gilet Élégant',
+        vestDesc: 'Gilet en Laine Premium Crème',
+        quarterZipPullover: 'Pull Quarter Zip',
+        quarterZipDesc: 'Mélange Cachemire avec Fermeture',
         knitSweater: 'Pull Tricoté',
         sweaterDesc: 'Cachemire en Bleu Foncé',
         oversizedHoodie: 'Sweat à Capuche Oversize',
@@ -816,11 +828,11 @@ function updatePageContent() {
     
     // Products
     const productTitles = [
-        'classicBlazer', 'poloShirt', 'chinosPants', 'knitSweater',
+        'classicBlazer', 'poloShirt', 'chinosPants', 'elegantVest', 'quarterZipPullover', 'knitSweater',
         'oversizedHoodie', 'graphicTee', 'cargoPants', 'trackPants'
     ];
     const productDescs = [
-        'blazerDesc', 'poloDesc', 'chinosDesc', 'sweaterDesc',
+        'blazerDesc', 'poloDesc', 'chinosDesc', 'vestDesc', 'quarterZipDesc', 'sweaterDesc',
         'hoodieDesc', 'teeDesc', 'cargoDesc', 'trackDesc'
     ];
     
