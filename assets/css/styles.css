@@ -2135,26 +2135,41 @@ body {
     }
     
     .navbar .container {
-        padding: 0 15px;
+        padding: 0 10px;
+        gap: 1rem;
+    }
+    
+    .logo {
+        flex: 0 0 auto;
     }
     
     .logo-image {
-        max-width: 85px;
+        max-width: 60px;
         height: auto;
-        margin-top: -3px;
+        margin-top: 0;
         margin-left: 0;
         display: block;
     }
     
     .nav-icons {
-        gap: 0.4rem;
+        gap: 0.3rem;
+        flex: 0 0 auto;
     }
     
-    .nav-icons button,
+    .nav-icons button {
+        padding: 0.25rem;
+    }
+    
+    .nav-icons button svg {
+        width: 20px;
+        height: 20px;
+    }
+    
     .currency-selector,
     .language-selector {
-        font-size: 0.8rem;
-        padding: 0.3rem 0.5rem;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.4rem;
+        min-width: auto;
     }
     
     .cart-count,
