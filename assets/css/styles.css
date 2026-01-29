@@ -2354,11 +2354,24 @@ body {
         font-size: 1.2rem;
     }
     
+    .chatbot-widget {
+        bottom: 80px;
+        right: 10px;
+    }
+    
+    .chatbot-header {
+        padding: 0.8rem 1.2rem;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+    }
+    
     .chatbot-content {
-        width: 100%;
-        max-width: calc(100vw - 30px);
-        right: 15px;
-        bottom: 15px;
+        width: calc(100vw - 20px);
+        max-width: 95%;
+        right: 10px;
+        bottom: 60px;
+        height: 450px;
+        box-sizing: border-box;
     }
     
     .chatbot-header h3 {
@@ -2366,7 +2379,26 @@ body {
     }
     
     .chatbot-messages {
-        max-height: 250px;
+        max-height: 280px;
+        padding: 0.5rem;
+    }
+    
+    .chatbot-input-area {
+        padding: 0.8rem;
+        box-sizing: border-box;
+    }
+    
+    .chatbot-input-area input {
+        padding: 0.7rem;
+        font-size: 16px;
+        min-width: 0;
+        width: 100%;
+    }
+    
+    .chatbot-input-area button {
+        padding: 0.7rem 0.8rem;
+        font-size: 0.9rem;
+        flex-shrink: 0;
     }
     
     .container {
