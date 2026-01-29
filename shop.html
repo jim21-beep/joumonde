@@ -411,9 +411,22 @@
                                     <option>XL</option>
                                 </select>
                             </div>
+                            <div class="color-dropdown-wrapper" style="position: relative;">
+                                <button class="color-dropdown-btn" id="weste-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="toggleWesteColorDropdown()">
+                                    <span class="color-square color-beige" id="weste-color-square"></span>
+                                    <span id="weste-color-selected-label" style="margin-left:8px;font-size:0.97em;color:#444;vertical-align:middle;">Creme</span>
+                                    <svg style="margin-left:6px;vertical-align:middle;" width="16" height="16" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" style="fill:none;stroke:#888;stroke-width:2"/></svg>
+                                </button>
+                                <div class="color-dropdown-list" id="weste-color-dropdown-list" style="display:none;position:absolute;z-index:10;top:38px;left:0;background:#fff;border:1.5px solid #eee;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.08);padding:10px 14px;min-width:140px;">
+                                    <div class="color-dropdown-option" data-color="beige" data-label="Creme" onclick="selectWesteColorDropdown('beige', '#f5f5dc', 'Creme')"><span class="color-square color-beige"></span> Creme</div>
+                                    <div class="color-dropdown-option" data-color="navy" data-label="Navy" onclick="selectWesteColorDropdown('navy', '#001f3f', 'Navy')"><span class="color-square color-navy"></span> Navy</div>
+                                    <div class="color-dropdown-option" data-color="gray" data-label="Grau" onclick="selectWesteColorDropdown('gray', '#808080', 'Grau')"><span class="color-square color-gray"></span> Grau</div>
+                                    <div class="color-dropdown-option" data-color="black" data-label="Schwarz" onclick="selectWesteColorDropdown('black', '#000', 'Schwarz')"><span class="color-square color-black"></span> Schwarz</div>
+                                </div>
+                            </div>
                         </div>
                         <a class="size-guide-link" style="display:block;margin-bottom:12px;" onclick="event.stopPropagation(); openSizeGuide()">Größentabelle</a>
-                        <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('Elegante Weste', 69.99, 'Creme')">In den Warenkorb</button>
+                        <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('Elegante Weste', 69.99, window.selectedWesteColor || 'Creme')">In den Warenkorb</button>
                     </div>
                 </div>
                 
@@ -450,9 +463,22 @@
                                     <option>XL</option>
                                 </select>
                             </div>
+                            <div class="color-dropdown-wrapper" style="position: relative;">
+                                <button class="color-dropdown-btn" id="quarterzip-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="toggleQuarterzipColorDropdown()">
+                                    <span class="color-square color-beige" id="quarterzip-color-square"></span>
+                                    <span id="quarterzip-color-selected-label" style="margin-left:8px;font-size:0.97em;color:#444;vertical-align:middle;">Creme</span>
+                                    <svg style="margin-left:6px;vertical-align:middle;" width="16" height="16" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" style="fill:none;stroke:#888;stroke-width:2"/></svg>
+                                </button>
+                                <div class="color-dropdown-list" id="quarterzip-color-dropdown-list" style="display:none;position:absolute;z-index:10;top:38px;left:0;background:#fff;border:1.5px solid #eee;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.08);padding:10px 14px;min-width:140px;">
+                                    <div class="color-dropdown-option" data-color="beige" data-label="Creme" onclick="selectQuarterzipColorDropdown('beige', '#f5f5dc', 'Creme')"><span class="color-square color-beige"></span> Creme</div>
+                                    <div class="color-dropdown-option" data-color="navy" data-label="Navy" onclick="selectQuarterzipColorDropdown('navy', '#001f3f', 'Navy')"><span class="color-square color-navy"></span> Navy</div>
+                                    <div class="color-dropdown-option" data-color="gray" data-label="Grau" onclick="selectQuarterzipColorDropdown('gray', '#808080', 'Grau')"><span class="color-square color-gray"></span> Grau</div>
+                                    <div class="color-dropdown-option" data-color="black" data-label="Schwarz" onclick="selectQuarterzipColorDropdown('black', '#000', 'Schwarz')"><span class="color-square color-black"></span> Schwarz</div>
+                                </div>
+                            </div>
                         </div>
                         <a class="size-guide-link" style="display:block;margin-bottom:12px;" onclick="event.stopPropagation(); openSizeGuide()">Größentabelle</a>
-                        <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('Quarter Zipper Pullover', 79.99, 'Creme')">In den Warenkorb</button>
+                        <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('Quarter Zipper Pullover', 79.99, window.selectedQuarterzipColor || 'Creme')">In den Warenkorb</button>
                     </div>
                 </div>
                 

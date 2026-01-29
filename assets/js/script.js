@@ -27,6 +27,20 @@ function togglePoloColorDropdown() {
     btn.setAttribute('aria-expanded', !expanded);
     list.style.display = expanded ? 'none' : 'block';
 }
+function toggleWesteColorDropdown() {
+    const btn = document.getElementById('weste-color-dropdown-btn');
+    const list = document.getElementById('weste-color-dropdown-list');
+    const expanded = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', !expanded);
+    list.style.display = expanded ? 'none' : 'block';
+}
+function toggleQuarterzipColorDropdown() {
+    const btn = document.getElementById('quarterzip-color-dropdown-btn');
+    const list = document.getElementById('quarterzip-color-dropdown-list');
+    const expanded = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', !expanded);
+    list.style.display = expanded ? 'none' : 'block';
+}
 
 // Gemeinsame Farbauswahl-Logik für alle Dropdowns
 function applyColorSelection(key, hex, label, stateKey) {
@@ -47,6 +61,8 @@ window.selectedBlazerColor = 'Schwarz';
 window.selectedPoloColor = 'Weiß';
 window.selectedChinoColor = 'Camel';
 window.selectedPulloverColor = 'Dunkelblau';
+window.selectedWesteColor = 'Creme';
+window.selectedQuarterzipColor = 'Creme';
 window.selectedHoodieColor = 'Schwarz';
 window.selectedTshirtColor = 'Schwarz';
 window.selectedCargoColor = 'Schwarz';
@@ -69,6 +85,14 @@ function selectPulloverColorDropdown(color, hex, label) {
     applyColorSelection('pullover', hex, label, 'selectedPulloverColor');
 }
 
+function selectWesteColorDropdown(color, hex, label) {
+    applyColorSelection('weste', hex, label, 'selectedWesteColor');
+}
+
+function selectQuarterzipColorDropdown(color, hex, label) {
+    applyColorSelection('quarterzip', hex, label, 'selectedQuarterzipColor');
+}
+
 // Schließe alle Dropdowns bei Klick außerhalb
 document.addEventListener('click', function(e) {
     const dropdowns = [
@@ -76,6 +100,8 @@ document.addEventListener('click', function(e) {
         ['chino-color-dropdown-btn', 'chino-color-dropdown-list'],
         ['pullover-color-dropdown-btn', 'pullover-color-dropdown-list'],
         ['polo-color-dropdown-btn', 'polo-color-dropdown-list'],
+        ['weste-color-dropdown-btn', 'weste-color-dropdown-list'],
+        ['quarterzip-color-dropdown-btn', 'quarterzip-color-dropdown-list'],
         ['hoodie-color-dropdown-btn', 'hoodie-color-dropdown-list'],
         ['tshirt-color-dropdown-btn', 'tshirt-color-dropdown-list'],
         ['cargo-color-dropdown-btn', 'cargo-color-dropdown-list'],
