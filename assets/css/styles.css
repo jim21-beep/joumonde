@@ -2357,22 +2357,27 @@ body {
     .chatbot-widget {
         bottom: 80px;
         right: 10px;
+        left: 10px;
+        width: auto;
     }
     
     .chatbot-header {
         padding: 0.8rem 1.2rem;
         font-size: 0.85rem;
         letter-spacing: 1px;
+        width: 100%;
+        text-align: center;
     }
     
     .chatbot-content {
-        width: calc(100vw - 20px);
+        width: 100%;
         max-width: 100%;
-        right: 10px;
-        left: 10px;
-        bottom: 60px;
-        height: 500px;
+        right: 0;
+        left: 0;
+        bottom: 70px;
+        height: 70vh;
         box-sizing: border-box;
+        border-radius: 12px 12px 0 0;
     }
     
     .chatbot-header h3 {
