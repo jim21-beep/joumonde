@@ -2367,10 +2367,11 @@ body {
     
     .chatbot-content {
         width: calc(100vw - 20px);
-        max-width: 95%;
+        max-width: 100%;
         right: 10px;
+        left: 10px;
         bottom: 60px;
-        height: 450px;
+        height: 500px;
         box-sizing: border-box;
     }
     
