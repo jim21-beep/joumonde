@@ -2193,13 +2193,23 @@ function checkCookieConsent() {
 
 function acceptCookies() {
     localStorage.setItem('cookieConsent', 'accepted');
-    document.getElementById('cookie-banner').classList.remove('active');
+    const banner = document.getElementById('cookie-banner');
+    banner.classList.remove('active');
+    // Force hide after animation
+    setTimeout(() => {
+        banner.style.display = 'none';
+    }, 500);
     showNotification('Cookie-Einstellungen gespeichert');
 }
 
 function rejectCookies() {
     localStorage.setItem('cookieConsent', 'rejected');
-    document.getElementById('cookie-banner').classList.remove('active');
+    const banner = document.getElementById('cookie-banner');
+    banner.classList.remove('active');
+    // Force hide after animation
+    setTimeout(() => {
+        banner.style.display = 'none';
+    }, 500);
     showNotification('Nur notwendige Cookies werden verwendet');
 }
 
