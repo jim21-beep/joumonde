@@ -2328,6 +2328,16 @@ body {
         left: auto;
     }
     
+    .close-cart-btn {
+        font-size: 2rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .close-cart-btn:hover {
+        transform: none;
+    }
+    
     .cart-header h3 {
         font-size: 1.2rem;
     }
@@ -2845,7 +2855,7 @@ body {
     backdrop-filter: blur(15px);
     padding: 1.5rem;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
-    z-index: 10000;
+    z-index: 99999;
     transition: bottom 0.5s ease;
     border-top: 3px solid var(--gold);
     max-height: 90vh;
