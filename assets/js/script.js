@@ -1274,9 +1274,11 @@ function toggleSearch() {
         { name: 'Klassischer Blazer', price: 79.99, category: 'Old Money' },
         { name: 'Polo Hemd', price: 34.99, category: 'Old Money' },
         { name: 'Chino Hose', price: 51.99, category: 'Old Money' },
+        { name: 'Elegante Weste', price: 69.99, category: 'Old Money' },
+        { name: 'Quarter Zipper Pullover', price: 79.99, category: 'Old Money' },
         { name: 'Strickpullover', price: 89.99, category: 'Old Money' },
         { name: 'Oversized Hoodie', price: 49.99, category: 'Streetwear' },
-        { name: 'Graphic T-Shirt', price: 24.99, category: 'Streetwear' },
+        { name: 'T-Shirt', price: 24.99, category: 'Streetwear' },
         { name: 'Cargo Pants', price: 59.99, category: 'Streetwear' },
         { name: 'Trainerhose', price: 44.99, category: 'Streetwear' }
     ];
