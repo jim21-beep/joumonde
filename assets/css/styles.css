@@ -2356,13 +2356,9 @@ body {
     
     .chatbot-widget {
         bottom: 20px;
-        right: 0;
-        left: 0;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        padding: 0 20px;
+        right: 20px;
+        left: auto;
+        width: auto;
     }
     
     .chatbot-header {
@@ -2373,7 +2369,7 @@ body {
     }
     
     .chatbot-content {
-        width: 100%;
+        width: calc(100vw - 20px);
         max-width: 100%;
         right: 0;
         left: 0;
@@ -2381,6 +2377,7 @@ body {
         height: 70vh;
         box-sizing: border-box;
         border-radius: 12px 12px 0 0;
+        position: fixed;
     }
     
     .chatbot-messages {
