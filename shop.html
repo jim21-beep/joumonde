@@ -515,11 +515,12 @@
                             </div>
                             <div class="color-dropdown-wrapper" style="position: relative;">
                                 <button class="color-dropdown-btn" id="pullover-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="togglePulloverColorDropdown()">
-                                    <span class="color-square color-white" id="pullover-color-square"></span>
+                                    <span class="color-square" id="pullover-color-square" style="background:#2c3e50;"></span>
                                     <span id="pullover-color-selected-label" style="margin-left:8px;font-size:0.97em;color:#444;vertical-align:middle;">Dunkelblau</span>
                                     <svg style="margin-left:6px;vertical-align:middle;" width="16" height="16" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" style="fill:none;stroke:#888;stroke-width:2"/></svg>
                                 </button>
-                                <div class="color-dropdown-list" id="pullover-color-dropdown-list" style="display:none;">
+                                <div class="color-dropdown-list" id="pullover-color-dropdown-list" style="display:none;position:absolute;z-index:10;top:38px;left:0;background:#fff;border:1.5px solid #eee;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.08);padding:10px 14px;min-width:140px;">
+                                    <div class="color-dropdown-option" data-color="darkblue" data-label="Dunkelblau" onclick="selectPulloverColorDropdown('darkblue', '#2c3e50', 'Dunkelblau')"><span class="color-square" style="background:#2c3e50;"></span> Dunkelblau</div>
                                     <div class="color-dropdown-option" data-color="white" data-label="Weiß" onclick="selectPulloverColorDropdown('white', '#fff', 'Weiß')"><span class="color-square color-white"></span> Weiß</div>
                                     <div class="color-dropdown-option" data-color="gray" data-label="Grau" onclick="selectPulloverColorDropdown('gray', '#808080', 'Grau')"><span class="color-square color-gray"></span> Grau</div>
                                     <div class="color-dropdown-option" data-color="beige" data-label="Beige" onclick="selectPulloverColorDropdown('beige', '#f5f5dc', 'Beige')"><span class="color-square color-beige"></span> Beige</div>
