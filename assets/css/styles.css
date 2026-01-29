@@ -3023,6 +3023,11 @@ body {
     .cookie-banner {
         padding: 0.8rem;
         max-height: 40vh;
+        bottom: 0 !important;
+    }
+    
+    .cookie-banner.active {
+        bottom: 0 !important;
     }
     
     .cookie-text h3 {
