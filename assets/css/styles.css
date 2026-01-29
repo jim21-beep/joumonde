@@ -2860,6 +2860,7 @@ body {
     border-top: 3px solid var(--gold);
     max-height: 50vh;
     overflow-y: auto;
+    pointer-events: auto;
 }
 
 .cookie-banner.active {
