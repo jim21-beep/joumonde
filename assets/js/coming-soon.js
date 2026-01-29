@@ -1,7 +1,7 @@
 // Coming Soon Page JavaScript
 
 function updateCountdown() {
-    const launchDate = new Date('2026-02-01T00:00:00').getTime();
+    const launchDate = new Date('2026-03-30T00:00:00').getTime();
     const timer = setInterval(() => {
         const now = Date.now();
         const distance = launchDate - now;
