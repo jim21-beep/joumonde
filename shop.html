@@ -258,19 +258,19 @@
                                 </select>
                             </div>
                             <div class="color-dropdown-wrapper" style="position: relative;">
-                                <button class="color-dropdown-btn" id="blazer-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="toggleBlazerColorDropdown()">
+                                <button class="color-dropdown-btn" id="blazer-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="toggleBlazerColorDropdown(event)">
                                     <span class="color-square color-black" id="blazer-color-square"></span>
                                     <span id="blazer-color-selected-label" style="margin-left:8px;font-size:0.97em;color:#444;vertical-align:middle;">Schwarz</span>
                                     <svg style="margin-left:6px;vertical-align:middle;" width="16" height="16" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" style="fill:none;stroke:#888;stroke-width:2"/></svg>
                                 </button>
                                 <div class="color-dropdown-list" id="blazer-color-dropdown-list" style="display:none;position:absolute;z-index:10;top:38px;left:0;background:#fff;border:1.5px solid #eee;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.08);padding:10px 14px;min-width:140px;">
-                                    <div class="color-dropdown-option" data-color="black" data-label="Schwarz" onclick="selectBlazerColorDropdown('black', '#000', 'Schwarz')"><span class="color-square color-black"></span> Schwarz</div>
-                                    <div class="color-dropdown-option" data-color="white" data-label="Weiß" onclick="selectBlazerColorDropdown('white', '#fff', 'Weiß')"><span class="color-square color-white"></span> Weiß</div>
-                                    <div class="color-dropdown-option" data-color="navy" data-label="Navy" onclick="selectBlazerColorDropdown('navy', '#001f3f', 'Navy')"><span class="color-square color-navy"></span> Navy</div>
-                                    <div class="color-dropdown-option" data-color="gray" data-label="Grau" onclick="selectBlazerColorDropdown('gray', '#808080', 'Grau')"><span class="color-square color-gray"></span> Grau</div>
-                                    <div class="color-dropdown-option" data-color="beige" data-label="Beige" onclick="selectBlazerColorDropdown('beige', '#f5f5dc', 'Beige')"><span class="color-square color-beige"></span> Beige</div>
-                                    <div class="color-dropdown-option" data-color="burgundy" data-label="Burgundy" onclick="selectBlazerColorDropdown('burgundy', '#800020', 'Burgundy')"><span class="color-square color-burgundy"></span> Burgundy</div>
-                                    <div class="color-dropdown-option" data-color="camel" data-label="Camel" onclick="selectBlazerColorDropdown('camel', '#C19A6B', 'Camel')"><span class="color-square color-camel"></span> Camel</div>
+                                    <div class="color-dropdown-option" data-color="black" data-label="Schwarz" onclick="event.stopPropagation(); selectBlazerColorDropdown('black', '#000', 'Schwarz', event)"><span class="color-square color-black"></span> Schwarz</div>
+                                    <div class="color-dropdown-option" data-color="white" data-label="Weiß" onclick="event.stopPropagation(); selectBlazerColorDropdown('white', '#fff', 'Weiß', event)"><span class="color-square color-white"></span> Weiß</div>
+                                    <div class="color-dropdown-option" data-color="navy" data-label="Navy" onclick="event.stopPropagation(); selectBlazerColorDropdown('navy', '#001f3f', 'Navy', event)"><span class="color-square color-navy"></span> Navy</div>
+                                    <div class="color-dropdown-option" data-color="gray" data-label="Grau" onclick="event.stopPropagation(); selectBlazerColorDropdown('gray', '#808080', 'Grau', event)"><span class="color-square color-gray"></span> Grau</div>
+                                    <div class="color-dropdown-option" data-color="beige" data-label="Beige" onclick="event.stopPropagation(); selectBlazerColorDropdown('beige', '#f5f5dc', 'Beige', event)"><span class="color-square color-beige"></span> Beige</div>
+                                    <div class="color-dropdown-option" data-color="burgundy" data-label="Burgundy" onclick="event.stopPropagation(); selectBlazerColorDropdown('burgundy', '#800020', 'Burgundy', event)"><span class="color-square color-burgundy"></span> Burgundy</div>
+                                    <div class="color-dropdown-option" data-color="camel" data-label="Camel" onclick="event.stopPropagation(); selectBlazerColorDropdown('camel', '#C19A6B', 'Camel', event)"><span class="color-square color-camel"></span> Camel</div>
                                 </div>
                             </div>
                         </div>
@@ -311,15 +311,15 @@
                                 </select>
                             </div>
                             <div class="color-dropdown-wrapper" style="position: relative;">
-                                <button class="color-dropdown-btn" id="polo-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="togglePoloColorDropdown()">
+                                <button class="color-dropdown-btn" id="polo-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="togglePoloColorDropdown(event)">
                                     <span class="color-square color-white" id="polo-color-square"></span>
                                     <span id="polo-color-selected-label" style="margin-left:8px;font-size:0.97em;color:#444;vertical-align:middle;">Weiß</span>
                                     <svg style="margin-left:6px;vertical-align:middle;" width="16" height="16" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" style="fill:none;stroke:#888;stroke-width:2"/></svg>
                                 </button>
                                 <div class="color-dropdown-list" id="polo-color-dropdown-list" style="display:none;position:absolute;z-index:10;top:38px;left:0;background:#fff;border:1px solid rgba(212,175,55,0.3);border-radius:0.25rem;box-shadow:0 4px 16px rgba(0,0,0,0.08);padding:0.5rem 0.25rem;min-width:140px;max-height:220px;overflow-y:auto;">
-                                    <div class="color-dropdown-option" data-color="white" data-label="Weiß" onclick="selectPoloColorDropdown('white', '#fff', 'Weiß')"><span class="color-square color-white"></span> Weiß</div>
-                                    <div class="color-dropdown-option" data-color="navy" data-label="Navy" onclick="selectPoloColorDropdown('navy', '#001f3f', 'Navy')"><span class="color-square color-navy"></span> Navy</div>
-                                    <div class="color-dropdown-option" data-color="black" data-label="Schwarz" onclick="selectPoloColorDropdown('black', '#000000', 'Schwarz')"><span class="color-square color-black"></span> Schwarz</div>
+                                    <div class="color-dropdown-option" data-color="white" data-label="Weiß" onclick="event.stopPropagation(); selectPoloColorDropdown('white', '#fff', 'Weiß', event)"><span class="color-square color-white"></span> Weiß</div>
+                                    <div class="color-dropdown-option" data-color="navy" data-label="Navy" onclick="event.stopPropagation(); selectPoloColorDropdown('navy', '#001f3f', 'Navy', event)"><span class="color-square color-navy"></span> Navy</div>
+                                    <div class="color-dropdown-option" data-color="black" data-label="Schwarz" onclick="event.stopPropagation(); selectPoloColorDropdown('black', '#000000', 'Schwarz', event)"><span class="color-square color-black"></span> Schwarz</div>
                                 </div>
                             </div>
                         </div>
@@ -360,17 +360,17 @@
                                 </select>
                             </div>
                             <div class="color-dropdown-wrapper" style="position: relative;">
-                                <button class="color-dropdown-btn" id="chino-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="toggleChinoColorDropdown()">
+                                <button class="color-dropdown-btn" id="chino-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="toggleChinoColorDropdown(event)">
                                     <span class="color-square color-camel" id="chino-color-square"></span>
                                     <span id="chino-color-selected-label" style="margin-left:8px;font-size:0.97em;color:#444;vertical-align:middle;">Camel</span>
                                     <svg style="margin-left:6px;vertical-align:middle;" width="16" height="16" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" style="fill:none;stroke:#888;stroke-width:2"/></svg>
                                 </button>
                                 <div class="color-dropdown-list" id="chino-color-dropdown-list" style="display:none;">
                                                                         <!-- bereits korrekt: max-height und overflow-y:auto vorhanden -->
-                                    <div class="color-dropdown-option" data-color="camel" data-label="Camel" onclick="selectChinoColorDropdown('camel', '#C19A6B', 'Camel')"><span class="color-square color-camel"></span> Camel</div>
-                                    <div class="color-dropdown-option" data-color="beige" data-label="Beige" onclick="selectChinoColorDropdown('beige', '#f5f5dc', 'Beige')"><span class="color-square color-beige"></span> Beige</div>
-                                    <div class="color-dropdown-option" data-color="gray" data-label="Grau" onclick="selectChinoColorDropdown('gray', '#808080', 'Grau')"><span class="color-square color-gray"></span> Grau</div>
-                                    <div class="color-dropdown-option" data-color="black" data-label="Schwarz" onclick="selectChinoColorDropdown('black', '#000000', 'Schwarz')"><span class="color-square color-black"></span> Schwarz</div>
+                                    <div class="color-dropdown-option" data-color="camel" data-label="Camel" onclick="event.stopPropagation(); selectChinoColorDropdown('camel', '#C19A6B', 'Camel', event)"><span class="color-square color-camel"></span> Camel</div>
+                                    <div class="color-dropdown-option" data-color="beige" data-label="Beige" onclick="event.stopPropagation(); selectChinoColorDropdown('beige', '#f5f5dc', 'Beige', event)"><span class="color-square color-beige"></span> Beige</div>
+                                    <div class="color-dropdown-option" data-color="gray" data-label="Grau" onclick="event.stopPropagation(); selectChinoColorDropdown('gray', '#808080', 'Grau', event)"><span class="color-square color-gray"></span> Grau</div>
+                                    <div class="color-dropdown-option" data-color="black" data-label="Schwarz" onclick="event.stopPropagation(); selectChinoColorDropdown('black', '#000000', 'Schwarz', event)"><span class="color-square color-black"></span> Schwarz</div>
                                 </div>
                             </div>
                         </div>
@@ -412,16 +412,16 @@
                                 </select>
                             </div>
                             <div class="color-dropdown-wrapper" style="position: relative;">
-                                <button class="color-dropdown-btn" id="weste-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="toggleWesteColorDropdown()">
+                                <button class="color-dropdown-btn" id="weste-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="toggleWesteColorDropdown(event)">
                                     <span class="color-square color-beige" id="weste-color-square"></span>
                                     <span id="weste-color-selected-label" style="margin-left:8px;font-size:0.97em;color:#444;vertical-align:middle;">Creme</span>
                                     <svg style="margin-left:6px;vertical-align:middle;" width="16" height="16" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" style="fill:none;stroke:#888;stroke-width:2"/></svg>
                                 </button>
                                 <div class="color-dropdown-list" id="weste-color-dropdown-list" style="display:none;position:absolute;z-index:10;top:38px;left:0;background:#fff;border:1.5px solid #eee;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.08);padding:10px 14px;min-width:140px;">
-                                    <div class="color-dropdown-option" data-color="beige" data-label="Creme" onclick="selectWesteColorDropdown('beige', '#f5f5dc', 'Creme')"><span class="color-square color-beige"></span> Creme</div>
-                                    <div class="color-dropdown-option" data-color="navy" data-label="Navy" onclick="selectWesteColorDropdown('navy', '#001f3f', 'Navy')"><span class="color-square color-navy"></span> Navy</div>
-                                    <div class="color-dropdown-option" data-color="gray" data-label="Grau" onclick="selectWesteColorDropdown('gray', '#808080', 'Grau')"><span class="color-square color-gray"></span> Grau</div>
-                                    <div class="color-dropdown-option" data-color="black" data-label="Schwarz" onclick="selectWesteColorDropdown('black', '#000', 'Schwarz')"><span class="color-square color-black"></span> Schwarz</div>
+                                    <div class="color-dropdown-option" data-color="beige" data-label="Creme" onclick="event.stopPropagation(); selectWesteColorDropdown('beige', '#f5f5dc', 'Creme', event)"><span class="color-square color-beige"></span> Creme</div>
+                                    <div class="color-dropdown-option" data-color="navy" data-label="Navy" onclick="event.stopPropagation(); selectWesteColorDropdown('navy', '#001f3f', 'Navy', event)"><span class="color-square color-navy"></span> Navy</div>
+                                    <div class="color-dropdown-option" data-color="gray" data-label="Grau" onclick="event.stopPropagation(); selectWesteColorDropdown('gray', '#808080', 'Grau', event)"><span class="color-square color-gray"></span> Grau</div>
+                                    <div class="color-dropdown-option" data-color="black" data-label="Schwarz" onclick="event.stopPropagation(); selectWesteColorDropdown('black', '#000', 'Schwarz', event)"><span class="color-square color-black"></span> Schwarz</div>
                                 </div>
                             </div>
                         </div>
@@ -463,16 +463,16 @@
                                 </select>
                             </div>
                             <div class="color-dropdown-wrapper" style="position: relative;">
-                                <button class="color-dropdown-btn" id="quarterzip-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="toggleQuarterzipColorDropdown()">
+                                <button class="color-dropdown-btn" id="quarterzip-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="toggleQuarterzipColorDropdown(event)">
                                     <span class="color-square color-beige" id="quarterzip-color-square"></span>
                                     <span id="quarterzip-color-selected-label" style="margin-left:8px;font-size:0.97em;color:#444;vertical-align:middle;">Creme</span>
                                     <svg style="margin-left:6px;vertical-align:middle;" width="16" height="16" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" style="fill:none;stroke:#888;stroke-width:2"/></svg>
                                 </button>
                                 <div class="color-dropdown-list" id="quarterzip-color-dropdown-list" style="display:none;position:absolute;z-index:10;top:38px;left:0;background:#fff;border:1.5px solid #eee;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.08);padding:10px 14px;min-width:140px;">
-                                    <div class="color-dropdown-option" data-color="beige" data-label="Creme" onclick="selectQuarterzipColorDropdown('beige', '#f5f5dc', 'Creme')"><span class="color-square color-beige"></span> Creme</div>
-                                    <div class="color-dropdown-option" data-color="navy" data-label="Navy" onclick="selectQuarterzipColorDropdown('navy', '#001f3f', 'Navy')"><span class="color-square color-navy"></span> Navy</div>
-                                    <div class="color-dropdown-option" data-color="gray" data-label="Grau" onclick="selectQuarterzipColorDropdown('gray', '#808080', 'Grau')"><span class="color-square color-gray"></span> Grau</div>
-                                    <div class="color-dropdown-option" data-color="black" data-label="Schwarz" onclick="selectQuarterzipColorDropdown('black', '#000', 'Schwarz')"><span class="color-square color-black"></span> Schwarz</div>
+                                    <div class="color-dropdown-option" data-color="beige" data-label="Creme" onclick="event.stopPropagation(); selectQuarterzipColorDropdown('beige', '#f5f5dc', 'Creme', event)"><span class="color-square color-beige"></span> Creme</div>
+                                    <div class="color-dropdown-option" data-color="navy" data-label="Navy" onclick="event.stopPropagation(); selectQuarterzipColorDropdown('navy', '#001f3f', 'Navy', event)"><span class="color-square color-navy"></span> Navy</div>
+                                    <div class="color-dropdown-option" data-color="gray" data-label="Grau" onclick="event.stopPropagation(); selectQuarterzipColorDropdown('gray', '#808080', 'Grau', event)"><span class="color-square color-gray"></span> Grau</div>
+                                    <div class="color-dropdown-option" data-color="black" data-label="Schwarz" onclick="event.stopPropagation(); selectQuarterzipColorDropdown('black', '#000', 'Schwarz', event)"><span class="color-square color-black"></span> Schwarz</div>
                                 </div>
                             </div>
                         </div>
@@ -513,16 +513,16 @@
                                 </select>
                             </div>
                             <div class="color-dropdown-wrapper" style="position: relative;">
-                                <button class="color-dropdown-btn" id="pullover-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="togglePulloverColorDropdown()">
+                                <button class="color-dropdown-btn" id="pullover-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="togglePulloverColorDropdown(event)">
                                     <span class="color-square" id="pullover-color-square" style="background:#2c3e50;"></span>
                                     <span id="pullover-color-selected-label" style="margin-left:8px;font-size:0.97em;color:#444;vertical-align:middle;">Dunkelblau</span>
                                     <svg style="margin-left:6px;vertical-align:middle;" width="16" height="16" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" style="fill:none;stroke:#888;stroke-width:2"/></svg>
                                 </button>
                                 <div class="color-dropdown-list" id="pullover-color-dropdown-list" style="display:none;position:absolute;z-index:10;top:38px;left:0;background:#fff;border:1.5px solid #eee;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.08);padding:10px 14px;min-width:140px;">
-                                    <div class="color-dropdown-option" data-color="darkblue" data-label="Dunkelblau" onclick="selectPulloverColorDropdown('darkblue', '#2c3e50', 'Dunkelblau')"><span class="color-square" style="background:#2c3e50;"></span> Dunkelblau</div>
-                                    <div class="color-dropdown-option" data-color="white" data-label="Weiß" onclick="selectPulloverColorDropdown('white', '#fff', 'Weiß')"><span class="color-square color-white"></span> Weiß</div>
-                                    <div class="color-dropdown-option" data-color="gray" data-label="Grau" onclick="selectPulloverColorDropdown('gray', '#808080', 'Grau')"><span class="color-square color-gray"></span> Grau</div>
-                                    <div class="color-dropdown-option" data-color="beige" data-label="Beige" onclick="selectPulloverColorDropdown('beige', '#f5f5dc', 'Beige')"><span class="color-square color-beige"></span> Beige</div>
+                                    <div class="color-dropdown-option" data-color="darkblue" data-label="Dunkelblau" onclick="event.stopPropagation(); selectPulloverColorDropdown('darkblue', '#2c3e50', 'Dunkelblau', event)"><span class="color-square" style="background:#2c3e50;"></span> Dunkelblau</div>
+                                    <div class="color-dropdown-option" data-color="white" data-label="Weiß" onclick="event.stopPropagation(); selectPulloverColorDropdown('white', '#fff', 'Weiß', event)"><span class="color-square color-white"></span> Weiß</div>
+                                    <div class="color-dropdown-option" data-color="gray" data-label="Grau" onclick="event.stopPropagation(); selectPulloverColorDropdown('gray', '#808080', 'Grau', event)"><span class="color-square color-gray"></span> Grau</div>
+                                    <div class="color-dropdown-option" data-color="beige" data-label="Beige" onclick="event.stopPropagation(); selectPulloverColorDropdown('beige', '#f5f5dc', 'Beige', event)"><span class="color-square color-beige"></span> Beige</div>
                                 </div>
                             </div>
                         </div>
@@ -719,18 +719,18 @@
                                 </select>
                             </div>
                             <div class="color-dropdown-wrapper" style="position: relative;">
-                                <button class="color-dropdown-btn" id="hoodie-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="toggleHoodieColorDropdown()">
+                                <button class="color-dropdown-btn" id="hoodie-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="toggleHoodieColorDropdown(event)">
                                     <span class="color-square color-black"></span>
                                     <span id="hoodie-color-selected-label" style="margin-left:8px;font-size:0.97em;color:#444;vertical-align:middle;">Schwarz</span>
                                     <svg style="margin-left:6px;vertical-align:middle;" width="16" height="16" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" style="fill:none;stroke:#888;stroke-width:2"/></svg>
                                 </button>
                                 <div class="color-dropdown-list" id="hoodie-color-dropdown-list" style="display:none;position:absolute;z-index:10;top:38px;left:0;background:#fff;border:1px solid #d4af37;border-radius:0;box-shadow:0 2px 8px rgba(0,0,0,0.08);padding:4px 0;max-height:120px;overflow-y:auto;min-width:120px;margin-top:2px;">
-                                    <div class="color-dropdown-option" data-color="black" data-label="Schwarz" onclick="selectHoodieColorDropdown('black', '#000000', 'Schwarz')"><span class="color-square color-black"></span> Schwarz</div>
-                                    <div class="color-dropdown-option" data-color="white" data-label="Weiß" onclick="selectHoodieColorDropdown('white', '#fff', 'Weiß')"><span class="color-square color-white"></span> Weiß</div>
-                                    <div class="color-dropdown-option" data-color="gray" data-label="Grau" onclick="selectHoodieColorDropdown('gray', '#808080', 'Grau')"><span class="color-square color-gray"></span> Grau</div>
-                                    <div class="color-dropdown-option" data-color="navy" data-label="Navy" onclick="selectHoodieColorDropdown('navy', '#001f3f', 'Navy')"><span class="color-square color-navy"></span> Navy</div>
-                                    <div class="color-dropdown-option" data-color="olive" data-label="Olive" onclick="selectHoodieColorDropdown('olive', '#556B2F', 'Olive')"><span class="color-square color-olive"></span> Olive</div>
-                                    <div class="color-dropdown-option" data-color="beige" data-label="Beige" onclick="selectHoodieColorDropdown('beige', '#f5f5dc', 'Beige')"><span class="color-square color-beige"></span> Beige</div>
+                                    <div class="color-dropdown-option" data-color="black" data-label="Schwarz" onclick="event.stopPropagation(); selectHoodieColorDropdown('black', '#000000', 'Schwarz', event)"><span class="color-square color-black"></span> Schwarz</div>
+                                    <div class="color-dropdown-option" data-color="white" data-label="Weiß" onclick="event.stopPropagation(); selectHoodieColorDropdown('white', '#fff', 'Weiß', event)"><span class="color-square color-white"></span> Weiß</div>
+                                    <div class="color-dropdown-option" data-color="gray" data-label="Grau" onclick="event.stopPropagation(); selectHoodieColorDropdown('gray', '#808080', 'Grau', event)"><span class="color-square color-gray"></span> Grau</div>
+                                    <div class="color-dropdown-option" data-color="navy" data-label="Navy" onclick="event.stopPropagation(); selectHoodieColorDropdown('navy', '#001f3f', 'Navy', event)"><span class="color-square color-navy"></span> Navy</div>
+                                    <div class="color-dropdown-option" data-color="olive" data-label="Olive" onclick="event.stopPropagation(); selectHoodieColorDropdown('olive', '#556B2F', 'Olive', event)"><span class="color-square color-olive"></span> Olive</div>
+                                    <div class="color-dropdown-option" data-color="beige" data-label="Beige" onclick="event.stopPropagation(); selectHoodieColorDropdown('beige', '#f5f5dc', 'Beige', event)"><span class="color-square color-beige"></span> Beige</div>
                                 </div>
                             </div>
                         </div>
@@ -771,18 +771,18 @@
                                 </select>
                             </div>
                             <div class="color-dropdown-wrapper" style="position: relative;">
-                                <button class="color-dropdown-btn" id="tshirt-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="toggleTshirtColorDropdown()">
+                                <button class="color-dropdown-btn" id="tshirt-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="toggleTshirtColorDropdown(event)">
                                     <span class="color-square color-black"></span>
                                     <span id="tshirt-color-selected-label" style="margin-left:8px;font-size:0.97em;color:#444;vertical-align:middle;">Schwarz</span>
                                     <svg style="margin-left:6px;vertical-align:middle;" width="16" height="16" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" style="fill:none;stroke:#888;stroke-width:2"/></svg>
                                 </button>
                                 <div class="color-dropdown-list" id="tshirt-color-dropdown-list" style="display:none;position:absolute;z-index:10;top:38px;left:0;background:#fff;border:1px solid #d4af37;border-radius:0;box-shadow:0 2px 8px rgba(0,0,0,0.08);padding:4px 0;max-height:120px;overflow-y:auto;min-width:120px;margin-top:2px;">
-                                    <div class="color-dropdown-option" data-color="black" data-label="Schwarz" onclick="selectTshirtColorDropdown('black', '#000000', 'Schwarz')"><span class="color-square color-black"></span> Schwarz</div>
-                                    <div class="color-dropdown-option" data-color="white" data-label="Weiß" onclick="selectTshirtColorDropdown('white', '#fff', 'Weiß')"><span class="color-square color-white"></span> Weiß</div>
-                                    <div class="color-dropdown-option" data-color="gray" data-label="Grau" onclick="selectTshirtColorDropdown('gray', '#808080', 'Grau')"><span class="color-square color-gray"></span> Grau</div>
-                                    <div class="color-dropdown-option" data-color="navy" data-label="Navy" onclick="selectTshirtColorDropdown('navy', '#001f3f', 'Navy')"><span class="color-square color-navy"></span> Navy</div>
-                                    <div class="color-dropdown-option" data-color="olive" data-label="Olive" onclick="selectTshirtColorDropdown('olive', '#556B2F', 'Olive')"><span class="color-square color-olive"></span> Olive</div>
-                                    <div class="color-dropdown-option" data-color="beige" data-label="Beige" onclick="selectTshirtColorDropdown('beige', '#f5f5dc', 'Beige')"><span class="color-square color-beige"></span> Beige</div>
+                                    <div class="color-dropdown-option" data-color="black" data-label="Schwarz" onclick="event.stopPropagation(); selectTshirtColorDropdown('black', '#000000', 'Schwarz', event)"><span class="color-square color-black"></span> Schwarz</div>
+                                    <div class="color-dropdown-option" data-color="white" data-label="Weiß" onclick="event.stopPropagation(); selectTshirtColorDropdown('white', '#fff', 'Weiß', event)"><span class="color-square color-white"></span> Weiß</div>
+                                    <div class="color-dropdown-option" data-color="gray" data-label="Grau" onclick="event.stopPropagation(); selectTshirtColorDropdown('gray', '#808080', 'Grau', event)"><span class="color-square color-gray"></span> Grau</div>
+                                    <div class="color-dropdown-option" data-color="navy" data-label="Navy" onclick="event.stopPropagation(); selectTshirtColorDropdown('navy', '#001f3f', 'Navy', event)"><span class="color-square color-navy"></span> Navy</div>
+                                    <div class="color-dropdown-option" data-color="olive" data-label="Olive" onclick="event.stopPropagation(); selectTshirtColorDropdown('olive', '#556B2F', 'Olive', event)"><span class="color-square color-olive"></span> Olive</div>
+                                    <div class="color-dropdown-option" data-color="beige" data-label="Beige" onclick="event.stopPropagation(); selectTshirtColorDropdown('beige', '#f5f5dc', 'Beige', event)"><span class="color-square color-beige"></span> Beige</div>
                                 </div>
                             </div>
                         </div>
@@ -822,18 +822,18 @@
                                 </select>
                             </div>
                             <div class="color-dropdown-wrapper" style="position: relative;">
-                                <button class="color-dropdown-btn" id="cargo-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="toggleCargoColorDropdown()">
+                                <button class="color-dropdown-btn" id="cargo-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="toggleCargoColorDropdown(event)">
                                     <span class="color-square color-black"></span>
                                     <span id="cargo-color-selected-label" style="margin-left:8px;font-size:0.97em;color:#444;vertical-align:middle;">Schwarz</span>
                                     <svg style="margin-left:6px;vertical-align:middle;" width="16" height="16" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" style="fill:none;stroke:#888;stroke-width:2"/></svg>
                                 </button>
                                 <div class="color-dropdown-list" id="cargo-color-dropdown-list" style="display:none;position:absolute;z-index:10;top:38px;left:0;background:#fff;border:1px solid #d4af37;border-radius:0;box-shadow:0 2px 8px rgba(0,0,0,0.08);padding:4px 0;max-height:120px;overflow-y:auto;min-width:120px;margin-top:2px;">
-                                    <div class="color-dropdown-option" data-color="black" data-label="Schwarz" onclick="selectCargoColorDropdown('black', '#000000', 'Schwarz')"><span class="color-square color-black"></span> Schwarz</div>
-                                    <div class="color-dropdown-option" data-color="white" data-label="Weiß" onclick="selectCargoColorDropdown('white', '#fff', 'Weiß')"><span class="color-square color-white"></span> Weiß</div>
-                                    <div class="color-dropdown-option" data-color="gray" data-label="Grau" onclick="selectCargoColorDropdown('gray', '#808080', 'Grau')"><span class="color-square color-gray"></span> Grau</div>
-                                    <div class="color-dropdown-option" data-color="navy" data-label="Navy" onclick="selectCargoColorDropdown('navy', '#001f3f', 'Navy')"><span class="color-square color-navy"></span> Navy</div>
-                                    <div class="color-dropdown-option" data-color="olive" data-label="Olive" onclick="selectCargoColorDropdown('olive', '#556B2F', 'Olive')"><span class="color-square color-olive"></span> Olive</div>
-                                    <div class="color-dropdown-option" data-color="beige" data-label="Beige" onclick="selectCargoColorDropdown('beige', '#f5f5dc', 'Beige')"><span class="color-square color-beige"></span> Beige</div>
+                                    <div class="color-dropdown-option" data-color="black" data-label="Schwarz" onclick="event.stopPropagation(); selectCargoColorDropdown('black', '#000000', 'Schwarz', event)"><span class="color-square color-black"></span> Schwarz</div>
+                                    <div class="color-dropdown-option" data-color="white" data-label="Weiß" onclick="event.stopPropagation(); selectCargoColorDropdown('white', '#fff', 'Weiß', event)"><span class="color-square color-white"></span> Weiß</div>
+                                    <div class="color-dropdown-option" data-color="gray" data-label="Grau" onclick="event.stopPropagation(); selectCargoColorDropdown('gray', '#808080', 'Grau', event)"><span class="color-square color-gray"></span> Grau</div>
+                                    <div class="color-dropdown-option" data-color="navy" data-label="Navy" onclick="event.stopPropagation(); selectCargoColorDropdown('navy', '#001f3f', 'Navy', event)"><span class="color-square color-navy"></span> Navy</div>
+                                    <div class="color-dropdown-option" data-color="olive" data-label="Olive" onclick="event.stopPropagation(); selectCargoColorDropdown('olive', '#556B2F', 'Olive', event)"><span class="color-square color-olive"></span> Olive</div>
+                                    <div class="color-dropdown-option" data-color="beige" data-label="Beige" onclick="event.stopPropagation(); selectCargoColorDropdown('beige', '#f5f5dc', 'Beige', event)"><span class="color-square color-beige"></span> Beige</div>
                                 </div>
                             </div>
                         </div>
@@ -873,18 +873,18 @@
                                 </select>
                             </div>
                             <div class="color-dropdown-wrapper" style="position: relative;">
-                                <button class="color-dropdown-btn" id="tracksuit-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="toggleTrackSuitColorDropdown()">
+                                <button class="color-dropdown-btn" id="tracksuit-color-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false" onclick="toggleTrackSuitColorDropdown(event)">
                                     <span class="color-square color-black"></span>
                                     <span id="tracksuit-color-selected-label" style="margin-left:8px;font-size:0.97em;color:#444;vertical-align:middle;">Schwarz</span>
                                     <svg style="margin-left:6px;vertical-align:middle;" width="16" height="16" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" style="fill:none;stroke:#888;stroke-width:2"/></svg>
                                 </button>
                                 <div class="color-dropdown-list" id="tracksuit-color-dropdown-list" style="display:none;position:absolute;z-index:10;top:38px;left:0;background:#fff;border:1px solid #d4af37;border-radius:0;box-shadow:0 2px 8px rgba(0,0,0,0.08);padding:4px 0;max-height:120px;overflow-y:auto;min-width:120px;margin-top:2px;">
-                                    <div class="color-dropdown-option" data-color="black" data-label="Schwarz" onclick="selectTrackSuitColorDropdown('black', '#000000', 'Schwarz')"><span class="color-square color-black"></span> Schwarz</div>
-                                    <div class="color-dropdown-option" data-color="white" data-label="Weiß" onclick="selectTrackSuitColorDropdown('white', '#fff', 'Weiß')"><span class="color-square color-white"></span> Weiß</div>
-                                    <div class="color-dropdown-option" data-color="gray" data-label="Grau" onclick="selectTrackSuitColorDropdown('gray', '#808080', 'Grau')"><span class="color-square color-gray"></span> Grau</div>
-                                    <div class="color-dropdown-option" data-color="navy" data-label="Navy" onclick="selectTrackSuitColorDropdown('navy', '#001f3f', 'Navy')"><span class="color-square color-navy"></span> Navy</div>
-                                    <div class="color-dropdown-option" data-color="olive" data-label="Olive" onclick="selectTrackSuitColorDropdown('olive', '#556B2F', 'Olive')"><span class="color-square color-olive"></span> Olive</div>
-                                    <div class="color-dropdown-option" data-color="beige" data-label="Beige" onclick="selectTrackSuitColorDropdown('beige', '#f5f5dc', 'Beige')"><span class="color-square color-beige"></span> Beige</div>
+                                    <div class="color-dropdown-option" data-color="black" data-label="Schwarz" onclick="event.stopPropagation(); selectTrackSuitColorDropdown('black', '#000000', 'Schwarz', event)"><span class="color-square color-black"></span> Schwarz</div>
+                                    <div class="color-dropdown-option" data-color="white" data-label="Weiß" onclick="event.stopPropagation(); selectTrackSuitColorDropdown('white', '#fff', 'Weiß', event)"><span class="color-square color-white"></span> Weiß</div>
+                                    <div class="color-dropdown-option" data-color="gray" data-label="Grau" onclick="event.stopPropagation(); selectTrackSuitColorDropdown('gray', '#808080', 'Grau', event)"><span class="color-square color-gray"></span> Grau</div>
+                                    <div class="color-dropdown-option" data-color="navy" data-label="Navy" onclick="event.stopPropagation(); selectTrackSuitColorDropdown('navy', '#001f3f', 'Navy', event)"><span class="color-square color-navy"></span> Navy</div>
+                                    <div class="color-dropdown-option" data-color="olive" data-label="Olive" onclick="event.stopPropagation(); selectTrackSuitColorDropdown('olive', '#556B2F', 'Olive', event)"><span class="color-square color-olive"></span> Olive</div>
+                                    <div class="color-dropdown-option" data-color="beige" data-label="Beige" onclick="event.stopPropagation(); selectTrackSuitColorDropdown('beige', '#f5f5dc', 'Beige', event)"><span class="color-square color-beige"></span> Beige</div>
                                 </div>
                             </div>
                         </div>
