@@ -225,8 +225,15 @@ window.selectedHoodieColor = 'Schwarz';
 function selectHoodieColor(color, btn) {
     const hoodieImg = document.getElementById('hoodie-img');
     const hoodieImageDiv = document.getElementById('hoodie-image');
-    const colorLabel = document.getElementById('hoodie-color-label');
+    const colorLabel = document.getElementById('hoodie-color-selected-label');
     const desc = document.getElementById('hoodie-desc');
+    
+    // Check if elements exist before proceeding
+    if (!hoodieImg || !hoodieImageDiv || !colorLabel) {
+        console.warn('Hoodie color selection: Missing required HTML elements. Need IDs: hoodie-img, hoodie-image, hoodie-color-selected-label');
+        return;
+    }
+    
     let colorName = 'Schwarz';
     let bg = 'linear-gradient(135deg, #000000 0%, #434343 100%)';
     let img = 'assets/images/hoodie-mockup.png';

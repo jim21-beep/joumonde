@@ -1,3 +1,10 @@
+:root {
+    --main-gap: 2rem;
+    --desktop-gap: 3rem;
+    --container-max-width: 1400px;
+    --desktop-container-max-width: 1600px;
+}
+
 /* ===== COLOR DROPDOWN SYSTEM ===== */
 
 /* Button */
@@ -107,9 +114,16 @@ body {
 }
 
 .container {
-    max-width: 1400px;
+    max-width: var(--container-max-width);
     margin: 0 auto;
     padding: 0 40px;
+}
+
+@media (min-width: 1024px) {
+    .container {
+        max-width: var(--desktop-container-max-width);
+        padding: 0 60px;
+    }
 }
 
 /* Navigation Bar */
@@ -126,9 +140,17 @@ body {
 
 .navbar .container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 3rem;
+    gap: var(--main-gap);
+    max-width: 100%;
+}
+
+@media (min-width: 1024px) {
+    .navbar .container {
+        gap: var(--desktop-gap);
+        justify-content: center;
+    }
 }
 
 .logo {
@@ -173,7 +195,13 @@ body {
 .nav-links {
     display: flex;
     list-style: none;
-    gap: 3rem;
+    gap: var(--main-gap);
+}
+
+@media (min-width: 1024px) {
+    .nav-links {
+        gap: var(--desktop-gap);
+    }
 }
 
 .nav-links a {
@@ -209,7 +237,7 @@ body {
 
 .nav-icons {
     display: flex;
-    gap: 0.8rem;
+    gap: var(--main-gap);
     align-items: center;
 }
 
@@ -517,16 +545,26 @@ body {
 .product-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 3rem;
-    margin-top: 3rem;
+    gap: var(--main-gap);
+    margin-top: var(--main-gap);
     align-items: start;
+    padding: var(--main-gap);
+    overflow: visible;
+}
+
+@media (min-width: 1024px) {
+    .product-grid {
+        gap: var(--desktop-gap);
+        padding: var(--desktop-gap);
+        margin-top: var(--desktop-gap);
+    }
 }
 
 .product-card {
     background: #ffffff;
     border-radius: 0;
     overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
     position: relative;
     border: 1px solid rgba(212, 175, 55, 0.1);
@@ -541,8 +579,10 @@ body {
     right: 0;
     bottom: 0;
     border: 2px solid transparent;
+    border-radius: 0;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
+    z-index: 1;
 }
 
 .product-card:hover::before {
