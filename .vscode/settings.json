@@ -1,4 +1,6 @@
 {
     "chat.agent.thinking.collapsedTools": "all",
-    "editor.defaultFormatter": "GitHub.copilot-chat"
+    "chat.checkpoints.showFileChanges": true,
+    "workbench.commandPalette.experimental.suggestCommands": false,
+    "github.copilot.chat.languageContext.typescript.fix.enabled": true
 }
