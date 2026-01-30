@@ -118,7 +118,7 @@ document.addEventListener('click', function(e) {
     });
 });
 // Farbauswahl Dropdown für Hoodie
-function toggleHoodieColorDropdown() {
+function toggleHoodieColorDropdown(e) { if (e) e.stopPropagation();
     const btn = document.getElementById('hoodie-color-dropdown-btn');
     const list = document.getElementById('hoodie-color-dropdown-list');
     const expanded = btn.getAttribute('aria-expanded') === 'true';
@@ -126,7 +126,7 @@ function toggleHoodieColorDropdown() {
     list.style.display = expanded ? 'none' : 'block';
 }
 
-function selectHoodieColorDropdown(color, hex, label) {
+function selectHoodieColorDropdown(color, hex, label, e) { if (e) e.stopPropagation();
     applyColorSelection('hoodie', hex, label, 'selectedHoodieColor');
     // Produktbild-Hintergrund anpassen
     var bgMap = {
@@ -165,7 +165,7 @@ document.addEventListener('click', function(e) {
 });
 
 // Farbauswahl Dropdown für T-Shirt (Streetwear)
-function toggleTshirtColorDropdown() {
+function toggleTshirtColorDropdown(e) { if (e) e.stopPropagation();
     const btn = document.getElementById('tshirt-color-dropdown-btn');
     const list = document.getElementById('tshirt-color-dropdown-list');
     const expanded = btn.getAttribute('aria-expanded') === 'true';
@@ -173,12 +173,12 @@ function toggleTshirtColorDropdown() {
     list.style.display = expanded ? 'none' : 'block';
 }
 
-function selectTshirtColorDropdown(color, hex, label) {
+function selectTshirtColorDropdown(color, hex, label, e) { if (e) e.stopPropagation();
     applyColorSelection('tshirt', hex, label, 'selectedTshirtColor');
 }
 
 // Farbauswahl Dropdown für Cargo Pants (Streetwear)
-function toggleCargoColorDropdown() {
+function toggleCargoColorDropdown(e) { if (e) e.stopPropagation();
     const btn = document.getElementById('cargo-color-dropdown-btn');
     const list = document.getElementById('cargo-color-dropdown-list');
     const expanded = btn.getAttribute('aria-expanded') === 'true';
@@ -186,12 +186,12 @@ function toggleCargoColorDropdown() {
     list.style.display = expanded ? 'none' : 'block';
 }
 
-function selectCargoColorDropdown(color, hex, label) {
+function selectCargoColorDropdown(color, hex, label, e) { if (e) e.stopPropagation();
     applyColorSelection('cargo', hex, label, 'selectedCargoColor');
 }
 
 // Farbauswahl Dropdown für Trainerhose (Streetwear)
-function toggleTrackSuitColorDropdown() {
+function toggleTrackSuitColorDropdown(e) { if (e) e.stopPropagation();
     const btn = document.getElementById('tracksuit-color-dropdown-btn');
     const list = document.getElementById('tracksuit-color-dropdown-list');
     const expanded = btn.getAttribute('aria-expanded') === 'true';
@@ -199,7 +199,7 @@ function toggleTrackSuitColorDropdown() {
     list.style.display = expanded ? 'none' : 'block';
 }
 
-function selectTrackSuitColorDropdown(color, hex, label) {
+function selectTrackSuitColorDropdown(color, hex, label, e) { if (e) e.stopPropagation();
     applyColorSelection('tracksuit', hex, label, 'selectedTrackSuitColor');
 }
 
