@@ -1,40 +1,40 @@
 // Dropdown-Logik für alle Old Money Produkte
-function toggleBlazerColorDropdown() {
+function toggleBlazerColorDropdown(e) { if (e) e.stopPropagation();
     const btn = document.getElementById('blazer-color-dropdown-btn');
     const list = document.getElementById('blazer-color-dropdown-list');
     const expanded = btn.getAttribute('aria-expanded') === 'true';
     btn.setAttribute('aria-expanded', !expanded);
     list.style.display = expanded ? 'none' : 'block';
 }
-function toggleChinoColorDropdown() {
+function toggleChinoColorDropdown(e) { if (e) e.stopPropagation();
     const btn = document.getElementById('chino-color-dropdown-btn');
     const list = document.getElementById('chino-color-dropdown-list');
     const expanded = btn.getAttribute('aria-expanded') === 'true';
     btn.setAttribute('aria-expanded', !expanded);
     list.style.display = expanded ? 'none' : 'block';
 }
-function togglePulloverColorDropdown() {
+function togglePulloverColorDropdown(e) { if (e) e.stopPropagation();
     const btn = document.getElementById('pullover-color-dropdown-btn');
     const list = document.getElementById('pullover-color-dropdown-list');
     const expanded = btn.getAttribute('aria-expanded') === 'true';
     btn.setAttribute('aria-expanded', !expanded);
     list.style.display = expanded ? 'none' : 'block';
 }
-function togglePoloColorDropdown() {
+function togglePoloColorDropdown(e) { if (e) e.stopPropagation();
     const btn = document.getElementById('polo-color-dropdown-btn');
     const list = document.getElementById('polo-color-dropdown-list');
     const expanded = btn.getAttribute('aria-expanded') === 'true';
     btn.setAttribute('aria-expanded', !expanded);
     list.style.display = expanded ? 'none' : 'block';
 }
-function toggleWesteColorDropdown() {
+function toggleWesteColorDropdown(e) { if (e) e.stopPropagation();
     const btn = document.getElementById('weste-color-dropdown-btn');
     const list = document.getElementById('weste-color-dropdown-list');
     const expanded = btn.getAttribute('aria-expanded') === 'true';
     btn.setAttribute('aria-expanded', !expanded);
     list.style.display = expanded ? 'none' : 'block';
 }
-function toggleQuarterzipColorDropdown() {
+function toggleQuarterzipColorDropdown(e) { if (e) e.stopPropagation();
     const btn = document.getElementById('quarterzip-color-dropdown-btn');
     const list = document.getElementById('quarterzip-color-dropdown-list');
     const expanded = btn.getAttribute('aria-expanded') === 'true';
@@ -69,27 +69,27 @@ window.selectedCargoColor = 'Schwarz';
 window.selectedTrackSuitColor = 'Schwarz';
 
 // Dropdown-Auswahl Old Money
-function selectBlazerColorDropdown(color, hex, label) {
+function selectBlazerColorDropdown(color, hex, label, e) { if (e) e.stopPropagation();
     applyColorSelection('blazer', hex, label, 'selectedBlazerColor');
 }
 
-function selectPoloColorDropdown(color, hex, label) {
+function selectPoloColorDropdown(color, hex, label, e) { if (e) e.stopPropagation();
     applyColorSelection('polo', hex, label, 'selectedPoloColor');
 }
 
-function selectChinoColorDropdown(color, hex, label) {
+function selectChinoColorDropdown(color, hex, label, e) { if (e) e.stopPropagation();
     applyColorSelection('chino', hex, label, 'selectedChinoColor');
 }
 
-function selectPulloverColorDropdown(color, hex, label) {
+function selectPulloverColorDropdown(color, hex, label, e) { if (e) e.stopPropagation();
     applyColorSelection('pullover', hex, label, 'selectedPulloverColor');
 }
 
-function selectWesteColorDropdown(color, hex, label) {
+function selectWesteColorDropdown(color, hex, label, e) { if (e) e.stopPropagation();
     applyColorSelection('weste', hex, label, 'selectedWesteColor');
 }
 
-function selectQuarterzipColorDropdown(color, hex, label) {
+function selectQuarterzipColorDropdown(color, hex, label, e) { if (e) e.stopPropagation();
     applyColorSelection('quarterzip', hex, label, 'selectedQuarterzipColor');
 }
 
