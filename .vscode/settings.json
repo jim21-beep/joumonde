@@ -1,3 +1,5 @@
 {
-    "liveServer.settings.port": 5501
+    "liveServer.settings.port": 5501,
+    "chat.agent.thinking.collapsedTools": "all",
+    "chat.checkpoints.showFileChanges": true,
 }
