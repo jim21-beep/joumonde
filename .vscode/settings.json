@@ -1,6 +1,0 @@
-{
-    "chat.agent.thinking.collapsedTools": "all",
-    "chat.checkpoints.showFileChanges": true,
-    "workbench.commandPalette.experimental.suggestCommands": false,
-    "github.copilot.chat.languageContext.typescript.fix.enabled": true
-}
