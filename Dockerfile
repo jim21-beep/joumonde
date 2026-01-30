@@ -2,7 +2,7 @@
 FROM nginx:alpine
 
 # Kopiere alle Website-Dateien in das nginx HTML-Verzeichnis
-COPY testsite.html /usr/share/nginx/html/index.html
+COPY *.html /usr/share/nginx/html/
 COPY assets/ /usr/share/nginx/html/assets/
 
 # Erstelle eine einfache nginx-Konfiguration

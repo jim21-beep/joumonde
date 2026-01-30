@@ -1006,9 +1006,17 @@ function viewProductDetail(productName, price, description, colors, sizes) {
 }
 
 // Add to Cart
-function addToCart(productName, price) {
-    // Check if item already exists in cart
-    const existingItem = cart.find(item => item.name === productName);
+function addToCart(productName, price, color, size) {
+    // Default values if not provided
+    color = color || '';
+    size = size || '';
+    
+    // Check if item already exists in cart with same color and size
+    const existingItem = cart.find(item => 
+        item.name === productName && 
+        item.color === color && 
+        item.size === size
+    );
     
     if (existingItem) {
         existingItem.quantity += 1;
@@ -1016,6 +1024,8 @@ function addToCart(productName, price) {
         cart.push({
             name: productName,
             price: price,
+            color: color,
+            size: size,
             quantity: 1
         });
     }
@@ -1026,8 +1036,12 @@ function addToCart(productName, price) {
     const cartSidebar = document.getElementById('cart-sidebar');
     cartSidebar.classList.add('active');
     
-    // Show notification
-    showNotification(`${productName} ${t('added')}`);
+    // Show notification with details
+    let details = [];
+    if (size) details.push(size);
+    if (color) details.push(color);
+    const detailStr = details.length > 0 ? ` (${details.join(', ')})` : '';
+    showNotification(`${productName}${detailStr} ${t('added')}`);
 }
 
 // Update Cart Display
@@ -1064,10 +1078,16 @@ function updateCart() {
         return;
     }
     
-    cartItemsContainer.innerHTML = cart.map((item, index) => `
+    cartItemsContainer.innerHTML = cart.map((item, index) => {
+        let details = [];
+        if (item.size) details.push(item.size);
+        if (item.color) details.push(item.color);
+        const detailStr = details.length > 0 ? `<span class="cart-item-details">${details.join(' / ')}</span>` : '';
+        return `
         <div class="cart-item">
             <div class="cart-item-info">
                 <h4>${item.name}</h4>
+                ${detailStr}
                 <p class="cart-item-price">${formatPrice(item.price)}</p>
                 <div class="cart-item-quantity">
                     <button class="qty-btn" onclick="updateQuantity(${index}, -1)">-</button>
@@ -1077,7 +1097,8 @@ function updateCart() {
             </div>
             <button class="remove-item-btn" onclick="removeFromCart(${index})">&times;</button>
         </div>
-    `).join('');
+    `;
+    }).join('');
     
     // Calculate subtotal
     let subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
