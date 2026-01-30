@@ -3,7 +3,7 @@
     --desktop-gap: 3rem;
     --container-max-width: 1400px;
     --desktop-container-max-width: 1600px;
-    --header-gap: 30px;
+    --header-gap: 40px;
 }
 
 /* ===== COLOR DROPDOWN SYSTEM ===== */
@@ -141,16 +141,19 @@ body {
 
 .navbar .container {
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
-    gap: var(--header-gap);
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 2rem;
 }
 
 .logo {
-    display: flex;
-    align-items: center;
+    display: block;
     margin: 0;
     padding: 0;
+    flex-shrink: 0;
 }
 
 .logo h1 {
@@ -191,10 +194,10 @@ body {
 .nav-links {
     display: flex;
     list-style: none;
-    gap: var(--header-gap);
     margin: 0;
     padding: 0;
     align-items: center;
+    gap: 2rem;
 }
 
 .nav-links a {
@@ -206,6 +209,7 @@ body {
     letter-spacing: 2px;
     position: relative;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
 }
 
 .nav-links a::before {
@@ -230,10 +234,11 @@ body {
 
 .nav-icons {
     display: flex;
-    gap: var(--header-gap);
     align-items: center;
     margin: 0;
     padding: 0;
+    flex-shrink: 0;
+    gap: 2rem;
 }
 
 .mobile-menu-btn {
@@ -256,12 +261,13 @@ body {
     background: transparent;
     border: 1px solid rgba(212, 175, 55, 0.3);
     color: #1a1a1a;
-    padding: 0.4rem 0.7rem;
+    padding: 0.5rem 1rem;
     font-size: 0.9rem;
     cursor: pointer;
     font-weight: 400;
     letter-spacing: 1px;
     transition: all 0.3s ease;
+    margin-right: 0.5rem;
 }
 
 .currency-selector:hover,
