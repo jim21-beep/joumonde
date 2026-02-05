@@ -2014,16 +2014,36 @@ function closeContactForm() {
 
 function submitContactForm(e) {
     e.preventDefault();
-    
-    const successMsg = currentLanguage === 'de' 
-        ? 'Vielen Dank für Ihre Nachricht! Wir melden uns in Kürze bei Ihnen.'
-        : currentLanguage === 'en'
-        ? 'Thank you for your message! We will get back to you shortly.'
-        : 'Merci pour votre message! Nous vous répondrons sous peu.';
-    
-    showNotification(successMsg);
-    e.target.reset();
-    closeContactForm();
+    const name = e.target.querySelector('input[name="name"]').value || '';
+    const email = e.target.querySelector('input[type="email"]').value || '';
+    const message = e.target.querySelector('textarea').value || '';
+    fetch('http://localhost:3001/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            name,
+            email,
+            message,
+            type: 'Kontaktformular'
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            const successMsg = currentLanguage === 'de' 
+                ? 'Vielen Dank für Ihre Nachricht! Wir melden uns in Kürze bei Ihnen.'
+                : currentLanguage === 'en'
+                ? 'Thank you for your message! We will get back to you shortly.'
+                : 'Merci pour votre message! Nous vous répondrons sous peu.';
+            showNotification(successMsg);
+            e.target.reset();
+            closeContactForm();
+        } else {
+            showNotification('Fehler beim Senden. Bitte versuche es später erneut.', 'error');
+        }
+    })
+    .catch(() => {
+        showNotification('Fehler beim Senden. Bitte versuche es später erneut.', 'error');
+    });
 }
 
 // Close contact modal when clicking outside
@@ -2182,16 +2202,6 @@ function submitNewsletter(e) {
         return;
     }
     
-    // Store in localStorage temporarily (backend-ready structure)
-    const subscribers = JSON.parse(localStorage.getItem('newsletterSubscribers') || '[]');
-    
-    // Check for duplicates
-    if (subscribers.some(sub => sub.email === email)) {
-        showNotification(t('emailAlreadyRegistered') || 'Diese E-Mail ist bereits registriert!');
-        return;
-    }
-    
-    // Add new subscriber
     const newSubscriber = {
         email: email,
         timestamp: new Date().toISOString(),
@@ -2199,26 +2209,22 @@ function submitNewsletter(e) {
         confirmed: false,
         language: localStorage.getItem('selectedLanguage') || 'de'
     };
-    
-    subscribers.push(newSubscriber);
-    localStorage.setItem('newsletterSubscribers', JSON.stringify(subscribers));
-    
-    // TODO: Send to backend API when ready
-    // fetch('/api/newsletter/subscribe', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(newSubscriber)
-    // }).then(response => {
-    //     if (response.ok) {
-    //         showNotification(t('newsletterSuccess'));
-    //     }
-    // }).catch(error => {
-    //     console.error('Newsletter signup failed:', error);
-    //     showNotification(t('newsletterError'), 'error');
-    // });
-    
-    showNotification(t('newsletterSuccess') || 'Danke für deine Anmeldung! Wir senden dir bald exklusive Angebote.');
-    e.target.reset();
+    fetch('http://localhost:3001/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newSubscriber)
+    })
+    .then(response => {
+        if (response.ok) {
+            showNotification(t('newsletterSuccess') || 'Danke für deine Anmeldung! Wir senden dir bald exklusive Angebote.');
+            e.target.reset();
+        } else {
+            showNotification(t('newsletterError') || 'Fehler beim Senden. Bitte versuche es später erneut.', 'error');
+        }
+    })
+    .catch(() => {
+        showNotification(t('newsletterError') || 'Fehler beim Senden. Bitte versuche es später erneut.', 'error');
+    });
 }
 
 function validateEmail(email) {

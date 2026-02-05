@@ -22,35 +22,28 @@ function handleNewsletterSignup(event) {
     const email = event.target.querySelector('input[type="email"]').value;
     
     if (email && validateEmail(email)) {
-        // Store in localStorage temporarily (backend-ready structure)
-        const subscribers = JSON.parse(localStorage.getItem('newsletterSubscribers') || '[]');
-        
-        // Check for duplicates
-        if (subscribers.some(sub => sub.email === email)) {
-            showNotification('Diese E-Mail ist bereits registriert!', 'info');
-            return;
-        }
-        
-        // Add new subscriber
         const newSubscriber = {
             email: email,
             timestamp: new Date().toISOString(),
             source: 'coming-soon-page',
             confirmed: false
         };
-        
-        subscribers.push(newSubscriber);
-        localStorage.setItem('newsletterSubscribers', JSON.stringify(subscribers));
-        
-        // TODO: Send to backend API
-        // fetch('/api/newsletter/subscribe', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify(newSubscriber)
-        // });
-        
-        showNotification('Danke für deine Anmeldung! Wir senden dir Updates zum Launch.', 'success');
-        event.target.reset();
+        fetch('http://localhost:3001/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newSubscriber)
+        })
+        .then(response => {
+            if (response.ok) {
+                showNotification('Danke für deine Anmeldung! Wir senden dir Updates zum Launch.', 'success');
+                event.target.reset();
+            } else {
+                showNotification('Fehler beim Senden. Bitte versuche es später erneut.', 'error');
+            }
+        })
+        .catch(() => {
+            showNotification('Fehler beim Senden. Bitte versuche es später erneut.', 'error');
+        });
     } else {
         showNotification('Bitte gib eine gültige E-Mail-Adresse ein.', 'error');
     }

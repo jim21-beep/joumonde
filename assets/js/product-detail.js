@@ -214,26 +214,30 @@ function submitReview(event) {
     const email = event.target.querySelector('input[type="email"]').value;
     const reviewText = event.target.querySelector('textarea').value;
     
-    // Save to localStorage
-    const reviews = JSON.parse(localStorage.getItem('productReviews')) || [];
-    reviews.push({
-        rating: parseInt(rating),
-        title: title,
-        name: name,
-        email: email,
-        text: reviewText,
-        date: new Date().toISOString(),
-        verified: false, // Would be true if user purchased
-        helpful: 0
+    fetch('http://localhost:3001/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            rating,
+            title,
+            name,
+            email,
+            reviewText,
+            type: 'Produktbewertung'
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Vielen Dank für Ihre Bewertung! Sie wird nach Prüfung veröffentlicht.');
+            closeReviewForm();
+            event.target.reset();
+        } else {
+            alert('Fehler beim Senden. Bitte versuche es später erneut.');
+        }
+    })
+    .catch(() => {
+        alert('Fehler beim Senden. Bitte versuche es später erneut.');
     });
-    localStorage.setItem('productReviews', JSON.stringify(reviews));
-    
-    // Show success message
-    alert('Vielen Dank für Ihre Bewertung! Sie wird nach Prüfung veröffentlicht.');
-    
-    // Close modal and reset form
-    closeReviewForm();
-    event.target.reset();
     
     // Reload reviews (in production, this would fetch from server)
     loadReviews();
