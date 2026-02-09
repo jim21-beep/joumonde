@@ -10,6 +10,7 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const bcrypt = require('bcrypt');
 // Passport config for Google
 passport.use(new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID || 'GOOGLE_CLIENT_ID',
@@ -189,7 +190,7 @@ app.get('/api/reset-password', (req, res) => {
     }
 });
 
-app.post('/api/reset-password', (req, res) => {
+app.post('/api/reset-password', async (req, res) => {
     const { email, token } = req.query;
     const { newPassword } = req.body;
     const user = users.find(u => u.email === email);
@@ -199,7 +200,8 @@ app.post('/api/reset-password', (req, res) => {
     if (passwordResetTokens[email] !== token) {
         return res.status(400).json({ message: 'Invalid or expired token.' });
     }
-    user.password = newPassword;
+    // Hash new password before storing
+    user.password = await bcrypt.hash(newPassword, 10);
     delete passwordResetTokens[email];
     res.json({ message: 'Password has been reset successfully.' });
 });
@@ -214,15 +216,17 @@ const transporter = nodemailer.createTransport({
 });
 
 // Register endpoint with email verification
-app.post('/api/register', (req, res) => {
+app.post('/api/register', async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
     if (users.find(u => u.email === email)) {
         return res.status(400).json({ message: 'User already exists' });
     }
+    // Hash password before storing
+    const hashedPassword = await bcrypt.hash(password, 10);
     // Generate verification token
     const token = crypto.randomBytes(32).toString('hex');
     verificationTokens[email] = token;
-    users.push({ firstName, lastName, email, password, verified: false, bonusPoints: 0 });
+    users.push({ firstName, lastName, email, password: hashedPassword, verified: false, bonusPoints: 0 });
 
     // Send verification email
     const verificationLink = `http://localhost:${PORT}/api/verify-email?email=${encodeURIComponent(email)}&token=${token}`;
@@ -259,10 +263,15 @@ app.get('/api/verify-email', (req, res) => {
 });
 
 // Login endpoint (only allow verified users, check 2FA if enabled)
-app.post('/api/login', (req, res) => {
+app.post('/api/login', async (req, res) => {
     const { email, password, token } = req.body;
-    const user = users.find(u => u.email === email && u.password === password);
+    const user = users.find(u => u.email === email);
     if (!user) {
+        return res.status(401).json({ message: 'Invalid credentials' });
+    }
+    // Verify password using bcrypt
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
         return res.status(401).json({ message: 'Invalid credentials' });
     }
     if (!user.verified) {
