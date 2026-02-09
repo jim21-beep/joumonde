@@ -7,6 +7,9 @@ const crypto = require('crypto');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 // Passport config for Google
 passport.use(new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID || 'GOOGLE_CLIENT_ID',
@@ -72,6 +75,40 @@ const PORT = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(bodyParser.json());
+
+// Configure multer for profile picture uploads
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, uploadsDir);
+    },
+    filename: (req, file, cb) => {
+        const uniqueName = `${Date.now()}-${crypto.randomBytes(6).toString('hex')}${path.extname(file.originalname)}`;
+        cb(null, uniqueName);
+    }
+});
+
+const upload = multer({
+    storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = /jpeg|jpg|png|gif/;
+        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = allowedTypes.test(file.mimetype);
+        if (extname && mimetype) {
+            cb(null, true);
+        } else {
+            cb(new Error('Only image files (jpeg, jpg, png, gif) are allowed'));
+        }
+    }
+});
+
+// Serve uploaded files
+app.use('/uploads', express.static(uploadsDir));
 
 // In-memory user store (for demo only)
 const users = [];
@@ -245,6 +282,43 @@ app.post('/api/login', (req, res) => {
         }
     }
     res.json({ message: 'Login successful', user: { firstName: user.firstName, lastName: user.lastName, email: user.email, twoFA: !!user.twoFA } });
+});
+
+// Upload profile picture
+app.post('/api/upload-profile-picture', upload.single('profilePicture'), (req, res) => {
+    const { email } = req.body;
+    if (!req.file) {
+        return res.status(400).json({ message: 'No file uploaded' });
+    }
+    const user = users.find(u => u.email === email);
+    if (!user) {
+        // Clean up uploaded file if user not found
+        fs.unlinkSync(req.file.path);
+        return res.status(404).json({ message: 'User not found' });
+    }
+    // Delete old profile picture if exists
+    if (user.profilePicture && fs.existsSync(path.join(uploadsDir, path.basename(user.profilePicture)))) {
+        fs.unlinkSync(path.join(uploadsDir, path.basename(user.profilePicture)));
+    }
+    // Save new profile picture URL
+    user.profilePicture = `/uploads/${req.file.filename}`;
+    res.json({ message: 'Profile picture uploaded successfully', profilePicture: user.profilePicture });
+});
+
+// Get user profile (including profile picture)
+app.get('/api/profile', (req, res) => {
+    const { email } = req.query;
+    const user = users.find(u => u.email === email);
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+    res.json({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        profilePicture: user.profilePicture || null,
+        twoFA: !!user.twoFA
+    });
 });
 
 // Create order and send confirmation email
