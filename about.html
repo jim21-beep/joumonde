@@ -271,5 +271,80 @@
             updateAboutPageContent();
         };
     </script>
+
+    <!-- Cookie Consent Banner (GDPR/CCPA Compliant) -->
+    <div id="cookie-banner" class="cookie-banner">
+        <div class="cookie-content">
+            <div class="cookie-text">
+                <h3>🍪 Cookies & Datenschutz</h3>
+                <p>
+                    Wir verwenden Cookies und ähnliche Technologien, um dir das beste Einkaufserlebnis zu bieten. 
+                    Einige Cookies sind notwendig für den Betrieb der Website, während andere uns helfen, die Website zu verbessern und deine Erfahrung zu personalisieren.
+                </p>
+                <p style="font-size: 0.85rem; opacity: 0.9;">
+                    Du kannst deine Einstellungen jederzeit ändern. 
+                    Weitere Informationen findest du in unserer <a href="cookie-policy.html" style="color: var(--gold); text-decoration: underline;">Cookie-Richtlinie</a>.
+                </p>
+            </div>
+            <div class="cookie-buttons">
+                <button onclick="acceptCookies()" class="btn-accept">Alle akzeptieren</button>
+                <button onclick="showCookieSettings()" class="btn-settings">Einstellungen</button>
+                <button onclick="rejectCookies()" class="btn-reject">Nur notwendige</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookie Settings Modal -->
+    <div id="cookie-settings-modal" class="cookie-settings-modal">
+        <div class="cookie-settings-content">
+            <button class="close-settings" onclick="closeCookieSettings()">&times;</button>
+            <h2>Cookie-Einstellungen</h2>
+            <p style="color: rgba(255,255,255,0.85); margin-bottom: 1.5rem;">Wir verwenden verschiedene Arten von Cookies. Du kannst selbst entscheiden, welche Kategorien du zulassen möchtest.</p>
+            
+            <div class="cookie-category">
+                <div class="category-header">
+                    <h3>Notwendige Cookies <span class="required-badge">Erforderlich</span></h3>
+                    <input type="checkbox" id="cookie-necessary" checked disabled>
+                </div>
+                <p>
+                    Diese Cookies sind für die Grundfunktionen der Website erforderlich und können nicht deaktiviert werden. 
+                    Sie speichern z.B. deinen Warenkorb, deine Spracheinstellungen und deine Cookie-Präferenzen.
+                </p>
+            </div>
+            
+            <div class="cookie-category">
+                <div class="category-header">
+                    <h3>Analyse-Cookies</h3>
+                    <input type="checkbox" id="cookie-analytics">
+                </div>
+                <p>
+                    Diese Cookies helfen uns zu verstehen, wie Besucher mit der Website interagieren, indem sie Informationen anonym sammeln und melden. 
+                    Wir verwenden Google Analytics, um die Nutzung unserer Website zu analysieren.
+                </p>
+            </div>
+            
+            <div class="cookie-category">
+                <div class="category-header">
+                    <h3>Marketing-Cookies</h3>
+                    <input type="checkbox" id="cookie-marketing">
+                </div>
+                <p>
+                    Diese Cookies werden verwendet, um Besuchern auf Websites relevante Werbung und Marketing-Kampagnen bereitzustellen. 
+                    Sie verfolgen Besucher über Websites hinweg und sammeln Informationen, um maßgeschneiderte Anzeigen bereitzustellen.
+                </p>
+            </div>
+            
+            <div class="settings-buttons">
+                <button onclick="saveCookiePreferences()">Auswahl speichern</button>
+                <button onclick="acceptCookies(); closeCookieSettings();">Alle akzeptieren</button>
+            </div>
+            
+            <div style="text-align: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(218,165,32,0.2);">
+                <a href="cookie-policy.html" style="color: var(--gold); font-size: 0.9rem; margin: 0 0.5rem;">Cookie-Richtlinie</a> • 
+                <a href="about.html#datenschutz" style="color: var(--gold); font-size: 0.9rem; margin: 0 0.5rem;">Datenschutzerklärung</a>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
