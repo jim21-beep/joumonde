@@ -114,6 +114,7 @@ app.use('/uploads', express.static(uploadsDir));
 const users = [];
 const user2FATokens = {};
 const orders = []; // Store orders
+const giftCards = []; // Store gift cards
 const speakeasy = require('speakeasy');
 const qrcode = require('qrcode');
 // Enable 2FA (user requests to enable)
@@ -221,7 +222,7 @@ app.post('/api/register', (req, res) => {
     // Generate verification token
     const token = crypto.randomBytes(32).toString('hex');
     verificationTokens[email] = token;
-    users.push({ firstName, lastName, email, password, verified: false });
+    users.push({ firstName, lastName, email, password, verified: false, bonusPoints: 0 });
 
     // Send verification email
     const verificationLink = `http://localhost:${PORT}/api/verify-email?email=${encodeURIComponent(email)}&token=${token}`;
@@ -434,6 +435,107 @@ app.get('/api/orders', (req, res) => {
     }
     const userOrders = orders.filter(o => o.email === email);
     res.json({ orders: userOrders });
+});
+
+// Create gift card (admin only - should be protected in production)
+app.post('/api/gift-cards/create', (req, res) => {
+    const { amount, quantity } = req.body;
+    if (!amount || !quantity) {
+        return res.status(400).json({ message: 'Amount and quantity are required' });
+    }
+    const createdCards = [];
+    for (let i = 0; i < quantity; i++) {
+        const code = crypto.randomBytes(8).toString('hex').toUpperCase();
+        const giftCard = {
+            code,
+            amount,
+            balance: amount,
+            isActive: true,
+            createdAt: new Date().toISOString()
+        };
+        giftCards.push(giftCard);
+        createdCards.push(code);
+    }
+    res.json({ message: `${quantity} gift card(s) created`, codes: createdCards });
+});
+
+// Redeem gift card
+app.post('/api/gift-cards/redeem', (req, res) => {
+    const { email, code } = req.body;
+    const user = users.find(u => u.email === email);
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+    const giftCard = giftCards.find(gc => gc.code === code && gc.isActive);
+    if (!giftCard) {
+        return res.status(404).json({ message: 'Invalid or inactive gift card' });
+    }
+    if (giftCard.balance <= 0) {
+        return res.status(400).json({ message: 'Gift card has no remaining balance' });
+    }
+    // Convert gift card balance to bonus points (e.g., 1€ = 10 points)
+    const pointsToAdd = giftCard.balance * 10;
+    user.bonusPoints = (user.bonusPoints || 0) + pointsToAdd;
+    giftCard.balance = 0;
+    giftCard.isActive = false;
+    giftCard.redeemedBy = email;
+    giftCard.redeemedAt = new Date().toISOString();
+    
+    res.json({ 
+        message: 'Gift card redeemed successfully', 
+        pointsAdded: pointsToAdd,
+        totalPoints: user.bonusPoints 
+    });
+});
+
+// Get bonus points balance
+app.get('/api/bonus-points', (req, res) => {
+    const { email } = req.query;
+    const user = users.find(u => u.email === email);
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+    res.json({ bonusPoints: user.bonusPoints || 0 });
+});
+
+// Redeem bonus points for discount
+app.post('/api/bonus-points/redeem', (req, res) => {
+    const { email, points } = req.body;
+    const user = users.find(u => u.email === email);
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+    if (!user.bonusPoints || user.bonusPoints < points) {
+        return res.status(400).json({ message: 'Insufficient bonus points' });
+    }
+    user.bonusPoints -= points;
+    // Convert points to discount (e.g., 100 points = 1€ discount)
+    const discountAmount = points / 100;
+    
+    res.json({ 
+        message: 'Bonus points redeemed',
+        pointsRedeemed: points,
+        discountAmount: discountAmount.toFixed(2),
+        remainingPoints: user.bonusPoints 
+    });
+});
+
+// Add bonus points on order completion (called internally or by webhook)
+app.post('/api/bonus-points/add', (req, res) => {
+    const { email, orderAmount } = req.body;
+    const user = users.find(u => u.email === email);
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+    // Award 1 point per 1€ spent
+    const pointsToAdd = Math.floor(orderAmount);
+    user.bonusPoints = (user.bonusPoints || 0) + pointsToAdd;
+    
+    res.json({ 
+        message: 'Bonus points added',
+        pointsAdded: pointsToAdd,
+        totalPoints: user.bonusPoints 
+    });
 });
 
 app.listen(PORT, () => {
