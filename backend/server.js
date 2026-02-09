@@ -76,6 +76,7 @@ app.use(bodyParser.json());
 // In-memory user store (for demo only)
 const users = [];
 const user2FATokens = {};
+const orders = []; // Store orders
 const speakeasy = require('speakeasy');
 const qrcode = require('qrcode');
 // Enable 2FA (user requests to enable)
@@ -244,6 +245,121 @@ app.post('/api/login', (req, res) => {
         }
     }
     res.json({ message: 'Login successful', user: { firstName: user.firstName, lastName: user.lastName, email: user.email, twoFA: !!user.twoFA } });
+});
+
+// Create order and send confirmation email
+app.post('/api/orders', (req, res) => {
+    const { email, items, totalAmount, shippingAddress } = req.body;
+    const user = users.find(u => u.email === email);
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+    const order = {
+        id: crypto.randomBytes(8).toString('hex'),
+        email,
+        items,
+        totalAmount,
+        shippingAddress,
+        status: 'pending',
+        createdAt: new Date().toISOString()
+    };
+    orders.push(order);
+    
+    // Send order confirmation email
+    const itemsList = items.map(item => `${item.name} x${item.quantity} - €${item.price}`).join('<br>');
+    transporter.sendMail({
+        from: process.env.EMAIL_USER || 'your-email@gmail.com',
+        to: email,
+        subject: `Order Confirmation #${order.id}`,
+        html: `
+            <h2>Thank you for your order!</h2>
+            <p>Hi ${user.firstName},</p>
+            <p>Your order has been received and is being processed.</p>
+            <h3>Order Details:</h3>
+            <p><strong>Order ID:</strong> ${order.id}</p>
+            <p><strong>Items:</strong><br>${itemsList}</p>
+            <p><strong>Total:</strong> €${totalAmount}</p>
+            <p><strong>Shipping Address:</strong><br>${shippingAddress}</p>
+            <p>We'll send you another email when your order ships.</p>
+            <p>Best regards,<br>Joumonde Team</p>
+        `
+    }, (err, info) => {
+        if (err) {
+            console.error('Failed to send order confirmation email:', err);
+        }
+    });
+    
+    res.status(201).json({ message: 'Order created', order });
+});
+
+// Update order status and send notification email
+app.patch('/api/orders/:orderId/status', (req, res) => {
+    const { orderId } = req.params;
+    const { status } = req.body;
+    const order = orders.find(o => o.id === orderId);
+    if (!order) {
+        return res.status(404).json({ message: 'Order not found' });
+    }
+    order.status = status;
+    order.updatedAt = new Date().toISOString();
+    
+    const user = users.find(u => u.email === order.email);
+    if (user) {
+        let subject = '';
+        let message = '';
+        
+        switch(status) {
+            case 'processing':
+                subject = `Order Processing #${orderId}`;
+                message = 'Your order is now being processed.';
+                break;
+            case 'shipped':
+                subject = `Order Shipped #${orderId}`;
+                message = 'Great news! Your order has been shipped and is on its way.';
+                break;
+            case 'delivered':
+                subject = `Order Delivered #${orderId}`;
+                message = 'Your order has been delivered. We hope you enjoy your purchase!';
+                break;
+            case 'cancelled':
+                subject = `Order Cancelled #${orderId}`;
+                message = 'Your order has been cancelled.';
+                break;
+            default:
+                subject = `Order Status Update #${orderId}`;
+                message = `Your order status has been updated to: ${status}`;
+        }
+        
+        transporter.sendMail({
+            from: process.env.EMAIL_USER || 'your-email@gmail.com',
+            to: order.email,
+            subject,
+            html: `
+                <h2>Order Status Update</h2>
+                <p>Hi ${user.firstName},</p>
+                <p>${message}</p>
+                <p><strong>Order ID:</strong> ${orderId}</p>
+                <p><strong>Status:</strong> ${status}</p>
+                <p>Best regards,<br>Joumonde Team</p>
+            `
+        }, (err, info) => {
+            if (err) {
+                console.error('Failed to send order status email:', err);
+            }
+        });
+    }
+    
+    res.json({ message: 'Order status updated', order });
+});
+
+// Get orders for a user
+app.get('/api/orders', (req, res) => {
+    const { email } = req.query;
+    if (!email) {
+        return res.status(400).json({ message: 'Email is required' });
+    }
+    const userOrders = orders.filter(o => o.email === email);
+    res.json({ orders: userOrders });
 });
 
 app.listen(PORT, () => {
