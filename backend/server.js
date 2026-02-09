@@ -547,6 +547,172 @@ app.post('/api/bonus-points/add', (req, res) => {
     });
 });
 
+// Newsletter Management
+const newsletterSubscribers = [];
+
+// Newsletter subscription endpoint
+app.post('/api/newsletter/subscribe', async (req, res) => {
+    try {
+        const { email, name, source } = req.body;
+        
+        if (!email) {
+            return res.status(400).json({ message: 'Email is required' });
+        }
+        
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ message: 'Invalid email format' });
+        }
+        
+        // Check if already subscribed
+        const existingSubscriber = newsletterSubscribers.find(sub => sub.email === email);
+        if (existingSubscriber) {
+            return res.status(409).json({ message: 'Email already subscribed' });
+        }
+        
+        // Create subscriber
+        const subscriber = {
+            email: email.toLowerCase(),
+            name: name || '',
+            source: source || 'website',
+            subscribed: new Date().toISOString(),
+            confirmed: false,
+            confirmationToken: crypto.randomBytes(32).toString('hex')
+        };
+        
+        newsletterSubscribers.push(subscriber);
+        
+        // Send confirmation email
+        const confirmationLink = `http://localhost:${PORT}/api/newsletter/confirm/${subscriber.confirmationToken}`;
+        const emailContent = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h1 style="color: #d4af37; font-size: 2rem; margin: 0;">Joumonde</h1>
+                </div>
+                
+                <h2 style="color: #333;">Newsletter Anmeldung bestätigen</h2>
+                
+                <p style="color: #666; line-height: 1.6;">
+                    Vielen Dank für dein Interesse an unserem Newsletter!
+                </p>
+                
+                <p style="color: #666; line-height: 1.6;">
+                    Bitte bestätige deine E-Mail-Adresse, um exklusive Angebote, Neuigkeiten und Updates zu erhalten.
+                </p>
+                
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="${confirmationLink}" 
+                       style="display: inline-block; padding: 15px 30px; background: #d4af37; color: #1a1a1a; text-decoration: none; border-radius: 4px; font-weight: bold;">
+                        Newsletter bestätigen
+                    </a>
+                </div>
+                
+                <p style="color: #999; font-size: 0.9rem; line-height: 1.6;">
+                    Wenn du diese Anmeldung nicht vorgenommen hast, ignoriere diese E-Mail einfach.
+                </p>
+                
+                <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+                
+                <p style="color: #999; font-size: 0.85rem; text-align: center;">
+                    © ${new Date().getFullYear()} Joumonde - Premium Fashion<br>
+                    <a href="https://joumonde.com" style="color: #d4af37; text-decoration: none;">joumonde.com</a>
+                </p>
+            </div>
+        `;
+        
+        try {
+            await transporter.sendMail({
+                from: process.env.EMAIL_USER || 'noreply@joumonde.com',
+                to: email,
+                subject: 'Newsletter Anmeldung bestätigen - Joumonde',
+                html: emailContent
+            });
+        } catch (emailError) {
+            console.error('Error sending confirmation email:', emailError);
+            // Don't fail the subscription if email fails
+        }
+        
+        res.json({ 
+            message: 'Subscription successful! Please check your email to confirm.',
+            requiresConfirmation: true
+        });
+    } catch (error) {
+        console.error('Newsletter subscription error:', error);
+        res.status(500).json({ message: 'Server error during subscription' });
+    }
+});
+
+// Confirm newsletter subscription
+app.get('/api/newsletter/confirm/:token', (req, res) => {
+    const { token } = req.params;
+    
+    const subscriber = newsletterSubscribers.find(sub => sub.confirmationToken === token);
+    
+    if (!subscriber) {
+        return res.status(404).send(`
+            <html>
+                <head>
+                    <title>Bestätigung fehlgeschlagen - Joumonde</title>
+                    <style>body { font-family: Arial; text-align: center; padding: 50px; }</style>
+                </head>
+                <body>
+                    <h1 style="color: #c0392b;">❌ Bestätigung fehlgeschlagen</h1>
+                    <p>Dieser Bestätigungslink ist ungültig oder abgelaufen.</p>
+                    <a href="https://joumonde.com" style="color: #d4af37;">Zurück zur Homepage</a>
+                </body>
+            </html>
+        `);
+    }
+    
+    subscriber.confirmed = true;
+    subscriber.confirmedAt = new Date().toISOString();
+    
+    res.send(`
+        <html>
+            <head>
+                <title>Newsletter bestätigt - Joumonde</title>
+                <style>body { font-family: Arial; text-align: center; padding: 50px; }</style>
+            </head>
+            <body>
+                <h1 style="color: #d4af37;">✓ Newsletter bestätigt!</h1>
+                <p>Vielen Dank! Du erhältst ab sofort exklusive Updates und Angebote von Joumonde.</p>
+                <a href="https://joumonde.com" style="color: #d4af37; text-decoration: none; font-weight: bold;">Zurück zur Homepage</a>
+            </body>
+        </html>
+    `);
+});
+
+// Unsubscribe from newsletter
+app.post('/api/newsletter/unsubscribe', (req, res) => {
+    const { email } = req.body;
+    
+    const index = newsletterSubscribers.findIndex(sub => sub.email === email.toLowerCase());
+    
+    if (index === -1) {
+        return res.status(404).json({ message: 'Email not found in subscribers' });
+    }
+    
+    newsletterSubscribers.splice(index, 1);
+    res.json({ message: 'Successfully unsubscribed from newsletter' });
+});
+
+// Get newsletter statistics (admin only)
+app.get('/api/newsletter/stats', (req, res) => {
+    const stats = {
+        total: newsletterSubscribers.length,
+        confirmed: newsletterSubscribers.filter(sub => sub.confirmed).length,
+        pending: newsletterSubscribers.filter(sub => !sub.confirmed).length,
+        sources: {}
+    };
+    
+    newsletterSubscribers.forEach(sub => {
+        stats.sources[sub.source] = (stats.sources[sub.source] || 0) + 1;
+    });
+    
+    res.json(stats);
+});
+
 app.listen(PORT, () => {
     console.log(`Backend server running on port ${PORT}`);
 });

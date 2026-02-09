@@ -445,6 +445,7 @@ const translations = {
         confirm: 'Warenkorb leeren',
         
         // Newsletter
+        sending: 'Wird gesendet...',
         newsletterSuccess: 'Danke für deine Anmeldung! Wir senden dir bald exklusive Angebote.',
         invalidEmail: 'Bitte gib eine gültige E-Mail-Adresse ein.',
         emailAlreadyRegistered: 'Diese E-Mail ist bereits registriert!',
@@ -588,6 +589,7 @@ const translations = {
         confirm: 'Clear Cart',
         
         // Newsletter
+        sending: 'Sending...',
         newsletterSuccess: 'Thank you for subscribing! We\'ll send you exclusive offers soon.',
         invalidEmail: 'Please enter a valid email address.',
         emailAlreadyRegistered: 'This email is already registered!',
@@ -731,6 +733,7 @@ const translations = {
         confirm: 'Vider le Panier',
         
         // Newsletter
+        sending: 'Envoi en cours...',
         newsletterSuccess: 'Merci pour votre inscription! Nous vous enverrons bientôt des offres exclusives.',
         invalidEmail: 'Veuillez entrer une adresse email valide.',
         emailAlreadyRegistered: 'Cet email est déjà enregistré!',
@@ -2265,35 +2268,56 @@ function toggleFAQ(button) {
 // ===== NEWSLETTER =====
 function submitNewsletter(e) {
     e.preventDefault();
-    const email = document.getElementById('newsletter-email').value;
+    const form = e.target;
+    const emailInput = form.querySelector('input[type="email"]');
+    const email = emailInput ? emailInput.value : document.getElementById('newsletter-email')?.value;
+    const submitButton = form.querySelector('button[type="submit"]');
     
     if (!email || !validateEmail(email)) {
-        showNotification(t('invalidEmail') || 'Bitte gib eine gültige E-Mail-Adresse ein.');
+        showNotification(t('invalidEmail') || 'Bitte gib eine gültige E-Mail-Adresse ein.', 'error');
         return;
     }
     
-    const newSubscriber = {
-        email: email,
-        timestamp: new Date().toISOString(),
-        source: 'footer-newsletter',
-        confirmed: false,
-        language: localStorage.getItem('selectedLanguage') || 'de'
-    };
-    fetch('http://localhost:3001/register', {
+    // Show loading state
+    if (submitButton) {
+        submitButton.disabled = true;
+        const originalText = submitButton.textContent;
+        submitButton.textContent = t('sending') || 'Wird gesendet...';
+        submitButton.dataset.originalText = originalText;
+    }
+    
+    fetch('http://localhost:4000/api/newsletter/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newSubscriber)
+        body: JSON.stringify({
+            email: email,
+            source: 'footer-newsletter',
+            name: ''
+        })
     })
-    .then(response => {
-        if (response.ok) {
-            showNotification(t('newsletterSuccess') || 'Danke für deine Anmeldung! Wir senden dir bald exklusive Angebote.');
-            e.target.reset();
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            // Track newsletter signup
+            if (typeof trackNewsletterSignup === 'function') {
+                trackNewsletterSignup(email);
+            }
+            showNotification(t('newsletterSuccess') || 'Danke für deine Anmeldung! Bitte bestätige deine E-Mail-Adresse.', 'success');
+            form.reset();
         } else {
-            showNotification(t('newsletterError') || 'Fehler beim Senden. Bitte versuche es später erneut.', 'error');
+            throw new Error('Unexpected response');
         }
     })
-    .catch(() => {
+    .catch((error) => {
+        console.error('Newsletter subscription error:', error);
         showNotification(t('newsletterError') || 'Fehler beim Senden. Bitte versuche es später erneut.', 'error');
+    })
+    .finally(() => {
+        // Restore button state
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = submitButton.dataset.originalText || 'Abonnieren';
+        }
     });
 }
 

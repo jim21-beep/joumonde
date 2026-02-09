@@ -22,31 +22,37 @@ function handleNewsletterSignup(event) {
     const email = event.target.querySelector('input[type="email"]').value;
     
     if (email && validateEmail(email)) {
-        const newSubscriber = {
-            email: email,
-            timestamp: new Date().toISOString(),
-            source: 'coming-soon-page',
-            confirmed: false
-        };
-        fetch('http://localhost:3001/register', {
+        const submitButton = event.target.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.textContent;
+        submitButton.textContent = 'Wird gesendet...';
+        submitButton.disabled = true;
+        
+        fetch('http://localhost:4000/api/newsletter/subscribe', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newSubscriber)
+            body: JSON.stringify({
+                email: email,
+                source: 'coming-soon-page',
+                name: ''
+            })
         })
-        .then(response => {
-            if (response.ok) {
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
                 // Track newsletter signup
                 if (typeof trackNewsletterSignup === 'function') {
                     trackNewsletterSignup(email);
                 }
-                showNotification('Danke für deine Anmeldung! Wir senden dir Updates zum Launch.', 'success');
+                showNotification('Danke für deine Anmeldung! Bitte bestätige deine E-Mail-Adresse.', 'success');
                 event.target.reset();
-            } else {
-                showNotification('Fehler beim Senden. Bitte versuche es später erneut.', 'error');
             }
         })
         .catch(() => {
             showNotification('Fehler beim Senden. Bitte versuche es später erneut.', 'error');
+        })
+        .finally(() => {
+            submitButton.textContent = originalButtonText;
+            submitButton.disabled = false;
         });
     } else {
         showNotification('Bitte gib eine gültige E-Mail-Adresse ein.', 'error');
