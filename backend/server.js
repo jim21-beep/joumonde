@@ -4,6 +4,68 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
+// Passport config for Google
+passport.use(new GoogleStrategy({
+        clientID: process.env.GOOGLE_CLIENT_ID || 'GOOGLE_CLIENT_ID',
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'GOOGLE_CLIENT_SECRET',
+        callbackURL: '/api/auth/google/callback'
+    },
+    function(accessToken, refreshToken, profile, done) {
+        let user = users.find(u => u.email === profile.emails[0].value);
+        if (!user) {
+            user = {
+                firstName: profile.name.givenName,
+                lastName: profile.name.familyName,
+                email: profile.emails[0].value,
+                verified: true,
+                social: 'google'
+            };
+            users.push(user);
+        }
+        return done(null, user);
+    }
+));
+
+// Passport config for Facebook
+passport.use(new FacebookStrategy({
+        clientID: process.env.FB_CLIENT_ID || 'FB_CLIENT_ID',
+        clientSecret: process.env.FB_CLIENT_SECRET || 'FB_CLIENT_SECRET',
+        callbackURL: '/api/auth/facebook/callback',
+        profileFields: ['id', 'emails', 'name']
+    },
+    function(accessToken, refreshToken, profile, done) {
+        let email = profile.emails && profile.emails[0] ? profile.emails[0].value : `${profile.id}@facebook.com`;
+        let user = users.find(u => u.email === email);
+        if (!user) {
+            user = {
+                firstName: profile.name.givenName,
+                lastName: profile.name.familyName,
+                email: email,
+                verified: true,
+                social: 'facebook'
+            };
+            users.push(user);
+        }
+        return done(null, user);
+    }
+));
+
+app.use(passport.initialize());
+
+// Google Auth Routes
+app.get('/api/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+app.get('/api/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
+    res.send('Google login successful!');
+});
+
+// Facebook Auth Routes
+app.get('/api/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }));
+app.get('/api/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/' }), (req, res) => {
+    res.send('Facebook login successful!');
+});
 
 const app = express();
 const PORT = process.env.PORT || 4000;
