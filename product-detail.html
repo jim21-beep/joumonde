@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Klassischer Blazer - Joumonde</title>
     <link rel="icon" type="image/png" href="assets/images/Zeichenfläche 1.png">
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EFD7P54PRE"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EFD7P54PRE');
+    </script>
+    
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
@@ -672,6 +682,7 @@
         </div>
     </div>
 
+    <script src="assets/js/analytics.js"></script>
     <script src="assets/js/script.js"></script>
     <script src="assets/js/product-detail.js"></script>
     <script src="assets/js/account-system.js"></script>
@@ -703,6 +714,11 @@
                 const convertedPrice = (productData.price * rates[currency]).toFixed(2);
                 currentPriceEl.textContent = currency + ' ' + convertedPrice;
                 currentPriceEl.setAttribute('data-price', productData.price);
+            }
+            
+            // Track product view
+            if (typeof trackViewItem === 'function') {
+                trackViewItem(productData.name, productData.price, productData.category || 'Fashion');
             }
             
             // Update sizes if provided

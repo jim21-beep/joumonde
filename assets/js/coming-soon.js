@@ -35,6 +35,10 @@ function handleNewsletterSignup(event) {
         })
         .then(response => {
             if (response.ok) {
+                // Track newsletter signup
+                if (typeof trackNewsletterSignup === 'function') {
+                    trackNewsletterSignup(email);
+                }
                 showNotification('Danke für deine Anmeldung! Wir senden dir Updates zum Launch.', 'success');
                 event.target.reset();
             } else {

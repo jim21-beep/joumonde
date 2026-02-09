@@ -135,6 +135,11 @@ function handleRegister(event) {
     allUsers.push(newUser);
     localStorage.setItem('allUsers', JSON.stringify(allUsers));
 
+    // Track signup
+    if (typeof trackSignup === 'function') {
+        trackSignup('email');
+    }
+
     showAccountMessage('Konto erfolgreich erstellt! Sie werden angemeldet...', 'success');
 
     // Send registration notification email
@@ -175,6 +180,11 @@ function handleLogin(event) {
     }
 
     showAccountMessage('Erfolgreich angemeldet! Willkommen zurück.', 'success');
+
+    // Track login
+    if (typeof trackLogin === 'function') {
+        trackLogin('email');
+    }
 
     // Login
     setTimeout(() => {

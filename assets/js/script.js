@@ -1029,6 +1029,11 @@ function addToCart(productName, price) {
     
     updateCart();
     
+    // Track add to cart event
+    if (typeof trackAddToCart === 'function') {
+        trackAddToCart(productName, price, 1);
+    }
+    
     // Show cart briefly
     const cartSidebar = document.getElementById('cart-sidebar');
     cartSidebar.classList.add('active');
@@ -1156,7 +1161,14 @@ function updateQuantity(index, change) {
 
 // Remove Item from Cart
 function removeFromCart(index) {
-    const itemName = cart[index].name;
+    const item = cart[index];
+    const itemName = item.name;
+    
+    // Track remove from cart
+    if (typeof trackRemoveFromCart === 'function') {
+        trackRemoveFromCart(item.name, item.price, item.quantity);
+    }
+    
     cart.splice(index, 1);
     updateCart();
     showNotification(`${itemName} ${t('removed')}`);
@@ -1392,6 +1404,11 @@ function openCheckout() {
     
     const total = subtotal - discount;
     
+    // Track begin checkout event
+    if (typeof trackBeginCheckout === 'function') {
+        trackBeginCheckout(cart, total);
+    }
+    
     const checkoutModal = document.createElement('div');
     checkoutModal.className = 'checkout-modal';
     checkoutModal.innerHTML = `
@@ -1480,6 +1497,24 @@ function openCheckout() {
 
 function submitOrder(e) {
     e.preventDefault();
+    
+    // Calculate total before clearing cart
+    let subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const hasHoodie = cart.some(item => item.name === 'Oversized Hoodie');
+    const hasTrainerhose = cart.some(item => item.name === 'Trainerhose');
+    let discount = 0;
+    
+    if (hasHoodie && hasTrainerhose) {
+        discount = subtotal * 0.05;
+    }
+    
+    const total = subtotal - discount;
+    const orderId = 'ORD-' + Date.now();
+    
+    // Track purchase
+    if (typeof trackPurchase === 'function') {
+        trackPurchase(orderId, cart, total, discount);
+    }
     
     const successMsg = currentLanguage === 'de' 
         ? 'Vielen Dank für Ihre Bestellung! Sie erhalten eine Bestätigung per Email.'
