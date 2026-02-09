@@ -114,6 +114,28 @@ body {
     max-width: 100vw;
 }
 
+/* Responsive Utility Classes */
+.resize-animation-stopper * {
+    animation: none !important;
+    transition: none !important;
+}
+
+.touch-device {
+    -webkit-tap-highlight-color: rgba(212, 175, 55, 0.2);
+}
+
+.touch-device * {
+    -webkit-touch-callout: none;
+}
+
+.touch-device button,
+.touch-device a,
+.touch-device input[type="submit"],
+.touch-device input[type="button"] {
+    cursor: pointer;
+    user-select: none;
+}
+
 .container {
     max-width: var(--container-max-width);
     margin: 0 auto;
@@ -5404,5 +5426,330 @@ button.loading::after {
         right: 10px;
         left: 10px;
         min-width: auto;
+    }
+}
+
+/* ===== ENHANCED RESPONSIVE DESIGN ===== */
+
+/* Tablet Landscape (1024px and below) */
+@media (max-width: 1024px) {
+    .container {
+        padding: 0 2rem;
+    }
+    
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .testimonial-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+}
+
+/* Tablet Portrait (768px and below) - Already exists but enhanced */
+@media (max-width: 768px) {
+    /* Typography scaling */
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.75rem; }
+    h3 { font-size: 1.4rem; }
+    
+    /* Container adjustmentsadjustments */
+    .container {
+        padding: 0 1.5rem;
+    }
+    
+    /* Product cards */
+    .product-card {
+        margin: 0 auto;
+        max-width: 400px;
+    }
+    
+    /* Modals full width on tablet */
+    .checkout-modal,
+    .contact-modal {
+        padding: 1rem;
+    }
+    
+    .checkout-content,
+    .contact-modal-content {
+        max-width: 100%;
+        width: 100%;
+        margin: 0;
+    }
+    
+    /* Cart sidebar full width */
+    .cart-sidebar {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    /* Footer columns stack */
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+    }
+    
+    .footer-column {
+        align-items: center;
+    }
+    
+    /* Newsletter form stacks */
+    .newsletter-form {
+        flex-direction: column;
+    }
+    
+    .newsletter-form button {
+        width: 100%;
+    }
+}
+
+/* Mobile Landscape (600px and below) */
+@media (max-width: 600px) {
+    /* Increase tap targets for mobile */
+    button,
+    .btn,
+    .nav-icons button,
+    a {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    /* Typography */
+    body {
+        font-size: 0.95rem;
+    }
+    
+    h1 { font-size: 1.75rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.25rem; }
+    
+    /* Container */
+    .container {
+        padding: 0 1rem;
+    }
+    
+    /* Product grid single column on small screens */
+    .product-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 1rem;
+    }
+    
+    .product-card {
+        max-width: 100%;
+    }
+    
+    /* Trust badges stack */
+    .trust-badges {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    /* Modal padding */
+    .checkout-content,
+    .contact-modal-content,
+    .account-modal-content {
+        padding: 1.5rem 1rem;
+    }
+    
+    /* Form improvements */
+    input,
+    textarea,
+    select {
+        font-size: 16px; /* Prevents zoom on iOS */
+        padding: 0.75rem;
+    }
+    
+    /* Button sizing */
+    .btn,
+    button {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    /* Cart items sizing */
+    .cart-item {
+        padding: 1rem;
+        gap: 0.75rem;
+    }
+    
+    .cart-item img {
+        width: 60px;
+        height: 60px;
+    }
+    
+    /* Payment methods stack */
+    .payment-methods {
+        flex-direction: column;
+    }
+    
+    .payment-option {
+        justify-content: flex-start;
+    }
+}
+
+/* Mobile Portrait (480px and below) - Enhanced */
+@media (max-width: 480px) {
+    /* Further typography reduction */
+    h1 { font-size: 1.5rem; }
+    h2 { font-size: 1.3rem; }
+    
+    .section-title {
+        font-size: 1.4rem;
+        letter-spacing: 1.5px;
+    }
+    
+    /* Compact spacing */
+    .container {
+        padding: 0 0.75rem;
+    }
+    
+    /* Hero adjustments */
+    .hero {
+        padding: 2.5rem 0.75rem 1.5rem;
+    }
+    
+    .hero-content h2 {
+        font-size: 1.6rem;
+    }
+    
+    .hero-content p {
+        font-size: 0.9rem;
+    }
+    
+    /* Logo even smaller */
+    .logo-image {
+        max-width: 45px;
+    }
+    
+    /* Navigation icons tighter */
+    .nav-icons {
+        gap: 0.2rem;
+    }
+    
+    /* Product card compact */
+    .product-info {
+        padding: 1rem;
+    }
+    
+    .product-info h3 {
+        font-size: 1.1rem;
+    }
+    
+    /* Modal close button larger */
+    .checkout-close,
+    .contact-close,
+    .account-close {
+        font-size: 2rem;
+        width: 44px;
+        height: 44px;
+    }
+    
+    /* Chatbot positioning */
+    .chatbot-icon {
+        bottom: 15px;
+        right: 15px;
+        width: 50px;
+        height: 50px;
+    }
+    
+    .chatbot-window {
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        bottom: 0;
+        right: 0;
+        border-radius: 0;
+    }
+    
+    /* Dashboard tabs scroll */
+    .dashboard-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    
+    .dashboard-tabs::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/* Extra Small Devices (360px and below) */
+@media (max-width: 360px) {
+    body {
+        font-size: 0.9rem;
+    }
+    
+    h1 { font-size: 1.3rem; }
+    h2 { font-size: 1.2rem; }
+    
+    .container {
+        padding: 0 0.5rem;
+    }
+    
+    .product-info {
+        padding: 0.75rem;
+    }
+    
+    .btn {
+        padding: 0.65rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .logo-image {
+        max-width: 40px;
+    }
+}
+
+/* Landscape Mode Optimizations */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero {
+        padding: 2rem 0 1rem;
+    }
+    
+    .mobile-menu-btn.mobile-active {
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+    
+    .chatbot-window {
+        max-height: 85vh;
+    }
+    
+    .checkout-modal,
+    .contact-modal,
+    .account-modal {
+        padding: 0.5rem;
+    }
+    
+    .checkout-content,
+    .contact-modal-content,
+    .account-modal-content {
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .navbar,
+    .footer,
+    .chatbot-icon,
+    .cart-sidebar,
+    .mobile-menu-btn,
+    .nav-icons,
+    button:not(.no-print) {
+        display: none !important;
+    }
+    
+    .container {
+        max-width: 100%;
+    }
+    
+    .product-card {
+        page-break-inside: avoid;
     }
 }

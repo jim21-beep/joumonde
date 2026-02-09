@@ -522,3 +522,142 @@ body::after {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
 }
+
+/* ===== ENHANCED RESPONSIVE DESIGN ===== */
+
+/* Tablet Landscape (768-1024px) */
+@media (min-width: 601px) and (max-width: 1024px) {
+    .coming-soon-wrapper {
+        padding: 40px 30px;
+    }
+    
+    .collections-teaser {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .countdown-timer {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+    }
+}
+
+/* Mobile Landscape (481-600px) */
+@media (min-width: 481px) and (max-width: 600px) {
+    .countdown-timer {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+    
+    .countdown-value {
+        font-size: 1.8rem;
+    }
+}
+
+/* Touch-Friendly Improvements */
+@media (max-width: 600px) {
+    /* Ensure tap targets are at least 44x44px */
+    .newsletter-form button,
+    .shop-link,
+    .insta-link,
+    .admin-login-btn {
+        min-height: 44px;
+        padding: 12px 20px;
+    }
+    
+    .newsletter-form input {
+        min-height: 44px;
+        font-size: 16px; /* Prevents iOS zoom */
+    }
+    
+    .admin-modal-content {
+        width: 95%;
+        padding: 2rem 1.5rem;
+    }
+}
+
+/* Extra Small Devices */
+@media (max-width: 360px) {
+    .coming-soon-wrapper {
+        padding: 20px 15px;
+    }
+    
+    .coming-soon-title {
+        font-size: 1.75rem;
+        letter-spacing: 0.05em;
+    }
+    
+    .joumonde-logo img {
+        max-width: 100px;
+    }
+    
+    .countdown-timer {
+        gap: 6px;
+    }
+    
+    .countdown-value {
+        font-size: 1.3rem;
+    }
+    
+    .countdown-unit {
+        font-size: 0.7rem;
+    }
+}
+
+/* Landscape Mode */
+@media (max-height: 500px) and (orientation: landscape) {
+    body {
+        padding: 10px;
+    }
+    
+    .coming-soon-wrapper {
+        padding: 20px;
+        max-height: 95vh;
+        overflow-y: auto;
+    }
+    
+    .joumonde-logo img {
+        max-width: 100px;
+    }
+    
+    .coming-soon-title {
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+    }
+    
+    .divider {
+        margin: 15px auto;
+    }
+    
+    .countdown-section,
+    .newsletter-section,
+    .collections-teaser {
+        margin-bottom: 1rem;
+        padding: 20px 15px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: white;
+    }
+    
+    .coming-soon-wrapper {
+        background: white;
+        border: none;
+        box-shadow: none;
+    }
+    
+    .newsletter-form,
+    .button-group,
+    .admin-login-btn {
+        display: none;
+    }
+    
+    .coming-soon-title,
+    .collections-teaser,
+    .joumonde-info {
+        color: black;
+    }
+}

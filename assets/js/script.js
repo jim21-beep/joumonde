@@ -1303,8 +1303,43 @@ document.head.appendChild(style);
 // Toggle Mobile Menu
 function toggleMobileMenu() {
     const navLinks = document.querySelector('.nav-links');
+    const mobileBtn = document.querySelector('.mobile-menu-btn');
     navLinks.classList.toggle('mobile-active');
+    
+    // Prevent body scroll when menu is open
+    if (navLinks.classList.contains('mobile-active')) {
+        document.body.style.overflow = 'hidden';
+        mobileBtn.setAttribute('aria-expanded', 'true');
+    } else {
+        document.body.style.overflow = '';
+        mobileBtn.setAttribute('aria-expanded', 'false');
+    }
 }
+
+// Close mobile menu when clicking outside
+document.addEventListener('click', function(event) {
+    const navLinks = document.querySelector('.nav-links');
+    const mobileBtn = document.querySelector('.mobile-menu-btn');
+    
+    if (navLinks && navLinks.classList.contains('mobile-active')) {
+        if (!navLinks.contains(event.target) && !mobileBtn.contains(event.target)) {
+            toggleMobileMenu();
+        }
+    }
+});
+
+// Close mobile menu when link is clicked
+document.addEventListener('DOMContentLoaded', function() {
+    const navLinks = document.querySelectorAll('.nav-links a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            const navLinksContainer = document.querySelector('.nav-links');
+            if (navLinksContainer && navLinksContainer.classList.contains('mobile-active')) {
+                toggleMobileMenu();
+            }
+        });
+    });
+});
 
 // Toggle Search
 function toggleSearch() {
@@ -2755,3 +2790,107 @@ function updateAboutPageContent() {
     });
 }
 
+/* ===== RESPONSIVE & MOBILE ENHANCEMENTS ===== */
+
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href !== '#' && href !== '#!') {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+    });
+});
+
+// Swipe to close cart sidebar on mobile
+let touchStartX = 0;
+let touchEndX = 0;
+
+const cartSidebar = document.getElementById('cart-sidebar');
+if (cartSidebar) {
+    cartSidebar.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    cartSidebar.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+        // Swipe right to close (minimum 100px swipe)
+        if (touchEndX > touchStartX + 100) {
+            if (cartSidebar.classList.contains('active')) {
+                toggleCart();
+            }
+        }
+    }
+}
+
+// Prevent iOS double-tap zoom on buttons
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function(e) {
+    const now = Date.now();
+    if (now - lastTouchEnd <= 300) {
+        e.preventDefault();
+    }
+    lastTouchEnd = now;
+}, { passive: false });
+
+// Optimize images on mobile (lazy loading)
+if ('loading' in HTMLImageElement.prototype) {
+    const images = document.querySelectorAll('img[data-src]');
+    images.forEach(img => {
+        img.src = img.dataset.src;
+    });
+} else {
+    // Fallback for browsers that don't support lazy loading
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
+    document.body.appendChild(script);
+}
+
+// Handle orientation change
+window.addEventListener('orientationchange', function() {
+    // Close modals/sidebars on orientation change for better UX
+    const openModals = document.querySelectorAll('.checkout-modal, .contact-modal, .account-modal');
+    openModals.forEach(modal => modal.remove());
+    
+    const cartSidebar = document.getElementById('cart-sidebar');
+    if (cartSidebar && cartSidebar.classList.contains('active')) {
+        toggleCart();
+    }
+    
+    // Recalculate viewport height for mobile browsers
+    document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+});
+
+// Set CSS custom property for viewport height (fixes mobile browser address bar issues)
+window.addEventListener('resize', function() {
+    document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+});
+
+// Initial viewport height setup
+document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+
+// Detect touch device
+if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+    document.body.classList.add('touch-device');
+}
+
+// Performance: Debounce window resize events
+let resizeTimer;
+window.addEventListener('resize', function() {
+    document.body.classList.add('resize-animation-stopper');
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+        document.body.classList.remove('resize-animation-stopper');
+    }, 400);
+});
