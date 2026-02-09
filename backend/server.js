@@ -75,6 +75,43 @@ app.use(bodyParser.json());
 
 // In-memory user store (for demo only)
 const users = [];
+const user2FATokens = {};
+const speakeasy = require('speakeasy');
+const qrcode = require('qrcode');
+// Enable 2FA (user requests to enable)
+app.post('/api/enable-2fa', (req, res) => {
+    const { email } = req.body;
+    const user = users.find(u => u.email === email);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    // Generate secret
+    const secret = speakeasy.generateSecret({ name: `Joumonde (${email})` });
+    user2FATokens[email] = secret.base32;
+    // Generate QR code for authenticator apps
+    qrcode.toDataURL(secret.otpauth_url, (err, data_url) => {
+        if (err) return res.status(500).json({ message: 'Failed to generate QR code' });
+        res.json({ qr: data_url, secret: secret.base32 });
+    });
+});
+
+// Verify 2FA code (during login or setup)
+app.post('/api/verify-2fa', (req, res) => {
+    const { email, token } = req.body;
+    const secret = user2FATokens[email];
+    if (!secret) return res.status(400).json({ message: '2FA not enabled' });
+    const verified = speakeasy.totp.verify({
+        secret,
+        encoding: 'base32',
+        token
+    });
+    if (verified) {
+        // Mark user as 2FA enabled
+        const user = users.find(u => u.email === email);
+        if (user) user.twoFA = true;
+        return res.json({ message: '2FA verified' });
+    } else {
+        return res.status(400).json({ message: 'Invalid 2FA code' });
+    }
+});
 const verificationTokens = {};
 const passwordResetTokens = {};
 // Request password reset endpoint
@@ -182,9 +219,9 @@ app.get('/api/verify-email', (req, res) => {
     }
 });
 
-// Login endpoint (only allow verified users)
+// Login endpoint (only allow verified users, check 2FA if enabled)
 app.post('/api/login', (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, token } = req.body;
     const user = users.find(u => u.email === email && u.password === password);
     if (!user) {
         return res.status(401).json({ message: 'Invalid credentials' });
@@ -192,7 +229,21 @@ app.post('/api/login', (req, res) => {
     if (!user.verified) {
         return res.status(403).json({ message: 'Please verify your email before logging in.' });
     }
-    res.json({ message: 'Login successful', user: { firstName: user.firstName, lastName: user.lastName, email: user.email } });
+    if (user.twoFA) {
+        const secret = user2FATokens[email];
+        if (!token) {
+            return res.status(206).json({ message: '2FA required' });
+        }
+        const verified = speakeasy.totp.verify({
+            secret,
+            encoding: 'base32',
+            token
+        });
+        if (!verified) {
+            return res.status(401).json({ message: 'Invalid 2FA code' });
+        }
+    }
+    res.json({ message: 'Login successful', user: { firstName: user.firstName, lastName: user.lastName, email: user.email, twoFA: !!user.twoFA } });
 });
 
 app.listen(PORT, () => {
