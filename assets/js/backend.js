@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
     secure: true,
     auth: {
         user: 'info@joumonde.com', // Deine E-Mail-Adresse
-        pass: 'DEIN_EMAIL_PASSWORT' // Dein Passwort
+        pass: '*0McLarenW1*' // Dein Passwort
     }
 });
 
