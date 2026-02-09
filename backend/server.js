@@ -14,6 +14,57 @@ app.use(bodyParser.json());
 // In-memory user store (for demo only)
 const users = [];
 const verificationTokens = {};
+const passwordResetTokens = {};
+// Request password reset endpoint
+app.post('/api/request-password-reset', (req, res) => {
+    const { email } = req.body;
+    const user = users.find(u => u.email === email);
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+    // Generate reset token
+    const token = crypto.randomBytes(32).toString('hex');
+    passwordResetTokens[email] = token;
+    // Send reset email
+    const resetLink = `http://localhost:${PORT}/api/reset-password?email=${encodeURIComponent(email)}&token=${token}`;
+    transporter.sendMail({
+        from: process.env.EMAIL_USER || 'your-email@gmail.com',
+        to: email,
+        subject: 'Password Reset Request',
+        html: `<p>Hi,</p><p>Click the link below to reset your password:</p><a href="${resetLink}">${resetLink}</a>`
+    }, (err, info) => {
+        if (err) {
+            return res.status(500).json({ message: 'Failed to send reset email', error: err.message });
+        }
+        res.json({ message: 'Password reset email sent.' });
+    });
+});
+
+// Password reset endpoint (GET for link, POST for new password)
+app.get('/api/reset-password', (req, res) => {
+    const { email, token } = req.query;
+    if (passwordResetTokens[email] === token) {
+        // Show a simple HTML form for new password (for demo)
+        res.send(`<form method='POST' action='/api/reset-password?email=${encodeURIComponent(email)}&token=${token}'><input type='password' name='newPassword' placeholder='New Password' required/><button type='submit'>Reset Password</button></form>`);
+    } else {
+        res.status(400).send('Invalid or expired token.');
+    }
+});
+
+app.post('/api/reset-password', (req, res) => {
+    const { email, token } = req.query;
+    const { newPassword } = req.body;
+    const user = users.find(u => u.email === email);
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+    if (passwordResetTokens[email] !== token) {
+        return res.status(400).json({ message: 'Invalid or expired token.' });
+    }
+    user.password = newPassword;
+    delete passwordResetTokens[email];
+    res.json({ message: 'Password has been reset successfully.' });
+});
 
 // Configure nodemailer (use your SMTP credentials)
 const transporter = nodemailer.createTransport({
