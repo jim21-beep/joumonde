@@ -1,11 +1,29 @@
-# Joumonde Fashion Shop - Deployment Guide
+# Joumonde – Setup & Deployment Guide
 
-## Lokales Testen mit Docker
+Dieses Dokument erklärt, wie man das Joumonde-Projekt lokal testet und auf einem Server veröffentlicht. Es richtet sich an Personen mit grundlegenden Kenntnissen in Webentwicklung.
 
-### Voraussetzungen
-- Docker Desktop installiert (https://www.docker.com/products/docker-desktop/)
+---
 
-### Container bauen und starten
+## 1. Schnellstart – Empfohlene Option
+
+Wer das Projekt schnell und unkompliziert online stellen will, ohne eigenen Server, dem empfehle ich folgende Dienste:
+
+- **Netlify** – Kostenloses Static Hosting, einfaches Drag & Drop
+- **Vercel** – Automatisches Deployment via Git
+- **GitHub Pages** – Gratis Hosting für statische Seiten
+
+Diese Varianten benötigen kein Docker und sind in wenigen Minuten eingerichtet.
+
+---
+
+## 2. Lokale Entwicklung mit Docker
+
+Für die lokale Entwicklung kann das Projekt mit Docker gestartet werden.
+
+**Voraussetzungen:**
+Docker Desktop muss installiert sein: https://www.docker.com/products/docker-desktop/
+
+**Container starten:**
 ```bash
 # Container bauen
 docker build -t joumonde-shop .
@@ -17,76 +35,51 @@ docker run -d -p 8080:80 --name joumonde joumonde-shop
 docker-compose up -d
 ```
 
-Website ist dann verfügbar unter: http://localhost:8080
+Die Website ist dann erreichbar unter: http://localhost:8080
 
-### Container verwalten
+**Container verwalten:**
 ```bash
-# Container stoppen
-docker stop joumonde
-
-# Container starten
-docker start joumonde
-
-# Logs anzeigen
-docker logs joumonde
-
-# Container entfernen
-docker rm -f joumonde
+docker stop joumonde      # stoppen
+docker start joumonde     # starten
+docker logs joumonde      # Logs anzeigen
+docker rm -f joumonde     # entfernen
 ```
 
-## Deployment Optionen
+---
 
-### 1. VPS/Server (DigitalOcean, Hetzner, etc.)
-1. Docker auf Server installieren
+## 3. Deployment auf eigenem Server
+
+Diese Option eignet sich für alle, die volle Kontrolle über ihren Server möchten (z.B. DigitalOcean, Hetzner).
+
+### 3.1 Server einrichten
+1. Docker auf dem Server installieren
 2. Repository clonen oder Dateien hochladen
 3. `docker-compose up -d` ausführen
-4. Nginx Reverse Proxy mit SSL (Let's Encrypt) konfigurieren
 
-### 2. Container Registry & Cloud
+### 3.2 SSL-Zertifikat einrichten (kostenlos)
 ```bash
-# Image taggen
-docker tag joumonde-shop your-registry.com/joumonde-shop:latest
-
-# Image pushen
-docker push your-registry.com/joumonde-shop:latest
-```
-
-Dann auf Server:
-```bash
-docker pull your-registry.com/joumonde-shop:latest
-docker run -d -p 80:80 your-registry.com/joumonde-shop:latest
-```
-
-### 3. Schweizer Hosting
-- **Hostpoint**: Docker Support mit Container Hosting
-- **Cyon**: Unterstützt Docker Deployment
-- **Infomaniak**: Cloud Server mit Docker
-
-### 4. Einfachere Alternativen (ohne Docker)
-- **Netlify**: Kostenloses Static Hosting, einfaches Drag & Drop
-- **Vercel**: Automatisches Deployment via Git
-- **GitHub Pages**: Gratis Hosting für statische Sites
-
-## SSL/HTTPS einrichten (auf eigenem Server)
-
-### Mit Let's Encrypt (kostenlos)
-```bash
-# Certbot installieren
-apt-get update
 apt-get install certbot python3-certbot-nginx
-
-# Zertifikat generieren
 certbot --nginx -d joumonde.ch -d www.joumonde.ch
 ```
 
-## Domain-Konfiguration
-1. Domain (z.B. joumonde.ch) kaufen
-2. DNS A-Record auf Server-IP zeigen lassen
-3. Warten bis DNS propagiert ist (5-30 Minuten)
-4. SSL-Zertifikat installieren
+### 3.3 Domain konfigurieren
+1. Domain kaufen (z.B. joumonde.ch)
+2. DNS A-Record auf die Server-IP setzen
+3. Ca. 5–30 Minuten warten bis die Änderung aktiv ist
+4. SSL-Zertifikat installieren (siehe 3.2)
 
-## Performance-Tipps
-- Bilder optimieren (WebP Format)
-- CDN verwenden (Cloudflare kostenlos)
-- Gzip Kompression (bereits in nginx.conf aktiviert)
-- Browser-Caching nutzen (bereits konfiguriert)
+**Schweizer Hosting-Anbieter mit Server-Support:**
+- **Hostpoint** – Docker Support mit Container Hosting
+- **Cyon** – Unterstützt Docker Deployment
+- **Infomaniak** – Cloud Server mit Docker
+
+---
+
+## 4. Performance-Optimierungen
+
+Einige Massnahmen zur Verbesserung der Ladegeschwindigkeit – grösstenteils bereits konfiguriert:
+
+- Bilder im WebP-Format verwenden
+- Cloudflare als kostenloses CDN nutzen
+- Gzip-Kompression (bereits in nginx.conf aktiv)
+- Browser-Caching (bereits konfiguriert)
