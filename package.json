@@ -1,12 +1,14 @@
 {
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "docx": "^9.6.1",
-    "multer": "^2.0.2",
-    "passport": "^0.7.0",
-    "passport-facebook": "^3.0.0",
-    "passport-google-oauth20": "^2.0.0",
-    "qrcode": "^1.5.4",
-    "speakeasy": "^2.0.0"
+  "name": "joumonde",
+  "version": "1.0.0",
+  "description": "Joumonde – Swiss Premium Fashion E-Commerce",
+  "private": true,
+  "scripts": {
+    "start": "npm run start --prefix backend",
+    "install:all": "npm install --prefix backend",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f"
   }
 }
