@@ -83,3 +83,4 @@ Einige Massnahmen zur Verbesserung der Ladegeschwindigkeit – grösstenteils be
 - Cloudflare als kostenloses CDN nutzen
 - Gzip-Kompression (bereits in nginx.conf aktiv)
 - Browser-Caching (bereits konfiguriert)
+
