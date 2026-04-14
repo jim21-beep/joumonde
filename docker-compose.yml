@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  joumonde-web:
+    build: .
+    container_name: joumonde-shop
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    networks:
+      - joumonde-network
+
+networks:
+  joumonde-network:
+    driver: bridge
