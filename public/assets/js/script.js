@@ -333,6 +333,8 @@ const translations = {
         poloDesc: 'Premium Baumwolle in Weiß',
         chinosPants: 'Chino Hose',
         chinosDesc: 'Slim-Fit in Khaki',
+        rippedKnitPolo: 'Ripped Knit Zip-Polo',
+        rippedKnitPoloDesc: 'Gestricktes Zip-Polo im Old Money Style',
         elegantVest: 'Elegante Weste',
         vestDesc: 'Premium Woll-Weste in Creme',
         quarterZipPullover: 'Quarter Zipper',
@@ -479,6 +481,8 @@ const translations = {
         poloDesc: 'Premium Cotton in White',
         chinosPants: 'Chino Pants',
         chinosDesc: 'Slim-Fit in Khaki',
+        rippedKnitPolo: 'Ripped Knit Zip-Polo',
+        rippedKnitPoloDesc: 'Gestricktes Zip-Polo im Old Money Style',
         elegantVest: 'Elegant Vest',
         vestDesc: 'Premium Wool Vest in Cream',
         quarterZipPullover: 'Quarter Zip Pullover',
@@ -625,6 +629,8 @@ const translations = {
         poloDesc: 'Coton Premium en Blanc',
         chinosPants: 'Pantalon Chino',
         chinosDesc: 'Coupe Slim en Kaki',
+        rippedKnitPolo: 'Ripped Knit Zip-Polo',
+        rippedKnitPoloDesc: 'Polo Zip en Maille Texturée',
         elegantVest: 'Gilet Élégant',
         vestDesc: 'Gilet en Laine Premium Crème',
         quarterZipPullover: 'Pull Quarter Zip',
@@ -844,11 +850,11 @@ function updatePageContent() {
     
     // Products
     const productTitles = [
-        'classicBlazer', 'poloShirt', 'chinosPants', 'elegantVest', 'quarterZipPullover', 'knitSweater', 'linenPants',
+        'classicBlazer', 'poloShirt', 'rippedKnitPolo', 'chinosPants', 'elegantVest', 'quarterZipPullover', 'knitSweater', 'linenPants',
         'oversizedHoodie', 'graphicTee', 'cargoPants', 'trackPants'
     ];
     const productDescs = [
-        'blazerDesc', 'poloDesc', 'chinosDesc', 'vestDesc', 'quarterZipDesc', 'sweaterDesc',
+        'blazerDesc', 'poloDesc', 'rippedKnitPoloDesc', 'chinosDesc', 'vestDesc', 'quarterZipDesc', 'sweaterDesc',
         'linenDesc', 'hoodieDesc', 'teeDesc', 'cargoDesc', 'trackDesc'
     ];
     
@@ -1006,13 +1012,28 @@ function toggleCart() {
 // Add Item to Cart
 // Navigate to Product Detail Page
 function viewProductDetail(productName, price, description, colors, sizes) {
+    // Fixed name → image mapping (never use array index)
+    const imageMap = {
+        'Klassischer Blazer': 'assets/images/klassischer_blazer.png',
+        'Polo Hemd': 'assets/images/polo.png',
+        'Ripped Knit Zip-Polo': 'assets/images/ripped-knit-polo.png',
+        'Chino Hose': 'assets/images/chino_hose.png',
+        'Elegante Weste': 'assets/images/weste.png',
+        'Quarter Zipper': 'assets/images/quarter_zipper.png',
+        'Strickpullover': 'assets/images/strickpullover.png',
+        'Leinenhose': 'assets/images/leinen.png',
+        'Oversized Hoodie': 'assets/images/hoodie-mockup.png',
+        'Trainerhose': 'assets/images/trainerhose.png'
+    };
+
     // Store product data in sessionStorage
     const productData = {
         name: productName,
         price: price,
         description: description,
         colors: colors || [],
-        sizes: sizes || ['S', 'M', 'L', 'XL']
+        sizes: sizes || ['S', 'M', 'L', 'XL'],
+        image: imageMap[productName] || null
     };
     
     sessionStorage.setItem('selectedProduct', JSON.stringify(productData));

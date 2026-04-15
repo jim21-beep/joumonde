@@ -1,4 +1,5 @@
 // Basic Express server for account system backend integration
+require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -11,6 +12,13 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const bcrypt = require('bcrypt');
+
+const app = express();
+const PORT = process.env.PORT || 4000;
+
+app.use(cors());
+app.use(bodyParser.json());
+
 // Passport config for Google
 passport.use(new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID || 'GOOGLE_CLIENT_ID',
@@ -70,12 +78,6 @@ app.get('/api/auth/facebook', passport.authenticate('facebook', { scope: ['email
 app.get('/api/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/' }), (req, res) => {
     res.send('Facebook login successful!');
 });
-
-const app = express();
-const PORT = process.env.PORT || 4000;
-
-app.use(cors());
-app.use(bodyParser.json());
 
 // Configure multer for profile picture uploads
 const uploadsDir = path.join(__dirname, 'uploads');
@@ -711,6 +713,34 @@ app.get('/api/newsletter/stats', (req, res) => {
     });
     
     res.json(stats);
+});
+
+// Chatbot endpoint
+const OpenAI = require('openai');
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+app.post('/api/chat', async (req, res) => {
+    const { message } = req.body;
+    if (!message) {
+        return res.status(400).json({ message: 'Message is required' });
+    }
+    try {
+        const completion = await openai.chat.completions.create({
+            model: 'gpt-4o-mini',
+            messages: [
+                {
+                    role: 'system',
+                    content: 'You are Nexara, the friendly shopping assistant for Joumonde, a premium fashion store. You only help with topics related to the Joumonde shop: products, styles, sizing, orders, shipping, and returns. If a customer asks about anything unrelated to the shop, politely let them know that you can only help with Joumonde-related questions. Always be warm, friendly, and professional.'
+                },
+                { role: 'user', content: message }
+            ],
+            max_tokens: 500
+        });
+        res.json({ reply: completion.choices[0].message.content });
+    } catch (error) {
+        console.error('OpenAI error:', error);
+        res.status(500).json({ message: 'Failed to get response from AI' });
+    }
 });
 
 app.listen(PORT, () => {
