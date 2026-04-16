@@ -803,6 +803,7 @@ Empfehlungslogik für Oberbekleidung (S/M/L/XL):
 Für Hosen (Größe 30–36): Taillenumfang in inch (Umfang cm ÷ 2.54). Bei unbekanntem Umfang: nach Gewicht und Körpertyp (schlank/normal/kräftig) schätzen.
 
 VERHALTEN:
+- Halte Antworten kurz — maximal 2–3 Sätze. Kein langer Fließtext.
 - Beantworte Fragen die nichts mit dem Shop zu tun haben kurz und hilfreich, und verbinde die Antwort dann natürlich mit einer passenden Produktempfehlung aus dem Sortiment.
 - Bei Wetterfragen: nutze die oben angegebenen echten Wetterdaten.
 - Bei Größenfragen: frage nach Körperdaten und gib eine konkrete Empfehlung.
@@ -811,6 +812,7 @@ VERHALTEN:
 
         const completion = await groq.chat.completions.create({
             model: 'llama-3.3-70b-versatile',
+            max_tokens: 150,
             messages: [
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: message }
