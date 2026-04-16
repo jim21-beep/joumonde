@@ -224,7 +224,9 @@
                         <li><a href="about.html">Über Uns</a></li>
                         <li><a href="shop.html#contact">Kontakt</a></li>
                         <li><a href="shop.html#faq">FAQ</a></li>
-                        <li><a href="shop.html#shipping">Versand & Retouren</a></li>
+                        <li><a href="versand.html">Versand &amp; Retouren</a></li>
+                        <li><a href="agb.html">AGB</a></li>
+                        <li><a href="cookie-policy.html">Datenschutz</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -255,23 +257,15 @@
     <script src="assets/js/account-system.js"></script>
     <script>
         // Load saved language on page load and update content
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             const savedLanguage = localStorage.getItem('language') || 'de';
             const languageSelector = document.getElementById('language-selector');
             if (languageSelector) {
                 languageSelector.value = savedLanguage;
-                currentLanguage = savedLanguage;
             }
-            // Update about page content with correct language
+            await loadLanguage(savedLanguage);
             updateAboutPageContent();
         });
-        
-        // Override changeLanguage to also update about page
-        const originalChangeLanguage = changeLanguage;
-        changeLanguage = function(lang) {
-            originalChangeLanguage(lang);
-            updateAboutPageContent();
-        };
     </script>
 
     <!-- Cookie Consent Banner (GDPR/CCPA Compliant) -->

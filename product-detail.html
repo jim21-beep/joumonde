@@ -32,9 +32,9 @@
                 </svg>
             </button>
             <ul class="nav-links">
-                <li><a href="index.html#home">Home</a></li>
-                <li><a href="index.html#old-money">Old Money</a></li>
-                <li><a href="index.html#streetwear">Streetwear</a></li>
+                <li><a href="shop.html">Home</a></li>
+                <li><a href="shop.html#old-money">Old Money</a></li>
+                <li><a href="shop.html#streetwear">Streetwear</a></li>
                 <li><a href="about.html">Über Uns</a></li>
                 <li><a href="shop.html#contact">Kontakt</a></li>
             </ul>
@@ -84,9 +84,9 @@
         <div class="container">
             <!-- Breadcrumb -->
             <div class="breadcrumb">
-                <a href="index.html">Home</a> 
+                <a href="shop.html">Home</a> 
                 <span>/</span> 
-                <a href="index.html#old-money">Old Money</a> 
+                <a href="shop.html#old-money">Old Money</a> 
                 <span>/</span> 
                 <span>Klassischer Blazer</span>
             </div>
@@ -554,8 +554,8 @@
                 <div class="footer-section">
                     <h4>Shop</h4>
                     <ul>
-                        <li><a href="index.html#old-money">Old Money</a></li>
-                        <li><a href="index.html#streetwear">Streetwear</a></li>
+                        <li><a href="shop.html#old-money">Old Money</a></li>
+                        <li><a href="shop.html#streetwear">Streetwear</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -691,7 +691,14 @@
     
     <script>
     // Load product data from sessionStorage
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', async function() {
+        // Load translations first
+        const savedLanguage = localStorage.getItem('language') || 'de';
+        const languageSelector = document.getElementById('language-selector');
+        if (languageSelector) languageSelector.value = savedLanguage;
+        await loadLanguage(savedLanguage);
+        updatePageContent();
+
         const productData = JSON.parse(sessionStorage.getItem('selectedProduct'));
         
         if (productData) {
@@ -787,6 +794,13 @@
             // sessionStorage.removeItem('selectedProduct');
         }
     });
+
+    // Override changeLanguage to also update page content when language is switched
+    const _origChangeLangDetail = changeLanguage;
+    changeLanguage = async function(lang) {
+        await _origChangeLangDetail(lang);
+        updatePageContent();
+    };
     </script>
 
     <!-- Cookie Consent Banner (GDPR/CCPA Compliant) -->

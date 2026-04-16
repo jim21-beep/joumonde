@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Versand & Retouren - Joumonde</title>
+    <meta name="description" content="Versandinformationen, Lieferzeiten und Rückgaberecht bei Joumonde. Schnelle Lieferung in die Schweiz und nach Europa.">
+    <link rel="icon" type="image/png" href="assets/images/Zeichenfläche 1.png">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EFD7P54PRE"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EFD7P54PRE');
+    </script>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        .legal-page {
+            padding: 8rem 0 6rem;
+            background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+            min-height: 60vh;
+        }
+        .legal-page .container {
+            max-width: 860px;
+        }
+        .legal-page h1 {
+            font-family: 'Garamond', 'Georgia', serif;
+            font-size: 2.8rem;
+            font-weight: 200;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        .legal-divider {
+            width: 60px;
+            height: 1px;
+            background: #d4af37;
+            margin: 1.5rem auto 3rem;
+        }
+        .legal-section {
+            margin-bottom: 2.5rem;
+        }
+        .legal-section h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .legal-section h2 svg {
+            color: #d4af37;
+            flex-shrink: 0;
+        }
+        .legal-section p, .legal-section ul, .legal-section li {
+            font-size: 1rem;
+            color: #444;
+            line-height: 1.8;
+        }
+        .legal-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        .legal-section ul li {
+            padding: 0.35rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
+        .legal-section ul li:last-child {
+            border-bottom: none;
+        }
+        .legal-section ul li strong {
+            color: #1a1a1a;
+            min-width: 160px;
+            display: inline-block;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .info-card {
+            background: #fff;
+            border: 1px solid rgba(218, 165, 32, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+        .info-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 0.75rem;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #d4af37;
+            text-decoration: none;
+            font-size: 0.95rem;
+            margin-bottom: 2.5rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="shop.html">
+                    <img src="assets/images/joumonde.png" alt="Joumonde Logo" class="logo-image">
+                </a>
+            </div>
+            <button class="mobile-menu-btn" aria-label="Menü" onclick="toggleMobileMenu()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <ul class="nav-links">
+                <li><a href="shop.html">Home</a></li>
+                <li><a href="shop.html#old-money">Old Money</a></li>
+                <li><a href="shop.html#streetwear">Streetwear</a></li>
+                <li><a href="about.html">Über Uns</a></li>
+                <li><a href="shop.html#contact">Kontakt</a></li>
+            </ul>
+            <div class="nav-icons">
+                <select class="currency-selector" id="currency-selector" onchange="changeCurrency(this.value)">
+                    <option value="CHF" selected>CHF</option>
+                    <option value="EUR">EUR</option>
+                    <option value="USD">USD</option>
+                </select>
+                <select class="language-selector" id="language-selector" onchange="changeLanguage(this.value)">
+                    <option value="de" selected>DE</option>
+                    <option value="en">EN</option>
+                    <option value="fr">FR</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <main class="legal-page">
+        <div class="container">
+            <a href="shop.html" class="back-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                Zurück zum Shop
+            </a>
+            <h1>Versand & Retouren</h1>
+            <div class="legal-divider"></div>
+
+            <!-- Versandkosten -->
+            <div class="legal-section">
+                <h2>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                    Versandkosten
+                </h2>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>🇨🇭 Schweiz</h3>
+                        <ul>
+                            <li><strong>Standard:</strong> CHF 7.90</li>
+                            <li><strong>Gratis ab:</strong> CHF 100.–</li>
+                            <li><strong>Express:</strong> + CHF 12.–</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>🇪🇺 Europa (EU)</h3>
+                        <ul>
+                            <li><strong>Standard:</strong> CHF 15.90</li>
+                            <li><strong>Gratis ab:</strong> CHF 150.–</li>
+                            <li><strong>Express:</strong> + CHF 12.–</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lieferzeiten -->
+            <div class="legal-section">
+                <h2>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    Lieferzeiten
+                </h2>
+                <ul>
+                    <li><strong>Schweiz Standard:</strong> 1–3 Werktage</li>
+                    <li><strong>Schweiz Express:</strong> 24 Stunden (Bestellung vor 12 Uhr)</li>
+                    <li><strong>EU Standard:</strong> 5–7 Werktage</li>
+                    <li><strong>EU Express:</strong> 2–3 Werktage</li>
+                </ul>
+                <p style="margin-top:1rem; font-size:0.9rem; color:#888;">Bestellungen, die werktags bis 14 Uhr eingehen, werden noch am selben Tag versendet. Lieferzeiten beginnen nach Zahlungseingang.</p>
+            </div>
+
+            <!-- Versandpartner -->
+            <div class="legal-section">
+                <h2>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    Versandpartner
+                </h2>
+                <p>Wir versenden mit <strong>Swiss Post</strong> (Schweiz) und <strong>DHL</strong> (International). Du erhältst nach dem Versand eine E-Mail mit Tracking-Link.</p>
+            </div>
+
+            <!-- Rückgaberecht -->
+            <div class="legal-section">
+                <h2>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                    Rückgaberecht
+                </h2>
+                <ul>
+                    <li><strong>Rückgabefrist:</strong> 14 Tage ab Erhalt der Ware</li>
+                    <li><strong>Kosten (CH):</strong> Kostenlose Retoure</li>
+                    <li><strong>Kosten (EU):</strong> Rücksendekosten trägt der Käufer</li>
+                    <li><strong>Zustand:</strong> Artikel ungetragen, ungewaschen, mit Originaletiketten</li>
+                    <li><strong>Rückerstattung:</strong> Innerhalb von 5–7 Werktagen nach Eingang der Retoure</li>
+                </ul>
+            </div>
+
+            <!-- Retourenprozess -->
+            <div class="legal-section">
+                <h2>Retourenprozess</h2>
+                <ol style="padding-left:1.2rem; color:#444; line-height:2;">
+                    <li>Schreibe uns eine E-Mail an <strong>info@joumonde.com</strong> mit Bestellnummer und Grund der Rückgabe.</li>
+                    <li>Du erhältst innerhalb von 24 Stunden eine Bestätigung und das Retourenlabel (CH).</li>
+                    <li>Verpacke die Ware sorgfältig und bringe das Paket zur Post.</li>
+                    <li>Nach Eingang und Prüfung der Ware erfolgt die Rückerstattung auf dein Zahlungsmittel.</li>
+                </ol>
+            </div>
+
+            <!-- Kontakt -->
+            <div class="legal-section">
+                <h2>Fragen zum Versand?</h2>
+                <p>Schreib uns jederzeit: <a href="mailto:info@joumonde.com" style="color:#d4af37;">info@joumonde.com</a> | <strong>+41 44 123 45 67</strong></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="assets/images/joumonde.png" alt="Joumonde Logo" class="footer-logo">
+                    <p>Premium Fashion Shop</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="shop.html#old-money">Old Money</a></li>
+                        <li><a href="shop.html#streetwear">Streetwear</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Informationen</h4>
+                    <ul>
+                        <li><a href="about.html">Über Uns</a></li>
+                        <li><a href="shop.html#contact">Kontakt</a></li>
+                        <li><a href="shop.html#faq">FAQ</a></li>
+                        <li><a href="versand.html">Versand &amp; Retouren</a></li>
+                        <li><a href="agb.html">AGB</a></li>
+                        <li><a href="cookie-policy.html">Datenschutz</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Joumonde. Alle Rechte vorbehalten.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/analytics.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            const savedLanguage = localStorage.getItem('language') || 'de';
+            const langSel = document.getElementById('language-selector');
+            if (langSel) langSel.value = savedLanguage;
+            const currSel = document.getElementById('currency-selector');
+            if (currSel) currSel.value = localStorage.getItem('currency') || 'CHF';
+        });
+    </script>
+</body>
+</html>
