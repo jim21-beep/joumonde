@@ -575,27 +575,44 @@ app.post('/api/newsletter/subscribe', async (req, res) => {
         if (!emailRegex.test(email)) {
             return res.status(400).json({ message: 'Invalid email format' });
         }
-        
-        // Check if already subscribed
-        const existingSubscriber = newsletterSubscribers.find(sub => sub.email === email);
-        if (existingSubscriber) {
+
+        const normalizedEmail = email.toLowerCase().trim();
+
+        // Check if already subscribed in Supabase
+        const { data: existing } = await supabaseAdmin
+            .from('newsletter_subscribers')
+            .select('id, confirmed')
+            .eq('email', normalizedEmail)
+            .maybeSingle();
+        if (existing) {
             return res.status(409).json({ message: 'Email already subscribed' });
         }
-        
-        // Create subscriber
+
+        const confirmationToken = crypto.randomBytes(32).toString('hex');
+
+        // Save to Supabase
+        await supabaseAdmin.from('newsletter_subscribers').insert({
+            email: normalizedEmail,
+            name: name || '',
+            source: source || 'website',
+            confirmed: false,
+            confirmation_token: confirmationToken
+        });
+
+        // Keep in-memory for stats endpoint
         const subscriber = {
-            email: email.toLowerCase(),
+            email: normalizedEmail,
             name: name || '',
             source: source || 'website',
             subscribed: new Date().toISOString(),
             confirmed: false,
-            confirmationToken: crypto.randomBytes(32).toString('hex')
+            confirmationToken
         };
-        
         newsletterSubscribers.push(subscriber);
         
         // Send confirmation email
-        const confirmationLink = `http://localhost:${PORT}/api/newsletter/confirm/${subscriber.confirmationToken}`;
+        const BASE_URL = process.env.BASE_URL || 'https://joumonde.onrender.com';
+        const confirmationLink = `${BASE_URL}/api/newsletter/confirm/${confirmationToken}`;
         const emailContent = `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
                 <div style="text-align: center; margin-bottom: 30px;">
@@ -655,11 +672,16 @@ app.post('/api/newsletter/subscribe', async (req, res) => {
 });
 
 // Confirm newsletter subscription
-app.get('/api/newsletter/confirm/:token', (req, res) => {
+app.get('/api/newsletter/confirm/:token', async (req, res) => {
     const { token } = req.params;
-    
-    const subscriber = newsletterSubscribers.find(sub => sub.confirmationToken === token);
-    
+
+    // Look up token in Supabase
+    const { data: subscriber } = await supabaseAdmin
+        .from('newsletter_subscribers')
+        .select('id, email, confirmed')
+        .eq('confirmation_token', token)
+        .maybeSingle();
+
     if (!subscriber) {
         return res.status(404).send(`
             <html>
@@ -670,15 +692,22 @@ app.get('/api/newsletter/confirm/:token', (req, res) => {
                 <body>
                     <h1 style="color: #c0392b;">❌ Bestätigung fehlgeschlagen</h1>
                     <p>Dieser Bestätigungslink ist ungültig oder abgelaufen.</p>
-                    <a href="https://joumonde.com" style="color: #d4af37;">Zurück zur Homepage</a>
+                    <a href="https://joumonde.ch" style="color: #d4af37;">Zurück zur Homepage</a>
                 </body>
             </html>
         `);
     }
-    
-    subscriber.confirmed = true;
-    subscriber.confirmedAt = new Date().toISOString();
-    
+
+    // Mark as confirmed in Supabase
+    await supabaseAdmin
+        .from('newsletter_subscribers')
+        .update({ confirmed: true })
+        .eq('id', subscriber.id);
+
+    // Update in-memory too
+    const mem = newsletterSubscribers.find(s => s.email === subscriber.email);
+    if (mem) { mem.confirmed = true; mem.confirmedAt = new Date().toISOString(); }
+
     res.send(`
         <html>
             <head>
@@ -688,7 +717,7 @@ app.get('/api/newsletter/confirm/:token', (req, res) => {
             <body>
                 <h1 style="color: #d4af37;">✓ Newsletter bestätigt!</h1>
                 <p>Vielen Dank! Du erhältst ab sofort exklusive Updates und Angebote von Joumonde.</p>
-                <a href="https://joumonde.com" style="color: #d4af37; text-decoration: none; font-weight: bold;">Zurück zur Homepage</a>
+                <a href="https://joumonde.ch" style="color: #d4af37; text-decoration: none; font-weight: bold;">Zurück zur Homepage</a>
             </body>
         </html>
     `);

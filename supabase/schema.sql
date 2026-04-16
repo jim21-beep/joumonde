@@ -113,12 +113,13 @@ create trigger on_auth_user_created
 -- NEWSLETTER SUBSCRIBERS
 -- ------------------------------------------------------------------
 create table public.newsletter_subscribers (
-  id          uuid default uuid_generate_v4() primary key,
-  email       text not null unique,
-  name        text,
-  source      text default 'website',
-  confirmed   boolean default false,
-  subscribed_at timestamptz default now()
+  id                 uuid default uuid_generate_v4() primary key,
+  email              text not null unique,
+  name               text,
+  source             text default 'website',
+  confirmed          boolean default false,
+  confirmation_token text,
+  subscribed_at      timestamptz default now()
 );
 
 -- Öffentlich eintragen (kein Login nötig), aber nur eigene E-Mail lesen
