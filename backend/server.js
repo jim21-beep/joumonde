@@ -882,6 +882,22 @@ const NEXARA_TOOLS = [
                 required: ['email']
             }
         }
+    },
+    {
+        type: 'function',
+        function: {
+            name: 'send_support_email',
+            description: 'Sendet eine Support-Email an den Kunden, z.B. mit Infos, Bestätigungen oder Antworten auf Anfragen.',
+            parameters: {
+                type: 'object',
+                properties: {
+                    to: { type: 'string', description: 'Empfänger-Email' },
+                    subject: { type: 'string', description: 'Betreff der Email' },
+                    body: { type: 'string', description: 'Inhalt der Email (Plain Text)' }
+                },
+                required: ['to', 'subject', 'body']
+            }
+        }
     }
 ];
 
@@ -958,6 +974,21 @@ async function executeNexaraTool(toolName, args, verifiedUserId, userEmail) {
                 return { success: true, email };
             }
 
+            case 'send_support_email': {
+                const to = args.to || userEmail;
+                if (!to) return { error: 'Keine Empfänger-Email bekannt. Bitte Email-Adresse angeben.' };
+                if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+                    return { error: 'Email-Versand ist noch nicht konfiguriert.' };
+                }
+                await transporter.sendMail({
+                    from: `"Joumonde Support" <${process.env.EMAIL_USER}>`,
+                    to,
+                    subject: args.subject || 'Nachricht von Joumonde',
+                    text: args.body
+                });
+                return { success: true, to };
+            }
+
             default:
                 return { error: `Unbekanntes Tool: ${toolName}` };
         }
@@ -1017,7 +1048,14 @@ app.post('/api/chat', async (req, res) => {
         const contextBlock = [dateContext, weatherContext, saleContext].filter(Boolean).join('\n');
         const systemPrompt = `Du bist Nexara, die persönliche Assistentin von Joumonde. Antworte IMMER in der Sprache des Users.
 ${contextBlock}
-PRODUKTE: Blazer, Polo, Knit Zip-Polo, Weste, Quarter Zipper, Strickpullover, Chino, Leinenhose, Hoodie, Trainerhose. Größen S–XL bzw. 30–36.
+PRODUKTE: Blazer, Polo, Knit Zip-Polo, Weste, Quarter Zipper, Strickpullover, Chino, Leinenhose, Hoodie, Trainerhose. Größen S–XL (Oberteil) bzw. 30–36 (Hosen-Bundweite in Zoll).
+GRÖSSENGUIDE OBERTEIL (Körpermaße → Größe):
+- S: ~160–168cm, 50–62kg, Brust ~82–88cm
+- M: ~168–175cm, 63–74kg, Brust ~88–96cm
+- L: ~173–180cm, 75–88kg, Brust ~96–104cm — auch für kompakte/muskulöse Builds unter 175cm mit >75kg!
+- XL: ~178–186cm+, 88–105kg+, Brust ~104–112cm
+FAUSTREGEL: Körpergewicht schlägt Körpergröße. Wer bei 160–165cm über 75kg wiegt (kompakter/muskulöser Build), braucht L, nicht M.
+HOSEN (Bundweite): 30≈76cm | 32≈81cm | 34≈86cm | 36≈91cm
 VERSAND: CH CHF 7.90 (gratis ab 100) | EU CHF 15.90 (gratis ab 150) | Express +12 | 14 Tage Rückgabe | TWINT, Kreditkarte, PayPal, Klarna.
 USER: ${verifiedUserId ? `Eingeloggt (Email: ${userEmail || 'unbekannt'})` : 'Nicht eingeloggt'}
 GESPRÄCHSSTIL:
@@ -1026,7 +1064,7 @@ GESPRÄCHSSTIL:
 - Sei locker, freundlich, natürlich — kein Verkäufer-Ton.
 - Wenn jemand nach einem Produkt fragt: frag zuerst nach Stil, Anlass oder Größe — mach keine vollständige Liste.
 - Wenn jemand ein Problem hat: hör zu, frag nach Details, dann löse es.
-TOOLS (get_order, get_my_orders, initiate_return, unsubscribe_newsletter): NUR verwenden wenn der Kunde EXPLIZIT danach fragt. Niemals proaktiv ansprechen.
+TOOLS (get_order, get_my_orders, initiate_return, unsubscribe_newsletter, send_support_email): NUR verwenden wenn der Kunde EXPLIZIT danach fragt. send_support_email nur nutzen wenn der Kunde ausdrücklich eine Email möchte.
 VERBOTEN: Markdown, Tool-Namen in Antworten, Telefonnummern, physische Adressen, erfundene Bestelldaten.`;
 
         const messages = [
