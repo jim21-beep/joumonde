@@ -830,16 +830,155 @@ function detectLanguageChange(message) {
     return null;
 }
 
+// ----------------------------------------------------------------
+// Nexara Tool Definitions (Groq Function Calling)
+// ----------------------------------------------------------------
+const NEXARA_TOOLS = [
+    {
+        type: 'function',
+        function: {
+            name: 'get_order',
+            description: 'Holt vollständige Details einer Bestellung anhand der Bestellnummer (Format JM...).',
+            parameters: {
+                type: 'object',
+                properties: {
+                    order_id: { type: 'string', description: 'Bestellnummer z.B. JM1234567890' }
+                },
+                required: ['order_id']
+            }
+        }
+    },
+    {
+        type: 'function',
+        function: {
+            name: 'get_my_orders',
+            description: 'Holt alle Bestellungen des eingeloggten Kunden (max. 5 neueste).',
+            parameters: { type: 'object', properties: {}, required: [] }
+        }
+    },
+    {
+        type: 'function',
+        function: {
+            name: 'initiate_return',
+            description: 'Leitet eine Retoure für eine Bestellung ein. Erfordert Login und gültige Bestellnummer.',
+            parameters: {
+                type: 'object',
+                properties: {
+                    order_id: { type: 'string', description: 'Bestellnummer der zu retournierenden Bestellung' },
+                    reason: { type: 'string', description: 'Grund der Retoure' }
+                },
+                required: ['order_id', 'reason']
+            }
+        }
+    },
+    {
+        type: 'function',
+        function: {
+            name: 'unsubscribe_newsletter',
+            description: 'Meldet eine Email-Adresse vom Newsletter ab.',
+            parameters: {
+                type: 'object',
+                properties: {
+                    email: { type: 'string', description: 'Email-Adresse des Kunden' }
+                },
+                required: ['email']
+            }
+        }
+    }
+];
+
+// ----------------------------------------------------------------
+// Tool Execution
+// ----------------------------------------------------------------
+async function executeNexaraTool(toolName, args, verifiedUserId, userEmail) {
+    try {
+        switch (toolName) {
+            case 'get_order': {
+                if (!verifiedUserId) return { error: 'Nicht eingeloggt – bitte zuerst einloggen.' };
+                const orderId = (args.order_id || '').toUpperCase();
+                const { data: order } = await supabaseAdmin
+                    .from('orders')
+                    .select('id, status, total, currency, created_at, updated_at, user_id, order_items(product_name, quantity, size, unit_price)')
+                    .eq('id', orderId)
+                    .single();
+                if (!order) return { error: `Bestellung ${orderId} nicht gefunden.` };
+                if (order.user_id !== verifiedUserId) return { error: 'Keine Berechtigung für diese Bestellung.' };
+                return { order };
+            }
+
+            case 'get_my_orders': {
+                if (!verifiedUserId) return { error: 'Nicht eingeloggt – bitte zuerst einloggen.' };
+                const { data: orders } = await supabaseAdmin
+                    .from('orders')
+                    .select('id, status, total, currency, created_at')
+                    .eq('user_id', verifiedUserId)
+                    .order('created_at', { ascending: false })
+                    .limit(5);
+                return { orders: orders || [] };
+            }
+
+            case 'initiate_return': {
+                if (!verifiedUserId) return { error: 'Nicht eingeloggt – bitte zuerst einloggen.' };
+                const orderId = (args.order_id || '').toUpperCase();
+                const { data: order } = await supabaseAdmin
+                    .from('orders')
+                    .select('id, status, user_id, total, currency')
+                    .eq('id', orderId)
+                    .single();
+                if (!order) return { error: `Bestellung ${orderId} nicht gefunden.` };
+                if (order.user_id !== verifiedUserId) return { error: 'Keine Berechtigung für diese Bestellung.' };
+                if (order.status === 'Retoure beantragt' || order.status === 'Retourniert') {
+                    return { info: `Für Bestellung ${orderId} wurde bereits eine Retoure beantragt.` };
+                }
+                await supabaseAdmin
+                    .from('orders')
+                    .update({ status: 'Retoure beantragt', updated_at: new Date().toISOString() })
+                    .eq('id', orderId);
+                let emailSent = false;
+                if (userEmail && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+                    try {
+                        await transporter.sendMail({
+                            from: `"Joumonde Support" <${process.env.EMAIL_USER}>`,
+                            to: userEmail,
+                            subject: `Retoure bestätigt – ${orderId}`,
+                            html: `<p>Hallo,</p><p>deine Retouranfrage für Bestellung <strong>${orderId}</strong> wurde erfolgreich erfasst.</p><p><strong>Grund:</strong> ${args.reason}</p><p>Wir melden uns innerhalb von 1–2 Werktagen mit weiteren Anweisungen bei dir.</p><p>Freundliche Grüsse,<br>Joumonde Support</p>`
+                        });
+                        emailSent = true;
+                    } catch {}
+                }
+                return { success: true, orderId, newStatus: 'Retoure beantragt', emailSent };
+            }
+
+            case 'unsubscribe_newsletter': {
+                const email = (args.email || '').toLowerCase().trim();
+                await supabaseAdmin.from('newsletter_subscribers').delete().eq('email', email);
+                if (verifiedUserId) {
+                    await supabaseAdmin.from('profiles').update({ newsletter: false }).eq('id', verifiedUserId);
+                }
+                const idx = newsletterSubscribers.findIndex(s => s.email === email);
+                if (idx !== -1) newsletterSubscribers.splice(idx, 1);
+                return { success: true, email };
+            }
+
+            default:
+                return { error: `Unbekanntes Tool: ${toolName}` };
+        }
+    } catch (err) {
+        return { error: err.message };
+    }
+}
+
+// ----------------------------------------------------------------
+// Chat endpoint – Nexara with Groq Tool Calling
+// ----------------------------------------------------------------
 app.post('/api/chat', async (req, res) => {
     const { message, lat, lon, city, lang, history } = req.body;
-    if (!message) {
-        return res.status(400).json({ message: 'Message is required' });
-    }
+    if (!message) return res.status(400).json({ message: 'Message is required' });
+
     try {
-        // Handle language switch command
+        // Language switch shortcut
         const switchLang = detectLanguageChange(message);
         if (switchLang && switchLang !== lang) {
-            const langNames = { de: 'Deutsch', en: 'English', fr: 'Français' };
             const confirmations = {
                 de: `Klar, ich stelle die Sprache auf Deutsch um!`,
                 en: `Sure, switching the language to English for you!`,
@@ -847,10 +986,10 @@ app.post('/api/chat', async (req, res) => {
             };
             return res.json({ reply: confirmations[switchLang], action: { type: 'changeLanguage', value: switchLang } });
         }
+
+        // Context blocks
         const dateContext = getDateContext();
         const saleContext = getSaleContext();
-
-        // Only fetch weather when the user explicitly asks about it
         let weatherContext = '';
         if (isWeatherQuestion(message)) {
             const mentionedCity = extractCityFromMessage(message);
@@ -866,49 +1005,36 @@ app.post('/api/chat', async (req, res) => {
             }
         }
 
-        // Order lookup: detect order number in message (format JM + digits)
-        let orderContext = '';
-        const orderMatch = message.match(/\bJM\d{10,}\b/i);
-        if (orderMatch && process.env.SUPABASE_SERVICE_KEY) {
-            const orderId = orderMatch[0].toUpperCase();
-            // Verify the requesting user owns this order
-            const authHeader = req.headers.authorization || '';
-            const accessToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
-            let verifiedUserId = null;
-            if (accessToken) {
-                const { data: { user } } = await supabaseAdmin.auth.getUser(accessToken);
-                verifiedUserId = user?.id || null;
-            }
-            if (!verifiedUserId) {
-                orderContext = 'BESTELLUNG: Bitte zuerst einloggen um Bestellinformationen abzurufen.';
-            } else {
-                const { data: order } = await supabaseAdmin
-                    .from('orders')
-                    .select('id, status, total, currency, created_at, user_id, order_items(product_name, quantity, size)')
-                    .eq('id', orderId)
-                    .single();
-                if (!order) {
-                    orderContext = `BESTELLUNG ${orderId}: Nicht gefunden.`;
-                } else if (order.user_id !== verifiedUserId) {
-                    orderContext = `BESTELLUNG ${orderId}: Keine Berechtigung – diese Bestellung gehört nicht dem eingeloggten Account.`;
-                } else {
-                    const items = (order.order_items || []).map(i => `${i.product_name} (${i.size}, x${i.quantity})`).join(', ');
-                    orderContext = `BESTELLUNG ${order.id}: Status="${order.status}", Artikel=${items || 'unbekannt'}, Gesamt=${order.total} ${order.currency}, Datum=${new Date(order.created_at).toLocaleDateString('de-CH')}.`;
-                }
-            }
+        // Authenticate user
+        const authHeader = req.headers.authorization || '';
+        const accessToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+        let verifiedUserId = null;
+        let userEmail = null;
+        if (accessToken) {
+            const { data: { user } } = await supabaseAdmin.auth.getUser(accessToken);
+            verifiedUserId = user?.id || null;
+            userEmail = user?.email || null;
         }
 
-        const contextBlock = [dateContext, weatherContext, saleContext, orderContext].filter(Boolean).join('\n');
-        const systemPrompt = `Du bist Nexara, die digitale Shopping-Assistentin von Joumonde. Antworte in der Sprache des Users.
+        const contextBlock = [dateContext, weatherContext, saleContext].filter(Boolean).join('\n');
+        const systemPrompt = `Du bist Nexara, die digitale Assistentin von Joumonde. Antworte in der Sprache des Users.
 ${contextBlock}
-PRODUKTE: Blazer,Polo,Knit Zip-Polo,Weste,Quarter Zipper,Strickpullover,Chino(SALE-20%),Leinenhose | Hoodie,Trainerhose. Größen S-XL bzw. 30-36.
-VERSAND: CH CHF7.90(gratis ab100)|EU CHF15.90(gratis ab150)|Express+12|14 Tage Rückgabe|TWINT,Kreditkarte,PayPal,Klarna.
-REGELN: Max 2 kurze Sätze. Kein Markdown. Keine Preise nennen außer bei Nachfrage. Verschiedene Produkte empfehlen. Sei natürlich und nicht roboterhaft.
-BESTELLUNGEN: Erfinde NIEMALS Bestelldaten, Status oder Versandinformationen. Ohne eine gültige Bestellnummer (Format JM...) im Chat kannst du NICHT weiterhelfen – sage dann immer genau: "Ich helfe dir gerne mit deiner Bestellung! Teile mir einfach deine Bestellnummer mit – du findest sie in deinem Profil oder in der Bestätigungsmail." Sag NIEMALS dass er anrufen oder eine Mail schreiben soll. Erwähne NIEMALS einen Standort oder eine Stadt.`;
+PRODUKTE: Blazer, Polo, Knit Zip-Polo, Weste, Quarter Zipper, Strickpullover, Chino (SALE -20%), Leinenhose | Hoodie, Trainerhose. Größen S–XL bzw. 30–36.
+VERSAND: CH CHF 7.90 (gratis ab 100) | EU CHF 15.90 (gratis ab 150) | Express +12 | 14 Tage Rückgabe | TWINT, Kreditkarte, PayPal, Klarna.
+USER: ${verifiedUserId ? `Eingeloggt (ID: ${verifiedUserId}, Email: ${userEmail || 'unbekannt'})` : 'Nicht eingeloggt'}
+FÄHIGKEITEN: Du kannst Bestellungen abrufen (get_order, get_my_orders), Retouren einleiten (initiate_return) und Newsletter abmelden (unsubscribe_newsletter). Nutze diese Tools aktiv wenn der Kunde danach fragt. Frage proaktiv nach fehlenden Infos (z.B. Bestellnummer, Grund).
+REGELN: Max 3 kurze Sätze. Kein Markdown. Erfinde NIEMALS Bestelldaten. Sei natürlich und hilfsbereit. Erwähne nie Telefon, physische Adressen oder Filialen.`;
 
+        const messages = [
+            { role: 'system', content: systemPrompt },
+            ...(Array.isArray(history) ? history.slice(-8) : []),
+            { role: 'user', content: message }
+        ];
 
         let reply;
+
         if (AI_PROVIDER === 'gemini') {
+            // Gemini path (no tool calling)
             const contents = [
                 ...(Array.isArray(history) ? history.slice(-10).map(m => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })) : []),
                 { role: 'user', parts: [{ text: message }] }
@@ -916,21 +1042,44 @@ BESTELLUNGEN: Erfinde NIEMALS Bestelldaten, Status oder Versandinformationen. Oh
             const geminiResult = await gemini.models.generateContent({
                 model: 'gemini-2.0-flash',
                 contents,
-                config: { systemInstruction: systemPrompt, maxOutputTokens: 120 }
+                config: { systemInstruction: systemPrompt, maxOutputTokens: 200 }
             });
             reply = geminiResult.text;
         } else {
-            const completion = await groq.chat.completions.create({
-                model: 'llama-3.1-8b-instant',
-                max_tokens: 120,
-                messages: [
-                    { role: 'system', content: systemPrompt },
-                    ...(Array.isArray(history) ? history.slice(-6) : []),
-                    { role: 'user', content: message }
-                ]
+            // Groq with Tool Calling
+            const firstCompletion = await groq.chat.completions.create({
+                model: 'llama-3.3-70b-versatile',
+                max_tokens: 300,
+                messages,
+                tools: NEXARA_TOOLS,
+                tool_choice: 'auto'
             });
-            reply = completion.choices[0].message.content;
+            const firstChoice = firstCompletion.choices[0];
+
+            if (firstChoice.finish_reason === 'tool_calls' && firstChoice.message.tool_calls?.length) {
+                // Execute each tool call
+                messages.push(firstChoice.message);
+                for (const tc of firstChoice.message.tool_calls) {
+                    const args = JSON.parse(tc.function.arguments || '{}');
+                    const result = await executeNexaraTool(tc.function.name, args, verifiedUserId, userEmail);
+                    messages.push({
+                        role: 'tool',
+                        tool_call_id: tc.id,
+                        content: JSON.stringify(result)
+                    });
+                }
+                // Second call: let Nexara formulate the final answer
+                const secondCompletion = await groq.chat.completions.create({
+                    model: 'llama-3.3-70b-versatile',
+                    max_tokens: 200,
+                    messages
+                });
+                reply = secondCompletion.choices[0].message.content;
+            } else {
+                reply = firstChoice.message.content;
+            }
         }
+
         res.json({ reply });
     } catch (error) {
         console.error('AI error:', error);
