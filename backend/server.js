@@ -718,15 +718,57 @@ app.get('/api/newsletter/stats', (req, res) => {
 // Chatbot endpoint
 const Groq = require('groq-sdk');
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+const { GoogleGenAI } = require('@google/genai');
+const AI_PROVIDER = (process.env.AI_PROVIDER || 'groq').toLowerCase();
+const gemini = AI_PROVIDER === 'gemini' ? new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY }) : null;
 
-// Fetch current weather from Open-Meteo (free, no API key)
+// Supabase client (service role – bypasses RLS)
+const { createClient } = require('@supabase/supabase-js');
+const supabaseAdmin = createClient(
+    'https://sbxffjszderijikxarho.supabase.co',
+    process.env.SUPABASE_SERVICE_KEY || ''
+);
+
+// Geocode a city name to lat/lon via Open-Meteo geocoding API
+async function geocodeCity(cityName) {
+    try {
+        const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=1&language=de&format=json`;
+        const r = await fetch(url);
+        const d = await r.json();
+        if (d.results && d.results.length > 0) {
+            const res = d.results[0];
+            return { lat: res.latitude, lon: res.longitude, name: `${res.name}, ${res.country}` };
+        }
+    } catch {}
+    return null;
+}
+
+// Detect if message is asking about weather
+function isWeatherQuestion(message) {
+    return /wetter|temperatur|regen|sonne|schnee|warm\?|kalt\?|grad|forecast|weather|météo|meteo|wind|bewölkt|sonnig/i.test(message);
+}
+
+// Extract a mentioned city from a weather question
+function extractCityFromMessage(message) {
+    const patterns = [
+        /\b(?:in|für|bei|aus|à)\s+([A-ZÄÖÜa-zäöüß][a-zäöüß\-]+(?:\s+[A-ZÄÖÜa-zäöüß][a-zäöüß\-]+)?)/i,
+        /([A-ZÄÖÜ][a-zäöüß\-]+(?:\s+[A-ZÄÖÜa-zäöüß][a-zäöüß\-]+)?)\s+(?:wetter|weather|météo)/i,
+    ];
+    for (const pat of patterns) {
+        const m = pat.exec(message);
+        if (m && m[1] && m[1].length > 2) return m[1].trim();
+    }
+    return null;
+}
+
+// Fetch 3-day weather forecast from Open-Meteo (free, no API key)
 async function getWeatherContext(lat = 47.3769, lon = 8.5417, cityName = 'Zürich') {
     try {
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weathercode,windspeed_10m&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=Europe/Zurich&forecast_days=3`;
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weathercode&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto&forecast_days=3`;
         const response = await fetch(url);
         const data = await response.json();
         const current = data.current;
-        const today = data.daily;
+        const daily = data.daily;
 
         const weatherCodes = {
             0: 'klarer Himmel', 1: 'überwiegend klar', 2: 'teilweise bewölkt', 3: 'bedeckt',
@@ -734,9 +776,17 @@ async function getWeatherContext(lat = 47.3769, lon = 8.5417, cityName = 'Züric
             63: 'mäßiger Regen', 65: 'starker Regen', 71: 'leichter Schneefall', 80: 'leichte Regenschauer',
             95: 'Gewitter'
         };
-        const desc = weatherCodes[current.weathercode] || 'wechselhaft';
+        const desc = code => weatherCodes[code] || 'wechselhaft';
 
-        return `WETTER IN ${cityName.toUpperCase()}: ${current.temperature_2m}°C, ${desc}.`;
+        const now = new Date();
+        const dayNames = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+        const labels = ['Heute', 'Morgen', dayNames[(now.getDay() + 2) % 7]];
+
+        const forecast = daily.time.slice(0, 3).map((_, i) =>
+            `${labels[i]}: ${Math.round(daily.temperature_2m_max[i])}°/${Math.round(daily.temperature_2m_min[i])}°C, ${desc(daily.weathercode[i])}`
+        ).join(' | ');
+
+        return `WETTER IN ${cityName.toUpperCase()}: Jetzt ${Math.round(current.temperature_2m)}°C, ${desc(current.weathercode)} | ${forecast}`;
     } catch (e) {
         return '';
     }
@@ -762,68 +812,119 @@ function getSaleContext() {
     return `AKTUELLE SALE-ARTIKEL: ${items}.`;
 }
 
+// Detect language change intent and return target lang code
+function detectLanguageChange(message) {
+    const m = message.toLowerCase();
+    if (/\b(switch to english|speak english|auf englisch|wechsel.*englisch|change.*english|in english please)\b/i.test(m)) return 'en';
+    if (/\b(switch to french|auf französisch|wechsel.*französisch|change.*french|en français|parle français)\b/i.test(m)) return 'fr';
+    if (/\b(switch to german|wechsel.*deutsch|change.*german|auf deutsch bitte|speak german)\b/i.test(m)) return 'de';
+    return null;
+}
+
 app.post('/api/chat', async (req, res) => {
-    const { message, lat, lon, city } = req.body;
+    const { message, lat, lon, city, lang, history } = req.body;
     if (!message) {
         return res.status(400).json({ message: 'Message is required' });
     }
     try {
-        const weatherContext = await getWeatherContext(lat || 47.3769, lon || 8.5417, city || 'Zürich');
+        // Handle language switch command
+        const switchLang = detectLanguageChange(message);
+        if (switchLang && switchLang !== lang) {
+            const langNames = { de: 'Deutsch', en: 'English', fr: 'Français' };
+            const confirmations = {
+                de: `Klar, ich stelle die Sprache auf Deutsch um!`,
+                en: `Sure, switching the language to English for you!`,
+                fr: `Bien sûr, je change la langue en français pour toi!`
+            };
+            return res.json({ reply: confirmations[switchLang], action: { type: 'changeLanguage', value: switchLang } });
+        }
         const dateContext = getDateContext();
         const saleContext = getSaleContext();
 
-        const contextBlock = [dateContext, weatherContext, saleContext].filter(Boolean).join('\n');
+        // Only fetch weather when the user explicitly asks about it
+        let weatherContext = '';
+        if (isWeatherQuestion(message)) {
+            const mentionedCity = extractCityFromMessage(message);
+            if (mentionedCity) {
+                const geo = await geocodeCity(mentionedCity);
+                weatherContext = geo
+                    ? await getWeatherContext(geo.lat, geo.lon, geo.name)
+                    : await getWeatherContext(lat || 47.3769, lon || 8.5417, city || 'Zürich');
+            } else if (lat && lon) {
+                weatherContext = await getWeatherContext(lat, lon, city || 'Zürich');
+            } else {
+                weatherContext = 'WETTER: Kein Standort bekannt.';
+            }
+        }
 
-        const systemPrompt = `Du bist Nexara, die freundliche und stilvolle Shopping-Assistentin von Joumonde, einem Schweizer Premium-Modelabel. Antworte immer auf Deutsch mit korrekter Grammatik und natürlicher Satzstellung — es sei denn, der Kunde schreibt in einer anderen Sprache.
+        // Order lookup: detect order number in message (format JM + digits)
+        let orderContext = '';
+        const orderMatch = message.match(/\bJM\d{10,}\b/i);
+        if (orderMatch && process.env.SUPABASE_SERVICE_KEY) {
+            const orderId = orderMatch[0].toUpperCase();
+            // Verify the requesting user owns this order
+            const authHeader = req.headers.authorization || '';
+            const accessToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+            let verifiedUserId = null;
+            if (accessToken) {
+                const { data: { user } } = await supabaseAdmin.auth.getUser(accessToken);
+                verifiedUserId = user?.id || null;
+            }
+            if (!verifiedUserId) {
+                orderContext = 'BESTELLUNG: Bitte zuerst einloggen um Bestellinformationen abzurufen.';
+            } else {
+                const { data: order } = await supabaseAdmin
+                    .from('orders')
+                    .select('id, status, total, currency, created_at, user_id, order_items(product_name, quantity, size)')
+                    .eq('id', orderId)
+                    .single();
+                if (!order) {
+                    orderContext = `BESTELLUNG ${orderId}: Nicht gefunden.`;
+                } else if (order.user_id !== verifiedUserId) {
+                    orderContext = `BESTELLUNG ${orderId}: Keine Berechtigung – diese Bestellung gehört nicht dem eingeloggten Account.`;
+                } else {
+                    const items = (order.order_items || []).map(i => `${i.product_name} (${i.size}, x${i.quantity})`).join(', ');
+                    orderContext = `BESTELLUNG ${order.id}: Status="${order.status}", Artikel=${items || 'unbekannt'}, Gesamt=${order.total} ${order.currency}, Datum=${new Date(order.created_at).toLocaleDateString('de-CH')}.`;
+                }
+            }
+        }
 
+        const contextBlock = [dateContext, weatherContext, saleContext, orderContext].filter(Boolean).join('\n');
+        const systemPrompt = `Du bist Nexara, die digitale Shopping-Assistentin von Joumonde. Antworte in der Sprache des Users.
 ${contextBlock}
+PRODUKTE: Blazer,Polo,Knit Zip-Polo,Weste,Quarter Zipper,Strickpullover,Chino(SALE-20%),Leinenhose | Hoodie,Trainerhose. Größen S-XL bzw. 30-36.
+VERSAND: CH CHF7.90(gratis ab100)|EU CHF15.90(gratis ab150)|Express+12|14 Tage Rückgabe|TWINT,Kreditkarte,PayPal,Klarna.
+REGELN: Max 2 kurze Sätze. Kein Markdown. Keine Preise nennen außer bei Nachfrage. Verschiedene Produkte empfehlen. Sei natürlich und nicht roboterhaft.
+BESTELLUNGEN: Erfinde NIEMALS Bestelldaten, Status oder Versandinformationen. Ohne eine gültige Bestellnummer (Format JM...) im Chat kannst du NICHT weiterhelfen – sage dann immer genau: "Ich helfe dir gerne mit deiner Bestellung! Teile mir einfach deine Bestellnummer mit – du findest sie in deinem Profil oder in der Bestätigungsmail." Sag NIEMALS dass er anrufen oder eine Mail schreiben soll. Erwähne NIEMALS einen Standort oder eine Stadt.`;
 
-JOUMONDE PRODUKTSORTIMENT:
-- Klassischer Blazer | CHF 79.99 | Farben: Navy, Schwarz, Grau | Größen: S–XL
-- Polo Hemd | CHF 34.99 | Farben: Weiß, Navy, Schwarz | Größen: S–XL
-- Ripped Knit Zip-Polo | CHF 44.99 | Farben: Beige, Weiß, Schwarz | Größen: S–XL
-- Chino Hose | CHF 51.99 (SALE -20%) | Farben: Beige, Navy, Grau, Oliv | Größen: 30–36
-- Elegante Weste | CHF 69.99 | Farben: Creme, Navy, Grau, Schwarz | Größen: S–XL
-- Quarter Zipper | CHF 79.99 | Farben: Creme, Navy, Grau, Schwarz | Größen: S–XL
-- Strickpullover | CHF 89.99 | Farben: Dunkelblau, Weiß, Grau, Beige | Größen: S–XL
-- Leinenhose | CHF 54.99 | Farben: Beige, Weiß, Hellgrau, Navy | Größen: 30–36
-- Oversized Hoodie | Streetwear
-- Trainerhose | Streetwear
 
-GRÖSSENBERATUNG — Wenn ein Kunde nach der richtigen Größe fragt, frage nach:
-1. Körpergröße (cm)
-2. Gewicht (kg)
-3. Schulterbreite oder Brustumfang falls vorhanden
-
-Empfehlungslogik für Oberbekleidung (S/M/L/XL):
-- S: bis 170 cm / bis 65 kg
-- M: 170–178 cm / 65–80 kg
-- L: 178–185 cm / 80–95 kg
-- XL: über 185 cm / über 95 kg
-Für Hosen (Größe 30–36): Taillenumfang in inch (Umfang cm ÷ 2.54). Bei unbekanntem Umfang: nach Gewicht und Körpertyp (schlank/normal/kräftig) schätzen.
-
-VERHALTEN:
-- Antworte NUR auf das, was der User direkt fragt. Maximal 1–2 Sätze.
-- Keine ungebetenen Zusatzinfos, keine langen Erklärungen, keine Listen.
-- Nur wenn der User explizit nach Empfehlungen fragt, Produkte erwähnen.
-- Bei Wetterfragen: eine kurze Antwort mit den echten Daten, fertig.
-- Bei Größenfragen: frage nach Körperdaten, gib eine konkrete Empfehlung.
-- Sei natürlich und direkt, nie aufdringlich.
-- Antworte immer in der Sprache des Kunden.
-- Wenn du auf Deutsch antwortest: Achte auf korrekte deutsche Grammatik, Satzstellung (Verb an zweiter Stelle im Hauptsatz) und natürliche Ausdrucksweise. Kein Denglisch, keine holprigen Formulierungen.`;
-
-        const completion = await groq.chat.completions.create({
-            model: 'llama-3.3-70b-versatile',
-            max_tokens: 80,
-            messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: message }
-            ]
-        });
-        const reply = completion.choices[0].message.content;
+        let reply;
+        if (AI_PROVIDER === 'gemini') {
+            const contents = [
+                ...(Array.isArray(history) ? history.slice(-10).map(m => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })) : []),
+                { role: 'user', parts: [{ text: message }] }
+            ];
+            const geminiResult = await gemini.models.generateContent({
+                model: 'gemini-2.0-flash',
+                contents,
+                config: { systemInstruction: systemPrompt, maxOutputTokens: 120 }
+            });
+            reply = geminiResult.text;
+        } else {
+            const completion = await groq.chat.completions.create({
+                model: 'llama-3.1-8b-instant',
+                max_tokens: 120,
+                messages: [
+                    { role: 'system', content: systemPrompt },
+                    ...(Array.isArray(history) ? history.slice(-6) : []),
+                    { role: 'user', content: message }
+                ]
+            });
+            reply = completion.choices[0].message.content;
+        }
         res.json({ reply });
     } catch (error) {
-        console.error('Groq error:', error);
+        console.error('AI error:', error);
         res.status(500).json({ message: 'Failed to get response from AI' });
     }
 });

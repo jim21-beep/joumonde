@@ -305,453 +305,28 @@ const currencySymbols = {
     'USD': '$'
 };
 
-// Translations
-const translations = {
-    de: {
-        // Navigation
-        home: 'Home',
-        oldMoney: 'Old Money',
-        streetwear: 'Streetwear',
-        about: 'Über Uns',
-        contact: 'Kontakt',
-        
-        // Hero
-        heroTitle: 'Entdecke Deinen Style',
-        heroSubtitle: 'Premium Fashion - Von klassischem Old Money bis modernem Streetwear',
-        shopNow: 'Jetzt Shoppen',
-        
-        // Sections
-        oldMoneyTitle: 'Old Money Collection',
-        oldMoneySubtitle: 'Zeitlose Eleganz und klassischer Luxus',
-        streetwearTitle: 'Streetwear Collection',
-        streetwearSubtitle: 'Urban Fashion mit Attitude',
-        
-        // Products
-        classicBlazer: 'Klassischer Blazer',
-        blazerDesc: 'Eleganter Woll-Blazer in Navy',
-        poloShirt: 'Polo Hemd',
-        poloDesc: 'Premium Baumwolle in Weiß',
-        chinosPants: 'Chino Hose',
-        chinosDesc: 'Slim-Fit in Khaki',
-        rippedKnitPolo: 'Ripped Knit Zip-Polo',
-        rippedKnitPoloDesc: 'Gestricktes Zip-Polo im Old Money Style',
-        elegantVest: 'Elegante Weste',
-        vestDesc: 'Premium Woll-Weste in Creme',
-        quarterZipPullover: 'Quarter Zipper',
-        quarterZipDesc: 'Kaschmir-Mix mit Reißverschluss',
-        knitSweater: 'Strickpullover',
-        sweaterDesc: 'Kaschmir in Dunkelblau',
-        linenPants: 'Leinenhose',
-        linenDesc: 'Leichter Leinenstoff, perfekt für den Sommer',
-        oversizedHoodie: 'Oversized Hoodie',
-        hoodieDesc: 'Premium Cotton in Schwarz',
-        graphicTee: 'T-Shirt',
-        teeDesc: 'Limited Edition Print',
-        cargoPants: 'Cargo Pants',
-        cargoDesc: 'Multi-Pocket Design',
-        trackPants: 'Trainerhose',
-        trackDesc: 'Perfekt für Tracksuit Kombination',
-        
-        // Product UI
-        size: 'Größe:',
-        addToCart: 'In den Warenkorb',
-        
-        // About
-        aboutTitle: 'Über Uns',
-        aboutText1: 'Willkommen bei Joumonde - Ihrer Destination für exklusive Mode. Wir vereinen die zeitlose Eleganz des Old Money Styles mit der dynamischen Energie moderner Streetwear.',
-        aboutText2: 'Unsere Mission ist es, hochwertige Fashion für jeden Geschmack anzubieten - von klassischer Raffinesse bis zu urbaner Coolness.',
-        
-        // About Page
-        aboutPageTitle: 'Über Joumonde',
-        aboutPageSubtitle: 'Wo Eleganz auf Streetwear trifft',
-        ourStory: 'Unsere Geschichte',
-        ourStoryText1: 'Joumonde wurde 2025 mit der Vision gegründet, zeitlose Eleganz mit modernem Streetwear zu verbinden. Unser Name vereint das französische "Jour" (Tag) mit "Monde" (Welt) - jeden Tag die Welt der Mode neu interpretieren.',
-        ourStoryText2: 'Wir glauben an Qualität, Nachhaltigkeit und zeitloses Design. Jedes unserer Stücke wird sorgfältig ausgewählt und kombiniert Old Money Ästhetik mit urbaner Streetwear-Kultur.',
-        ourMission: 'Unsere Mission',
-        ourMissionText1: 'Bei Joumonde geht es nicht nur um Mode - es geht um einen Lifestyle. Wir möchten Menschen dabei helfen, ihren individuellen Stil zu finden und sich selbstbewusst zu fühlen, egal ob im Business-Meeting oder beim Street-Festival.',
-        ourMissionText2: 'Unsere Kollektionen werden von den besten Manufakturen produziert, mit Fokus auf faire Arbeitsbedingungen und nachhaltige Materialien. Premium-Qualität bedeutet für uns nicht nur erstklassige Stoffe, sondern auch Verantwortung gegenüber Mensch und Umwelt.',
-        ourValues: 'Unsere Werte',
-        premiumQuality: 'Premium Qualität',
-        premiumQualityText: 'Hochwertige Materialien und erstklassige Verarbeitung für langlebige Fashion-Pieces',
-        sustainability: 'Nachhaltigkeit',
-        sustainabilityText: 'Verantwortungsvolle Produktion, faire Arbeitsbedingungen und umweltbewusste Materialauswahl',
-        customerService: 'Kundenservice',
-        customerServiceText: 'Persönliche Beratung, schneller Versand und erstklassiger Support für ein perfektes Shopping-Erlebnis',
-        timelessDesign: 'Zeitloses Design',
-        timelessDesignText: 'Klassische Eleganz trifft moderne Trends - Mode die nicht mit der Saison verschwindet',
-        followInstagram: 'Folge uns auf Instagram',
-        instagramSubtitle: 'Entdecke unsere neuesten Styles und werde Teil der Joumonde Community',
-        newsletter: 'Newsletter',
-        newsletterText: 'Erhalte exklusive Angebote & Neuigkeiten',
-        newsletterPlaceholder: 'Deine E-Mail',
-        subscribe: 'Abonnieren',
-        allRightsReserved: 'Alle Rechte vorbehalten',
-        sslSecure: '🔒 SSL Verschlüsselt',
-        securePayment: '💳 Sichere Zahlung',
-        fastShipping: '🚚 Schneller Versand',
-        dayReturn: '↩️ 14 Tage Rückgabe',
-        
-        // Testimonials
-        testimonialsTitle: 'Das sagen unsere Kunden',
-        
-        // FAQ
-        faqTitle: 'Häufig gestellte Fragen',
-        
-        // Shipping
-        shippingTitle: 'Versand & Retouren',
-        
-        // Contact Form
-        sendMessage: 'Nachricht senden',
-        
-        // Contact
-        contactTitle: 'Kontakt',
-        email: 'Email',
-        phone: 'Telefon',
-        address: 'Adresse',
-        addressText: 'Bahnhofstrasse 123<br>8001 Zürich, Schweiz',
-        
-        // Footer
-        shop: 'Shop',
-        information: 'Informationen',
-        terms: 'AGB',
-        privacy: 'Datenschutz',
-        footerText: 'Premium Fashion Shop',
-        copyright: '© 2025 Joumonde. Alle Rechte vorbehalten.',
-        
-        // Cart
-        cart: 'Warenkorb',
-        cartEmpty: 'Ihr Warenkorb ist leer',
-        added: 'wurde zum Warenkorb hinzugefügt!',
-        removed: 'wurde aus dem Warenkorb entfernt',
-        cleared: 'Warenkorb wurde geleert',
-        clearCart: 'Warenkorb leeren',
-        total: 'Gesamt:',
-        checkout: 'Zur Kasse',
-        tracksuit: '🎉 Tracksuit Kombi -5%',
-        
-        // Chat
-        chatHelp: '💬 Hilfe?',
-        chatSupport: 'Chat Support',
-        chatPlaceholder: 'Nachricht eingeben...',
-        send: 'Senden',
-        chatWelcome: 'Hallo! Wie kann ich Ihnen helfen?',
-        
-        // Search
-        searchTitle: 'Produkte durchsuchen',
-        searchPlaceholder: 'Suche nach Produkten...',
-        searchHint: 'Geben Sie mindestens 2 Zeichen ein',
-        searchNoResults: 'Keine Produkte gefunden',
-        
-        // Modal
-        modalTitle: 'Warenkorb leeren?',
-        modalText: 'Möchten Sie wirklich alle Artikel aus dem Warenkorb entfernen?',
-        cancel: 'Abbrechen',
-        confirm: 'Warenkorb leeren',
-        
-        // Newsletter
-        sending: 'Wird gesendet...',
-        newsletterSuccess: 'Danke für deine Anmeldung! Wir senden dir bald exklusive Angebote.',
-        invalidEmail: 'Bitte gib eine gültige E-Mail-Adresse ein.',
-        emailAlreadyRegistered: 'Diese E-Mail ist bereits registriert!',
-        newsletterError: 'Ein Fehler ist aufgetreten. Bitte versuche es später erneut.'
-    },
-    en: {
-        // Navigation
-        home: 'Home',
-        oldMoney: 'Old Money',
-        streetwear: 'Streetwear',
-        about: 'About Us',
-        contact: 'Contact',
-        
-        // Hero
-        heroTitle: 'Discover Your Style',
-        heroSubtitle: 'Premium Fashion - From classic Old Money to modern Streetwear',
-        shopNow: 'Shop Now',
-        
-        // Sections
-        oldMoneyTitle: 'Old Money Collection',
-        oldMoneySubtitle: 'Timeless Elegance and Classic Luxury',
-        streetwearTitle: 'Streetwear Collection',
-        streetwearSubtitle: 'Urban Fashion with Attitude',
-        
-        // Products
-        classicBlazer: 'Classic Blazer',
-        blazerDesc: 'Elegant Wool Blazer in Navy',
-        poloShirt: 'Polo Shirt',
-        poloDesc: 'Premium Cotton in White',
-        chinosPants: 'Chino Pants',
-        chinosDesc: 'Slim-Fit in Khaki',
-        rippedKnitPolo: 'Ripped Knit Zip-Polo',
-        rippedKnitPoloDesc: 'Gestricktes Zip-Polo im Old Money Style',
-        elegantVest: 'Elegant Vest',
-        vestDesc: 'Premium Wool Vest in Cream',
-        quarterZipPullover: 'Quarter Zip Pullover',
-        quarterZipDesc: 'Cashmere Blend with Zipper',
-        knitSweater: 'Knit Sweater',
-        sweaterDesc: 'Cashmere in Dark Blue',
-        linenPants: 'Linen Pants',
-        linenDesc: 'Lightweight linen, perfect for summer',
-        oversizedHoodie: 'Oversized Hoodie',
-        hoodieDesc: 'Premium Cotton in Black',
-        graphicTee: 'T-Shirt',
-        teeDesc: 'Limited Edition Print',
-        cargoPants: 'Cargo Pants',
-        cargoDesc: 'Multi-Pocket Design',
-        trackPants: 'Track Pants',
-        trackDesc: 'Perfect for Tracksuit Combo',
-        
-        // Product UI
-        size: 'Size:',
-        addToCart: 'Add to Cart',
-        
-        // About
-        aboutTitle: 'About Us',
-        aboutText1: 'Welcome to Joumonde - your destination for exclusive fashion. We combine the timeless elegance of Old Money style with the dynamic energy of modern streetwear.',
-        aboutText2: 'Our mission is to offer high-quality fashion for every taste - from classic sophistication to urban coolness.',
-        
-        // About Page
-        aboutPageTitle: 'About Joumonde',
-        aboutPageSubtitle: 'Where Elegance Meets Streetwear',
-        ourStory: 'Our Story',
-        ourStoryText1: 'Joumonde was founded in 2025 with the vision of combining timeless elegance with modern streetwear. Our name unites the French "Jour" (day) with "Monde" (world) - reinterpreting the world of fashion every day.',
-        ourStoryText2: 'We believe in quality, sustainability and timeless design. Each of our pieces is carefully selected and combines Old Money aesthetics with urban streetwear culture.',
-        ourMission: 'Our Mission',
-        ourMissionText1: 'At Joumonde, it\'s not just about fashion - it\'s about a lifestyle. We want to help people find their individual style and feel confident, whether at a business meeting or at a street festival.',
-        ourMissionText2: 'Our collections are produced by the best manufacturers, with a focus on fair working conditions and sustainable materials. Premium quality for us means not only first-class fabrics, but also responsibility towards people and the environment.',
-        ourValues: 'Our Values',
-        premiumQuality: 'Premium Quality',
-        premiumQualityText: 'High-quality materials and first-class workmanship for durable fashion pieces',
-        sustainability: 'Sustainability',
-        sustainabilityText: 'Responsible production, fair working conditions and environmentally conscious material selection',
-        customerService: 'Customer Service',
-        customerServiceText: 'Personal advice, fast shipping and first-class support for a perfect shopping experience',
-        timelessDesign: 'Timeless Design',
-        timelessDesignText: 'Classic elegance meets modern trends - fashion that doesn\'t disappear with the season',
-        followInstagram: 'Follow us on Instagram',
-        instagramSubtitle: 'Discover our latest styles and become part of the Joumonde community',
-        newsletter: 'Newsletter',
-        newsletterText: 'Get exclusive offers & news',
-        newsletterPlaceholder: 'Your email',
-        subscribe: 'Subscribe',
-        allRightsReserved: 'All rights reserved',
-        sslSecure: '🔒 SSL Encrypted',
-        securePayment: '💳 Secure Payment',
-        fastShipping: '🚚 Fast Shipping',
-        dayReturn: '↩️ 14 Day Returns',
-        
-        // Testimonials
-        testimonialsTitle: 'What Our Customers Say',
-        
-        // FAQ
-        faqTitle: 'Frequently Asked Questions',
-        
-        // Shipping
-        shippingTitle: 'Shipping & Returns',
-        
-        // Contact Form
-        sendMessage: 'Send Message',
-        
-        // Contact
-        contactTitle: 'Contact',
-        email: 'Email',
-        phone: 'Phone',
-        address: 'Address',
-        addressText: 'Bahnhofstrasse 123<br>8001 Zurich, Switzerland',
-        
-        // Footer
-        shop: 'Shop',
-        information: 'Information',
-        terms: 'Terms',
-        privacy: 'Privacy',
-        footerText: 'Premium Fashion Shop',
-        copyright: '© 2025 Joumonde. All rights reserved.',
-        
-        // Cart
-        cart: 'Cart',
-        cartEmpty: 'Your cart is empty',
-        added: 'added to cart!',
-        removed: 'removed from cart',
-        cleared: 'Cart cleared',
-        clearCart: 'Clear Cart',
-        total: 'Total:',
-        checkout: 'Checkout',
-        tracksuit: '🎉 Tracksuit Combo -5%',
-        
-        // Chat
-        chatHelp: '💬 Help?',
-        chatSupport: 'Chat Support',
-        chatPlaceholder: 'Type a message...',
-        send: 'Send',
-        chatWelcome: 'Hello! How can I help you?',
-        
-        // Search
-        searchTitle: 'Search Products',
-        searchPlaceholder: 'Search for products...',
-        searchHint: 'Enter at least 2 characters',
-        searchNoResults: 'No products found',
-        
-        // Modal
-        modalTitle: 'Clear Cart?',
-        modalText: 'Do you really want to remove all items from the cart?',
-        cancel: 'Cancel',
-        confirm: 'Clear Cart',
-        
-        // Newsletter
-        sending: 'Sending...',
-        newsletterSuccess: 'Thank you for subscribing! We\'ll send you exclusive offers soon.',
-        invalidEmail: 'Please enter a valid email address.',
-        emailAlreadyRegistered: 'This email is already registered!',
-        newsletterError: 'An error occurred. Please try again later.'
-    },
-    fr: {
-        // Navigation
-        home: 'Accueil',
-        oldMoney: 'Old Money',
-        streetwear: 'Streetwear',
-        about: 'À propos',
-        contact: 'Contact',
-        
-        // Hero
-        heroTitle: 'Découvrez Votre Style',
-        heroSubtitle: 'Mode Premium - Du classique Old Money au Streetwear moderne',
-        shopNow: 'Acheter Maintenant',
-        
-        // Sections
-        oldMoneyTitle: 'Collection Old Money',
-        oldMoneySubtitle: 'Élégance Intemporelle et Luxe Classique',
-        streetwearTitle: 'Collection Streetwear',
-        streetwearSubtitle: 'Mode Urbaine avec Attitude',
-        
-        // Products
-        classicBlazer: 'Blazer Classique',
-        blazerDesc: 'Blazer en Laine Élégant en Marine',
-        poloShirt: 'Polo',
-        poloDesc: 'Coton Premium en Blanc',
-        chinosPants: 'Pantalon Chino',
-        chinosDesc: 'Coupe Slim en Kaki',
-        rippedKnitPolo: 'Ripped Knit Zip-Polo',
-        rippedKnitPoloDesc: 'Polo Zip en Maille Texturée',
-        elegantVest: 'Gilet Élégant',
-        vestDesc: 'Gilet en Laine Premium Crème',
-        quarterZipPullover: 'Pull Quarter Zip',
-        quarterZipDesc: 'Mélange Cachemire avec Fermeture',
-        knitSweater: 'Pull Tricoté',
-        sweaterDesc: 'Cachemire en Bleu Foncé',
-        linenPants: 'Pantalon en Lin',
-        linenDesc: 'Lin léger, parfait pour l\'été',
-        oversizedHoodie: 'Sweat à Capuche Oversize',
-        hoodieDesc: 'Coton Premium en Noir',
-        graphicTee: 'T-Shirt Graphique',
-        teeDesc: 'Édition Limitée',
-        cargoPants: 'Pantalon Cargo',
-        cargoDesc: 'Design Multi-Poches',
-        trackPants: 'Pantalon de Survêtement',
-        trackDesc: 'Parfait pour Combo Tracksuit',
-        
-        // Product UI
-        size: 'Taille:',
-        addToCart: 'Ajouter au Panier',
-        
-        // About
-        aboutTitle: 'À Propos',
-        aboutText1: 'Bienvenue chez Joumonde - votre destination pour la mode exclusive. Nous combinons l\'élégance intemporelle du style Old Money avec l\'énergie dynamique du streetwear moderne.',
-        aboutText2: 'Notre mission est d\'offrir une mode de haute qualité pour tous les goûts - de la sophistication classique à la coolitude urbaine.',
-        
-        // About Page
-        aboutPageTitle: 'À Propos de Joumonde',
-        aboutPageSubtitle: 'Où l\'Élégance Rencontre le Streetwear',
-        ourStory: 'Notre Histoire',
-        ourStoryText1: 'Joumonde a été fondée en 2025 avec la vision de combiner l\'élégance intemporelle avec le streetwear moderne. Notre nom unit le français "Jour" avec "Monde" - réinterpréter le monde de la mode chaque jour.',
-        ourStoryText2: 'Nous croyons en la qualité, la durabilité et le design intemporel. Chacune de nos pièces est soigneusement sélectionnée et combine l\'esthétique Old Money avec la culture streetwear urbaine.',
-        ourMission: 'Notre Mission',
-        ourMissionText1: 'Chez Joumonde, il ne s\'agit pas seulement de mode - il s\'agit d\'un style de vie. Nous voulons aider les gens à trouver leur style individuel et à se sentir confiants, que ce soit lors d\'une réunion d\'affaires ou lors d\'un festival de rue.',
-        ourMissionText2: 'Nos collections sont produites par les meilleurs fabricants, en mettant l\'accent sur des conditions de travail équitables et des matériaux durables. La qualité premium signifie pour nous non seulement des tissus de première classe, mais aussi la responsabilité envers les personnes et l\'environnement.',
-        ourValues: 'Nos Valeurs',
-        premiumQuality: 'Qualité Premium',
-        premiumQualityText: 'Matériaux de haute qualité et fabrication de première classe pour des pièces de mode durables',
-        sustainability: 'Durabilité',
-        sustainabilityText: 'Production responsable, conditions de travail équitables et sélection de matériaux respectueux de l\'environnement',
-        customerService: 'Service Client',
-        customerServiceText: 'Conseil personnalisé, expédition rapide et support de première classe pour une expérience d\'achat parfaite',
-        timelessDesign: 'Design Intemporel',
-        timelessDesignText: 'L\'élégance classique rencontre les tendances modernes - une mode qui ne disparaît pas avec la saison',
-        followInstagram: 'Suivez-nous sur Instagram',
-        instagramSubtitle: 'Découvrez nos derniers styles et rejoignez la communauté Joumonde',
-        newsletter: 'Newsletter',
-        newsletterText: 'Recevez des offres exclusives et des nouvelles',
-        newsletterPlaceholder: 'Votre email',
-        subscribe: 'S\'abonner',
-        allRightsReserved: 'Tous droits réservés',
-        sslSecure: '🔒 Cryptage SSL',
-        securePayment: '💳 Paiement Sécurisé',
-        fastShipping: '🚚 Livraison Rapide',
-        dayReturn: '↩️ Retour 14 Jours',
-        
-        // Testimonials
-        testimonialsTitle: 'Ce que disent nos clients',
-        
-        // FAQ
-        faqTitle: 'Questions Fréquemment Posées',
-        
-        // Shipping
-        shippingTitle: 'Expédition & Retours',
-        
-        // Contact Form
-        sendMessage: 'Envoyer le message',
-        
-        // Contact
-        contactTitle: 'Contact',
-        email: 'Email',
-        phone: 'Téléphone',
-        address: 'Adresse',
-        addressText: 'Bahnhofstrasse 123<br>8001 Zurich, Suisse',
-        
-        // Footer
-        shop: 'Boutique',
-        information: 'Information',
-        terms: 'CGV',
-        privacy: 'Confidentialité',
-        footerText: 'Boutique de Mode Premium',
-        copyright: '© 2025 Joumonde. Tous droits réservés.',
-        
-        // Cart
-        cart: 'Panier',
-        cartEmpty: 'Votre panier est vide',
-        added: 'ajouté au panier!',
-        removed: 'retiré du panier',
-        cleared: 'Panier vidé',
-        clearCart: 'Vider le Panier',
-        total: 'Total:',
-        checkout: 'Commander',
-        tracksuit: '🎉 Combo Tracksuit -5%',
-        
-        // Chat
-        chatHelp: '💬 Aide?',
-        chatSupport: 'Support Chat',
-        chatPlaceholder: 'Tapez un message...',
-        send: 'Envoyer',
-        chatWelcome: 'Bonjour! Comment puis-je vous aider?',
-        
-        // Search
-        searchTitle: 'Rechercher des Produits',
-        searchPlaceholder: 'Rechercher des produits...',
-        searchHint: 'Entrez au moins 2 caractères',
-        searchNoResults: 'Aucun produit trouvé',
-        
-        // Modal
-        modalTitle: 'Vider le Panier?',
-        modalText: 'Voulez-vous vraiment supprimer tous les articles du panier?',
-        cancel: 'Annuler',
-        confirm: 'Vider le Panier',
-        
-        // Newsletter
-        sending: 'Envoi en cours...',
-        newsletterSuccess: 'Merci pour votre inscription! Nous vous enverrons bientôt des offres exclusives.',
-        invalidEmail: 'Veuillez entrer une adresse email valide.',
-        emailAlreadyRegistered: 'Cet email est déjà enregistré!',
-        newsletterError: 'Une erreur s\'est produite. Veuillez réessayer plus tard.'
+// Translations — loaded from locales/*.json
+let translations = {};
+
+async function loadLanguage(lang) {
+    if (!translations[lang]) {
+        try {
+            const r = await fetch(`assets/locales/${lang}.json`);
+            translations[lang] = await r.json();
+        } catch (e) {
+            console.warn('Could not load locale:', lang, e);
+            translations[lang] = translations['de'] || {};
+        }
     }
-};
+    currentLanguage = lang;
+}
+
+// t() — translate key, fallback to German, fallback to key itself
+function t(key) {
+    return (translations[currentLanguage] && translations[currentLanguage][key])
+        || (translations['de'] && translations['de'][key])
+        || key;
+}
 
 // Format price with currency
 function formatPrice(price) {
@@ -813,10 +388,11 @@ function updateAllPrices() {
 }
 
 // Change Language
-function changeLanguage(lang) {
-    currentLanguage = lang;
+async function changeLanguage(lang) {
+    await loadLanguage(lang);
     localStorage.setItem('language', lang);
     updatePageContent();
+    updateAboutPageContent();
     updateCart();
 }
 
@@ -996,11 +572,42 @@ function updatePageContent() {
     if (firstBotMsg && (firstBotMsg.textContent.includes('Hallo') || firstBotMsg.textContent.includes('Hello') || firstBotMsg.textContent.includes('Bonjour'))) {
         firstBotMsg.textContent = t('chatWelcome');
     }
-}
 
-// Get translation
-function t(key) {
-    return translations[currentLanguage][key] || translations['de'][key];
+    // Sort dropdowns
+    document.querySelectorAll('.sort-select').forEach(select => {
+        if (select.options[0]) select.options[0].text = t('sortBy');
+        if (select.options[1]) select.options[1].text = t('sortPriceLowHigh');
+        if (select.options[2]) select.options[2].text = t('sortPriceHighLow');
+        if (select.options[3]) select.options[3].text = t('sortNameAZ');
+        if (select.options[4]) select.options[4].text = t('sortNewest');
+        if (select.options[5]) select.options[5].text = t('sortPopular');
+    });
+
+    // Filter sections (position-based: Price, Size, Color)
+    document.querySelectorAll('.filter-sidebar').forEach(sidebar => {
+        const groups = sidebar.querySelectorAll('.filter-group h4');
+        if (groups[0]) groups[0].textContent = t('filterPrice');
+        if (groups[1]) groups[1].textContent = t('filterSize');
+        if (groups[2]) groups[2].textContent = t('filterColor');
+    });
+    document.querySelectorAll('.filter-reset-btn').forEach(btn => {
+        btn.textContent = t('resetFilters');
+    });
+
+    // Product badges
+    document.querySelectorAll('.product-badge.badge-new').forEach(b => {
+        b.textContent = t('badgeNew');
+    });
+
+    // Similar products section
+    const similarTitle = document.querySelector('.similar-title');
+    if (similarTitle) similarTitle.textContent = t('similarProducts');
+
+    // Discount code input & button
+    const discountInput = document.getElementById('discountCode');
+    const applyDiscountBtn = document.querySelector('.apply-discount-btn');
+    if (discountInput && !discountInput.disabled) discountInput.placeholder = t('discountCodePlaceholder');
+    if (applyDiscountBtn && !applyDiscountBtn.disabled) applyDiscountBtn.textContent = t('applyDiscount');
 }
 
 // Toggle Cart Sidebar
@@ -2092,7 +1699,10 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // Chatbot closes only via its toggle button (not outside click)
 
 // Initialize
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    // Load translations for saved language first
+    await loadLanguage(currentLanguage);
+
     // Set saved language and currency
     document.getElementById('language-selector').value = currentLanguage;
     document.getElementById('currency-selector').value = currentCurrency;
@@ -2106,82 +1716,30 @@ document.addEventListener('DOMContentLoaded', function() {
     const chatbotWidget = document.getElementById('chatbot-widget');
     const chatbotMessages = document.getElementById('chatbot-messages');
     
-    chatbotWidget.addEventListener('wheel', function(e) {
-        if (chatbotOpen) {
-            e.preventDefault();
-            e.stopPropagation();
-            chatbotMessages.scrollTop += e.deltaY;
-        }
-    }, { passive: false });
+    if (chatbotWidget && chatbotMessages) {
+        chatbotWidget.addEventListener('wheel', function(e) {
+            if (chatbotOpen) {
+                e.preventDefault();
+                e.stopPropagation();
+                chatbotMessages.scrollTop += e.deltaY;
+            }
+        }, { passive: false });
+    }
     
     console.log('Joumonde Shop loaded successfully!');
 });
 
-// Contact Form Submission
-function openContactForm() {
-    const modal = document.getElementById('contact-modal');
-    modal.classList.add('active');
-}
-
-function closeContactForm() {
-    const modal = document.getElementById('contact-modal');
-    modal.classList.remove('active');
-}
-
-function submitContactForm(e) {
-    e.preventDefault();
-    const inputs = e.target.querySelectorAll('input');
-    const name    = inputs[0] ? inputs[0].value.trim() : '';
-    const email   = inputs[1] ? inputs[1].value.trim() : '';
-    const phone   = inputs[2] ? inputs[2].value.trim() : '';
-    const subject = inputs[3] ? inputs[3].value.trim() : '';
-    const message = e.target.querySelector('textarea') ? e.target.querySelector('textarea').value.trim() : '';
-
-    const btn = e.target.querySelector('button[type="submit"]');
-    if (btn) btn.disabled = true;
-
-    fetch('https://sbxffjszderijikxarho.supabase.co/functions/v1/send-newsletter-confirmation', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'contact', name, email, phone, subject, message })
-    })
-    .then(r => r.json())
-    .then(() => {
-        const content = document.querySelector('.contact-modal-content');
-        if (content) {
-            content.innerHTML = `
-                <button class="contact-close" onclick="closeContactForm()">&times;</button>
-                <div style="text-align:center;padding:2.5rem 1rem;">
-                    <div style="font-size:3.5rem;color:#d4af37;margin-bottom:1rem;">✓</div>
-                    <h2 style="color:#d4af37;margin-bottom:1rem;font-size:1.4rem;">Anfrage erhalten!</h2>
-                    <p style="color:#f5f0e8;line-height:1.7;margin-bottom:1rem;">
-                        Wir haben Ihre Anfrage erhalten und werden uns so schnell wie möglich darum kümmern.
-                    </p>
-                    <p style="color:#888;font-size:0.9rem;margin-bottom:2rem;">
-                        Für sofortigen Support steht Ihnen unser Live-Chat zur Verfügung:
-                    </p>
-                    <a href="live-chat.html" style="display:inline-block;padding:0.85rem 2rem;background:linear-gradient(135deg,#d4af37,#c9a961);color:#1a1a1a;text-decoration:none;border-radius:8px;font-weight:700;font-size:1rem;">
-                        💬 Live-Chat starten
-                    </a>
-                </div>
-            `;
-        }
-    })
-    .catch(() => {
-        showNotification('Fehler beim Senden. Bitte versuche es später erneut.', 'error');
-    })
-    .finally(() => {
-        if (btn) btn.disabled = false;
-    });
-}
-
-// Close contact modal when clicking outside
-document.addEventListener('click', function(e) {
-    const modal = document.getElementById('contact-modal');
-    if (e.target === modal) {
-        closeContactForm();
+// Re-apply language when page is restored from bfcache (browser back/forward)
+window.addEventListener('pageshow', async function(event) {
+    if (event.persisted) {
+        await loadLanguage(currentLanguage);
+        updatePageContent();
+        updateAboutPageContent();
+        const sel = document.getElementById('language-selector');
+        if (sel) sel.value = currentLanguage;
     }
 });
+
 
 // ===== WISHLIST FUNCTIONALITY =====
 let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
