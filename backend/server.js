@@ -716,8 +716,8 @@ app.get('/api/newsletter/stats', (req, res) => {
 });
 
 // Chatbot endpoint
-const { GoogleGenerativeAI } = require('@google/generative-ai');
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const Groq = require('groq-sdk');
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 // Fetch current weather from Open-Meteo (free, no API key)
 async function getWeatherContext(lat = 47.3769, lon = 8.5417, cityName = 'Zürich') {
@@ -809,14 +809,17 @@ VERHALTEN:
 - Sei charmant, warm und nie aufdringlich.
 - Antworte immer in der Sprache des Kunden.`;
 
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
-        const result = await model.generateContent([
-            { text: `SYSTEM:\n${systemPrompt}\n\nUSER:\n${message}` }
-        ]);
-        const reply = result.response.text();
+        const completion = await groq.chat.completions.create({
+            model: 'llama-3.3-70b-versatile',
+            messages: [
+                { role: 'system', content: systemPrompt },
+                { role: 'user', content: message }
+            ]
+        });
+        const reply = completion.choices[0].message.content;
         res.json({ reply });
     } catch (error) {
-        console.error('OpenAI error:', error);
+        console.error('Groq error:', error);
         res.status(500).json({ message: 'Failed to get response from AI' });
     }
 });
