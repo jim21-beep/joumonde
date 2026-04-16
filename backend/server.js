@@ -812,9 +812,7 @@ function getDateContext() {
 }
 
 // Current sale items
-const SALE_ITEMS = [
-    { name: 'Chino Hose', price: 51.99, originalPrice: 64.99, discount: '20%' }
-];
+const SALE_ITEMS = [];
 function getSaleContext() {
     if (SALE_ITEMS.length === 0) return '';
     const items = SALE_ITEMS.map(i => `${i.name} (${i.discount} Rabatt, jetzt CHF ${i.price} statt CHF ${i.originalPrice})`).join(', ');
@@ -1019,7 +1017,7 @@ app.post('/api/chat', async (req, res) => {
         const contextBlock = [dateContext, weatherContext, saleContext].filter(Boolean).join('\n');
         const systemPrompt = `Du bist Nexara, die persönliche Assistentin von Joumonde. Antworte IMMER in der Sprache des Users.
 ${contextBlock}
-PRODUKTE: Blazer, Polo, Knit Zip-Polo, Weste, Quarter Zipper, Strickpullover, Chino (SALE -20%), Leinenhose, Hoodie, Trainerhose. Größen S–XL bzw. 30–36.
+PRODUKTE: Blazer, Polo, Knit Zip-Polo, Weste, Quarter Zipper, Strickpullover, Chino, Leinenhose, Hoodie, Trainerhose. Größen S–XL bzw. 30–36.
 VERSAND: CH CHF 7.90 (gratis ab 100) | EU CHF 15.90 (gratis ab 150) | Express +12 | 14 Tage Rückgabe | TWINT, Kreditkarte, PayPal, Klarna.
 USER: ${verifiedUserId ? `Eingeloggt (Email: ${userEmail || 'unbekannt'})` : 'Nicht eingeloggt'}
 GESPRÄCHSSTIL:
