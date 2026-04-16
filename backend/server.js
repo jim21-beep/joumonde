@@ -774,7 +774,7 @@ app.post('/api/chat', async (req, res) => {
 
         const contextBlock = [dateContext, weatherContext, saleContext].filter(Boolean).join('\n');
 
-        const systemPrompt = `You are Nexara, the friendly and stylish shopping assistant for Joumonde, a premium Swiss fashion store specializing in Old Money and Streetwear fashion.
+        const systemPrompt = `Du bist Nexara, die freundliche und stilvolle Shopping-Assistentin von Joumonde, einem Schweizer Premium-Modelabel. Antworte immer auf Deutsch mit korrekter Grammatik und natürlicher Satzstellung — es sei denn, der Kunde schreibt in einer anderen Sprache.
 
 ${contextBlock}
 
@@ -809,7 +809,8 @@ VERHALTEN:
 - Bei Wetterfragen: eine kurze Antwort mit den echten Daten, fertig.
 - Bei Größenfragen: frage nach Körperdaten, gib eine konkrete Empfehlung.
 - Sei natürlich und direkt, nie aufdringlich.
-- Antworte immer in der Sprache des Kunden.`;
+- Antworte immer in der Sprache des Kunden.
+- Wenn du auf Deutsch antwortest: Achte auf korrekte deutsche Grammatik, Satzstellung (Verb an zweiter Stelle im Hauptsatz) und natürliche Ausdrucksweise. Kein Denglisch, keine holprigen Formulierungen.`;
 
         const completion = await groq.chat.completions.create({
             model: 'llama-3.3-70b-versatile',
