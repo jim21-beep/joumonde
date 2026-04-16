@@ -695,16 +695,32 @@ app.get('/api/newsletter/confirm/:token', (req, res) => {
 });
 
 // Unsubscribe from newsletter
-app.post('/api/newsletter/unsubscribe', (req, res) => {
+app.post('/api/newsletter/unsubscribe', async (req, res) => {
     const { email } = req.body;
-    
-    const index = newsletterSubscribers.findIndex(sub => sub.email === email.toLowerCase());
-    
-    if (index === -1) {
-        return res.status(404).json({ message: 'Email not found in subscribers' });
+    if (!email) return res.status(400).json({ message: 'Email is required' });
+    const normalizedEmail = email.toLowerCase().trim();
+
+    // Remove from in-memory array
+    const index = newsletterSubscribers.findIndex(sub => sub.email === normalizedEmail);
+    if (index !== -1) newsletterSubscribers.splice(index, 1);
+
+    // Remove from Supabase
+    await supabaseAdmin.from('newsletter_subscribers').delete().eq('email', normalizedEmail);
+
+    // Send confirmation email
+    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+        try {
+            await transporter.sendMail({
+                from: `"Joumonde" <${process.env.EMAIL_USER}>`,
+                to: normalizedEmail,
+                subject: 'Newsletter-Abmeldung bestätigt',
+                html: `<p>Hallo,</p><p>du wurdest erfolgreich von unserem Newsletter abgemeldet.</p><p>Du erhältst ab sofort keine weiteren Emails von uns.</p><p>Falls du dich versehentlich abgemeldet hast, kannst du dich jederzeit wieder anmelden unter <a href="https://joumonde.ch">joumonde.ch</a>.</p><p>Freundliche Grüsse,<br>Dein Joumonde-Team</p>`
+            });
+        } catch (err) {
+            console.error('Unsubscribe email error:', err.message);
+        }
     }
-    
-    newsletterSubscribers.splice(index, 1);
+
     res.json({ message: 'Successfully unsubscribed from newsletter' });
 });
 
@@ -964,14 +980,30 @@ async function executeNexaraTool(toolName, args, verifiedUserId, userEmail) {
             }
 
             case 'unsubscribe_newsletter': {
-                const email = (args.email || '').toLowerCase().trim();
+                const email = (args.email || userEmail || '').toLowerCase().trim();
+                if (!email) return { error: 'Keine Email-Adresse bekannt. Bitte Email angeben.' };
                 await supabaseAdmin.from('newsletter_subscribers').delete().eq('email', email);
                 if (verifiedUserId) {
                     await supabaseAdmin.from('profiles').update({ newsletter: false }).eq('id', verifiedUserId);
                 }
                 const idx = newsletterSubscribers.findIndex(s => s.email === email);
                 if (idx !== -1) newsletterSubscribers.splice(idx, 1);
-                return { success: true, email };
+                // Confirmation email
+                let emailSent = false;
+                if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+                    try {
+                        await transporter.sendMail({
+                            from: `"Joumonde" <${process.env.EMAIL_USER}>`,
+                            to: email,
+                            subject: 'Newsletter-Abmeldung bestätigt',
+                            html: `<p>Hallo,</p><p>du wurdest erfolgreich von unserem Newsletter abgemeldet.</p><p>Du erhältst ab sofort keine weiteren Emails von uns.</p><p>Falls du dich versehentlich abgemeldet hast, kannst du dich jederzeit wieder anmelden unter <a href="https://joumonde.ch">joumonde.ch</a>.</p><p>Freundliche Grüsse,<br>Dein Joumonde-Team</p>`
+                        });
+                        emailSent = true;
+                    } catch (err) {
+                        console.error('Unsubscribe email error:', err.message);
+                    }
+                }
+                return { success: true, email, emailSent };
             }
 
             case 'send_support_email': {
