@@ -1367,6 +1367,21 @@
         </div>
 
         <script>
+            // Cache user location once per session
+            let userLocation = { lat: 47.3769, lon: 8.5417, city: 'Zürich' };
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async pos => {
+                    userLocation.lat = pos.coords.latitude;
+                    userLocation.lon = pos.coords.longitude;
+                    // Reverse geocode city name via Open-Meteo geocoding
+                    try {
+                        const r = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLocation.lat}&lon=${userLocation.lon}&format=json`);
+                        const d = await r.json();
+                        userLocation.city = d.address?.city || d.address?.town || d.address?.village || 'Zürich';
+                    } catch {}
+                }, () => {});
+            }
+
             function toggleNexara() {
                 const win = document.getElementById('nexara-window');
                 win.style.display = win.style.display === 'flex' ? 'none' : 'flex';
@@ -1392,7 +1407,7 @@
                     const res = await fetch('http://localhost:4000/api/chat', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: text })
+                        body: JSON.stringify({ message: text, lat: userLocation.lat, lon: userLocation.lon, city: userLocation.city })
                     });
                     const data = await res.json();
                     const botMsg = document.createElement('div');
