@@ -1123,7 +1123,7 @@ VERBOTEN: Tool-Namen nennen, Telefonnummern, Adressen, erfundene Bestelldaten.`;
 
         const messages = [
             { role: 'system', content: systemPrompt },
-            ...(Array.isArray(history) ? history.slice(-8) : []),
+            ...(Array.isArray(history) ? history.slice(-2) : []),
             { role: 'user', content: message }
         ];
 
@@ -1132,7 +1132,7 @@ VERBOTEN: Tool-Namen nennen, Telefonnummern, Adressen, erfundene Bestelldaten.`;
         if (AI_PROVIDER === 'gemini') {
             // Gemini path (no tool calling)
             const contents = [
-                ...(Array.isArray(history) ? history.slice(-10).map(m => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })) : []),
+                ...(Array.isArray(history) ? history.slice(-2).map(m => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })) : []),
                 { role: 'user', parts: [{ text: message }] }
             ];
             const geminiResult = await gemini.models.generateContent({
