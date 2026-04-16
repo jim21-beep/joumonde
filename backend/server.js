@@ -19,6 +19,15 @@ const PORT = process.env.PORT || 4000;
 app.use(cors());
 app.use(bodyParser.json());
 
+// Health check
+app.get('/health', (req, res) => {
+    res.json({
+        status: 'ok',
+        groqKey: !!process.env.GROQ_API_KEY,
+        supabaseKey: !!process.env.SUPABASE_SERVICE_KEY
+    });
+});
+
 // Passport config for Google
 passport.use(new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID || 'GOOGLE_CLIENT_ID',
@@ -925,7 +934,7 @@ BESTELLUNGEN: Erfinde NIEMALS Bestelldaten, Status oder Versandinformationen. Oh
         res.json({ reply });
     } catch (error) {
         console.error('AI error:', error);
-        res.status(500).json({ message: 'Failed to get response from AI' });
+        res.status(500).json({ message: 'Failed to get response from AI', debug: error?.message || String(error) });
     }
 });
 
