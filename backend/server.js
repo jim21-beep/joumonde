@@ -736,7 +736,7 @@ async function getWeatherContext(lat = 47.3769, lon = 8.5417, cityName = 'Züric
         };
         const desc = weatherCodes[current.weathercode] || 'wechselhaft';
 
-        return `AKTUELLES WETTER IN ${cityName.toUpperCase()}: ${current.temperature_2m}°C, ${desc}, Wind ${current.windspeed_10m} km/h. Morgen: ${today.temperature_2m_min[1]}–${today.temperature_2m_max[1]}°C. Übermorgen: ${today.temperature_2m_min[2]}–${today.temperature_2m_max[2]}°C.`;
+        return `WETTER IN ${cityName.toUpperCase()}: ${current.temperature_2m}°C, ${desc}.`;
     } catch (e) {
         return '';
     }
@@ -803,16 +803,17 @@ Empfehlungslogik für Oberbekleidung (S/M/L/XL):
 Für Hosen (Größe 30–36): Taillenumfang in inch (Umfang cm ÷ 2.54). Bei unbekanntem Umfang: nach Gewicht und Körpertyp (schlank/normal/kräftig) schätzen.
 
 VERHALTEN:
-- Halte Antworten kurz — maximal 2–3 Sätze. Kein langer Fließtext.
-- Beantworte Fragen die nichts mit dem Shop zu tun haben kurz und hilfreich, und verbinde die Antwort dann natürlich mit einer passenden Produktempfehlung aus dem Sortiment.
-- Bei Wetterfragen: nutze die oben angegebenen echten Wetterdaten.
-- Bei Größenfragen: frage nach Körperdaten und gib eine konkrete Empfehlung.
-- Sei charmant, warm und nie aufdringlich.
+- Antworte NUR auf das, was der User direkt fragt. Maximal 1–2 Sätze.
+- Keine ungebetenen Zusatzinfos, keine langen Erklärungen, keine Listen.
+- Nur wenn der User explizit nach Empfehlungen fragt, Produkte erwähnen.
+- Bei Wetterfragen: eine kurze Antwort mit den echten Daten, fertig.
+- Bei Größenfragen: frage nach Körperdaten, gib eine konkrete Empfehlung.
+- Sei natürlich und direkt, nie aufdringlich.
 - Antworte immer in der Sprache des Kunden.`;
 
         const completion = await groq.chat.completions.create({
-            model: 'llama-3.3-70b-versatile',
-            max_tokens: 150,
+            model: 'llama-3.1-8b-instant',
+            max_tokens: 80,
             messages: [
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: message }
