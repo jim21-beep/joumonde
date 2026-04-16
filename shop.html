@@ -1230,7 +1230,7 @@
                         const { data: { session } } = await supabaseClient.auth.getSession();
                         if (session?.access_token) nexaraHeaders['Authorization'] = 'Bearer ' + session.access_token;
                     } catch (_) {}
-                    const res = await fetch('http://localhost:4000/api/chat', {
+                    const res = await fetch('https://joumonde.onrender.com/api/chat', {
                         method: 'POST',
                         headers: nexaraHeaders,
                         body: JSON.stringify({
