@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: joumonde-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
