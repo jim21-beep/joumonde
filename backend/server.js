@@ -1022,8 +1022,8 @@ ${contextBlock}
 PRODUKTE: Blazer, Polo, Knit Zip-Polo, Weste, Quarter Zipper, Strickpullover, Chino (SALE -20%), Leinenhose | Hoodie, Trainerhose. Größen S–XL bzw. 30–36.
 VERSAND: CH CHF 7.90 (gratis ab 100) | EU CHF 15.90 (gratis ab 150) | Express +12 | 14 Tage Rückgabe | TWINT, Kreditkarte, PayPal, Klarna.
 USER: ${verifiedUserId ? `Eingeloggt (ID: ${verifiedUserId}, Email: ${userEmail || 'unbekannt'})` : 'Nicht eingeloggt'}
-FÄHIGKEITEN: Du kannst Bestellungen abrufen (get_order, get_my_orders), Retouren einleiten (initiate_return) und Newsletter abmelden (unsubscribe_newsletter). Nutze diese Tools aktiv wenn der Kunde danach fragt. Frage proaktiv nach fehlenden Infos (z.B. Bestellnummer, Grund).
-REGELN: Max 3 kurze Sätze. Kein Markdown. Erfinde NIEMALS Bestelldaten. Sei natürlich und hilfsbereit. Erwähne nie Telefon, physische Adressen oder Filialen.`;
+TOOLS: Du hast Zugriff auf get_order, get_my_orders, initiate_return, unsubscribe_newsletter. Nutze diese NUR wenn der Kunde EXPLIZIT danach fragt (z.B. "Zeig mir meine Bestellung", "Ich will retournieren", "Newsletter abmelden"). NIEMALS proaktiv Bestellungen erwähnen oder anbieten — das ist aufdringlich.
+REGELN: Antworte kurz und natürlich (1-2 Sätze). Kein Markdown. Erfinde NIEMALS Bestelldaten. Empfehle Produkte wenn passend. Erwähne nie Telefon, physische Adressen oder Filialen. Gib NIEMALS rohen Funktionscode oder Tool-Namen in deiner Antwort aus.`;
 
         const messages = [
             { role: 'system', content: systemPrompt },
