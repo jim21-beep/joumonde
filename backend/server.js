@@ -716,27 +716,105 @@ app.get('/api/newsletter/stats', (req, res) => {
 });
 
 // Chatbot endpoint
-const OpenAI = require('openai');
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const { GoogleGenerativeAI } = require('@google/generative-ai');
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+// Fetch current weather from Open-Meteo (free, no API key)
+async function getWeatherContext(lat = 47.3769, lon = 8.5417, cityName = 'Zürich') {
+    try {
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weathercode,windspeed_10m&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=Europe/Zurich&forecast_days=3`;
+        const response = await fetch(url);
+        const data = await response.json();
+        const current = data.current;
+        const today = data.daily;
+
+        const weatherCodes = {
+            0: 'klarer Himmel', 1: 'überwiegend klar', 2: 'teilweise bewölkt', 3: 'bedeckt',
+            45: 'nebelig', 48: 'Reifnebel', 51: 'leichter Nieselregen', 61: 'leichter Regen',
+            63: 'mäßiger Regen', 65: 'starker Regen', 71: 'leichter Schneefall', 80: 'leichte Regenschauer',
+            95: 'Gewitter'
+        };
+        const desc = weatherCodes[current.weathercode] || 'wechselhaft';
+
+        return `AKTUELLES WETTER IN ${cityName.toUpperCase()}: ${current.temperature_2m}°C, ${desc}, Wind ${current.windspeed_10m} km/h. Morgen: ${today.temperature_2m_min[1]}–${today.temperature_2m_max[1]}°C. Übermorgen: ${today.temperature_2m_min[2]}–${today.temperature_2m_max[2]}°C.`;
+    } catch (e) {
+        return '';
+    }
+}
+
+// Current date/season context
+function getDateContext() {
+    const now = new Date();
+    const days = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
+    const months = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+    const month = now.getMonth();
+    const season = month >= 2 && month <= 4 ? 'Frühling' : month >= 5 && month <= 7 ? 'Sommer' : month >= 8 && month <= 10 ? 'Herbst' : 'Winter';
+    return `HEUTE: ${days[now.getDay()]}, ${now.getDate()}. ${months[month]} ${now.getFullYear()} — Jahreszeit: ${season}.`;
+}
+
+// Current sale items
+const SALE_ITEMS = [
+    { name: 'Chino Hose', price: 51.99, originalPrice: 64.99, discount: '20%' }
+];
+function getSaleContext() {
+    if (SALE_ITEMS.length === 0) return '';
+    const items = SALE_ITEMS.map(i => `${i.name} (${i.discount} Rabatt, jetzt CHF ${i.price} statt CHF ${i.originalPrice})`).join(', ');
+    return `AKTUELLE SALE-ARTIKEL: ${items}.`;
+}
 
 app.post('/api/chat', async (req, res) => {
-    const { message } = req.body;
+    const { message, lat, lon, city } = req.body;
     if (!message) {
         return res.status(400).json({ message: 'Message is required' });
     }
     try {
-        const completion = await openai.chat.completions.create({
-            model: 'gpt-4o-mini',
-            messages: [
-                {
-                    role: 'system',
-                    content: 'You are Nexara, the friendly shopping assistant for Joumonde, a premium fashion store. You only help with topics related to the Joumonde shop: products, styles, sizing, orders, shipping, and returns. If a customer asks about anything unrelated to the shop, politely let them know that you can only help with Joumonde-related questions. Always be warm, friendly, and professional.'
-                },
-                { role: 'user', content: message }
-            ],
-            max_tokens: 500
-        });
-        res.json({ reply: completion.choices[0].message.content });
+        const weatherContext = await getWeatherContext(lat || 47.3769, lon || 8.5417, city || 'Zürich');
+        const dateContext = getDateContext();
+        const saleContext = getSaleContext();
+
+        const contextBlock = [dateContext, weatherContext, saleContext].filter(Boolean).join('\n');
+
+        const systemPrompt = `You are Nexara, the friendly and stylish shopping assistant for Joumonde, a premium Swiss fashion store specializing in Old Money and Streetwear fashion.
+
+${contextBlock}
+
+JOUMONDE PRODUKTSORTIMENT:
+- Klassischer Blazer | CHF 79.99 | Farben: Navy, Schwarz, Grau | Größen: S–XL
+- Polo Hemd | CHF 34.99 | Farben: Weiß, Navy, Schwarz | Größen: S–XL
+- Ripped Knit Zip-Polo | CHF 44.99 | Farben: Beige, Weiß, Schwarz | Größen: S–XL
+- Chino Hose | CHF 51.99 (SALE -20%) | Farben: Beige, Navy, Grau, Oliv | Größen: 30–36
+- Elegante Weste | CHF 69.99 | Farben: Creme, Navy, Grau, Schwarz | Größen: S–XL
+- Quarter Zipper | CHF 79.99 | Farben: Creme, Navy, Grau, Schwarz | Größen: S–XL
+- Strickpullover | CHF 89.99 | Farben: Dunkelblau, Weiß, Grau, Beige | Größen: S–XL
+- Leinenhose | CHF 54.99 | Farben: Beige, Weiß, Hellgrau, Navy | Größen: 30–36
+- Oversized Hoodie | Streetwear
+- Trainerhose | Streetwear
+
+GRÖSSENBERATUNG — Wenn ein Kunde nach der richtigen Größe fragt, frage nach:
+1. Körpergröße (cm)
+2. Gewicht (kg)
+3. Schulterbreite oder Brustumfang falls vorhanden
+
+Empfehlungslogik für Oberbekleidung (S/M/L/XL):
+- S: bis 170 cm / bis 65 kg
+- M: 170–178 cm / 65–80 kg
+- L: 178–185 cm / 80–95 kg
+- XL: über 185 cm / über 95 kg
+Für Hosen (Größe 30–36): Taillenumfang in inch (Umfang cm ÷ 2.54). Bei unbekanntem Umfang: nach Gewicht und Körpertyp (schlank/normal/kräftig) schätzen.
+
+VERHALTEN:
+- Beantworte Fragen die nichts mit dem Shop zu tun haben kurz und hilfreich, und verbinde die Antwort dann natürlich mit einer passenden Produktempfehlung aus dem Sortiment.
+- Bei Wetterfragen: nutze die oben angegebenen echten Wetterdaten.
+- Bei Größenfragen: frage nach Körperdaten und gib eine konkrete Empfehlung.
+- Sei charmant, warm und nie aufdringlich.
+- Antworte immer in der Sprache des Kunden.`;
+
+        const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+        const result = await model.generateContent([
+            { text: `SYSTEM:\n${systemPrompt}\n\nUSER:\n${message}` }
+        ]);
+        const reply = result.response.text();
+        res.json({ reply });
     } catch (error) {
         console.error('OpenAI error:', error);
         res.status(500).json({ message: 'Failed to get response from AI' });
