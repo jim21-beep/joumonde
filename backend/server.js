@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Basic Express server for account system backend integration
 require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });
 const express = require('express');
