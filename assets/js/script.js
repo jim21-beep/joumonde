@@ -1254,6 +1254,7 @@ let chatbotContext = {
     lastQuestion: null,
     userName: null
 };
+let nexaraChatHistory = [];
 
 // Chatbot Learning System
 let chatbotAnalytics = JSON.parse(localStorage.getItem('chatbotAnalytics')) || {
@@ -1424,13 +1425,56 @@ function resetConversation() {
     const messagesContainer = document.getElementById('chatbot-messages');
     messagesContainer.innerHTML = `
         <div class="bot-message">
-            <p>${currentLanguage === 'de' ? 'Hallo! Wie kann ich Ihnen helfen?' : currentLanguage === 'en' ? 'Hello! How can I help you?' : 'Bonjour! Comment puis-je vous aider?'}</p>
+            <p>${currentLanguage === 'de' ? 'Hallo, ich bin Nexara, deine Joumonde-Assistentin für Produkte, Größen, Bestellungen, Versand und Retouren.' : currentLanguage === 'en' ? 'Hello, I am Nexara, your Joumonde assistant for products, sizing, orders, shipping, and returns.' : 'Bonjour, je suis Nexara, ton assistante Joumonde pour les produits, les tailles, les commandes, la livraison et les retours.'}</p>
         </div>
     `;
     document.getElementById('chatbot-input').value = '';
+    nexaraChatHistory = [];
 }
 
-function sendChatMessage() {
+async function getSupabaseAccessToken() {
+    try {
+        if (!window.supabaseClient || !window.supabaseClient.auth) return null;
+        const { data } = await window.supabaseClient.auth.getSession();
+        return data?.session?.access_token || null;
+    } catch {
+        return null;
+    }
+}
+
+async function requestNexaraBackend(message) {
+    const apiCandidates = [
+        '/api/chat',
+        'https://joumonde.onrender.com/api/chat'
+    ];
+    const accessToken = await getSupabaseAccessToken();
+
+    for (const apiUrl of apiCandidates) {
+        try {
+            const headers = { 'Content-Type': 'application/json' };
+            if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
+
+            const res = await fetch(apiUrl, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify({
+                    message,
+                    lang: currentLanguage,
+                    history: nexaraChatHistory.slice(-8)
+                })
+            });
+
+            if (!res.ok) continue;
+            const data = await res.json();
+            if (!data || typeof data.reply !== 'string') continue;
+            return data;
+        } catch {}
+    }
+
+    return null;
+}
+
+async function sendChatMessage() {
     const input = document.getElementById('chatbot-input');
     const message = input.value.trim();
     
@@ -1438,23 +1482,47 @@ function sendChatMessage() {
     
     // Add user message
     addChatMessage(message, 'user');
+    nexaraChatHistory.push({ role: 'user', content: message });
     
     // Clear input
     input.value = '';
     
     // Simulate bot response with typing indicator
     addTypingIndicator();
-    setTimeout(() => {
+    try {
+        const backendResult = await requestNexaraBackend(message);
         removeTypingIndicator();
-        const botResponse = generateBotResponse(message);
-        if (Array.isArray(botResponse)) {
-            botResponse.forEach((response, index) => {
-                setTimeout(() => addChatMessage(response, 'bot'), index * 400);
-            });
-        } else {
-            addChatMessage(botResponse, 'bot');
+
+        if (backendResult?.reply) {
+            addChatMessage(backendResult.reply, 'bot');
+            nexaraChatHistory.push({ role: 'assistant', content: backendResult.reply });
+
+            if (backendResult.action?.type === 'changeLanguage' && backendResult.action.value) {
+                currentLanguage = backendResult.action.value;
+                localStorage.setItem('language', currentLanguage);
+                const sel = document.getElementById('language-selector');
+                if (sel) sel.value = currentLanguage;
+            }
+            return;
         }
-    }, 800);
+
+        const unavailableMsg = currentLanguage === 'en'
+            ? 'Nexara is currently not reachable. Please try again in a moment.'
+            : currentLanguage === 'fr'
+            ? 'Nexara est momentanement indisponible. Reessaie dans un instant.'
+            : 'Nexara ist gerade nicht erreichbar. Bitte versuche es gleich noch einmal.';
+        addChatMessage(unavailableMsg, 'bot');
+        nexaraChatHistory.push({ role: 'assistant', content: unavailableMsg });
+    } catch {
+        removeTypingIndicator();
+        const errorMsg = currentLanguage === 'en'
+            ? 'Connection issue. Please try again in a few seconds.'
+            : currentLanguage === 'fr'
+            ? 'Probleme de connexion. Reessaie dans quelques secondes.'
+            : 'Verbindungsproblem. Bitte versuche es in ein paar Sekunden erneut.';
+        addChatMessage(errorMsg, 'bot');
+        nexaraChatHistory.push({ role: 'assistant', content: errorMsg });
+    }
 }
 
 function addTypingIndicator() {
@@ -1472,11 +1540,21 @@ function removeTypingIndicator() {
     if (indicator) indicator.remove();
 }
 
+function sanitizeBotGermanPhrasing(text) {
+    if (typeof text !== 'string') return text;
+    return text
+        .replace(/\bwie kann ich\s+f[üu]r dich helfen\??/gi, 'Wie kann ich dir helfen?')
+        .replace(/\bwie kann ich\s+f[üu]r dich\b/gi, 'Wie kann ich dir')
+        .replace(/\b(hallo|hi|hey)\s*,?\s*dir\b/gi, '$1')
+        .replace(/\bhallo\s*dir\b/gi, 'Hallo');
+}
+
 function addChatMessage(message, sender) {
     const messagesContainer = document.getElementById('chatbot-messages');
     const messageDiv = document.createElement('div');
     messageDiv.className = sender === 'user' ? 'user-message' : 'bot-message';
-    messageDiv.innerHTML = `<p>${message}</p>`;
+    const safeMessage = sender === 'bot' ? sanitizeBotGermanPhrasing(message) : message;
+    messageDiv.innerHTML = `<p>${safeMessage}</p>`;
     messagesContainer.appendChild(messageDiv);
     
     // Scroll to bottom
@@ -1484,6 +1562,14 @@ function addChatMessage(message, sender) {
 }
 
 function generateBotResponse(userMessage) {
+    // Legacy fallback is intentionally disabled to avoid canned responses.
+    // Nexara responses must come from backend /api/chat.
+    return currentLanguage === 'en'
+        ? 'Nexara is currently not reachable. Please try again in a moment.'
+        : currentLanguage === 'fr'
+        ? 'Nexara est momentanement indisponible. Reessaie dans un instant.'
+        : 'Nexara ist gerade nicht erreichbar. Bitte versuche es gleich noch einmal.';
+
     // Auto-correct typos
     const correctedMessage = autoCorrectInput(userMessage);
     const message = correctedMessage.toLowerCase().trim();
@@ -1540,7 +1626,7 @@ function generateBotResponse(userMessage) {
     // Greetings - expanded
     if (containsAny(['hallo', 'hi', 'hey', 'guten tag', 'moin', 'servus', 'gruss', 'tag', 'morgen', 'abend'])) {
         wasResolved = true;
-        response = 'Hallo! 👋 Willkommen bei Joumonde. Ich bin Ihr virtueller Assistent. Wie kann ich Ihnen heute helfen?\n\nIch kann Ihnen bei folgenden Themen helfen:\n• Bestellstatus verfolgen\n• Versand & Lieferung\n• Rückgabe & Umtausch\n• Größenberatung\n• Zahlungsmethoden\n• Produktinformationen';
+        response = 'Hallo, ich bin Nexara, deine Joumonde-Assistentin für Produkte, Größen, Bestellungen, Versand und Retouren.';
     }
     
     // Order tracking - expanded variations

@@ -838,37 +838,44 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     });
 
-    // Wrap submitOrder so logged-in orders are saved to Supabase
+    // Wrap submitOrder without changing core checkout behavior.
+    // The actual order save/email is handled in script.js + edge function.
     const originalSubmitOrder = window.submitOrder;
     window.submitOrder = async function(event) {
-        if (currentUser && typeof cart !== 'undefined' && cart.length > 0) {
-            const orderId = 'JM' + Date.now();
-            const total   = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const order   = {
-                id:       orderId,
-                date:     new Date().toISOString(),
-                status:   'Bearbeitung',
-                total,
-                currency: (currentUser.preferences && currentUser.preferences.defaultCurrency) || 'CHF',
-                items:    cart.map(item => ({
-                    name: item.name, price: item.price, quantity: item.quantity,
-                    size: item.size || null, color: item.color || null, articleNumber: item.articleNumber || null
-                }))
-            };
-            const { error: oErr } = await supabaseClient.from('orders').insert({
-                id: orderId, user_id: currentUser.id, status: order.status, total, currency: order.currency
-            });
-            if (!oErr) {
-                const items = order.items.map(i => ({
-                    order_id: orderId, product_name: i.name, unit_price: i.price,
-                    quantity: i.quantity, size: i.size, color: i.color, article_number: i.articleNumber
-                }));
-                await supabaseClient.from('order_items').insert(items);
-            }
-            if (currentUser.orderHistory) currentUser.orderHistory.unshift(order);
-            // Email is sent by submitOrder in script.js (covers both guests and logged-in users)
+        if (event && typeof event.preventDefault === 'function') {
+            event.preventDefault();
         }
-        if (originalSubmitOrder) originalSubmitOrder(event);
+
+        if (typeof originalSubmitOrder === 'function') {
+            await originalSubmitOrder(event);
+        }
+
+        // Refresh order history after checkout so dashboard shows latest orders.
+        if (currentUser && currentUser.id) {
+            const { data: ordersRes, error: ordersErr } = await supabaseClient
+                .from('orders')
+                .select('*, order_items(*)')
+                .eq('user_id', currentUser.id)
+                .order('created_at', { ascending: false });
+
+            if (!ordersErr && Array.isArray(ordersRes)) {
+                currentUser.orderHistory = ordersRes.map(o => ({
+                    id: o.id,
+                    date: o.created_at,
+                    status: o.status,
+                    total: parseFloat(o.total || 0),
+                    currency: o.currency,
+                    items: (o.order_items || []).map(i => ({
+                        name: i.product_name,
+                        price: parseFloat(i.unit_price || 0),
+                        quantity: i.quantity,
+                        size: i.size,
+                        color: i.color,
+                        articleNumber: i.article_number
+                    }))
+                }));
+            }
+        }
     };
 });
 
