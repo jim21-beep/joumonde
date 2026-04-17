@@ -522,8 +522,9 @@ function updatePageContent() {
         const links = footerSections[2].querySelectorAll('a');
         if (links[0]) links[0].textContent = t('about');
         if (links[1]) links[1].textContent = t('contact');
-        if (links[2]) links[2].textContent = t('terms');
-        if (links[3]) links[3].textContent = t('privacy');
+        if (links[2]) links[2].textContent = t('shippingTitle');
+        if (links[3]) links[3].textContent = t('terms');
+        if (links[4]) links[4].textContent = t('privacy');
     }
     if (footerSections[0]) {
         const footerP = footerSections[0].querySelector('p');
@@ -1218,7 +1219,7 @@ function submitOrder(e) {
     }
     
     const successMsg = currentLanguage === 'de' 
-        ? 'Vielen Dank für Ihre Bestellung! Sie erhalten eine Bestätigung per Email.'
+        ? 'Vielen Dank für deine Bestellung! Du erhältst eine Bestätigung per Email.'
         : currentLanguage === 'en'
         ? 'Thank you for your order! You will receive a confirmation email.'
         : 'Merci pour votre commande! Vous recevrez un email de confirmation.';
@@ -2478,6 +2479,9 @@ function updateAboutPageContent() {
         const infoLinks = footerSections[2].querySelectorAll('a');
         if (infoLinks[0]) infoLinks[0].textContent = t('about');
         if (infoLinks[1]) infoLinks[1].textContent = t('contact');
+        if (infoLinks[2]) infoLinks[2].textContent = t('shippingTitle');
+        if (infoLinks[3]) infoLinks[3].textContent = t('terms');
+        if (infoLinks[4]) infoLinks[4].textContent = t('privacy');
     }
     if (footerSections[3]) {
         footerSections[3].querySelector('h4').textContent = t('newsletter');

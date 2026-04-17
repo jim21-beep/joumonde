@@ -471,13 +471,6 @@ function getDashboardPreferences() {
                 </select>
             </div>
             
-            <div class="form-group">
-                <label style="display: flex; align-items: center; gap: 0.5rem;">
-                    <input type="checkbox" name="newsletter" ${currentUser.preferences.newsletter ? 'checked' : ''}>
-                    Newsletter abonnieren
-                </label>
-            </div>
-            
             <button type="submit" class="btn-primary">Einstellungen speichern</button>
         </form>
         
@@ -496,15 +489,13 @@ async function savePreferences(event) {
     const prefs = {
         defaultSize:     formData.get('defaultSize') || null,
         defaultCurrency: formData.get('defaultCurrency'),
-        defaultLanguage: formData.get('defaultLanguage'),
-        newsletter:      formData.get('newsletter') === 'on'
+        defaultLanguage: formData.get('defaultLanguage')
     };
 
     const { error } = await supabaseClient.from('profiles').update({
         default_size:     prefs.defaultSize,
         default_currency: prefs.defaultCurrency,
-        default_language: prefs.defaultLanguage,
-        newsletter:       prefs.newsletter
+        default_language: prefs.defaultLanguage
     }).eq('id', currentUser.id);
 
     if (error) {
@@ -520,26 +511,35 @@ async function savePreferences(event) {
 // Add Address
 function showAddAddressForm() {
     const form = `
-        <div class="address-form-modal" id="address-form-modal">
+        <div class="address-form-modal" id="address-form-modal" onclick="if(event.target===this)closeAddressForm()">
             <div class="modal-content">
-                <h3>Neue Adresse hinzufügen</h3>
+                <div class="modal-header">
+                    <h3>Neue Adresse hinzufügen</h3>
+                    <button type="button" class="modal-close" onclick="closeAddressForm()" aria-label="Schliessen">&times;</button>
+                </div>
+                <div class="modal-divider"></div>
                 <form onsubmit="saveAddress(event)">
                     <div class="form-group">
-                        <input type="text" name="street" placeholder="Straße & Hausnummer *" required>
+                        <label>Straße & Hausnummer <span class="required">*</span></label>
+                        <input type="text" name="street" placeholder="z.B. Musterstrasse 12" required>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <input type="text" name="zip" placeholder="PLZ *" required>
+                            <label>PLZ <span class="required">*</span></label>
+                            <input type="text" name="zip" placeholder="8001" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" name="city" placeholder="Stadt *" required>
+                            <label>Stadt <span class="required">*</span></label>
+                            <input type="text" name="city" placeholder="Zürich" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" name="country" placeholder="Land *" value="Schweiz" required>
+                        <label>Land <span class="required">*</span></label>
+                        <input type="text" name="country" value="Schweiz" required>
                     </div>
                     <div class="form-group">
-                        <input type="tel" name="phone" placeholder="Telefon (optional)">
+                        <label>Telefon <span class="optional">(optional)</span></label>
+                        <input type="tel" name="phone" placeholder="+41 79 123 45 67">
                     </div>
                     <div class="form-actions">
                         <button type="button" onclick="closeAddressForm()" class="btn-secondary">Abbrechen</button>
