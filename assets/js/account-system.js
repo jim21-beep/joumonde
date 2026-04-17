@@ -4,6 +4,11 @@
 // User State
 let currentUser = null;
 
+// Expose current user id for other scripts (e.g. checkout/order save flow).
+window.getCurrentUserId = function getCurrentUserId() {
+    return currentUser && currentUser.id ? currentUser.id : null;
+};
+
 
 
 // ==================== AUTHENTICATION ====================
