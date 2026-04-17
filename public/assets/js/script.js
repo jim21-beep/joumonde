@@ -1213,6 +1213,7 @@ async function submitOrder(e) {
                     type: 'order-confirmation',
                     email,
                     firstName,
+                    userId: (typeof window.getCurrentUserId === 'function' ? window.getCurrentUserId() : null),
                     orderId,
                     items: cart.map(item => ({ name: item.name, price: item.price, quantity: item.quantity })),
                     total,
@@ -2645,21 +2646,32 @@ async function submitNewsletter(event) {
     if (submitBtn) { submitBtn.textContent = 'Senden...'; submitBtn.disabled = true; }
 
     try {
-        const res = await fetch(
-            'https://joumonde.onrender.com/api/newsletter/subscribe',
-            {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, source: 'footer-form' })
-            }
-        );
-        if (res.status === 409) {
+        const res = await fetch('https://sbxffjszderijikxarho.supabase.co/functions/v1/send-newsletter-confirmation', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type: 'newsletter', email, source: 'footer-form' })
+        });
+
+        let data = null;
+        try {
+            data = await res.json();
+        } catch (_jsonErr) {
+            data = null;
+        }
+
+        if (!res.ok) {
+            const msg = data && data.error
+                ? data.error
+                : 'Fehler beim Senden. Bitte später erneut versuchen.';
+            showNotification(msg);
+            return;
+        }
+
+        if (data && data.alreadySubscribed) {
             showNotification('Diese E-Mail wurde bereits hinzugefügt.');
-        } else if (res.ok) {
+        } else {
             showNotification('Vielen Dank für deine Anmeldung! Du bekommst bald eine Bestätigungsmail.');
             form.reset();
-        } else {
-            showNotification('Fehler beim Senden. Bitte später erneut versuchen.');
         }
     } catch (err) {
         console.error('Newsletter error:', err);

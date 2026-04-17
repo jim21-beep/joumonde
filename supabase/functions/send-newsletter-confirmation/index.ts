@@ -22,6 +22,11 @@ serve(async (req) => {
     return new Response('ok', { headers: CORS });
   }
 
+  if (!RESEND_API_KEY || !SUPABASE_URL || !SUPABASE_SERVICE) {
+    console.error('Missing required env vars for edge function');
+    return json({ error: 'Server-Konfiguration fehlt' }, 500);
+  }
+
   try {
     const body = await req.json();
     const { type = 'newsletter', email } = body;
@@ -165,7 +170,7 @@ serve(async (req) => {
         ${FOOTER}`;
 
     } else if (type === 'order-confirmation') {
-      const { firstName = '', orderId = '', items = [], total = 0, orderDate = '', currency = 'CHF' } = body;
+      const { firstName = '', userId = null, orderId = '', items = [], total = 0, orderDate = '', currency = 'CHF' } = body;
 
       // ── Save order to Supabase ───────────────────────────────────────────────
       try {
@@ -174,7 +179,7 @@ serve(async (req) => {
 
         const { error: orderErr } = await db.from('orders').insert({
           id: dbOrderId,
-          user_id: null,
+          user_id: userId,
           status: 'pending',
           total: Number(total),
           currency,
@@ -282,7 +287,7 @@ serve(async (req) => {
     if (!res.ok) {
       const errText = await res.text();
       console.error('Resend error:', res.status, errText);
-      return json({ success: true });
+      return json({ error: 'E-Mail Versand fehlgeschlagen' }, 502);
     }
 
     const resData = await res.json();
@@ -291,7 +296,6 @@ serve(async (req) => {
 
   } catch (e) {
     console.error('Edge function error:', e);
-    // Always return success to client — log error server-side
-    return json({ success: true, warning: String(e) });
+    return json({ error: 'Interner Serverfehler', warning: String(e) }, 500);
   }
 });

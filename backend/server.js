@@ -25,7 +25,7 @@ app.get('/health', (req, res) => {
     res.json({
         status: 'ok',
         groqKey: !!process.env.GROQ_API_KEY,
-        supabaseKey: !!process.env.SUPABASE_SERVICE_KEY
+        supabaseKey: !!(process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY)
     });
 });
 
@@ -591,25 +591,22 @@ app.post('/api/newsletter/subscribe', async (req, res) => {
             return res.status(409).json({ message: 'Email already subscribed' });
         }
 
+        // Already pending confirmation → reject (avoid repeated re-signups)
+        if (existing && !existing.confirmed) {
+            return res.status(409).json({ message: 'Email already pending confirmation' });
+        }
+
         const confirmationToken = crypto.randomBytes(32).toString('hex');
 
-        if (existing && !existing.confirmed) {
-            // Pending confirmation → update token and resend email
-            await supabaseAdmin
-                .from('newsletter_subscribers')
-                .update({ confirmation_token: confirmationToken, name: name || existing.name || '' })
-                .eq('id', existing.id);
-        } else {
-            // New subscription → insert
-            const { error: insertError } = await supabaseAdmin.from('newsletter_subscribers').insert({
-                email: normalizedEmail,
-                name: name || '',
-                source: source || 'website',
-                confirmed: false,
-                confirmation_token: confirmationToken
-            });
-            if (insertError) throw insertError;
-        }
+        // New subscription → insert
+        const { error: insertError } = await supabaseAdmin.from('newsletter_subscribers').insert({
+            email: normalizedEmail,
+            name: name || '',
+            source: source || 'website',
+            confirmed: false,
+            confirmation_token: confirmationToken
+        });
+        if (insertError) throw insertError;
 
         // Keep in-memory for stats endpoint (update or add)
         const memIdx = newsletterSubscribers.findIndex(s => s.email === normalizedEmail);
@@ -796,7 +793,7 @@ const gemini = AI_PROVIDER === 'gemini' ? new GoogleGenAI({ apiKey: process.env.
 const { createClient } = require('@supabase/supabase-js');
 const supabaseAdmin = createClient(
     'https://sbxffjszderijikxarho.supabase.co',
-    process.env.SUPABASE_SERVICE_KEY || ''
+    process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 );
 
 // Geocode a city name to lat/lon via Open-Meteo geocoding API

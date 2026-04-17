@@ -43,7 +43,20 @@ async function handleNewsletterSignup(event) {
             }
         );
 
-        const data = await response.json();
+        let data = null;
+        try {
+            data = await response.json();
+        } catch (_jsonErr) {
+            data = null;
+        }
+
+        if (!response.ok) {
+            const errorMessage = data && data.error
+                ? data.error
+                : 'Fehler beim Senden. Bitte versuche es spaeter erneut.';
+            showNotification(errorMessage, 'error');
+            return;
+        }
 
         if (data && data.alreadySubscribed) {
             showNotification('Diese E-Mail ist bereits angemeldet.', 'info');
