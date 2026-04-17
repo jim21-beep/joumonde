@@ -70,7 +70,8 @@ async function handleLogin(event) {
 }
 
 // Profil + Daten aus Supabase laden und currentUser befüllen
-async function loginUser(supabaseUser) {
+// isActualLogin = false when restoring session on page load (no notification, no language override)
+async function loginUser(supabaseUser, isActualLogin = true) {
     const [profileRes, addressesRes, ordersRes] = await Promise.all([
         supabaseClient.from('profiles').select('*').eq('id', supabaseUser.id).single(),
         supabaseClient.from('addresses').select('*').eq('user_id', supabaseUser.id),
@@ -110,13 +111,19 @@ async function loginUser(supabaseUser) {
         }))
     };
 
-    if (currentUser.preferences.defaultCurrency && typeof changeCurrency === 'function')
-        changeCurrency(currentUser.preferences.defaultCurrency);
-    if (currentUser.preferences.defaultLanguage && typeof changeLanguage === 'function')
-        changeLanguage(currentUser.preferences.defaultLanguage);
+    // Only apply profile preferences and show notification on actual login,
+    // not on page-load session restore (localStorage already has correct values)
+    if (isActualLogin) {
+        if (currentUser.preferences.defaultCurrency && typeof changeCurrency === 'function')
+            changeCurrency(currentUser.preferences.defaultCurrency);
+        if (currentUser.preferences.defaultLanguage && typeof changeLanguage === 'function')
+            changeLanguage(currentUser.preferences.defaultLanguage);
+    }
 
     updateAccountUI();
-    showNotification(`Willkommen zurück, ${currentUser.firstName}!`, 'success');
+    if (isActualLogin) {
+        showNotification(`Willkommen zurück, ${currentUser.firstName}!`, 'success');
+    }
 }
 
 // Logout – Supabase Auth
@@ -789,11 +796,15 @@ function sendContactEmail(name, email, message) {
 // ==================== INITIALIZATION ====================
 
 // ==================== SUPABASE SESSION INIT ====================
+// Flag to prevent double loginUser() call: getSession() + onAuthStateChange both firing on page load
+let _sessionRestored = false;
+
 document.addEventListener('DOMContentLoaded', async function() {
-    // Bestehende Session des Browsers wiederherstellen
+    // Bestehende Session des Browsers wiederherstellen (silent – kein Notification, keine Sprache überschreiben)
     const { data: { session } } = await supabaseClient.auth.getSession();
     if (session) {
-        await loginUser(session.user);
+        _sessionRestored = true;
+        await loginUser(session.user, false);
     } else {
         updateAccountUI();
     }
@@ -801,7 +812,13 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Auf Login/Logout reagieren (auch in anderen Tabs)
     supabaseClient.auth.onAuthStateChange(async (event, session) => {
         if (event === 'SIGNED_IN' && session) {
-            await loginUser(session.user);
+            if (_sessionRestored) {
+                // This SIGNED_IN was triggered by the page-load session restore above – skip duplicate
+                _sessionRestored = false;
+            } else {
+                // Actual fresh login from handleLogin()
+                await loginUser(session.user, true);
+            }
             // Modal schliessen falls offen
             const modal = document.getElementById('account-modal');
             if (modal && modal.classList.contains('active')) {
@@ -809,6 +826,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 document.body.classList.remove('modal-open');
             }
         } else if (event === 'SIGNED_OUT') {
+            _sessionRestored = false;
             currentUser = null;
             updateAccountUI();
         }
