@@ -40,6 +40,7 @@ serve(async (req) => {
       }
       if (dbErr) {
         console.error('DB insert error:', dbErr);
+        return json({ error: 'Datenbank-Fehler' }, 500);
       }
     }
 
@@ -52,6 +53,8 @@ serve(async (req) => {
         .insert({ name, email, phone, subject: contactSubject, message });
       if (dbErr) console.error('Contact DB insert error:', dbErr);
 
+      const esc = (s: string) => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
       // Forward to admin
       const adminRes = await fetch('https://api.resend.com/emails', {
         method: 'POST',
@@ -60,14 +63,14 @@ serve(async (req) => {
           from: 'Joumonde Kontakt <info@joumonde.com>',
           to: ['info@joumonde.com'],
           reply_to: email,
-          subject: `Neue Kontaktanfrage: ${contactSubject || '(kein Betreff)'}`,
+          subject: `Neue Kontaktanfrage: ${esc(contactSubject) || '(kein Betreff)'}`,
           html: `<div style="font-family:sans-serif;max-width:600px;">
             <h2>Neue Kontaktanfrage</h2>
-            <p><strong>Von:</strong> ${name} (${email})</p>
-            ${phone ? `<p><strong>Telefon:</strong> ${phone}</p>` : ''}
-            <p><strong>Betreff:</strong> ${contactSubject}</p>
+            <p><strong>Von:</strong> ${esc(name)} (${esc(email)})</p>
+            ${phone ? `<p><strong>Telefon:</strong> ${esc(phone)}</p>` : ''}
+            <p><strong>Betreff:</strong> ${esc(contactSubject)}</p>
             <hr>
-            <p style="white-space:pre-wrap;">${message}</p>
+            <p style="white-space:pre-wrap;">${esc(message)}</p>
           </div>`,
         }),
       });
@@ -186,8 +189,10 @@ serve(async (req) => {
           color: i.color ?? null,
           article_number: null,
         }));
-        const { error: itemsErr } = await db.from('order_items').insert(orderItems);
-        if (itemsErr) console.error('Order items insert error:', itemsErr);
+        if (orderItems.length > 0) {
+          const { error: itemsErr } = await db.from('order_items').insert(orderItems);
+          if (itemsErr) console.error('Order items insert error:', itemsErr);
+        }
 
         console.log('Order saved to DB:', dbOrderId);
       } catch (dbEx) {
@@ -200,7 +205,7 @@ serve(async (req) => {
           <tr>
             <td style="padding:10px 8px;border-bottom:1px solid #222;">${i.name}</td>
             <td style="padding:10px 8px;border-bottom:1px solid #222;text-align:center;">${i.quantity}</td>
-            <td style="padding:10px 8px;border-bottom:1px solid #222;text-align:right;">CHF ${(i.price * i.quantity).toFixed(2)}</td>
+            <td style="padding:10px 8px;border-bottom:1px solid #222;text-align:right;">${currency} ${(i.price * i.quantity).toFixed(2)}</td>
           </tr>`).join('');
       subject = `Bestellbestätigung #${orderId} – Joumonde`;
       html = `${HEADER}
@@ -222,7 +227,7 @@ serve(async (req) => {
           <tfoot>
             <tr>
               <td colspan="2" style="padding:12px 8px;font-weight:bold;color:#d4af37;border-top:1px solid #333;">Gesamt</td>
-              <td style="padding:12px 8px;font-weight:bold;text-align:right;color:#d4af37;border-top:1px solid #333;">CHF ${Number(total).toFixed(2)}</td>
+              <td style="padding:12px 8px;font-weight:bold;text-align:right;color:#d4af37;border-top:1px solid #333;">${currency} ${Number(total).toFixed(2)}</td>
             </tr>
           </tfoot>
         </table>
