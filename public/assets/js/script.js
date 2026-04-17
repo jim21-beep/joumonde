@@ -2628,19 +2628,20 @@ async function submitNewsletter(event) {
 
     try {
         const res = await fetch(
-            'https://sbxffjszderijikxarho.supabase.co/functions/v1/send-newsletter-confirmation',
+            'https://joumonde.onrender.com/api/newsletter/subscribe',
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ type: 'newsletter', email, source: 'footer-form' })
+                body: JSON.stringify({ email, source: 'footer-form' })
             }
         );
-        const data = await res.json();
-        if (data && data.alreadySubscribed) {
-            showNotification('Diese E-Mail ist bereits angemeldet.');
-        } else {
-            showNotification('Danke! Bitte bestätige deine E-Mail-Adresse.');
+        if (res.status === 409) {
+            showNotification('Diese E-Mail wurde bereits hinzugefügt.');
+        } else if (res.ok) {
+            showNotification('Vielen Dank für deine Anmeldung! Du bekommst bald eine Bestätigungsmail.');
             form.reset();
+        } else {
+            showNotification('Fehler beim Senden. Bitte später erneut versuchen.');
         }
     } catch (err) {
         console.error('Newsletter error:', err);
