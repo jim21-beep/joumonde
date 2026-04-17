@@ -1174,11 +1174,12 @@ function openCheckout() {
     };
 }
 
-function submitOrder(e) {
+async function submitOrder(e) {
     e.preventDefault();
     
     // Read customer data from checkout form
     const form = e.target;
+    const submitBtn = form.querySelector('.submit-order-btn');
     const inputs = form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]');
     const firstName = inputs[0] ? inputs[0].value.trim() : '';
     const email     = inputs[2] ? inputs[2].value.trim() : '';
@@ -1195,22 +1196,35 @@ function submitOrder(e) {
     
     const total = subtotal - discount;
     const orderId = 'ORD-' + Date.now();
+
+    // Show loading state
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = currentLanguage === 'en' ? 'Processing…' : 'Wird verarbeitet…';
+    }
     
     // Send order confirmation email to customer
     if (email) {
-        fetch('https://sbxffjszderijikxarho.supabase.co/functions/v1/send-newsletter-confirmation', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                type: 'order-confirmation',
-                email,
-                firstName,
-                orderId,
-                items: cart.map(item => ({ name: item.name, price: item.price, quantity: item.quantity })),
-                total,
-                orderDate: new Date().toLocaleString('de-DE')
-            })
-        }).catch(err => console.warn('Order email failed:', err));
+        try {
+            const res = await fetch('https://sbxffjszderijikxarho.supabase.co/functions/v1/send-newsletter-confirmation', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    type: 'order-confirmation',
+                    email,
+                    firstName,
+                    orderId,
+                    items: cart.map(item => ({ name: item.name, price: item.price, quantity: item.quantity })),
+                    total,
+                    orderDate: new Date().toLocaleString('de-DE')
+                })
+            });
+            if (!res.ok) {
+                console.error('Bestellbestätigung fehlgeschlagen – HTTP', res.status, await res.text());
+            }
+        } catch (err) {
+            console.warn('Netzwerkfehler beim Senden der Bestellbestätigung:', err);
+        }
     }
 
     // Track purchase
