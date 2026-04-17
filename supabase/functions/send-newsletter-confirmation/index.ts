@@ -161,7 +161,40 @@ serve(async (req) => {
         ${FOOTER}`;
 
     } else if (type === 'order-confirmation') {
-      const { firstName = '', orderId = '', items = [], total = 0, orderDate = '' } = body;
+      const { firstName = '', orderId = '', items = [], total = 0, orderDate = '', currency = 'CHF' } = body;
+
+      // ── Save order to Supabase ───────────────────────────────────────────────
+      try {
+        const db = createClient(SUPABASE_URL, SUPABASE_SERVICE);
+        const dbOrderId = crypto.randomUUID();
+
+        const { error: orderErr } = await db.from('orders').insert({
+          id: dbOrderId,
+          user_id: null,
+          status: 'pending',
+          total: Number(total),
+          currency,
+        });
+        if (orderErr) console.error('Order insert error:', orderErr);
+
+        const orderItems = (items as Array<{ name: string; quantity: number; price: number; size?: string; color?: string }>).map(i => ({
+          order_id: dbOrderId,
+          product_name: i.name,
+          quantity: i.quantity,
+          unit_price: i.price,
+          size: i.size ?? null,
+          color: i.color ?? null,
+          article_number: null,
+        }));
+        const { error: itemsErr } = await db.from('order_items').insert(orderItems);
+        if (itemsErr) console.error('Order items insert error:', itemsErr);
+
+        console.log('Order saved to DB:', dbOrderId);
+      } catch (dbEx) {
+        console.error('DB save failed:', dbEx);
+      }
+      // ────────────────────────────────────────────────────────────────────────
+
       const itemRows = (items as Array<{ name: string; quantity: number; price: number }>)
         .map(i => `
           <tr>
