@@ -938,6 +938,9 @@ document.head.appendChild(style);
 
 // Search Functionality
 // Toggle Mobile Menu
+const HAMBURGER_SVG = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>`;
+const CLOSE_SVG = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+
 function toggleMobileMenu() {
     const navLinks = document.querySelector('.nav-links');
     const mobileBtn = document.querySelector('.mobile-menu-btn');
@@ -947,9 +950,11 @@ function toggleMobileMenu() {
     if (navLinks.classList.contains('mobile-active')) {
         document.body.style.overflow = 'hidden';
         mobileBtn.setAttribute('aria-expanded', 'true');
+        mobileBtn.innerHTML = CLOSE_SVG;
     } else {
         document.body.style.overflow = '';
         mobileBtn.setAttribute('aria-expanded', 'false');
+        mobileBtn.innerHTML = HAMBURGER_SVG;
     }
 }
 
@@ -2604,3 +2609,43 @@ window.addEventListener('resize', function() {
         document.body.classList.remove('resize-animation-stopper');
     }, 400);
 });
+
+// Newsletter sign-up (footer forms on shop/about/product-detail pages)
+async function submitNewsletter(event) {
+    event.preventDefault();
+    const form = event.target;
+    const emailInput = form.querySelector('input[type="email"]');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showNotification('Bitte gib eine gültige E-Mail-Adresse ein.');
+        return;
+    }
+
+    const originalText = submitBtn ? submitBtn.textContent : '';
+    if (submitBtn) { submitBtn.textContent = 'Senden...'; submitBtn.disabled = true; }
+
+    try {
+        const res = await fetch(
+            'https://sbxffjszderijikxarho.supabase.co/functions/v1/send-newsletter-confirmation',
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: 'newsletter', email, source: 'footer-form' })
+            }
+        );
+        const data = await res.json();
+        if (data && data.alreadySubscribed) {
+            showNotification('Diese E-Mail ist bereits angemeldet.');
+        } else {
+            showNotification('Danke! Bitte bestätige deine E-Mail-Adresse.');
+            form.reset();
+        }
+    } catch (err) {
+        console.error('Newsletter error:', err);
+        showNotification('Fehler beim Senden. Bitte später erneut versuchen.');
+    } finally {
+        if (submitBtn) { submitBtn.textContent = originalText; submitBtn.disabled = false; }
+    }
+}
