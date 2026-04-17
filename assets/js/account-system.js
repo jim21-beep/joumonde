@@ -708,16 +708,17 @@ window.openCheckout = function() {
         setTimeout(() => {
             const checkoutForm = document.querySelector('.checkout-form');
             if (checkoutForm) {
-                checkoutForm.querySelector('input[placeholder*="Vorname"]').value = currentUser.firstName;
-                checkoutForm.querySelector('input[placeholder*="Nachname"]').value = currentUser.lastName;
-                checkoutForm.querySelector('input[type="email"]').value = currentUser.email;
+                // Use positional selectors (matches DOM order in script.js checkout form)
+                // [0]=Vorname [1]=Nachname [2]=Email [3]=Tel [4]=Straße [5]=PLZ [6]=Stadt [7]=Land
+                const fields = checkoutForm.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]');
+                if (fields[0]) fields[0].value = currentUser.firstName;
+                if (fields[1]) fields[1].value = currentUser.lastName;
+                if (fields[2]) fields[2].value = currentUser.email;
                 if (defaultAddress) {
-                    checkoutForm.querySelector('input[placeholder*="Straße"]').value = defaultAddress.street;
-                    checkoutForm.querySelector('input[placeholder*="PLZ"]').value = defaultAddress.zip;
-                    checkoutForm.querySelector('input[placeholder*="Stadt"]').value = defaultAddress.city;
-                    if (defaultAddress.phone) {
-                        checkoutForm.querySelector('input[type="tel"]').value = defaultAddress.phone;
-                    }
+                    if (fields[4]) fields[4].value = defaultAddress.street || '';
+                    if (fields[5]) fields[5].value = defaultAddress.zip || '';
+                    if (fields[6]) fields[6].value = defaultAddress.city || '';
+                    if (fields[3] && defaultAddress.phone) fields[3].value = defaultAddress.phone;
                 }
             }
         }, 100);
