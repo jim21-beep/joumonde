@@ -120,7 +120,7 @@ function addToCartFromDetail() {
     
     // Add to cart with size and color
     for (let i = 0; i < quantity; i++) {
-        addToCart(productName + ` (${selectedSize}, ${selectedColor})`, price);
+        addToCart(productName, price, selectedColor, selectedSize);
     }
     
     // Show feedback

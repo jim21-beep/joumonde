@@ -1311,7 +1311,26 @@ body {
 .cart-items {
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212, 175, 55, 0.55) rgba(212, 175, 55, 0.12);
     padding: 2rem;
+}
+
+.cart-items::-webkit-scrollbar {
+    width: 10px;
+}
+
+.cart-items::-webkit-scrollbar-track {
+    background: rgba(212, 175, 55, 0.12);
+    border-radius: 999px;
+}
+
+.cart-items::-webkit-scrollbar-thumb {
+    background: rgba(212, 175, 55, 0.55);
+    border-radius: 999px;
+    border: 2px solid rgba(255, 255, 255, 0.85);
 }
 
 .empty-cart-message {
@@ -1353,6 +1372,42 @@ body {
     font-size: 1.2rem;
     letter-spacing: 1px;
     font-family: 'Garamond', 'Georgia', serif;
+}
+
+.cart-item-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.55rem;
+    flex-wrap: wrap;
+    color: #666;
+    font-size: 0.85rem;
+}
+
+.cart-item-meta label {
+    font-weight: 500;
+}
+
+.cart-size-select {
+    padding: 0.25rem 0.45rem;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    background: #fff;
+    color: #222;
+    font-size: 0.83rem;
+}
+
+.cart-size-select:focus {
+    outline: none;
+    border-color: #d4af37;
+}
+
+.cart-item-color {
+    padding: 0.14rem 0.5rem;
+    border: 1px solid rgba(212, 175, 55, 0.28);
+    border-radius: 999px;
+    color: #6a5a2a;
+    background: rgba(212, 175, 55, 0.08);
 }
 
 .cart-item-quantity {
@@ -2024,8 +2079,27 @@ body {
     width: 90%;
     max-height: 90vh;
     overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212, 175, 55, 0.7) rgba(255, 255, 255, 0.12);
     position: relative;
     box-shadow: 0 20px 60px rgba(212, 175, 55, 0.3);
+}
+
+.checkout-content::-webkit-scrollbar {
+    width: 12px;
+}
+
+.checkout-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+}
+
+.checkout-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(212, 175, 55, 0.9), rgba(201, 169, 97, 0.9));
+    border-radius: 999px;
+    border: 2px solid rgba(26, 26, 26, 0.9);
 }
 
 .checkout-close {
@@ -2960,6 +3034,10 @@ body.modal-open {
     max-width: 580px;
     max-height: 90vh;
     overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212, 175, 55, 0.55) rgba(212, 175, 55, 0.12);
     position: relative;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
     animation: authPanelIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -2971,9 +3049,20 @@ body.modal-open {
 }
 
 /* Scrollbar inside modal */
-.auth-modal-panel::-webkit-scrollbar { width: 4px; }
-.auth-modal-panel::-webkit-scrollbar-track { background: transparent; }
-.auth-modal-panel::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.3); border-radius: 4px; }
+.auth-modal-panel::-webkit-scrollbar {
+    width: 10px;
+}
+
+.auth-modal-panel::-webkit-scrollbar-track {
+    background: rgba(212, 175, 55, 0.12);
+    border-radius: 999px;
+}
+
+.auth-modal-panel::-webkit-scrollbar-thumb {
+    background: rgba(212, 175, 55, 0.55);
+    border-radius: 999px;
+    border: 2px solid #ffffff;
+}
 
 /* Close button */
 .auth-modal-close {
@@ -5975,6 +6064,26 @@ button.loading::after {
 /* Preferences Form */
 .preferences-form {
     max-width: 100%;
+}
+
+.settings-card {
+    border: 1px solid #ececec;
+    background: #fff;
+    border-radius: 10px;
+    padding: 1rem 1rem 0.35rem;
+    margin-bottom: 1rem;
+}
+
+.settings-card h4 {
+    margin-bottom: 0.4rem;
+    color: #2f2f2f;
+    font-size: 0.96rem;
+}
+
+.settings-hint {
+    color: #777;
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
 }
 
 .preferences-form .form-group {
