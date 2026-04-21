@@ -1068,7 +1068,7 @@ function getDeterministicSizeAdvice(message, lang = 'de') {
 function detectStyleOccasion(message) {
     const text = String(message || '').toLowerCase();
     if (/sushi|restaurant|essen gehen|dinner|abendessen|date night|date|nacht|bar|cocktail|lounge/.test(text)) return 'dinner';
-    if (/office|business|meeting|termin|kunden|arbeit/.test(text)) return 'business';
+    if (/office|business|meeting|termin|kunden|arbeit|pr[äa]sentation|vortrag|referat|pitch|b[üu]hne/.test(text)) return 'business';
     if (/party|club|event|veranstaltung/.test(text)) return 'night';
     if (/alltag|casual|freizeit|city|stadt/.test(text)) return 'casual';
     return 'casual';
@@ -1076,7 +1076,7 @@ function detectStyleOccasion(message) {
 
 function isStyleRequestMessage(message) {
     const text = String(message || '').toLowerCase();
-    return /outfit|look|style|styling|anziehen|tragen|kombin|passt dazu|was soll ich anziehen|sushi|restaurant|essen gehen|date|event|party|club/.test(text);
+    return /outfit|look|style|styling|anziehen|tragen|kombin|passt dazu|was soll ich anziehen|sushi|restaurant|essen gehen|date|event|party|club|pr[äa]sentation|vortrag|referat|pitch|dresscode/.test(text);
 }
 
 function getSeasonalLooks(season, occasion) {
@@ -1160,10 +1160,14 @@ function getDeterministicStyleReply(message, lang = 'de', history = []) {
     }
 
     if (isDiningIntent) {
-        return `In Muenchen gibt es viele Sushi-Optionen, vor allem rund um die Innenstadt. Fuer einen stilvollen ${season.toLowerCase()}-Look passt ${selected}; ich kann dir auch direkt eine zweite Option mit ${alt} zusammenstellen.`;
+        return `In München gibt es viele Sushi-Optionen, vor allem rund um die Innenstadt. Für einen stilvollen ${season.toLowerCase()}-Look passt ${selected}; ich kann dir direkt eine zweite Option mit ${alt} zusammenstellen.`;
     }
 
-    return `Fuer einen stilvollen ${season.toLowerCase()}-Look passt ${selected}. Wenn du willst, baue ich dir direkt eine zweite Variante mit ${alt}.`;
+    if (occasion === 'business') {
+        return `Für ${season.toLowerCase()}e Business-Termine oder Präsentationen passt ${selected}. Wenn du willst, gebe ich dir noch eine klare Alternative mit ${alt}.`;
+    }
+
+    return `Für einen stilvollen ${season.toLowerCase()}-Look passt ${selected}. Wenn du willst, baue ich dir direkt eine zweite Variante mit ${alt}.`;
 }
 
 function isSensitiveBlockedTopic(message) {
@@ -1193,21 +1197,6 @@ function getSensitiveBoundaryReply(lang = 'de') {
         return 'Je ne peux pas aider sur ce sujet. En tant qu\'assistante Joumonde, je peux t\'aider pour des questions techniques ou de style.';
     }
     return 'Dabei kann ich dir nicht helfen. Als Joumonde-Assistentin unterstütze ich dich bei Stilberatung, Wetter und saisongerechten Outfits.';
-}
-
-function isCodingRequest(message) {
-    const text = String(message || '').toLowerCase();
-    return /\b(code|coding|programmier|programming|html|css|javascript|typescript|python|java|c\+\+|c#|sql|api|debug|bug|fix|funktion schreiben|script schreiben|komponente bauen|button bauen|snippet|regex)\b/.test(text);
-}
-
-function getCodingBoundaryReply(lang = 'de') {
-    if (lang === 'en') {
-        return 'I do not provide coding help. I can help you with weather, season-aware outfit advice, and styling recommendations.';
-    }
-    if (lang === 'fr') {
-        return 'Je ne fournis pas d\'aide en programmation. Je peux t\'aider pour la météo, la saison et le conseil style.';
-    }
-    return 'Ich gebe keine Programmierhilfe. Ich helfe dir gern bei Wetter, Jahreszeit, Datum/Kalender und passender Modeberatung.';
 }
 
 function enforceBoundaryConsistency(reply, lang = 'de') {
@@ -1493,11 +1482,6 @@ app.post('/api/chat', async (req, res) => {
             return res.json({ reply: getSensitiveBoundaryReply(lang || 'de') });
         }
 
-        // Hard boundary for coding/programming requests.
-        if (isCodingRequest(message)) {
-            return res.json({ reply: getCodingBoundaryReply(lang || 'de') });
-        }
-
         // Language switch shortcut
         const switchLang = detectLanguageChange(message);
         if (switchLang && switchLang !== lang) {
@@ -1595,8 +1579,8 @@ app.post('/api/chat', async (req, res) => {
 
     Verhaltensregeln:
     1) Programmierung/Code:
-    - Keine Coding-Hilfe, keine Code-Snippets, keine Debug-Antworten.
-    - Antworte kurz mit Grenze und leite direkt auf Wetter/Jahreszeit/Datum/Kalender + Stylingberatung um.
+    - Halte Antworten kurz und ohne lange technische Ausfuehrungen.
+    - Fuehre das Gespraech danach wieder auf Wetter, Jahreszeit, Datum/Kalender und Stylingberatung zurueck.
 
     2) Nicht-technische Anfragen (Smalltalk, Wetter, Allgemeines):
     - Antworte zuerst kurz und korrekt auf die eigentliche Frage.

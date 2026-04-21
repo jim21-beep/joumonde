@@ -291,6 +291,83 @@ let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let currentCurrency = localStorage.getItem('currency') || 'CHF';
 let currentLanguage = localStorage.getItem('language') || 'de';
 
+const PRODUCT_SIZE_OPTIONS = {
+    'Klassischer Blazer': ['S', 'M', 'L', 'XL'],
+    'Polo Hemd': ['S', 'M', 'L', 'XL'],
+    'Knit Zip-Polo': ['S', 'M', 'L', 'XL'],
+    'Ripped Knit Zip-Polo': ['S', 'M', 'L', 'XL'],
+    'Chino Hose': ['30', '32', '34', '36'],
+    'Elegante Weste': ['S', 'M', 'L', 'XL'],
+    'Quarter Zipper': ['S', 'M', 'L', 'XL'],
+    'Strickpullover': ['S', 'M', 'L', 'XL'],
+    'Leinenhose': ['30', '32', '34', '36'],
+    'Oversized Hoodie': ['S', 'M', 'L', 'XL'],
+    'T-Shirt': ['S', 'M', 'L', 'XL'],
+    'Cargo Pants': ['30', '32', '34', '36'],
+    'Trainerhose': ['S', 'M', 'L', 'XL']
+};
+
+function getAvailableSizesForProduct(productName) {
+    return PRODUCT_SIZE_OPTIONS[productName] || ['S', 'M', 'L', 'XL'];
+}
+
+function getPreferredSizeForProduct(productName) {
+    const availableSizes = getAvailableSizesForProduct(productName);
+    const preferred = localStorage.getItem('defaultSize');
+
+    if (preferred && availableSizes.includes(preferred)) {
+        return preferred;
+    }
+
+    if (availableSizes.includes('M')) {
+        return 'M';
+    }
+
+    return availableSizes[0] || 'M';
+}
+
+function normalizeCartItemSizes() {
+    let hasChanges = false;
+
+    cart.forEach(item => {
+        if (!item || !item.name) return;
+
+        const allowedSizes = getAvailableSizesForProduct(item.name);
+        if (!item.size || !allowedSizes.includes(item.size)) {
+            item.size = getPreferredSizeForProduct(item.name);
+            hasChanges = true;
+        }
+    });
+
+    if (hasChanges) {
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }
+}
+
+function applyPreferredSizeToProductSelectors() {
+    const preferred = localStorage.getItem('defaultSize');
+    if (!preferred) return;
+
+    document.querySelectorAll('.size-select').forEach(select => {
+        const hasPreferred = Array.from(select.options).some(option => option.value === preferred);
+        if (hasPreferred) {
+            select.value = preferred;
+        }
+    });
+}
+
+window.setPreferredSize = function setPreferredSize(size) {
+    if (size) {
+        localStorage.setItem('defaultSize', size);
+    } else {
+        localStorage.removeItem('defaultSize');
+    }
+
+    applyPreferredSizeToProductSelectors();
+    normalizeCartItemSizes();
+    updateCart();
+};
+
 // Currency conversion rates (base: CHF)
 const currencyRates = {
     'CHF': 1,
@@ -394,6 +471,12 @@ async function changeLanguage(lang) {
     updatePageContent();
     updateAboutPageContent();
     updateCart();
+    if (typeof resetConversation === 'function') {
+        resetConversation();
+    }
+    if (typeof window.refreshAccountLanguageUI === 'function') {
+        window.refreshAccountLanguageUI();
+    }
 }
 
 // Update all page content based on language
@@ -506,6 +589,9 @@ function updatePageContent() {
     const submitContactBtn = document.querySelector('.submit-contact-btn');
     if (contactCtaBtn) contactCtaBtn.textContent = t('sendMessage');
     if (submitContactBtn) submitContactBtn.textContent = t('sendMessage');
+
+    const nexaraBtn = document.querySelector('button[onclick*="toggleNexara"]');
+    if (nexaraBtn) nexaraBtn.textContent = `✦ ${t('askNexara')}`;
     
     // Footer
     const footerSections = document.querySelectorAll('.footer-section');
@@ -651,9 +737,15 @@ function viewProductDetail(productName, price, description, colors, sizes) {
 }
 
 // Add to Cart
-function addToCart(productName, price) {
+function addToCart(productName, price, color = null, explicitSize = null) {
+    const size = explicitSize || getPreferredSizeForProduct(productName);
+
     // Check if item already exists in cart
-    const existingItem = cart.find(item => item.name === productName);
+    const existingItem = cart.find(item => (
+        item.name === productName
+        && (item.size || null) === size
+        && (item.color || null) === (color || null)
+    ));
     
     if (existingItem) {
         existingItem.quantity += 1;
@@ -661,7 +753,9 @@ function addToCart(productName, price) {
         cart.push({
             name: productName,
             price: price,
-            quantity: 1
+            quantity: 1,
+            size,
+            color: color || null
         });
     }
     
@@ -674,10 +768,10 @@ function addToCart(productName, price) {
     
     // Show cart briefly
     const cartSidebar = document.getElementById('cart-sidebar');
-    cartSidebar.classList.add('active');
+    if (cartSidebar) cartSidebar.classList.add('active');
     
     // Show notification
-    showNotification(`${productName} ${t('added')}`);
+    showNotification(`${productName} (${t('size')}: ${size}) ${t('added')}`);
 }
 
 // Update Cart Display
@@ -686,12 +780,21 @@ function updateCart() {
     const cartCountElement = document.querySelector('.cart-count');
     const cartTotalElement = document.getElementById('cart-total');
     
+    normalizeCartItemSizes();
+
     // Save cart to localStorage
     localStorage.setItem('cart', JSON.stringify(cart));
     
     // Update cart count
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    cartCountElement.textContent = totalItems;
+    if (cartCountElement) {
+        cartCountElement.textContent = totalItems;
+    }
+
+    // Some pages only show the cart icon count but not the full cart sidebar.
+    if (!cartItemsContainer || !cartTotalElement) {
+        return;
+    }
     
     // Update cart items display
     if (cart.length === 0) {
@@ -718,6 +821,15 @@ function updateCart() {
         <div class="cart-item">
             <div class="cart-item-info">
                 <h4>${item.name}</h4>
+                <div class="cart-item-meta">
+                    <label>${t('size')}:</label>
+                    <select class="cart-size-select" onchange="updateCartItemSize(${index}, this.value)">
+                        ${getAvailableSizesForProduct(item.name).map(size => `
+                            <option value="${size}" ${item.size === size ? 'selected' : ''}>${size}</option>
+                        `).join('')}
+                    </select>
+                    ${item.color ? `<span class="cart-item-color">Color: ${item.color}</span>` : ''}
+                </div>
                 <p class="cart-item-price">${formatPrice(item.price)}</p>
                 <div class="cart-item-quantity">
                     <button class="qty-btn" onclick="updateQuantity(${index}, -1)">-</button>
@@ -784,6 +896,28 @@ function updateCart() {
     const totalLabel = document.querySelector('.cart-total span:first-child');
     if (totalLabel) totalLabel.textContent = t('total');
     cartTotalElement.textContent = formatPrice(total);
+}
+
+function updateCartItemSize(index, newSize) {
+    if (!cart[index]) return;
+
+    const item = cart[index];
+    const existingIndex = cart.findIndex((candidate, candidateIndex) => (
+        candidateIndex !== index
+        && candidate.name === item.name
+        && candidate.price === item.price
+        && (candidate.color || null) === (item.color || null)
+        && (candidate.size || null) === newSize
+    ));
+
+    if (existingIndex !== -1) {
+        cart[existingIndex].quantity += item.quantity;
+        cart.splice(index, 1);
+    } else {
+        cart[index].size = newSize;
+    }
+
+    updateCart();
 }
 
 // Update Item Quantity
@@ -1100,7 +1234,12 @@ function openCheckout() {
                     <div class="checkout-items">
                         ${cart.map(item => `
                             <div class="checkout-item">
-                                <span>${item.name} x${item.quantity}</span>
+                                <span>
+                                    ${item.name} x${item.quantity}
+                                    <small style="display:block; opacity:0.75; margin-top:2px;">
+                                        ${t('size')}: ${item.size || getPreferredSizeForProduct(item.name)}${item.color ? ` • Farbe: ${item.color}` : ''}
+                                    </small>
+                                </span>
                                 <span>${formatPrice(item.price * item.quantity)}</span>
                             </div>
                         `).join('')}
@@ -1215,7 +1354,13 @@ async function submitOrder(e) {
                     firstName,
                     userId: (typeof window.getCurrentUserId === 'function' ? window.getCurrentUserId() : null),
                     orderId,
-                    items: cart.map(item => ({ name: item.name, price: item.price, quantity: item.quantity })),
+                    items: cart.map(item => ({
+                        name: item.name,
+                        price: item.price,
+                        quantity: item.quantity,
+                        size: item.size || getPreferredSizeForProduct(item.name),
+                        color: item.color || null
+                    })),
                     total,
                     orderDate: new Date().toLocaleString('de-DE')
                 })
@@ -1498,10 +1643,9 @@ async function sendChatMessage() {
             nexaraChatHistory.push({ role: 'assistant', content: backendResult.reply });
 
             if (backendResult.action?.type === 'changeLanguage' && backendResult.action.value) {
-                currentLanguage = backendResult.action.value;
-                localStorage.setItem('language', currentLanguage);
+                await changeLanguage(backendResult.action.value);
                 const sel = document.getElementById('language-selector');
-                if (sel) sel.value = currentLanguage;
+                if (sel) sel.value = backendResult.action.value;
             }
             return;
         }
@@ -1815,6 +1959,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     document.getElementById('currency-selector').value = currentCurrency;
     
     // Apply saved preferences
+    applyPreferredSizeToProductSelectors();
+    normalizeCartItemSizes();
     updatePageContent();
     updateAllPrices();
     updateCart();

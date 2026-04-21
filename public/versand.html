@@ -273,11 +273,201 @@
     <script src="assets/js/script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async function() {
+            const legalContainer = document.querySelector('.legal-page .container');
+            const originalHtml = legalContainer ? legalContainer.innerHTML : '';
+            const legalTemplates = {
+                en: `
+                    <a href="shop.html" class="back-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        Back to Shop
+                    </a>
+                    <h1>Shipping & Returns</h1>
+                    <div class="legal-divider"></div>
+
+                    <div class="legal-section">
+                        <h2>
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                            Shipping Costs
+                        </h2>
+                        <div class="info-grid">
+                            <div class="info-card">
+                                <h3>🇨🇭 Switzerland</h3>
+                                <ul>
+                                    <li><strong>Standard:</strong> CHF 7.90</li>
+                                    <li><strong>Free from:</strong> CHF 100.00</li>
+                                    <li><strong>Express:</strong> + CHF 12.00</li>
+                                </ul>
+                            </div>
+                            <div class="info-card">
+                                <h3>🇪🇺 Europe (EU)</h3>
+                                <ul>
+                                    <li><strong>Standard:</strong> CHF 15.90</li>
+                                    <li><strong>Free from:</strong> CHF 150.00</li>
+                                    <li><strong>Express:</strong> + CHF 12.00</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            Delivery Times
+                        </h2>
+                        <ul>
+                            <li><strong>Switzerland Standard:</strong> 1-3 business days</li>
+                            <li><strong>Switzerland Express:</strong> 24 hours (order before 12:00)</li>
+                            <li><strong>EU Standard:</strong> 5-7 business days</li>
+                            <li><strong>EU Express:</strong> 2-3 business days</li>
+                        </ul>
+                        <p style="margin-top:1rem; font-size:0.9rem; color:#888;">Orders received on business days before 14:00 are shipped the same day. Delivery times start after payment is received.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                            Shipping Partners
+                        </h2>
+                        <p>We ship with <strong>Swiss Post</strong> (Switzerland) and <strong>DHL</strong> (international). After dispatch, you receive an email with your tracking link.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                            Return Policy
+                        </h2>
+                        <ul>
+                            <li><strong>Return window:</strong> 14 days after receiving your order</li>
+                            <li><strong>Costs (CH):</strong> free return shipping</li>
+                            <li><strong>Costs (EU):</strong> return shipping paid by customer</li>
+                            <li><strong>Condition:</strong> unworn, unwashed, with original tags</li>
+                            <li><strong>Refund:</strong> within 5-7 business days after return arrival</li>
+                        </ul>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Return Process</h2>
+                        <ol style="padding-left:1.2rem; color:#444; line-height:2;">
+                            <li>Send us an email at <strong>info@joumonde.com</strong> with your order number and reason for return.</li>
+                            <li>You will receive confirmation and your return label (CH) within 24 hours.</li>
+                            <li>Pack the items carefully and drop off the parcel at the post office.</li>
+                            <li>After inspection, the refund is issued to your original payment method.</li>
+                        </ol>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Shipping Questions?</h2>
+                        <p>Write to us anytime: <a href="mailto:info@joumonde.com" style="color:#d4af37;">info@joumonde.com</a> | <strong>+41 44 123 45 67</strong></p>
+                    </div>
+                `,
+                fr: `
+                    <a href="shop.html" class="back-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        Retour a la boutique
+                    </a>
+                    <h1>Livraison & retours</h1>
+                    <div class="legal-divider"></div>
+
+                    <div class="legal-section">
+                        <h2>
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                            Frais de livraison
+                        </h2>
+                        <div class="info-grid">
+                            <div class="info-card">
+                                <h3>🇨🇭 Suisse</h3>
+                                <ul>
+                                    <li><strong>Standard :</strong> CHF 7.90</li>
+                                    <li><strong>Gratuit des :</strong> CHF 100.00</li>
+                                    <li><strong>Express :</strong> + CHF 12.00</li>
+                                </ul>
+                            </div>
+                            <div class="info-card">
+                                <h3>🇪🇺 Europe (UE)</h3>
+                                <ul>
+                                    <li><strong>Standard :</strong> CHF 15.90</li>
+                                    <li><strong>Gratuit des :</strong> CHF 150.00</li>
+                                    <li><strong>Express :</strong> + CHF 12.00</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            Delais de livraison
+                        </h2>
+                        <ul>
+                            <li><strong>Suisse Standard :</strong> 1-3 jours ouvrables</li>
+                            <li><strong>Suisse Express :</strong> 24 heures (commande avant 12h00)</li>
+                            <li><strong>UE Standard :</strong> 5-7 jours ouvrables</li>
+                            <li><strong>UE Express :</strong> 2-3 jours ouvrables</li>
+                        </ul>
+                        <p style="margin-top:1rem; font-size:0.9rem; color:#888;">Les commandes recues les jours ouvrables avant 14h00 sont expediees le jour meme. Les delais commencent apres reception du paiement.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                            Partenaires de livraison
+                        </h2>
+                        <p>Nous expedions avec <strong>Swiss Post</strong> (Suisse) et <strong>DHL</strong> (international). Apres expedition, vous recevez un e-mail avec le lien de suivi.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                            Politique de retour
+                        </h2>
+                        <ul>
+                            <li><strong>Delai de retour :</strong> 14 jours apres reception</li>
+                            <li><strong>Frais (CH) :</strong> retour gratuit</li>
+                            <li><strong>Frais (UE) :</strong> retour a la charge du client</li>
+                            <li><strong>Etat :</strong> article non porte, non lave, avec etiquettes d'origine</li>
+                            <li><strong>Remboursement :</strong> sous 5-7 jours ouvrables apres reception du retour</li>
+                        </ul>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Processus de retour</h2>
+                        <ol style="padding-left:1.2rem; color:#444; line-height:2;">
+                            <li>Envoyez-nous un e-mail a <strong>info@joumonde.com</strong> avec votre numero de commande et le motif du retour.</li>
+                            <li>Vous recevez une confirmation et le label de retour (CH) sous 24 heures.</li>
+                            <li>Emballez soigneusement les articles et deposez le colis a la poste.</li>
+                            <li>Apres controle des articles, le remboursement est effectue sur votre moyen de paiement initial.</li>
+                        </ol>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Des questions sur la livraison ?</h2>
+                        <p>Ecrivez-nous a tout moment : <a href="mailto:info@joumonde.com" style="color:#d4af37;">info@joumonde.com</a> | <strong>+41 44 123 45 67</strong></p>
+                    </div>
+                `
+            };
+
+            function applyShippingTranslation(lang) {
+                if (!legalContainer) return;
+                if (lang === 'en' || lang === 'fr') {
+                    legalContainer.innerHTML = legalTemplates[lang];
+                } else {
+                    legalContainer.innerHTML = originalHtml;
+                }
+            }
+
             const savedLanguage = localStorage.getItem('language') || 'de';
             const langSel = document.getElementById('language-selector');
-            if (langSel) langSel.value = savedLanguage;
+            if (langSel) {
+                langSel.value = savedLanguage;
+                langSel.addEventListener('change', function() {
+                    const selected = langSel.value || 'de';
+                    applyShippingTranslation(selected);
+                });
+            }
             const currSel = document.getElementById('currency-selector');
             if (currSel) currSel.value = localStorage.getItem('currency') || 'CHF';
+
+            applyShippingTranslation(savedLanguage);
         });
     </script>
 </body>

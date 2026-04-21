@@ -25,7 +25,7 @@ create table public.profiles (
 -- ------------------------------------------------------------------
 create table public.addresses (
   id         uuid default uuid_generate_v4() primary key,
-  user_id    uuid references public.profiles(id) on delete cascade not null,
+  user_id    uuid references auth.users(id) on delete cascade not null,
   street     text,
   zip        text,
   city       text,
@@ -72,10 +72,26 @@ alter table public.order_items    enable row level security;
 
 -- Profiles: nur eigenes Profil lesen/bearbeiten
 create policy "Eigen Profil lesen"       on public.profiles for select using (auth.uid() = id);
+create policy "Eigen Profil anlegen"     on public.profiles for insert with check (auth.uid() = id);
 create policy "Eigen Profil aktualisieren" on public.profiles for update using (auth.uid() = id);
 
 -- Addresses: nur eigene Adressen
-create policy "Eigen Adressen"           on public.addresses for all using (auth.uid() = user_id);
+create policy "Eigen Adressen lesen"
+  on public.addresses for select
+  using (auth.uid() = user_id);
+
+create policy "Eigen Adressen einfuegen"
+  on public.addresses for insert
+  with check (auth.uid() = user_id);
+
+create policy "Eigen Adressen aktualisieren"
+  on public.addresses for update
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+create policy "Eigen Adressen loeschen"
+  on public.addresses for delete
+  using (auth.uid() = user_id);
 
 -- Orders: nur eigene Bestellungen lesen
 create policy "Eigen Bestellungen lesen" on public.orders for select using (auth.uid() = user_id);

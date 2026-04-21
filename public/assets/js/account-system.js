@@ -4,6 +4,14 @@
 // User State
 let currentUser = null;
 
+function accountT(key, fallback) {
+    if (typeof window.t === 'function') {
+        const translated = window.t(key);
+        if (translated && translated !== key) return translated;
+    }
+    return fallback;
+}
+
 // Expose current user id for other scripts (e.g. checkout/order save flow).
 window.getCurrentUserId = function getCurrentUserId() {
     return currentUser && currentUser.id ? currentUser.id : null;
@@ -118,6 +126,10 @@ async function loginUser(supabaseUser, isActualLogin = true) {
 
     // Only apply profile preferences and show notification on actual login,
     // not on page-load session restore (localStorage already has correct values)
+    if (typeof setPreferredSize === 'function') {
+        setPreferredSize(currentUser.preferences.defaultSize);
+    }
+
     if (isActualLogin) {
         if (currentUser.preferences.defaultCurrency && typeof changeCurrency === 'function')
             changeCurrency(currentUser.preferences.defaultCurrency);
@@ -127,7 +139,7 @@ async function loginUser(supabaseUser, isActualLogin = true) {
 
     updateAccountUI();
     if (isActualLogin) {
-        showNotification(`Willkommen zurück, ${currentUser.firstName}!`, 'success');
+        showNotification(`${accountT('accountWelcomeBack', 'Willkommen zurueck')}, ${currentUser.firstName}!`, 'success');
     }
 }
 
@@ -272,10 +284,10 @@ function showAccountDashboard() {
             </div>
             
             <div class="dashboard-tabs">
-                <button class="dashboard-tab active" onclick="showDashboardSection('overview')">Übersicht</button>
-                <button class="dashboard-tab" onclick="showDashboardSection('orders')">Bestellungen</button>
-                <button class="dashboard-tab" onclick="showDashboardSection('addresses')">Adressen</button>
-                <button class="dashboard-tab" onclick="showDashboardSection('preferences')">Einstellungen</button>
+                <button class="dashboard-tab active" onclick="showDashboardSection('overview')">${accountT('accountOverview', 'Uebersicht')}</button>
+                <button class="dashboard-tab" onclick="showDashboardSection('orders')">${accountT('accountOrders', 'Bestellungen')}</button>
+                <button class="dashboard-tab" onclick="showDashboardSection('addresses')">${accountT('accountAddresses', 'Adressen')}</button>
+                <button class="dashboard-tab" onclick="showDashboardSection('preferences')">${accountT('accountSettings', 'Einstellungen')}</button>
             </div>
             
             <div class="dashboard-content">
@@ -294,7 +306,7 @@ function showAccountDashboard() {
             </div>
             
             <div class="dashboard-footer">
-                <button class="btn-logout" onclick="logoutUser()">Abmelden</button>
+                <button class="btn-logout" onclick="logoutUser()">${accountT('accountLogout', 'Abmelden')}</button>
             </div>
         </div>
     `;
@@ -323,46 +335,46 @@ function getDashboardOverview() {
     const wishlistCount = wishlist.length;
     
     return `
-        <h3>Willkommen zurück!</h3>
+        <h3>${accountT('accountOverviewWelcome', 'Willkommen zurueck!')}</h3>
         <div class="overview-stats">
             <div class="stat-card">
                 <div class="stat-icon">📦</div>
                 <div class="stat-value">${totalOrders}</div>
-                <div class="stat-label">Bestellungen</div>
+                <div class="stat-label">${accountT('accountOrders', 'Bestellungen')}</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">💰</div>
                 <div class="stat-value">CHF ${totalSpent.toFixed(2)}</div>
-                <div class="stat-label">Gesamt ausgegeben</div>
+                <div class="stat-label">${accountT('accountTotalSpent', 'Gesamt ausgegeben')}</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">❤️</div>
                 <div class="stat-value">${wishlistCount}</div>
-                <div class="stat-label">Wunschliste</div>
+                <div class="stat-label">${accountT('accountWishlist', 'Wunschliste')}</div>
             </div>
         </div>
         
         <div class="quick-actions">
-            <h4>Schnellzugriff</h4>
+            <h4>${accountT('accountQuickAccess', 'Schnellzugriff')}</h4>
             <button onclick="showDashboardSection('orders')" class="quick-action-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="1" y="3" width="15" height="13"></rect>
                     <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
                 </svg>
-                Bestellungen ansehen
+                ${accountT('accountViewOrders', 'Bestellungen ansehen')}
             </button>
             <button onclick="showDashboardSection('addresses')" class="quick-action-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                     <circle cx="12" cy="10" r="3"></circle>
                 </svg>
-                Adressen verwalten
+                ${accountT('accountManageAddresses', 'Adressen verwalten')}
             </button>
             <button onclick="toggleWishlist()" class="quick-action-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                 </svg>
-                Wunschliste öffnen
+                ${accountT('accountOpenWishlist', 'Wunschliste oeffnen')}
             </button>
         </div>
     `;
@@ -372,14 +384,14 @@ function getDashboardOverview() {
 function getDashboardOrders() {
     if (currentUser.orderHistory.length === 0) {
         return `
-            <h3>Bestellungen</h3>
+            <h3>${accountT('accountOrders', 'Bestellungen')}</h3>
             <div class="empty-state">
                 <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="1" y="3" width="15" height="13"></rect>
                     <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
                 </svg>
-                <p>Sie haben noch keine Bestellungen.</p>
-                <button onclick="toggleAccount(); document.getElementById('old-money').scrollIntoView({behavior: 'smooth'})" class="btn-primary">Jetzt shoppen</button>
+                <p>${accountT('accountNoOrdersYet', 'Sie haben noch keine Bestellungen.')}</p>
+                <button onclick="toggleAccount(); document.getElementById('old-money').scrollIntoView({behavior: 'smooth'})" class="btn-primary">${accountT('accountShopNow', 'Jetzt shoppen')}</button>
             </div>
         `;
     }
@@ -388,7 +400,7 @@ function getDashboardOrders() {
         <div class="order-card">
             <div class="order-header">
                 <div>
-                    <strong>Bestellung ${order.id}</strong>
+                    <strong>${accountT('accountOrderPrefix', 'Bestellung')} ${order.id}</strong>
                     <span class="order-date">${new Date(order.date).toLocaleDateString('de-DE')}</span>
                 </div>
                 <span class="order-status status-${order.status.toLowerCase()}">${order.status}</span>
@@ -402,14 +414,14 @@ function getDashboardOrders() {
                 `).join('')}
             </div>
             <div class="order-footer">
-                <strong>Gesamt: CHF ${order.total.toFixed(2)}</strong>
-                <button class="btn-secondary" onclick="viewOrderDetails('${order.id}')">Details ansehen</button>
+                <strong>${accountT('accountTotalLabel', 'Gesamt')}: CHF ${order.total.toFixed(2)}</strong>
+                <button class="btn-secondary" onclick="viewOrderDetails('${order.id}')">${accountT('accountViewDetails', 'Details ansehen')}</button>
             </div>
         </div>
     `).join('');
     
     return `
-        <h3>Bestellungen</h3>
+        <h3>${accountT('accountOrders', 'Bestellungen')}</h3>
         <div class="orders-list">${ordersHTML}</div>
     `;
 }
@@ -426,17 +438,17 @@ function getDashboardAddresses() {
                     ${addr.phone ? `<p>Tel: ${addr.phone}</p>` : ''}
                 </div>
                 <div class="address-actions">
-                    ${!addr.isDefault ? `<button onclick="setDefaultAddress('${addr.id}')">Als Standard</button>` : ''}
-                    <button onclick="editAddress('${addr.id}')">Bearbeiten</button>
-                    <button onclick="deleteAddress('${addr.id}')" class="btn-delete">Löschen</button>
+                    ${!addr.isDefault ? `<button onclick="setDefaultAddress('${addr.id}')">${accountT('accountAddressSetDefault', 'Als Standard')}</button>` : ''}
+                    <button onclick="editAddress('${addr.id}')">${accountT('accountAddressEdit', 'Bearbeiten')}</button>
+                    <button onclick="deleteAddress('${addr.id}')" class="btn-delete">${accountT('accountAddressDelete', 'Loeschen')}</button>
                 </div>
             </div>
         `).join('')
-        : '<div class="empty-state"><p>Keine Adressen gespeichert.</p></div>';
+        : `<div class="empty-state"><p>${accountT('accountNoSavedAddresses', 'Keine Adressen gespeichert.')}</p></div>`;
     
     return `
-        <h3>Adressen</h3>
-        <button class="btn-primary" onclick="showAddAddressForm()">+ Neue Adresse hinzufügen</button>
+        <h3>${accountT('accountAddresses', 'Adressen')}</h3>
+        <button class="btn-primary" onclick="showAddAddressForm()">+ ${accountT('accountAddAddress', 'Neue Adresse hinzufuegen')}</button>
         <div class="addresses-list">${addressesHTML}</div>
     `;
 }
@@ -444,44 +456,56 @@ function getDashboardAddresses() {
 // Dashboard Preferences
 function getDashboardPreferences() {
     return `
-        <h3>Einstellungen</h3>
+        <h3>${accountT('accountSettings', 'Einstellungen')}</h3>
         <form class="preferences-form" onsubmit="savePreferences(event)">
-            <div class="form-group">
-                <label>Standardgröße</label>
-                <select name="defaultSize">
-                    <option value="">Keine</option>
-                    <option value="S" ${currentUser.preferences.defaultSize === 'S' ? 'selected' : ''}>S</option>
-                    <option value="M" ${currentUser.preferences.defaultSize === 'M' ? 'selected' : ''}>M</option>
-                    <option value="L" ${currentUser.preferences.defaultSize === 'L' ? 'selected' : ''}>L</option>
-                    <option value="XL" ${currentUser.preferences.defaultSize === 'XL' ? 'selected' : ''}>XL</option>
-                    <option value="XXL" ${currentUser.preferences.defaultSize === 'XXL' ? 'selected' : ''}>XXL</option>
-                </select>
+            <div class="settings-card">
+                <h4>${accountT('accountShopping', 'Shopping')}</h4>
+                <p class="settings-hint">${accountT('accountSettingsHintShopping', 'Wird beim Hinzufuegen in den Warenkorb automatisch vorausgewaehlt.')}</p>
+                <div class="form-group">
+                    <label>${accountT('accountDefaultSize', 'Standardgroesse')}</label>
+                    <select name="defaultSize">
+                        <option value="">${accountT('accountNone', 'Keine')}</option>
+                        <option value="S" ${currentUser.preferences.defaultSize === 'S' ? 'selected' : ''}>S</option>
+                        <option value="M" ${currentUser.preferences.defaultSize === 'M' ? 'selected' : ''}>M</option>
+                        <option value="L" ${currentUser.preferences.defaultSize === 'L' ? 'selected' : ''}>L</option>
+                        <option value="XL" ${currentUser.preferences.defaultSize === 'XL' ? 'selected' : ''}>XL</option>
+                        <option value="XXL" ${currentUser.preferences.defaultSize === 'XXL' ? 'selected' : ''}>XXL</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-card">
+                <h4>${accountT('accountRegionLanguage', 'Region & Sprache')}</h4>
+                <div class="form-group">
+                    <label>${accountT('accountDefaultCurrency', 'Standardwaehrung')}</label>
+                    <select name="defaultCurrency">
+                        <option value="CHF" ${currentUser.preferences.defaultCurrency === 'CHF' ? 'selected' : ''}>CHF</option>
+                        <option value="EUR" ${currentUser.preferences.defaultCurrency === 'EUR' ? 'selected' : ''}>EUR</option>
+                        <option value="USD" ${currentUser.preferences.defaultCurrency === 'USD' ? 'selected' : ''}>USD</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>${accountT('accountDefaultLanguage', 'Standardsprache')}</label>
+                    <select name="defaultLanguage">
+                        <option value="de" ${currentUser.preferences.defaultLanguage === 'de' ? 'selected' : ''}>Deutsch</option>
+                        <option value="en" ${currentUser.preferences.defaultLanguage === 'en' ? 'selected' : ''}>English</option>
+                        <option value="fr" ${currentUser.preferences.defaultLanguage === 'fr' ? 'selected' : ''}>Français</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-card">
+                <h4>${accountT('accountProfile', 'Profil')}</h4>
+                <p class="settings-hint">${accountT('accountSettingsHintProfile', 'Diese Einstellungen gelten nur fuer dein Konto.')}</p>
             </div>
             
-            <div class="form-group">
-                <label>Standardwährung</label>
-                <select name="defaultCurrency">
-                    <option value="CHF" ${currentUser.preferences.defaultCurrency === 'CHF' ? 'selected' : ''}>CHF</option>
-                    <option value="EUR" ${currentUser.preferences.defaultCurrency === 'EUR' ? 'selected' : ''}>EUR</option>
-                    <option value="USD" ${currentUser.preferences.defaultCurrency === 'USD' ? 'selected' : ''}>USD</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>Standardsprache</label>
-                <select name="defaultLanguage">
-                    <option value="de" ${currentUser.preferences.defaultLanguage === 'de' ? 'selected' : ''}>Deutsch</option>
-                    <option value="en" ${currentUser.preferences.defaultLanguage === 'en' ? 'selected' : ''}>English</option>
-                    <option value="fr" ${currentUser.preferences.defaultLanguage === 'fr' ? 'selected' : ''}>Français</option>
-                </select>
-            </div>
-            
-            <button type="submit" class="btn-primary">Einstellungen speichern</button>
+            <button type="submit" class="btn-primary">${accountT('accountSaveSettings', 'Einstellungen speichern')}</button>
         </form>
         
         <div class="danger-zone">
-            <h4>Gefahrenzone</h4>
-            <button class="btn-danger" onclick="deleteAccount()">Konto löschen</button>
+            <h4>${accountT('accountDangerZone', 'Gefahrenzone')}</h4>
+            <button class="btn-danger" onclick="deleteAccount()">${accountT('accountDeleteAccount', 'Konto loeschen')}</button>
         </div>
     `;
 }
@@ -504,14 +528,24 @@ async function savePreferences(event) {
     }).eq('id', currentUser.id);
 
     if (error) {
-        showNotification('Fehler beim Speichern der Einstellungen.', 'error'); return;
+        showNotification(accountT('accountSaveError', 'Fehler beim Speichern der Einstellungen.'), 'error'); return;
     }
 
     currentUser.preferences = { ...currentUser.preferences, ...prefs };
+    if (typeof setPreferredSize === 'function') setPreferredSize(prefs.defaultSize);
     if (typeof changeCurrency === 'function') changeCurrency(prefs.defaultCurrency);
     if (typeof changeLanguage === 'function') changeLanguage(prefs.defaultLanguage);
-    showNotification('Einstellungen gespeichert!', 'success');
+    showNotification(accountT('accountSaveSuccess', 'Einstellungen gespeichert!'), 'success');
 }
+
+window.refreshAccountLanguageUI = function refreshAccountLanguageUI() {
+    const modal = document.getElementById('account-modal');
+    if (!modal || !modal.classList.contains('active') || !currentUser) return;
+
+    const activeSection = document.querySelector('.dashboard-section.active')?.id?.replace('dashboard-', '') || 'overview';
+    showAccountDashboard();
+    showDashboardSection(activeSection);
+};
 
 // Add Address
 function showAddAddressForm() {
@@ -561,10 +595,17 @@ function showAddAddressForm() {
 async function saveAddress(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
+    const { data: authData } = await supabaseClient.auth.getUser();
+    const userId = authData?.user?.id || currentUser?.id;
+
+    if (!userId) {
+        showNotification('Sitzung ungueltig. Bitte neu einloggen.', 'error');
+        return;
+    }
 
     const isFirst = currentUser.addresses.length === 0;
     const newAddr = {
-        user_id:    currentUser.id,
+        user_id:    userId,
         street:     formData.get('street'),
         zip:        formData.get('zip'),
         city:       formData.get('city'),
@@ -573,10 +614,23 @@ async function saveAddress(event) {
         is_default: isFirst
     };
 
-    const { data, error } = await supabaseClient.from('addresses').insert(newAddr).select().single();
+    let { data, error } = await supabaseClient.from('addresses').insert(newAddr).select().single();
+
+    if (error && error.code === '23503') {
+        await upsertProfileForCurrentUser(userId);
+        const retry = await supabaseClient.from('addresses').insert(newAddr).select().single();
+        data = retry.data;
+        error = retry.error;
+    }
 
     if (error) {
-        showNotification('Adresse konnte nicht gespeichert werden.', 'error'); return;
+        console.error('Address insert failed:', error);
+        if (error.code === '42501') {
+            showNotification('Adresse konnte nicht gespeichert werden (RLS/Policy blockiert). SQL-Fix in Supabase ausfuehren.', 'error');
+            return;
+        }
+        const details = error.message ? ` (${error.message})` : '';
+        showNotification(`Adresse konnte nicht gespeichert werden${details}.`, 'error'); return;
     }
 
     currentUser.addresses.push({
@@ -588,6 +642,20 @@ async function saveAddress(event) {
     showAccountDashboard();
     showDashboardSection('addresses');
     showNotification('Adresse hinzugefügt!', 'success');
+}
+
+async function upsertProfileForCurrentUser(userId) {
+    const payload = {
+        id: userId,
+        first_name: currentUser?.firstName || '',
+        last_name: currentUser?.lastName || '',
+        newsletter: !!(currentUser?.preferences?.newsletter),
+        default_currency: currentUser?.preferences?.defaultCurrency || 'CHF',
+        default_language: currentUser?.preferences?.defaultLanguage || 'de',
+        default_size: currentUser?.preferences?.defaultSize || null
+    };
+
+    await supabaseClient.from('profiles').upsert(payload, { onConflict: 'id' });
 }
 
 function closeAddressForm() {
