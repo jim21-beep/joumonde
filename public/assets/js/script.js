@@ -396,6 +396,7 @@ async function loadLanguage(lang) {
         }
     }
     currentLanguage = lang;
+    return translations[lang];
 }
 
 // t() — translate key, fallback to German, fallback to key itself
