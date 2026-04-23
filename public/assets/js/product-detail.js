@@ -104,6 +104,21 @@ function increaseQuantity() {
     }
 }
 
+// Update product description dynamically
+function updateProductDescription() {
+    const productName = document.querySelector('.product-detail-title')?.textContent || '';
+    const descriptionEl = document.getElementById('product-description-text');
+    
+    if (descriptionEl && window.productDescriptions && window.productDescriptions[productName]) {
+        descriptionEl.textContent = window.productDescriptions[productName];
+    }
+}
+
+// Call on page load
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(updateProductDescription, 100);
+});
+
 function decreaseQuantity() {
     const quantityInput = document.getElementById('quantity');
     const currentValue = parseInt(quantityInput.value);
