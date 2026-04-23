@@ -1,20 +1,4 @@
-﻿// Global product descriptions map
-const productDescriptions = {
-    'Klassischer Blazer': 'Zeitloser Wollblazer mit perfekter Passform – die Essenz des Old Money Stils',
-    'Polo Hemd': 'Klassisches Poloshirt aus feiner Baumwolle – versatil und elegant',
-    'Knit Zip-Polo': 'Feinstrick-Poloshirt mit Reißverschluss – Komfort und Stil vereint',
-    'Chino Hose': 'Premium-Chino mit elegantem Sitz – vielseitig und langlebig',
-    'Elegante Weste': 'Raffinierte Wollweste aus bester Qualität – vollendeter Layering Look',
-    'Quarter Zipper': 'Luxuriöser Kaschmir-Mix mit Reißverschluss – Eleganz mit praktischem Touch',
-    'Strickpullover': 'Premium-Kaschmir Pullover – zeitlos schön und unglaublich wohlig',
-    'Leinenhose': 'Leichte Leinenhose – perfekt für warme Tage und läss igen Chic',
-    'Oversized Hoodie': 'Entspannter Baumwoll-Hoodie – urban cool und unglaublich bequem',
-    'T-Shirt': 'Hochwertiges T-Shirt mit limitiertem Design – Statement Piece mit Charakter',
-    'Cargo Pants': 'Funktionale Cargo-Hose mit Style – praktisch und modisch',
-    'Trainerhose': 'Bequeme Trainerhose mit modernem Schnitt – Athleisure Essentials'
-};
-
-// Dropdown-Logik für alle Old Money Produkte
+﻿// Dropdown-Logik für alle Old Money Produkte
 function toggleBlazerColorDropdown(e) { if (e) e.stopPropagation();
     const btn = document.getElementById('blazer-color-dropdown-btn');
     const list = document.getElementById('blazer-color-dropdown-list');
