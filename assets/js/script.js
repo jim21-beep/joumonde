@@ -1773,12 +1773,29 @@ function sanitizeBotGermanPhrasing(text) {
         .replace(/\bhallo\s*dir\b/gi, 'Hallo');
 }
 
+function escapeHtml(text) {
+    return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function renderChatMessageHtml(message, sender) {
+    const sanitized = sender === 'bot' ? sanitizeBotGermanPhrasing(message) : String(message || '');
+    const escaped = escapeHtml(sanitized);
+    const urlRegex = /(https?:\/\/[^\s<]+)/g;
+    const withLinks = escaped.replace(urlRegex, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+    return withLinks.replace(/\n/g, '<br>');
+}
+
 function addChatMessage(message, sender) {
     const messagesContainer = document.getElementById('chatbot-messages');
     const messageDiv = document.createElement('div');
     messageDiv.className = sender === 'user' ? 'user-message' : 'bot-message';
-    const safeMessage = sender === 'bot' ? sanitizeBotGermanPhrasing(message) : message;
-    messageDiv.innerHTML = `<p>${safeMessage}</p>`;
+    const safeMessageHtml = renderChatMessageHtml(message, sender);
+    messageDiv.innerHTML = `<p>${safeMessageHtml}</p>`;
     messagesContainer.appendChild(messageDiv);
     
     // Scroll to bottom
