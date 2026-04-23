@@ -1635,28 +1635,6 @@ if (typeof window !== 'undefined') {
     window.viewChatbotAnalytics = getChatbotAnalytics;
 }
 
-function toggleChatbot() {
-    const chatbotContent = document.getElementById('chatbot-content');
-    chatbotOpen = !chatbotOpen;
-    
-    if (chatbotOpen) {
-        chatbotContent.classList.add('active');
-    } else {
-        chatbotContent.classList.remove('active');
-    }
-}
-
-function resetConversation() {
-    const messagesContainer = document.getElementById('chatbot-messages');
-    messagesContainer.innerHTML = `
-        <div class="bot-message">
-            <p>${currentLanguage === 'de' ? 'Hallo, ich bin Nexara, deine Joumonde-Assistentin für Produkte, Größen, Bestellungen, Versand und Retouren.' : currentLanguage === 'en' ? 'Hello, I am Nexara, your Joumonde assistant for products, sizing, orders, shipping, and returns.' : 'Bonjour, je suis Nexara, ton assistante Joumonde pour les produits, les tailles, les commandes, la livraison et les retours.'}</p>
-        </div>
-    `;
-    document.getElementById('chatbot-input').value = '';
-    nexaraChatHistory = [];
-}
-
 async function getSupabaseAccessToken() {
     try {
         if (!window.supabaseClient || !window.supabaseClient.auth) return null;
@@ -2010,12 +1988,6 @@ function getFutureDate(daysAhead) {
     const date = new Date();
     date.setDate(date.getDate() + daysAhead);
     return date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
-}
-
-function handleChatKeypress(event) {
-    if (event.key === 'Enter') {
-        sendChatMessage();
-    }
 }
 
 // Close cart when clicking outside
