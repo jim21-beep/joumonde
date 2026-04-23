@@ -96,8 +96,15 @@
                 <li><a href="shop.html">Home</a></li>
                 <li><a href="shop.html#old-money">Old Money</a></li>
                 <li><a href="shop.html#streetwear">Streetwear</a></li>
-                <li><a href="about.html">Über Uns</a></li>
-                <li><a href="shop.html#contact">Kontakt</a></li>
+                <li class="nav-dropdown" id="nav-dropdown-kollektionen">
+                    <button class="nav-dropdown-trigger" onclick="toggleNavDropdown()">Kollektionen <span class="nav-dropdown-chevron">▾</span></button>
+                    <div class="nav-dropdown-menu">
+                        <div class="nav-dropdown-item" onclick="showNavComingSoon('Accessories')">Accessories <span class="nav-soon-badge">Soon</span></div>
+                        <div class="nav-dropdown-item" onclick="showNavComingSoon('Essentials')">Essentials <span class="nav-soon-badge">Soon</span></div>
+                        <div class="nav-dropdown-item" onclick="showNavComingSoon('Seasonal')">Seasonal <span class="nav-soon-badge">Soon</span></div>
+                        <div class="nav-dropdown-item" onclick="showNavComingSoon('Gift &amp; Sets')">Gift &amp; Sets <span class="nav-soon-badge">Soon</span></div>
+                    </div>
+                </li>
             </ul>
             <div class="nav-icons">
                 <select class="currency-selector" id="currency-selector" onchange="changeCurrency(this.value)">

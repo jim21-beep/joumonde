@@ -311,9 +311,23 @@ function getAvailableSizesForProduct(productName) {
     return PRODUCT_SIZE_OPTIONS[productName] || ['S', 'M', 'L', 'XL'];
 }
 
+function isNumericSize(size) {
+    return /^\d+$/.test(String(size || ''));
+}
+
+function getPreferredTopSize() {
+    // Backward compatibility: fall back to the old single preference key.
+    return localStorage.getItem('defaultTopSize') || localStorage.getItem('defaultSize');
+}
+
+function getPreferredPantsSize() {
+    return localStorage.getItem('defaultPantsSize');
+}
+
 function getPreferredSizeForProduct(productName) {
     const availableSizes = getAvailableSizesForProduct(productName);
-    const preferred = localStorage.getItem('defaultSize');
+    const isPantsSizing = availableSizes.some(isNumericSize);
+    const preferred = isPantsSizing ? getPreferredPantsSize() : getPreferredTopSize();
 
     if (preferred && availableSizes.includes(preferred)) {
         return preferred;
@@ -345,10 +359,12 @@ function normalizeCartItemSizes() {
 }
 
 function applyPreferredSizeToProductSelectors() {
-    const preferred = localStorage.getItem('defaultSize');
-    if (!preferred) return;
-
     document.querySelectorAll('.size-select').forEach(select => {
+        const availableValues = Array.from(select.options).map(option => option.value);
+        const hasNumericSizes = availableValues.some(isNumericSize);
+        const preferred = hasNumericSizes ? getPreferredPantsSize() : getPreferredTopSize();
+        if (!preferred) return;
+
         const hasPreferred = Array.from(select.options).some(option => option.value === preferred);
         if (hasPreferred) {
             select.value = preferred;
@@ -356,10 +372,34 @@ function applyPreferredSizeToProductSelectors() {
     });
 }
 
+window.setPreferredSizes = function setPreferredSizes(topSize, pantsSize) {
+    if (topSize) {
+        localStorage.setItem('defaultTopSize', topSize);
+        // Keep legacy key for compatibility with existing data flows.
+        localStorage.setItem('defaultSize', topSize);
+    } else {
+        localStorage.removeItem('defaultTopSize');
+        localStorage.removeItem('defaultSize');
+    }
+
+    if (pantsSize) {
+        localStorage.setItem('defaultPantsSize', pantsSize);
+    } else {
+        localStorage.removeItem('defaultPantsSize');
+    }
+
+    applyPreferredSizeToProductSelectors();
+    normalizeCartItemSizes();
+    updateCart();
+};
+
 window.setPreferredSize = function setPreferredSize(size) {
+    // Legacy API: treat as top/body size.
     if (size) {
+        localStorage.setItem('defaultTopSize', size);
         localStorage.setItem('defaultSize', size);
     } else {
+        localStorage.removeItem('defaultTopSize');
         localStorage.removeItem('defaultSize');
     }
 
@@ -1094,6 +1134,31 @@ function toggleMobileMenu() {
     }
 }
 
+function toggleNavDropdown() {
+    const dropdown = document.getElementById('nav-dropdown-kollektionen');
+    if (!dropdown) return;
+    dropdown.classList.toggle('open');
+}
+
+function showNavComingSoon(collection) {
+    const msgs = {
+        de: `${collection} – Bald verfügbar! Wir arbeiten bereits daran.`,
+        en: `${collection} – Coming soon! We're already working on it.`,
+        fr: `${collection} – Bientôt disponible ! Nous y travaillons déjà.`
+    };
+    showNotification(msgs[currentLanguage] || msgs['de']);
+    const dropdown = document.getElementById('nav-dropdown-kollektionen');
+    if (dropdown) dropdown.classList.remove('open');
+}
+
+// Close nav dropdown when clicking outside
+document.addEventListener('click', function(e) {
+    const dropdown = document.getElementById('nav-dropdown-kollektionen');
+    if (dropdown && !dropdown.contains(e.target)) {
+        dropdown.classList.remove('open');
+    }
+});
+
 // Close mobile menu when clicking outside
 document.addEventListener('click', function(event) {
     const navLinks = document.querySelector('.nav-links');
@@ -1141,16 +1206,40 @@ function toggleSearch() {
     const searchResults = document.getElementById('search-results');
     
     const products = [
-        { name: 'Klassischer Blazer', price: 79.99, category: 'Old Money' },
-        { name: 'Polo Hemd', price: 34.99, category: 'Old Money' },
-        { name: 'Chino Hose', price: 51.99, category: 'Old Money' },
-        { name: 'Elegante Weste', price: 69.99, category: 'Old Money' },
-        { name: 'Quarter Zipper', price: 79.99, category: 'Old Money' },
-        { name: 'Strickpullover', price: 89.99, category: 'Old Money' },
-        { name: 'Oversized Hoodie', price: 49.99, category: 'Streetwear' },
-        { name: 'T-Shirt', price: 24.99, category: 'Streetwear' },
-        { name: 'Cargo Pants', price: 59.99, category: 'Streetwear' },
-        { name: 'Trainerhose', price: 44.99, category: 'Streetwear' }
+        // Live products
+        { name: 'Klassischer Blazer', price: 79.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Blazer', section: 'old-money', status: 'live' },
+        { name: 'Polo Hemd', price: 34.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Shirts & Polos', section: 'old-money', status: 'live' },
+        { name: 'Knit Zip-Polo', price: 44.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Shirts & Polos', section: 'old-money', status: 'live' },
+        { name: 'Chino Hose', price: 51.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'old-money', status: 'live' },
+        { name: 'Elegante Weste', price: 69.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Westen', section: 'old-money', status: 'live' },
+        { name: 'Quarter Zipper', price: 79.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Knitwear', section: 'old-money', status: 'live' },
+        { name: 'Strickpullover', price: 89.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Knitwear', section: 'old-money', status: 'live' },
+        { name: 'Leinenhose', price: 54.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'old-money', status: 'live' },
+        { name: 'Oversized Hoodie', price: 49.99, collection: 'Streetwear', mainCategory: 'Bekleidung', subCategory: 'Hoodies', section: 'streetwear', status: 'live' },
+        { name: 'T-Shirt', price: 24.99, collection: 'Streetwear', mainCategory: 'Bekleidung', subCategory: 'Tees', section: 'streetwear', status: 'live' },
+        { name: 'Cargo Pants', price: 59.99, collection: 'Streetwear', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'streetwear', status: 'live' },
+        { name: 'Trainerhose', price: 44.99, collection: 'Streetwear', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'streetwear', status: 'live' },
+
+        // Planned expansion (categorized)
+        { name: 'Custom made AirPods Cases', price: null, collection: 'Accessories', mainCategory: 'Tech-Accessoires', subCategory: 'Cases', section: null, status: 'planned' },
+        { name: 'Pins für Krawatten', price: null, collection: 'Accessories', mainCategory: 'Formal-Accessoires', subCategory: 'Krawatten-Accessoires', section: null, status: 'planned' },
+        { name: 'Schuhe', price: null, collection: 'Accessories', mainCategory: 'Footwear', subCategory: 'Schuhe', section: null, status: 'planned' },
+        { name: 'Herrentasche', price: null, collection: 'Accessories', mainCategory: 'Taschen & Lederwaren', subCategory: 'Taschen', section: null, status: 'planned' },
+        { name: 'Einstecktücher', price: null, collection: 'Accessories', mainCategory: 'Formal-Accessoires', subCategory: 'Pocket Squares', section: null, status: 'planned' },
+        { name: 'Socken', price: null, collection: 'Essentials', mainCategory: 'Basics', subCategory: 'Socken', section: null, status: 'planned' },
+        { name: 'Unterhosen', price: null, collection: 'Essentials', mainCategory: 'Basics', subCategory: 'Unterwäsche', section: null, status: 'planned' },
+        { name: 'Krawatten', price: null, collection: 'Accessories', mainCategory: 'Formal-Accessoires', subCategory: 'Krawatten', section: null, status: 'planned' },
+        { name: 'Fliegen', price: null, collection: 'Accessories', mainCategory: 'Formal-Accessoires', subCategory: 'Fliegen', section: null, status: 'planned' },
+        { name: 'Krawatten & Fliegen Sets', price: null, collection: 'Gift & Sets', mainCategory: 'Sets', subCategory: 'Formal Sets', section: null, status: 'planned' },
+        { name: 'Hosenträger', price: null, collection: 'Accessories', mainCategory: 'Formal-Accessoires', subCategory: 'Hosenträger', section: null, status: 'planned' },
+        { name: 'Brieftaschen', price: null, collection: 'Accessories', mainCategory: 'Taschen & Lederwaren', subCategory: 'Wallets', section: null, status: 'planned' },
+        { name: 'Schal', price: null, collection: 'Seasonal', mainCategory: 'Seasonal Accessoires', subCategory: 'Schals', section: null, status: 'planned' },
+        { name: 'Handschuhe', price: null, collection: 'Seasonal', mainCategory: 'Seasonal Accessoires', subCategory: 'Handschuhe', section: null, status: 'planned' },
+        { name: 'Badehosen', price: null, collection: 'Seasonal', mainCategory: 'Resortwear', subCategory: 'Swimwear', section: null, status: 'planned' },
+        { name: 'Gürtel', price: null, collection: 'Accessories', mainCategory: 'Formal-Accessoires', subCategory: 'Gürtel', section: null, status: 'planned' },
+        { name: 'Sonnenbrille', price: null, collection: 'Accessories', mainCategory: 'Eyewear', subCategory: 'Sonnenbrillen', section: null, status: 'planned' },
+        { name: 'Geschenkboxen', price: null, collection: 'Gift & Sets', mainCategory: 'Packaging', subCategory: 'Gift Boxes', section: null, status: 'planned' },
+        { name: 'Nécessaire', price: null, collection: 'Accessories', mainCategory: 'Taschen & Lederwaren', subCategory: 'Travel', section: null, status: 'planned' }
     ];
     
     searchInput.addEventListener('input', (e) => {
@@ -1161,9 +1250,11 @@ function toggleSearch() {
             return;
         }
         
-        const results = products.filter(p => 
-            p.name.toLowerCase().includes(query) || 
-            p.category.toLowerCase().includes(query)
+        const results = products.filter(p =>
+            p.name.toLowerCase().includes(query) ||
+            p.collection.toLowerCase().includes(query) ||
+            p.mainCategory.toLowerCase().includes(query) ||
+            p.subCategory.toLowerCase().includes(query)
         );
         
         if (results.length === 0) {
@@ -1172,12 +1263,12 @@ function toggleSearch() {
         }
         
         searchResults.innerHTML = results.map(p => `
-            <div class="search-result-item" onclick="scrollToProduct('${p.name}')">
+            <div class="search-result-item" onclick="handleSearchResultClick('${p.name.replace(/'/g, "\\'")}')">
                 <div>
                     <h4>${p.name}</h4>
-                    <span class="search-category">${p.category}</span>
+                    <span class="search-category">${p.collection} • ${p.mainCategory}${p.status === 'planned' ? ' • Bald verfügbar' : ''}</span>
                 </div>
-                <span class="search-price">€${p.price.toFixed(2)}</span>
+                <span class="search-price">${p.price != null ? `CHF ${p.price.toFixed(2)}` : 'Coming Soon'}</span>
             </div>
         `).join('');
     });
@@ -1192,10 +1283,126 @@ function toggleSearch() {
 
 function scrollToProduct(productName) {
     document.querySelector('.search-modal').remove();
-    const section = productName.includes('Hoodie') || productName.includes('Shirt') || 
-                    productName.includes('Cargo') || productName.includes('Trainer') 
-                    ? 'streetwear' : 'old-money';
-    document.getElementById(section).scrollIntoView({ behavior: 'smooth' });
+    const sectionMap = {
+        'Klassischer Blazer': 'old-money',
+        'Polo Hemd': 'old-money',
+        'Knit Zip-Polo': 'old-money',
+        'Chino Hose': 'old-money',
+        'Elegante Weste': 'old-money',
+        'Quarter Zipper': 'old-money',
+        'Strickpullover': 'old-money',
+        'Leinenhose': 'old-money',
+        'Oversized Hoodie': 'streetwear',
+        'T-Shirt': 'streetwear',
+        'Cargo Pants': 'streetwear',
+        'Trainerhose': 'streetwear'
+    };
+    const section = sectionMap[productName];
+    if (section && document.getElementById(section)) {
+        document.getElementById(section).scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+function handleSearchResultClick(productName) {
+    const plannedProducts = new Set([
+        'Custom made AirPods Cases',
+        'Pins für Krawatten',
+        'Schuhe',
+        'Herrentasche',
+        'Einstecktücher',
+        'Socken',
+        'Unterhosen',
+        'Krawatten',
+        'Fliegen',
+        'Krawatten & Fliegen Sets',
+        'Hosenträger',
+        'Brieftaschen',
+        'Schal',
+        'Handschuhe',
+        'Badehosen',
+        'Gürtel',
+        'Sonnenbrille',
+        'Geschenkboxen',
+        'Nécessaire'
+    ]);
+
+    if (plannedProducts.has(productName)) {
+        const modal = document.querySelector('.search-modal');
+        if (modal) modal.remove();
+        showNotification(`${productName} ist bald verfügbar.`);
+        return;
+    }
+
+    scrollToProduct(productName);
+}
+
+const checkoutAddOnProducts = [
+    { key: 'socks', name: 'Socken', price: 12.90 },
+    { key: 'underwear', name: 'Unterhosen', price: 19.90 }
+];
+
+function getCheckoutAddOnLabel(key) {
+    if (currentLanguage === 'en') {
+        if (key === 'socks') return 'Socks';
+        if (key === 'underwear') return 'Underwear';
+    }
+    if (currentLanguage === 'fr') {
+        if (key === 'socks') return 'Chaussettes';
+        if (key === 'underwear') return 'Sous-vetements';
+    }
+    if (key === 'socks') return 'Socken';
+    if (key === 'underwear') return 'Unterhosen';
+    return key;
+}
+
+function getSelectedCheckoutAddOns(form) {
+    const selectedAddOns = [];
+
+    checkoutAddOnProducts.forEach((addOn) => {
+        const enabled = document.getElementById(`addon-${addOn.key}`);
+        const qtyInput = document.getElementById(`addon-${addOn.key}-qty`);
+        const quantity = Math.max(1, parseInt(qtyInput?.value || '1', 10));
+
+        if (enabled && enabled.checked) {
+            selectedAddOns.push({
+                name: getCheckoutAddOnLabel(addOn.key),
+                quantity,
+                price: addOn.price,
+                size: null,
+                color: null,
+                isAddOn: true
+            });
+        }
+    });
+
+    return selectedAddOns;
+}
+
+function updateCheckoutAddOnState(key) {
+    const checkbox = document.getElementById(`addon-${key}`);
+    const qtyInput = document.getElementById(`addon-${key}-qty`);
+    if (!checkbox || !qtyInput) return;
+    qtyInput.disabled = !checkbox.checked;
+    if (!checkbox.checked) qtyInput.value = '1';
+    updateCheckoutTotalsFromModal();
+}
+
+function updateCheckoutTotalsFromModal() {
+    const modal = document.querySelector('.checkout-modal');
+    const form = modal?.querySelector('.checkout-form');
+    const totalEl = document.getElementById('checkoutTotalAmount');
+    const submitAmountEl = document.getElementById('checkoutSubmitAmount');
+    if (!form || !totalEl || !submitAmountEl) return;
+
+    const baseSubtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const addOnTotal = getSelectedCheckoutAddOns(form).reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const hasHoodie = cart.some(item => item.name === 'Oversized Hoodie');
+    const hasTrainerhose = cart.some(item => item.name === 'Trainerhose');
+    const discount = (hasHoodie && hasTrainerhose) ? baseSubtotal * 0.05 : 0;
+    const total = (baseSubtotal + addOnTotal) - discount;
+
+    totalEl.textContent = formatPrice(total);
+    submitAmountEl.textContent = formatPrice(total);
 }
 
 // Checkout Functionality
@@ -1244,6 +1451,25 @@ function openCheckout() {
                                 <span>${formatPrice(item.price * item.quantity)}</span>
                             </div>
                         `).join('')}
+                        <div class="checkout-addons-block">
+                            <div class="checkout-addons-title">${currentLanguage === 'de' ? 'Noch dazu einpacken' : currentLanguage === 'en' ? 'Add to your order' : 'Ajouter a la commande'}</div>
+                            ${checkoutAddOnProducts.map(addOn => `
+                                <div class="checkout-addon-item">
+                                    <label>
+                                        <input type="checkbox" id="addon-${addOn.key}" onchange="updateCheckoutAddOnState('${addOn.key}')">
+                                        ${getCheckoutAddOnLabel(addOn.key)} (${formatPrice(addOn.price)})
+                                    </label>
+                                    <input
+                                        type="number"
+                                        id="addon-${addOn.key}-qty"
+                                        min="1"
+                                        value="1"
+                                        disabled
+                                        onchange="updateCheckoutTotalsFromModal()"
+                                    >
+                                </div>
+                            `).join('')}
+                        </div>
                         ${discount > 0 ? `
                             <div class="checkout-item discount-item">
                                 <span>${t('tracksuit')}</span>
@@ -1253,7 +1479,7 @@ function openCheckout() {
                     </div>
                     <div class="checkout-total">
                         <span>${t('total')}</span>
-                        <span>${formatPrice(total)}</span>
+                        <span id="checkoutTotalAmount">${formatPrice(total)}</span>
                     </div>
                 </div>
                 
@@ -1306,7 +1532,7 @@ function openCheckout() {
                         </div>
                         
                         <button type="submit" class="submit-order-btn">
-                            ${currentLanguage === 'de' ? 'Kostenpflichtig bestellen' : currentLanguage === 'en' ? 'Place Order' : 'Commander'} ${formatPrice(total)}
+                            ${currentLanguage === 'de' ? 'Kostenpflichtig bestellen' : currentLanguage === 'en' ? 'Place Order' : 'Commander'} <span id="checkoutSubmitAmount">${formatPrice(total)}</span>
                         </button>
                     </form>
                 </div>
@@ -1345,25 +1571,28 @@ async function submitOrder(e) {
     const paymentMethod = selectedPayment ? selectedPayment.value : 'card';
 
     // Calculate total before clearing cart
-    let subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const selectedAddOns = getSelectedCheckoutAddOns(form);
+    const addOnTotal = selectedAddOns.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const baseSubtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    let subtotal = baseSubtotal + addOnTotal;
     const hasHoodie = cart.some(item => item.name === 'Oversized Hoodie');
     const hasTrainerhose = cart.some(item => item.name === 'Trainerhose');
     let discount = 0;
     
     if (hasHoodie && hasTrainerhose) {
-        discount = subtotal * 0.05;
+        discount = baseSubtotal * 0.05;
     }
     
     const total = subtotal - discount;
     const orderId = 'JM' + Date.now().toString();
 
-    const orderItems = cart.map(item => ({
+    const orderItems = [...cart.map(item => ({
         name: item.name,
         quantity: item.quantity,
         price: item.price,
         size: item.size || getPreferredSizeForProduct(item.name),
         color: item.color || null
-    }));
+    })), ...selectedAddOns];
 
     const shippingAddress = {
         firstName,
@@ -1456,7 +1685,7 @@ async function submitOrder(e) {
 
     // Track purchase
     if (typeof trackPurchase === 'function') {
-        trackPurchase(orderId, cart, total, discount);
+        trackPurchase(orderId, orderItems, total, discount);
     }
     
     const successMsg = currentLanguage === 'de' 
