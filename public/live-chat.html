@@ -580,6 +580,14 @@
             </div>`;
 
         await getOrCreateSession();
+
+        // Pre-fill chat input if opened via "Retoure beantragen"
+        const preFill = sessionStorage.getItem('chatPreFill');
+        if (preFill) {
+            const input = document.getElementById('chat-input');
+            if (input) input.value = preFill;
+            sessionStorage.removeItem('chatPreFill');
+        }
     }
 
     async function getOrCreateSession() {

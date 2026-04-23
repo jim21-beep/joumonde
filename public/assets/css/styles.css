@@ -1358,6 +1358,28 @@ body {
     flex: 1;
 }
 
+.cart-item-details {
+    flex: 1;
+}
+
+.wishlist-move-btn {
+    margin-top: 0.65rem;
+    background: #1a1a1a;
+    color: #f5e4aa;
+    border: 1px solid rgba(212, 175, 55, 0.6);
+    border-radius: 999px;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.wishlist-move-btn:hover {
+    background: #d4af37;
+    color: #1a1a1a;
+}
+
 .cart-item-info h4 {
     color: #1a1a1a;
     margin-bottom: 0.8rem;
@@ -2224,15 +2246,18 @@ body {
     padding: 1rem;
     border: 1px solid rgba(212, 175, 55, 0.3);
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.05);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
     cursor: pointer;
     transition: all 0.3s ease;
     gap: 0.75rem;
+    position: relative;
+    overflow: hidden;
 }
 
 .payment-option:hover {
-    background: rgba(212, 175, 55, 0.1);
+    background: linear-gradient(145deg, rgba(212, 175, 55, 0.16), rgba(212, 175, 55, 0.05));
     border-color: #d4af37;
+    transform: translateY(-1px);
 }
 
 .payment-option input[type="radio"] {
@@ -2242,18 +2267,53 @@ body {
     flex-shrink: 0;
 }
 
-.payment-logo {
-    height: 22px;
-    max-width: 60px;
-    width: auto;
-    object-fit: contain;
-    flex-shrink: 0;
+.payment-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
 }
 
-.payment-option span {
+.payment-brand-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.payment-brand-logos {
+    min-height: 28px;
+    line-height: 0;
+}
+
+.payment-logo {
+    height: 26px;
+    width: auto;
+    display: block;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+}
+
+.payment-logo-wide {
+    height: 28px;
+}
+
+.payment-label {
     color: #fff;
     font-size: 1rem;
     flex: 1;
+    font-weight: 500;
+}
+
+.payment-option input[type="radio"]:checked ~ .payment-content .payment-label {
+    color: #f4d372;
+}
+
+.payment-option input[type="radio"]:checked ~ .payment-content .payment-logo {
+    border-color: rgba(244, 211, 114, 0.75);
+    box-shadow: 0 0 18px rgba(212, 175, 55, 0.35);
 }
 
 .submit-order-btn {
@@ -5000,6 +5060,7 @@ button.loading {
 
 .color-options-detail {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.75rem;
 }
 
@@ -6181,6 +6242,91 @@ button.loading::after {
 .empty-state p {
     font-size: 1.1rem;
     margin-bottom: 1.5rem;
+}
+
+.order-details-modal .modal-content {
+    max-width: 560px;
+}
+
+.order-modal-title {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.order-modal-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.order-modal-id {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: 0.03em;
+}
+
+.order-detail-meta {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.order-detail-meta p {
+    margin: 0;
+    color: #4d4d4d;
+    font-size: 0.92rem;
+}
+
+.order-detail-items {
+    border-top: 1px solid #ececec;
+    border-bottom: 1px solid #ececec;
+    margin: 1rem 0;
+}
+
+.order-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 0.9rem 0;
+}
+
+.order-detail-row + .order-detail-row {
+    border-top: 1px dashed #ededed;
+}
+
+.order-detail-row p {
+    margin: 0.2rem 0 0;
+    color: #777;
+    font-size: 0.86rem;
+}
+
+.order-detail-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.05rem;
+    margin-top: 0.5rem;
+}
+
+@media (max-width: 640px) {
+    .order-detail-meta {
+        grid-template-columns: 1fr;
+    }
+
+    .order-details-modal .modal-content {
+        max-height: 90dvh;
+        overflow-y: auto;
+    }
+
+    .size-options-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
 }
 
 /* Responsive Design */

@@ -113,6 +113,7 @@ async function loginUser(supabaseUser, isActualLogin = true) {
         orderHistory: orders.map(o => ({
             id: o.id, date: o.created_at, status: o.status,
             total: parseFloat(o.total || 0), currency: o.currency,
+            paymentMethod: o.payment_method || null,
             items: (o.order_items || []).map(i => ({
                 name:          i.product_name,
                 price:         parseFloat(i.unit_price || 0),
@@ -137,6 +138,22 @@ async function loginUser(supabaseUser, isActualLogin = true) {
             changeLanguage(currentUser.preferences.defaultLanguage);
     }
 
+    // Wishlist: load user's own wishlist from localStorage namespace
+    const userWishlistKey = `wishlist_${supabaseUser.id}`;
+    const anonymousWishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    const userWishlist = JSON.parse(localStorage.getItem(userWishlistKey) || '[]');
+    // Merge anonymous items that are not already in user wishlist
+    const mergedWishlist = [...userWishlist];
+    anonymousWishlist.forEach(item => {
+        if (!mergedWishlist.some(w => w.name === item.name)) mergedWishlist.push(item);
+    });
+    if (typeof wishlist !== 'undefined') {
+        wishlist = mergedWishlist;
+        localStorage.setItem(userWishlistKey, JSON.stringify(wishlist));
+        localStorage.removeItem('wishlist');
+        if (typeof updateWishlistCount === 'function') updateWishlistCount();
+    }
+
     updateAccountUI();
     if (isActualLogin) {
         showNotification(`${accountT('accountWelcomeBack', 'Willkommen zurueck')}, ${currentUser.firstName}!`, 'success');
@@ -145,6 +162,13 @@ async function loginUser(supabaseUser, isActualLogin = true) {
 
 // Logout – Supabase Auth
 window.logoutUser = async function logoutUser() {
+    // Save user's wishlist under their ID namespace before logout
+    if (currentUser && currentUser.id && typeof wishlist !== 'undefined') {
+        localStorage.setItem(`wishlist_${currentUser.id}`, JSON.stringify(wishlist));
+        // Reset to anonymous (empty) after saving
+        if (typeof wishlist !== 'undefined') wishlist = [];
+        if (typeof updateWishlistCount === 'function') updateWishlistCount();
+    }
     await supabaseClient.auth.signOut();
     currentUser = null;
     const modal = document.getElementById('account-modal');
@@ -766,8 +790,84 @@ async function deleteAccount() {
 function viewOrderDetails(orderId) {
     const order = currentUser.orderHistory.find(o => o.id === orderId);
     if (!order) return;
-    
-    alert(`Bestellung ${orderId}\n\nStatus: ${order.status}\nDatum: ${new Date(order.date).toLocaleDateString('de-DE')}\n\nArtikel:\n${order.items.map(i => `- ${i.name} × ${i.quantity}: CHF ${(i.price * i.quantity).toFixed(2)}`).join('\n')}\n\nGesamt: CHF ${order.total.toFixed(2)}`);
+
+    const existing = document.getElementById('order-details-modal');
+    if (existing) existing.remove();
+
+    const paymentLabels = { card: 'Kreditkarte', amex: 'American Express', paypal: 'PayPal' };
+    const paymentLabel = paymentLabels[order.paymentMethod] || order.paymentMethod || '—';
+    const currency = order.currency || 'CHF';
+    const statusLabels = {
+        pending: 'Ausstehend', Bearbeitung: 'In Bearbeitung', Versendet: 'Versendet',
+        Geliefert: 'Geliefert', Storniert: 'Storniert',
+        'Retoure beantragt': 'Retoure beantragt', Retourniert: 'Retourniert'
+    };
+    const statusLabel = statusLabels[order.status] || order.status || '—';
+
+    const itemsHtml = (order.items || []).map(item => `
+        <div class="order-detail-row">
+            <div>
+                <strong>${item.name}</strong>
+                <p>${accountT('accountQuantity', 'Menge')}: ${item.quantity}${item.size ? ` • ${accountT('accountSize', 'Grösse')}: ${item.size}` : ''}${item.color ? ` • ${item.color}` : ''}</p>
+            </div>
+            <strong>${currency} ${(item.price * item.quantity).toFixed(2)}</strong>
+        </div>
+    `).join('');
+
+    const modal = document.createElement('div');
+    modal.className = 'address-form-modal order-details-modal';
+    modal.id = 'order-details-modal';
+    modal.onclick = (event) => {
+        if (event.target === modal) closeOrderDetailsModal();
+    };
+
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="order-modal-title">
+                    <span class="order-modal-label">${accountT('accountOrderPrefix', 'Bestellung')}</span>
+                    <span class="order-modal-id">${order.id}</span>
+                </div>
+                <button type="button" class="modal-close" onclick="closeOrderDetailsModal()" aria-label="Schliessen">&times;</button>
+            </div>
+            <div class="modal-divider"></div>
+            <div class="order-detail-meta">
+                <p><strong>${accountT('accountStatus', 'Status')}:</strong> ${statusLabel}</p>
+                <p><strong>${accountT('accountDate', 'Datum')}:</strong> ${new Date(order.date).toLocaleDateString('de-DE')}</p>
+                <p><strong>Zahlungsmethode:</strong> ${paymentLabel}</p>
+                <p><strong>Währung:</strong> ${currency}</p>
+            </div>
+            <div class="order-detail-items">
+                ${itemsHtml}
+            </div>
+            <div class="order-detail-total">
+                <span>${accountT('accountTotalLabel', 'Gesamt')}:</span>
+                <strong>CHF ${order.total.toFixed(2)}</strong>
+            </div>
+            <div class="form-actions">
+                ${['Versendet', 'Geliefert', 'Retoure beantragt', 'Retourniert'].includes(order.status) ? '' : `<button type="button" class="btn-secondary" onclick="requestReturnFromModal('${order.id}'); closeOrderDetailsModal()">Retoure beantragen</button>`}
+                <button type="button" class="btn-primary" onclick="closeOrderDetailsModal()">${accountT('accountClose', 'Schliessen')}</button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+}
+
+function closeOrderDetailsModal() {
+    document.getElementById('order-details-modal')?.remove();
+}
+
+function requestReturnFromModal(orderId) {
+    // Open live-chat with return context pre-filled
+    const chatBtn = document.querySelector('.live-chat-btn, [onclick*="live-chat"]');
+    if (window.location.href.includes('live-chat')) {
+        const input = document.getElementById('chat-input') || document.querySelector('input[placeholder]');
+        if (input) input.value = `Retoure Bestellung ${orderId}`;
+    } else {
+        sessionStorage.setItem('chatPreFill', `Retoure Bestellung ${orderId}`);
+        window.open('live-chat.html', '_blank');
+    }
 }
 
 // ==================== CHECKOUT INTEGRATION ====================
@@ -933,6 +1033,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     status: o.status,
                     total: parseFloat(o.total || 0),
                     currency: o.currency,
+                    paymentMethod: o.payment_method || null,
                     items: (o.order_items || []).map(i => ({
                         name: i.product_name,
                         price: parseFloat(i.unit_price || 0),

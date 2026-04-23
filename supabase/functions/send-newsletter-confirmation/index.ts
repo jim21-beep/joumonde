@@ -140,6 +140,7 @@ serve(async (req) => {
 
     let subject: string;
     let html: string;
+    let orderSaved = false;
 
     if (type === 'registration') {
       const { firstName = '', lastName = '', registeredAt = '' } = body;
@@ -170,41 +171,74 @@ serve(async (req) => {
         ${FOOTER}`;
 
     } else if (type === 'order-confirmation') {
-      const { firstName = '', userId = null, orderId = '', items = [], total = 0, orderDate = '', currency = 'CHF' } = body;
+      const {
+        firstName = '',
+        userId = null,
+        orderId = '',
+        items = [],
+        total = 0,
+        orderDate = '',
+        currency = 'CHF',
+        persistOrder = false,
+        paymentMethod = 'card',
+        paymentStatus = 'paid'
+      } = body;
 
-      // ── Save order to Supabase ───────────────────────────────────────────────
-      try {
-        const db = createClient(SUPABASE_URL, SUPABASE_SERVICE);
-        const dbOrderId = crypto.randomUUID();
+      if (persistOrder) {
+        try {
+          const db = createClient(SUPABASE_URL, SUPABASE_SERVICE);
+          const normalizedPaymentMethod = ['card', 'amex', 'paypal'].includes(paymentMethod) ? paymentMethod : 'card';
+          const normalizedPaymentStatus = paymentStatus || 'paid';
+          const paymentProvider = normalizedPaymentMethod === 'paypal' ? 'paypal' : 'card';
+          const finalOrderId = String(orderId || ('JM' + Date.now().toString()));
 
-        const { error: orderErr } = await db.from('orders').insert({
-          id: dbOrderId,
-          user_id: userId,
-          status: 'pending',
-          total: Number(total),
-          currency,
-        });
-        if (orderErr) console.error('Order insert error:', orderErr);
+          const orderPayload = {
+            id: finalOrderId,
+            user_id: userId || null,
+            status: 'Bearbeitung',
+            total: Number(total || 0),
+            currency,
+            payment_method: normalizedPaymentMethod,
+            payment_status: normalizedPaymentStatus,
+            payment_provider: paymentProvider,
+            provider_payment_id: null,
+          };
 
-        const orderItems = (items as Array<{ name: string; quantity: number; price: number; size?: string; color?: string }>).map(i => ({
-          order_id: dbOrderId,
-          product_name: i.name,
-          quantity: i.quantity,
-          unit_price: i.price,
-          size: i.size ?? null,
-          color: i.color ?? null,
-          article_number: null,
-        }));
-        if (orderItems.length > 0) {
-          const { error: itemsErr } = await db.from('order_items').insert(orderItems);
-          if (itemsErr) console.error('Order items insert error:', itemsErr);
+          let { error: orderErr } = await db.from('orders').insert(orderPayload);
+
+          if (orderErr && userId) {
+            const retryPayload = { ...orderPayload, user_id: null };
+            ({ error: orderErr } = await db.from('orders').insert(retryPayload));
+          }
+
+          if (orderErr) {
+            console.error('Order insert fallback error:', orderErr);
+          } else {
+            const orderItems = (items as Array<{ name: string; quantity: number; price: number; size?: string; color?: string; article_number?: string }>).map(i => ({
+              order_id: finalOrderId,
+              product_name: i.name,
+              quantity: Number(i.quantity || 1),
+              unit_price: Number(i.price || 0),
+              size: i.size ?? null,
+              color: i.color ?? null,
+              article_number: i.article_number ?? null,
+            }));
+
+            if (orderItems.length > 0) {
+              const { error: itemsErr } = await db.from('order_items').insert(orderItems);
+              if (itemsErr) {
+                console.error('Order item fallback insert error:', itemsErr);
+              } else {
+                orderSaved = true;
+              }
+            } else {
+              orderSaved = true;
+            }
+          }
+        } catch (dbEx) {
+          console.error('Fallback order save failed:', dbEx);
         }
-
-        console.log('Order saved to DB:', dbOrderId);
-      } catch (dbEx) {
-        console.error('DB save failed:', dbEx);
       }
-      // ────────────────────────────────────────────────────────────────────────
 
       const itemRows = (items as Array<{ name: string; quantity: number; price: number }>)
         .map(i => `
@@ -220,6 +254,10 @@ serve(async (req) => {
         <p style="color:#aaa;font-size:0.9rem;">
           Bestellnummer: <strong style="color:#f5f0e8;">${orderId}</strong>
           &nbsp;|&nbsp; ${orderDate}
+        </p>
+        <p style="margin:12px 0 20px;padding:10px 14px;background:#1e1e1e;border-left:3px solid #d4af37;border-radius:4px;color:#f5f0e8;font-size:0.9rem;">
+          Status: <strong style="color:#d4af37;">In Bearbeitung</strong>
+          &nbsp;— Wir informieren dich per E-Mail, sobald deine Bestellung versendet wurde.
         </p>
         <table style="width:100%;border-collapse:collapse;margin:24px 0;">
           <thead>
@@ -292,7 +330,7 @@ serve(async (req) => {
 
     const resData = await res.json();
     console.log('Email sent, id:', resData?.id);
-    return json({ success: true });
+    return json({ success: true, orderSaved });
 
   } catch (e) {
     console.error('Edge function error:', e);
