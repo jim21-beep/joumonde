@@ -17,6 +17,79 @@ window.getCurrentUserId = function getCurrentUserId() {
     return currentUser && currentUser.id ? currentUser.id : null;
 };
 
+function getAvatarStorageKey(userId) {
+    return `profileAvatar_${userId}`;
+}
+
+function getUserInitials(firstName, lastName) {
+    const first = (firstName || '').trim().charAt(0);
+    const last = (lastName || '').trim().charAt(0);
+    return `${first}${last}`.toUpperCase() || 'U';
+}
+
+function getDashboardAvatarMarkup() {
+    const initials = getUserInitials(currentUser?.firstName, currentUser?.lastName);
+    if (currentUser?.avatarUrl) {
+        return `<img src="${currentUser.avatarUrl}" alt="Profilbild" class="user-avatar-large-image">`;
+    }
+    return `<span>${initials}</span>`;
+}
+
+function updateProfileAvatarPreview(previewEl, avatarUrl) {
+    if (!previewEl) return;
+    const initials = getUserInitials(currentUser?.firstName, currentUser?.lastName);
+    if (avatarUrl) {
+        previewEl.innerHTML = `<img src="${avatarUrl}" alt="Profilbild" class="profile-avatar-preview-image">`;
+    } else {
+        previewEl.innerHTML = `<span>${initials}</span>`;
+    }
+}
+
+function updateProfileImageFilenameLabel(filename) {
+    const label = document.getElementById('profile-upload-filename');
+    if (!label) return;
+    label.textContent = filename || 'PNG oder JPG, maximal 2 MB';
+}
+
+window.handleProfileAvatarChange = function handleProfileAvatarChange(event) {
+    const file = event?.target?.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+        showNotification('Bitte ein gueltiges Bild auswaehlen.', 'error');
+        event.target.value = '';
+        return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+        showNotification('Profilbild ist zu gross (max. 2MB).', 'error');
+        event.target.value = '';
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+        const preview = document.getElementById('profile-avatar-preview');
+        updateProfileAvatarPreview(preview, String(reader.result || ''));
+        updateProfileImageFilenameLabel(file.name);
+        const removeInput = document.querySelector('input[name="removeProfileImage"]');
+        if (removeInput) removeInput.value = '0';
+    };
+    reader.readAsDataURL(file);
+};
+
+window.removeProfileAvatar = function removeProfileAvatar() {
+    const preview = document.getElementById('profile-avatar-preview');
+    updateProfileAvatarPreview(preview, null);
+    updateProfileImageFilenameLabel('Kein Bild ausgewaehlt');
+
+    const fileInput = document.querySelector('input[name="profileImage"]');
+    if (fileInput) fileInput.value = '';
+
+    const removeInput = document.querySelector('input[name="removeProfileImage"]');
+    if (removeInput) removeInput.value = '1';
+};
+
 
 
 // ==================== AUTHENTICATION ====================
@@ -100,11 +173,14 @@ async function loginUser(supabaseUser, isActualLogin = true) {
         email:      supabaseUser.email,
         firstName:  profile.first_name || '',
         lastName:   profile.last_name  || '',
+        avatarUrl:  localStorage.getItem(getAvatarStorageKey(supabaseUser.id)) || null,
         preferences: {
             newsletter:      profile.newsletter      || false,
             defaultCurrency: profile.default_currency || 'CHF',
             defaultLanguage: profile.default_language || 'de',
-            defaultSize:     profile.default_size     || null
+            defaultSize:     profile.default_size     || null,
+            defaultTopSize:  profile.default_size     || null,
+            defaultPantsSize: localStorage.getItem('defaultPantsSize') || null
         },
         addresses: addresses.map(a => ({
             id: a.id, street: a.street, zip: a.zip, city: a.city,
@@ -127,8 +203,10 @@ async function loginUser(supabaseUser, isActualLogin = true) {
 
     // Only apply profile preferences and show notification on actual login,
     // not on page-load session restore (localStorage already has correct values)
-    if (typeof setPreferredSize === 'function') {
-        setPreferredSize(currentUser.preferences.defaultSize);
+    if (typeof setPreferredSizes === 'function') {
+        setPreferredSizes(currentUser.preferences.defaultTopSize, currentUser.preferences.defaultPantsSize);
+    } else if (typeof setPreferredSize === 'function') {
+        setPreferredSize(currentUser.preferences.defaultTopSize);
     }
 
     if (isActualLogin) {
@@ -302,9 +380,8 @@ function showAccountDashboard() {
         <button class="contact-close" onclick="toggleAccount()">&times;</button>
         <div class="account-dashboard">
             <div class="dashboard-header">
-                <div class="user-avatar-large">${currentUser.firstName.charAt(0)}${currentUser.lastName.charAt(0)}</div>
+                <div class="user-avatar-large">${getDashboardAvatarMarkup()}</div>
                 <h2>${currentUser.firstName} ${currentUser.lastName}</h2>
-                <p class="user-email">${currentUser.email}</p>
             </div>
             
             <div class="dashboard-tabs">
@@ -479,49 +556,91 @@ function getDashboardAddresses() {
 
 // Dashboard Preferences
 function getDashboardPreferences() {
+    const initials = getUserInitials(currentUser?.firstName, currentUser?.lastName);
+    const avatarPreview = currentUser?.avatarUrl
+        ? `<img src="${currentUser.avatarUrl}" alt="Profilbild" class="profile-avatar-preview-image">`
+        : `<span>${initials}</span>`;
+
     return `
         <h3>${accountT('accountSettings', 'Einstellungen')}</h3>
         <form class="preferences-form" onsubmit="savePreferences(event)">
-            <div class="settings-card">
+            <div class="settings-card settings-card-compact profile-settings-card">
+                <h4>${accountT('accountProfile', 'Profil')}</h4>
+                <div class="profile-settings-grid">
+                    <div class="profile-media-panel">
+                        <div class="profile-image-editor">
+                            <div class="profile-avatar-preview" id="profile-avatar-preview">${avatarPreview}</div>
+                            <div class="profile-upload-controls">
+                                <label for="profile-image-input" class="profile-upload-link">Bild ändern</label>
+                                <button type="button" class="profile-avatar-remove-link" onclick="removeProfileAvatar()">Entfernen</button>
+                            </div>
+                            <span id="profile-upload-filename" class="profile-upload-filename">PNG oder JPG, maximal 2 MB</span>
+                            <input id="profile-image-input" class="profile-file-input" type="file" name="profileImage" accept="image/*" onchange="handleProfileAvatarChange(event)">
+                            <input type="hidden" name="removeProfileImage" value="0">
+                        </div>
+                    </div>
+
+                    <div class="profile-form-panel">
+                        <div class="profile-name-fields">
+                            <div class="form-group">
+                                <label>Vorname</label>
+                                <input type="text" name="firstName" value="${currentUser.firstName || ''}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Nachname</label>
+                                <input type="text" name="lastName" value="${currentUser.lastName || ''}" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-card settings-card-compact">
                 <h4>${accountT('accountShopping', 'Shopping')}</h4>
                 <p class="settings-hint">${accountT('accountSettingsHintShopping', 'Wird beim Hinzufuegen in den Warenkorb automatisch vorausgewaehlt.')}</p>
-                <div class="form-group">
-                    <label>${accountT('accountDefaultSize', 'Standardgroesse')}</label>
-                    <select name="defaultSize">
-                        <option value="">${accountT('accountNone', 'Keine')}</option>
-                        <option value="S" ${currentUser.preferences.defaultSize === 'S' ? 'selected' : ''}>S</option>
-                        <option value="M" ${currentUser.preferences.defaultSize === 'M' ? 'selected' : ''}>M</option>
-                        <option value="L" ${currentUser.preferences.defaultSize === 'L' ? 'selected' : ''}>L</option>
-                        <option value="XL" ${currentUser.preferences.defaultSize === 'XL' ? 'selected' : ''}>XL</option>
-                        <option value="XXL" ${currentUser.preferences.defaultSize === 'XXL' ? 'selected' : ''}>XXL</option>
-                    </select>
-                </div>
-            </div>
 
-            <div class="settings-card">
-                <h4>${accountT('accountRegionLanguage', 'Region & Sprache')}</h4>
-                <div class="form-group">
-                    <label>${accountT('accountDefaultCurrency', 'Standardwaehrung')}</label>
-                    <select name="defaultCurrency">
-                        <option value="CHF" ${currentUser.preferences.defaultCurrency === 'CHF' ? 'selected' : ''}>CHF</option>
-                        <option value="EUR" ${currentUser.preferences.defaultCurrency === 'EUR' ? 'selected' : ''}>EUR</option>
-                        <option value="USD" ${currentUser.preferences.defaultCurrency === 'USD' ? 'selected' : ''}>USD</option>
-                    </select>
-                </div>
+                <div class="settings-form-grid">
+                    <div class="form-group">
+                        <label>${accountT('accountDefaultSize', 'Standardgroesse Oberkoerper')}</label>
+                        <select name="defaultTopSize">
+                            <option value="">${accountT('accountNone', 'Keine')}</option>
+                            <option value="S" ${currentUser.preferences.defaultTopSize === 'S' ? 'selected' : ''}>S</option>
+                            <option value="M" ${currentUser.preferences.defaultTopSize === 'M' ? 'selected' : ''}>M</option>
+                            <option value="L" ${currentUser.preferences.defaultTopSize === 'L' ? 'selected' : ''}>L</option>
+                            <option value="XL" ${currentUser.preferences.defaultTopSize === 'XL' ? 'selected' : ''}>XL</option>
+                            <option value="XXL" ${currentUser.preferences.defaultTopSize === 'XXL' ? 'selected' : ''}>XXL</option>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label>${accountT('accountDefaultLanguage', 'Standardsprache')}</label>
-                    <select name="defaultLanguage">
-                        <option value="de" ${currentUser.preferences.defaultLanguage === 'de' ? 'selected' : ''}>Deutsch</option>
-                        <option value="en" ${currentUser.preferences.defaultLanguage === 'en' ? 'selected' : ''}>English</option>
-                        <option value="fr" ${currentUser.preferences.defaultLanguage === 'fr' ? 'selected' : ''}>Français</option>
-                    </select>
-                </div>
-            </div>
+                    <div class="form-group">
+                        <label>${accountT('accountDefaultSize', 'Standardgroesse Hose')}</label>
+                        <select name="defaultPantsSize">
+                            <option value="">${accountT('accountNone', 'Keine')}</option>
+                            <option value="30" ${currentUser.preferences.defaultPantsSize === '30' ? 'selected' : ''}>30</option>
+                            <option value="32" ${currentUser.preferences.defaultPantsSize === '32' ? 'selected' : ''}>32</option>
+                            <option value="34" ${currentUser.preferences.defaultPantsSize === '34' ? 'selected' : ''}>34</option>
+                            <option value="36" ${currentUser.preferences.defaultPantsSize === '36' ? 'selected' : ''}>36</option>
+                        </select>
+                    </div>
 
-            <div class="settings-card">
-                <h4>${accountT('accountProfile', 'Profil')}</h4>
-                <p class="settings-hint">${accountT('accountSettingsHintProfile', 'Diese Einstellungen gelten nur fuer dein Konto.')}</p>
+                    <div class="form-group">
+                        <label>${accountT('accountDefaultCurrency', 'Standardwaehrung')}</label>
+                        <select name="defaultCurrency">
+                            <option value="CHF" ${currentUser.preferences.defaultCurrency === 'CHF' ? 'selected' : ''}>CHF</option>
+                            <option value="EUR" ${currentUser.preferences.defaultCurrency === 'EUR' ? 'selected' : ''}>EUR</option>
+                            <option value="USD" ${currentUser.preferences.defaultCurrency === 'USD' ? 'selected' : ''}>USD</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>${accountT('accountDefaultLanguage', 'Standardsprache')}</label>
+                        <select name="defaultLanguage">
+                            <option value="de" ${currentUser.preferences.defaultLanguage === 'de' ? 'selected' : ''}>Deutsch</option>
+                            <option value="en" ${currentUser.preferences.defaultLanguage === 'en' ? 'selected' : ''}>English</option>
+                            <option value="fr" ${currentUser.preferences.defaultLanguage === 'fr' ? 'selected' : ''}>Français</option>
+                        </select>
+                    </div>
+                </div>
             </div>
             
             <button type="submit" class="btn-primary">${accountT('accountSaveSettings', 'Einstellungen speichern')}</button>
@@ -539,14 +658,25 @@ async function savePreferences(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
 
+    const firstName = String(formData.get('firstName') || '').trim();
+    const lastName = String(formData.get('lastName') || '').trim();
+    if (!firstName || !lastName) {
+        showNotification('Bitte Vorname und Nachname ausfuellen.', 'error');
+        return;
+    }
+
     const prefs = {
-        defaultSize:     formData.get('defaultSize') || null,
+        defaultSize:     formData.get('defaultTopSize') || null,
+        defaultTopSize:  formData.get('defaultTopSize') || null,
+        defaultPantsSize: formData.get('defaultPantsSize') || null,
         defaultCurrency: formData.get('defaultCurrency'),
         defaultLanguage: formData.get('defaultLanguage')
     };
 
     const { error } = await supabaseClient.from('profiles').update({
-        default_size:     prefs.defaultSize,
+        first_name:       firstName,
+        last_name:        lastName,
+        default_size:     prefs.defaultTopSize,
         default_currency: prefs.defaultCurrency,
         default_language: prefs.defaultLanguage
     }).eq('id', currentUser.id);
@@ -555,10 +685,45 @@ async function savePreferences(event) {
         showNotification(accountT('accountSaveError', 'Fehler beim Speichern der Einstellungen.'), 'error'); return;
     }
 
+    const removeAvatar = formData.get('removeProfileImage') === '1';
+    const avatarFile = formData.get('profileImage');
+    const avatarKey = getAvatarStorageKey(currentUser.id);
+
+    if (removeAvatar) {
+        localStorage.removeItem(avatarKey);
+        currentUser.avatarUrl = null;
+    } else if (avatarFile && avatarFile instanceof File && avatarFile.size > 0) {
+        const avatarDataUrl = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(String(reader.result || ''));
+            reader.onerror = () => reject(new Error('avatar-read-failed'));
+            reader.readAsDataURL(avatarFile);
+        }).catch(() => null);
+
+        if (!avatarDataUrl) {
+            showNotification('Profilbild konnte nicht verarbeitet werden.', 'error');
+            return;
+        }
+
+        localStorage.setItem(avatarKey, avatarDataUrl);
+        currentUser.avatarUrl = avatarDataUrl;
+    }
+
+    currentUser.firstName = firstName;
+    currentUser.lastName = lastName;
     currentUser.preferences = { ...currentUser.preferences, ...prefs };
-    if (typeof setPreferredSize === 'function') setPreferredSize(prefs.defaultSize);
+    // Top size is synced via profile; pants size is stored locally for now.
+    if (typeof setPreferredSizes === 'function') {
+        setPreferredSizes(prefs.defaultTopSize, prefs.defaultPantsSize);
+    } else if (typeof setPreferredSize === 'function') {
+        setPreferredSize(prefs.defaultTopSize);
+    }
     if (typeof changeCurrency === 'function') changeCurrency(prefs.defaultCurrency);
     if (typeof changeLanguage === 'function') changeLanguage(prefs.defaultLanguage);
+
+    updateAccountUI();
+    showAccountDashboard();
+    showDashboardSection('preferences');
     showNotification(accountT('accountSaveSuccess', 'Einstellungen gespeichert!'), 'success');
 }
 
@@ -676,7 +841,7 @@ async function upsertProfileForCurrentUser(userId) {
         newsletter: !!(currentUser?.preferences?.newsletter),
         default_currency: currentUser?.preferences?.defaultCurrency || 'CHF',
         default_language: currentUser?.preferences?.defaultLanguage || 'de',
-        default_size: currentUser?.preferences?.defaultSize || null
+        default_size: currentUser?.preferences?.defaultTopSize || currentUser?.preferences?.defaultSize || null
     };
 
     await supabaseClient.from('profiles').upsert(payload, { onConflict: 'id' });
@@ -1062,6 +1227,8 @@ window.createTestAccount = function() {
     // Add test preferences
     testUser.preferences.newsletter = true;
     testUser.preferences.defaultSize = 'L';
+    testUser.preferences.defaultTopSize = 'L';
+    testUser.preferences.defaultPantsSize = '32';
     testUser.preferences.defaultCurrency = 'CHF';
     
     // Add test address

@@ -164,73 +164,73 @@
   "askNexara": "Ask Nexara",
   "productDescriptions": {
     "Klassischer Blazer": {
-      "description": "This classic blazer made of premium Italian wool is the perfect garment for the discerning gentleman. With its timeless silhouette and first-class workmanship, it adds an elegant note to any outfit. Ideal for business meetings, formal occasions and everyday elegance.",
+      "description": "This classic blazer, crafted from premium Italian wool, is made for the modern gentleman. Its timeless silhouette and refined tailoring elevate any outfit with effortless elegance. Ideal for business meetings, formal occasions, and polished everyday wear.",
       "features": ["Premium Italian wool (Super 120s)", "Classic 2-button cut", "Viscose lining", "Two side pockets with piping", "Breast pocket for handkerchief", "Perfect for business & formal occasions"],
       "materials": ["90% pure wool (Italian, Super 120s)", "10% cashmere", "Lining: 100% viscose"],
       "care": ["Dry cleaning only", "Do not bleach", "Do not tumble dry", "Iron at low temperature", "Hang on hanger"]
     },
     "Polo Hemd": {
-      "description": "This classic polo shirt made of Egyptian cotton combines timeless elegance with supreme wearing comfort. The fine workmanship and premium material make it the perfect companion for leisure and business-casual. A classic that never goes out of style.",
+      "description": "This classic polo shirt in premium Egyptian cotton blends timeless elegance with all-day comfort. Clean construction and elevated fabric make it a versatile choice for both leisure and smart casual settings. A staple that never goes out of style.",
       "features": ["Premium Egyptian cotton", "Classic polo shape", "Button placket with snap buttons", "Contrast colored collar and sleeve binding", "Loosely cut sleeve hem", "Reinforced shoulder seams for durability"],
       "materials": ["100% Egyptian cotton", "Weight: 200 g/m²", "High-quality workmanship"],
       "care": ["Machine wash at 30°C", "Wash with similar colors", "Tumble dry on low heat", "Iron at medium temperature"]
     },
     "Knit Zip-Polo": {
-      "description": "The innovative Knit Zip-Polo combines the charm of a classic polo shirt with the practical functionality of a zipper. Made from the finest knitted material, it offers optimal freedom of movement and breathable comfort for active wearers.",
+      "description": "The Knit Zip-Polo combines the polish of a classic polo with the ease of a quarter-zip. Made from a fine knit fabric, it offers breathable comfort and natural freedom of movement throughout the day.",
       "features": ["Fine knit structure made of premium cotton blend", "Practical 1/4 zipper", "Fitted cut", "High-quality YKK zippers", "Elastic binding and sleeve cuffs", "Modern, sporty look"],
       "materials": ["90% cotton, 10% polyester", "Fine knit quality", "Durable and shape-stable"],
       "care": ["Machine wash at 30°C (delicate cycle)", "Wash inside out", "Lay flat to dry", "Iron at low temperature"]
     },
     "Chino Hose": {
-      "description": "The classic chino pants are a timeless staple for the modern gentleman. Made from premium cotton blend, they offer the perfect mix of comfort and elegance. Their versatility makes them the ideal companion for business-casual to leisure wear.",
+      "description": "These classic chinos are a timeless essential for the modern gentleman. Cut from a premium cotton blend, they strike the right balance between comfort and sophistication. Easy to style from business casual looks to off-duty outfits.",
       "features": ["Slim-fit cut with modern look", "Reinforced seams for durability", "Deep pockets with coin pocket", "Classic button and zipper closure", "Adjustable inner waistband for perfect fit", "Modern, timeless color palette"],
       "materials": ["98% cotton, 2% elastane", "Durable twill fabric", "Pleasant feel and long-lasting"],
       "care": ["Machine wash at 40°C", "Wash with similar colors", "Tumble dry on low temperature", "Iron lightly if needed"]
     },
     "Elegante Weste": {
-      "description": "This refined wool vest is the crowning piece for elaborately styled outfits. With its delicate structure and first-class workmanship, it imparts sovereignty and style to the wearer. Perfect as a layering piece for formal and dressy-casual occasions.",
+      "description": "This refined wool vest is the finishing touch for thoughtfully styled outfits. Its elegant structure and premium craftsmanship add confidence and character to your look. Perfect as a layering piece for formal and dressy-casual occasions.",
       "features": ["Premium wool blend fabric", "Classic V-neckline", "Four exterior pockets", "Interior pocket for small items", "Adjustable back strap", "Elegant button placket with mother-of-pearl buttons"],
       "materials": ["85% pure wool, 15% silk", "High-quality jacquard lining", "Premium craftsmanship"],
       "care": ["Dry cleaning recommended", "Store on hanger", "Protect from strong sunlight", "Professional cleaning if needed"]
     },
     "Quarter Zipper": {
-      "description": "The Quarter Zipper made of luxurious cashmere blend is the perfect bridge between elegance and comfort. The practical 1/4 zipper allows for flexible temperature adjustment, while the premium materials provide an incomparable feel. An investment piece for discerning wearers.",
+      "description": "This quarter-zip, made from a luxurious cashmere blend, bridges comfort and elegance with ease. The practical zip collar lets you adjust for changing temperatures, while the premium knit feels exceptionally soft against the skin. A true investment piece for a refined wardrobe.",
       "features": ["Cashmere-cotton premium blend", "1/4 zipper for flexibility", "Ribbed crew neck", "Elastic binding and sleeve cuffs", "High-quality workmanship", "Timeless understated design"],
       "materials": ["50% cashmere, 50% cotton", "Ultra-soft and breathable", "Durable and high-quality"],
       "care": ["Hand wash or delicate cycle at 30°C", "Use mild detergent", "Lay flat to dry", "Do not iron - air dry"]
     },
     "Strickpullover": {
-      "description": "This premium cashmere sweater embodies timeless luxury and incomparable comfort. The ultra-soft material gently hugs the body and offers an elegant silhouette that suits any occasion. A classic that lasts a lifetime.",
+      "description": "This premium cashmere sweater delivers timeless luxury and exceptional comfort. Its ultra-soft handle drapes cleanly on the body for an elegant silhouette that works across occasions. A lasting classic you will reach for season after season.",
       "features": ["100% premium cashmere", "Seamless back (side seam only)", "Ribbed crew neck and cuffs", "Elegant, figure-flattering cut", "High-quality workmanship", "Perfect balance of elegance and comfort"],
       "materials": ["100% premium-grade cashmere", "Long-staple and soft", "Timeless elegance"],
       "care": ["Hand wash in cold water", "Use cashmere-specific detergent", "Lay flat to dry on even surface", "Do not wring or twist"]
     },
     "Leinenhose": {
-      "description": "The lightweight linen pants are the perfect summer essential for the style-conscious man. Made from pure, premium linen, they offer breathtaking breathability and an elegant, relaxed look. Ideal for warm days and laid-back elegance.",
+      "description": "These lightweight linen trousers are a summer essential for style-conscious men. Woven from pure premium linen, they offer excellent breathability and a relaxed yet elevated look. Perfect for warm days and understated elegance.",
       "features": ["100% pure Irish linen", "Relaxed, elegant cut", "Two large front pockets", "Adjustable side ruffles", "Classic button closure", "Natural color variations for authenticity"],
       "materials": ["100% Irish linen", "Natural and breathable", "Environmentally friendly"],
       "care": ["Machine wash at 30°C", "Wash with similar colors", "Lay flat or hang dry", "Light steam or gently iron with damp cloth"]
     },
     "Oversized Hoodie": {
-      "description": "The Oversized Hoodie is the urban cultural piece par excellence. With its relaxed cut and premium cotton, it offers maximum comfort without sacrificing style. Perfect for streetwear enthusiasts who like it casual and cool.",
+      "description": "The oversized hoodie is a true streetwear staple. Its relaxed cut and premium cotton construction deliver maximum comfort without compromising style. Perfect for everyday urban looks with a clean, effortless edge.",
       "features": ["100% premium cotton", "Oversized, relaxed cut", "Kangaroo front pocket with zipper", "Adjustable drawstrings in hood", "Brushed interior for extra comfort", "Durable flatlock seams"],
       "materials": ["100% organic cotton", "280 g/m² weight", "Durable and shape-stable"],
       "care": ["Machine wash at 30°C", "Turn inside out before washing", "Tumble dry on low or hang dry", "Iron on low temperature if needed"]
     },
     "T-Shirt": {
-      "description": "This limited-edition graphic t-shirt is more than just a piece of clothing – it's a statement. With premium cotton and exclusive design prints, it becomes a favorite in any wardrobe. Limited quantities guarantee exclusivity.",
+      "description": "This limited-edition graphic tee is more than just a basic, it is a statement piece. Premium cotton and exclusive artwork make it an instant favorite in any rotation. Produced in limited quantities for true exclusivity.",
       "features": ["100% premium cotton", "Exclusive limited-edition graphic", "Classic crew neckline", "Professional print processing", "Durable colors through special printing techniques", "Comfortable, classic fit"],
       "materials": ["100% organic cotton", "150 g/m² lightweight", "Soft skin feel"],
       "care": ["Machine wash at 30°C (gentle cycle)", "Wash with graphic inside", "Tumble dry on very low temperature", "Do not iron directly on graphic"]
     },
     "Cargo Pants": {
-      "description": "The cargo pants combine functionality with modern streetwear style. With several well-thought-out pockets, they offer practical solutions for everyday life and adventure. High-quality workmanship and timeless colors – a statement for the practical fashionista.",
+      "description": "These cargo pants fuse practical function with contemporary streetwear style. Multiple utility pockets keep essentials close without sacrificing a clean silhouette. Built with durable construction in timeless colors for everyday wear and beyond.",
       "features": ["Robust cotton canvas material", "Six functional cargo pockets", "Adjustable side straps for fit", "Zipper details on legs", "Tapered silhouette for modern look", "Double stitching for durability"],
       "materials": ["100% cotton canvas", "12 oz. weight", "Durable and water-resistant"],
       "care": ["Machine wash at 40°C", "Wash with similar colors", "Tumble dry or hang dry", "Iron only if needed"]
     },
     "Trainerhose": {
-      "description": "The track pants are the modern athleisure essential that perfectly combines comfort and style. With its tapered cut and premium materials, it's ideal for training, leisure and relaxed everyday elegance. Timeless, versatile and absolutely wearable.",
+      "description": "These track pants are a modern athleisure essential that balance comfort and style. The tapered fit and premium fabric make them ideal for training, downtime, and elevated everyday looks. Timeless, versatile, and made to be worn on repeat.",
       "features": ["Premium cotton-polyester blend", "Tapered cut with modern appeal", "Two deep front pockets", "Elastic back with drawstring", "Zipper ankle pockets (optional)", "Softshell processing for extra comfort"],
       "materials": ["80% cotton, 20% polyester", "Woven and combed", "Breathable and shape-stable"],
       "care": ["Machine wash at 30°C", "Wash with similar colors", "Tumble dry on low temperature", "Lightly iron if desired"]
