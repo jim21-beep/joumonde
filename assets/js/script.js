@@ -1,4 +1,4 @@
-// Dropdown-Logik für alle Old Money Produkte
+﻿// Dropdown-Logik für alle Old Money Produkte
 function toggleBlazerColorDropdown(e) { if (e) e.stopPropagation();
     const btn = document.getElementById('blazer-color-dropdown-btn');
     const list = document.getElementById('blazer-color-dropdown-list');
@@ -59,7 +59,7 @@ function applyColorSelection(key, hex, label, stateKey) {
 // Initialwerte für die Farbauswahl
 window.selectedBlazerColor = 'Schwarz';
 window.selectedPoloColor = 'Weiß';
-window.selectedChinoColor = 'Camel';
+window.selectedChinoColor = 'Beige';
 window.selectedPulloverColor = 'Dunkelblau';
 window.selectedWesteColor = 'Creme';
 window.selectedQuarterzipColor = 'Creme';
@@ -1260,35 +1260,47 @@ function openCheckout() {
                     <h3>${currentLanguage === 'de' ? 'Lieferadresse' : currentLanguage === 'en' ? 'Shipping Address' : 'Adresse de livraison'}</h3>
                     <form class="checkout-form" onsubmit="submitOrder(event)">
                         <div class="form-row">
-                            <input type="text" placeholder="${currentLanguage === 'de' ? 'Vorname' : currentLanguage === 'en' ? 'First Name' : 'Prénom'}" required>
-                            <input type="text" placeholder="${currentLanguage === 'de' ? 'Nachname' : currentLanguage === 'en' ? 'Last Name' : 'Nom'}" required>
+                            <input type="text" placeholder="${currentLanguage === 'de' ? 'Vorname' : currentLanguage === 'en' ? 'First Name' : 'Prénom'}">
+                            <input type="text" placeholder="${currentLanguage === 'de' ? 'Nachname' : currentLanguage === 'en' ? 'Last Name' : 'Nom'}">
                         </div>
                         <input type="email" placeholder="Email" required>
-                        <input type="tel" placeholder="${currentLanguage === 'de' ? 'Telefon' : currentLanguage === 'en' ? 'Phone' : 'Téléphone'}" required>
-                        <input type="text" placeholder="${currentLanguage === 'de' ? 'Straße & Hausnummer' : currentLanguage === 'en' ? 'Street & Number' : 'Rue & Numéro'}" required>
+                        <input type="tel" placeholder="${currentLanguage === 'de' ? 'Telefon' : currentLanguage === 'en' ? 'Phone' : 'Téléphone'}">
+                        <input type="text" placeholder="${currentLanguage === 'de' ? 'Straße & Hausnummer' : currentLanguage === 'en' ? 'Street & Number' : 'Rue & Numéro'}">
                         <div class="form-row">
-                            <input type="text" placeholder="${currentLanguage === 'de' ? 'PLZ' : currentLanguage === 'en' ? 'ZIP' : 'NPA'}" required>
-                            <input type="text" placeholder="${currentLanguage === 'de' ? 'Stadt' : currentLanguage === 'en' ? 'City' : 'Ville'}" required>
+                            <input type="text" placeholder="${currentLanguage === 'de' ? 'PLZ' : currentLanguage === 'en' ? 'ZIP' : 'NPA'}">
+                            <input type="text" placeholder="${currentLanguage === 'de' ? 'Stadt' : currentLanguage === 'en' ? 'City' : 'Ville'}">
                         </div>
-                        <input type="text" placeholder="${currentLanguage === 'de' ? 'Land' : currentLanguage === 'en' ? 'Country' : 'Pays'}" value="Schweiz" required>
+                        <input type="text" placeholder="${currentLanguage === 'de' ? 'Land' : currentLanguage === 'en' ? 'Country' : 'Pays'}" value="Schweiz">
                         
                         <h3>${currentLanguage === 'de' ? 'Zahlungsmethode' : currentLanguage === 'en' ? 'Payment Method' : 'Mode de paiement'}</h3>
                         <div class="payment-methods">
                             <label class="payment-option">
                                 <input type="radio" name="payment" value="card" checked>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="Visa" class="payment-logo">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard" class="payment-logo">
-                                <span>${currentLanguage === 'de' ? 'Kreditkarte' : currentLanguage === 'en' ? 'Credit Card' : 'Carte de crédit'}</span>
+                                <div class="payment-content">
+                                    <div class="payment-brand-row payment-brand-logos">
+                                        <img src="assets/images/payments/visa.svg" alt="Visa" class="payment-logo">
+                                        <img src="assets/images/payments/mastercard.svg" alt="Mastercard" class="payment-logo">
+                                    </div>
+                                    <span class="payment-label">${currentLanguage === 'de' ? 'Kreditkarte' : currentLanguage === 'en' ? 'Credit Card' : 'Carte de credit'}</span>
+                                </div>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="amex">
+                                <div class="payment-content">
+                                    <div class="payment-brand-row payment-brand-logos">
+                                        <img src="assets/images/payments/amex.svg" alt="American Express" class="payment-logo payment-logo-wide">
+                                    </div>
+                                    <span class="payment-label">American Express</span>
+                                </div>
                             </label>
                             <label class="payment-option">
                                 <input type="radio" name="payment" value="paypal">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/200px-PayPal.svg.png" alt="PayPal" class="payment-logo">
-                                <span>PayPal</span>
-                            </label>
-                            <label class="payment-option">
-                                <input type="radio" name="payment" value="twint">
-                                <img src="assets/images/twint-seeklogo.png" alt="TWINT" class="payment-logo">
-                                <span>TWINT</span>
+                                <div class="payment-content">
+                                    <div class="payment-brand-row payment-brand-logos">
+                                        <img src="assets/images/payments/paypal.svg" alt="PayPal" class="payment-logo payment-logo-wide">
+                                    </div>
+                                    <span class="payment-label">PayPal</span>
+                                </div>
                             </label>
                         </div>
                         
@@ -1321,7 +1333,15 @@ async function submitOrder(e) {
     const submitBtn = form.querySelector('.submit-order-btn');
     const inputs = form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]');
     const firstName = inputs[0] ? inputs[0].value.trim() : '';
-    const email     = inputs[2] ? inputs[2].value.trim() : '';
+    const lastName = inputs[1] ? inputs[1].value.trim() : '';
+    const email = inputs[2] ? inputs[2].value.trim() : '';
+    const phone = inputs[3] ? inputs[3].value.trim() : '';
+    const street = inputs[4] ? inputs[4].value.trim() : '';
+    const zip = inputs[5] ? inputs[5].value.trim() : '';
+    const city = inputs[6] ? inputs[6].value.trim() : '';
+    const country = inputs[7] ? inputs[7].value.trim() : '';
+    const selectedPayment = form.querySelector('input[name="payment"]:checked');
+    const paymentMethod = selectedPayment ? selectedPayment.value : 'card';
 
     // Calculate total before clearing cart
     let subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -1334,15 +1354,39 @@ async function submitOrder(e) {
     }
     
     const total = subtotal - discount;
-    const orderId = 'ORD-' + Date.now();
+    const orderId = 'JM' + Date.now().toString();
+
+    const orderItems = cart.map(item => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        size: item.size || getPreferredSizeForProduct(item.name),
+        color: item.color || null
+    }));
+
+    const shippingAddress = {
+        firstName,
+        lastName,
+        phone,
+        street,
+        zip,
+        city,
+        country,
+        fullAddress: [street, `${zip} ${city}`.trim(), country].filter(Boolean).join(', ')
+    };
 
     // Show loading state
     if (submitBtn) {
         submitBtn.disabled = true;
         submitBtn.textContent = currentLanguage === 'en' ? 'Processing…' : 'Wird verarbeitet…';
     }
-    
-    // Send order confirmation email to customer
+
+    // Single checkout path for test orders:
+    // Persist order + send confirmation email via edge function (no real charge).
+    let orderPersisted = false;
+    let emailSent = false;
+    const effectivePaymentMethod = paymentMethod || 'card';
+
     if (email) {
         try {
             const res = await fetch('https://sbxffjszderijikxarho.supabase.co/functions/v1/send-newsletter-confirmation', {
@@ -1354,23 +1398,59 @@ async function submitOrder(e) {
                     firstName,
                     userId: (typeof window.getCurrentUserId === 'function' ? window.getCurrentUserId() : null),
                     orderId,
-                    items: cart.map(item => ({
-                        name: item.name,
-                        price: item.price,
-                        quantity: item.quantity,
-                        size: item.size || getPreferredSizeForProduct(item.name),
-                        color: item.color || null
-                    })),
+                    items: orderItems,
                     total,
+                    currency: currentCurrency || 'CHF',
+                    persistOrder: true,
+                    paymentMethod: effectivePaymentMethod,
+                    paymentStatus: 'paid',
+                    shippingAddress,
                     orderDate: new Date().toLocaleString('de-DE')
                 })
             });
             if (!res.ok) {
                 console.error('Bestellbestätigung fehlgeschlagen – HTTP', res.status, await res.text());
+            } else {
+                try {
+                    const responseData = await res.json();
+                    if (responseData?.orderSaved) {
+                        orderPersisted = true;
+                    }
+                } catch {}
+                emailSent = true;
             }
         } catch (err) {
             console.warn('Netzwerkfehler beim Senden der Bestellbestätigung:', err);
         }
+    }
+
+    if (!emailSent) {
+        const errorMsg = currentLanguage === 'de'
+            ? 'Bestellbestätigung konnte nicht gesendet werden. Bitte versuche es erneut.'
+            : currentLanguage === 'en'
+            ? 'The order confirmation email could not be sent. Please try again.'
+            : 'L\'email de confirmation n\'a pas pu etre envoye. Veuillez reessayer.';
+        showNotification(errorMsg, 'error');
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = `${currentLanguage === 'de' ? 'Kostenpflichtig bestellen' : currentLanguage === 'en' ? 'Place Order' : 'Commander'} ${formatPrice(total)}`;
+        }
+        return;
+    }
+
+    if (!orderPersisted) {
+        console.warn('Order could not be persisted via edge function.');
+        const errorMsg = currentLanguage === 'de'
+            ? 'Bestellung konnte aktuell nicht gespeichert werden. Bitte versuche es erneut.'
+            : currentLanguage === 'en'
+            ? 'Your order could not be saved right now. Please try again.'
+            : 'La commande n\'a pas pu etre enregistree. Veuillez reessayer.';
+        showNotification(errorMsg, 'error');
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = `${currentLanguage === 'de' ? 'Kostenpflichtig bestellen' : currentLanguage === 'en' ? 'Place Order' : 'Commander'} ${formatPrice(total)}`;
+        }
+        return;
     }
 
     // Track purchase
@@ -1806,9 +1886,9 @@ function generateBotResponse(userMessage) {
     }
     // Payment methods - expanded
     else if (containsAny(['zahlung', 'bezahlen', 'zahlungsmethode', 'payment', 'kreditkarte', 'paypal',
-                     'twint', 'rechnung', 'uberweisung', 'karte', 'bezahl', 'pay'])) {
+                     'rechnung', 'uberweisung', 'karte', 'bezahl', 'pay'])) {
         wasResolved = true;
-        response = '💳 Zahlungsmethoden:\n\n✓ Kreditkarte (Visa, Mastercard, Amex)\n✓ PayPal\n✓ TWINT (Schweizer Mobile Payment)\n✓ Rechnung (Klarna)\n✓ Apple Pay & Google Pay\n\nAlle Zahlungen sind SSL-verschlüsselt und sicher! 🔒';
+        response = '💳 Zahlungsmethoden:\n\n✓ Kreditkarte (Visa, Mastercard, Amex)\n✓ PayPal\n✓ Rechnung (Klarna)\n✓ Apple Pay & Google Pay\n\nAlle Zahlungen sind SSL-verschlüsselt und sicher! 🔒';
     }
     // Sizing - expanded
     else if (containsAny(['grosse', 'passt', 'grossentabelle', 'grossenberatung', 'sizing', 'size',
@@ -2011,7 +2091,8 @@ function toggleWishlistItem(productName, price, imageBg, buttonElement) {
         wishlist.push({
             name: productName,
             price: price,
-            imageBg: imageBg || 'linear-gradient(135deg, #f5f5dc 0%, #d3d3d3 100%)'
+            imageBg: imageBg || 'linear-gradient(135deg, #f5f5dc 0%, #d3d3d3 100%)',
+            addedAt: Date.now()
         });
         buttonElement.classList.add('active');
         showNotification(`${productName} zur Wunschliste hinzugefügt`);
@@ -2025,6 +2106,14 @@ function toggleWishlistItem(productName, price, imageBg, buttonElement) {
     localStorage.setItem('wishlist', JSON.stringify(wishlist));
     updateWishlistCount();
     updateWishlistDisplay();
+}
+
+function addWishlistItemToCart(productName) {
+    const item = wishlist.find(entry => entry.name === productName);
+    if (!item) return;
+
+    addToCart(item.name, item.price);
+    showNotification(`${productName} aus Wunschliste in den Warenkorb gelegt`);
 }
 
 function removeFromWishlist(productName) {
@@ -2052,6 +2141,7 @@ function updateWishlistCount() {
 
 function updateWishlistDisplay() {
     const wishlistItems = document.getElementById('wishlist-items');
+    if (!wishlistItems) return;
     
     if (wishlist.length === 0) {
         wishlistItems.innerHTML = `
@@ -2063,7 +2153,8 @@ function updateWishlistDisplay() {
             </div>
         `;
     } else {
-        wishlistItems.innerHTML = wishlist.map(item => `
+        const sortedWishlist = [...wishlist].sort((a, b) => (b.addedAt || 0) - (a.addedAt || 0));
+        wishlistItems.innerHTML = sortedWishlist.map(item => `
             <div class="cart-item">
                 <div class="cart-item-image" style="background: ${item.imageBg};">
                     <span style="font-size: 0.7rem;">Bild</span>
@@ -2071,6 +2162,7 @@ function updateWishlistDisplay() {
                 <div class="cart-item-details">
                     <h4>${item.name}</h4>
                     <p class="cart-item-price">${formatPrice(item.price)}</p>
+                    <button class="wishlist-move-btn" onclick="addWishlistItemToCart('${item.name}')">In den Warenkorb</button>
                 </div>
                 <button class="remove-item-btn" onclick="removeFromWishlist('${item.name}')">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2568,14 +2660,14 @@ function applyDiscountCode() {
     const code = codeInput.value.trim().toUpperCase();
     
     if (!code) {
-        showDiscountMessage('Bitte geben Sie einen Rabattcode ein.', 'error');
+        showDiscountMessage('Bitte gib einen Rabattcode ein.', 'error');
         return;
     }
     
     const discountInfo = validDiscountCodes[code];
     
     if (!discountInfo) {
-        showDiscountMessage('Ung�ltiger Rabattcode. Bitte versuchen Sie es erneut.', 'error');
+        showDiscountMessage('Ungültiger Rabattcode. Bitte versuche es erneut.', 'error');
         return;
     }
     

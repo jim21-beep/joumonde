@@ -733,34 +733,57 @@
             
             // Update sizes if provided
             if (productData.sizes && productData.sizes.length > 0) {
-                const sizeButtons = document.querySelectorAll('.size-btn');
-                const sizeContainer = document.querySelector('.size-buttons');
+                const sizeContainer = document.querySelector('.size-options-grid');
                 if (sizeContainer) {
                     sizeContainer.innerHTML = '';
                     productData.sizes.forEach((size, index) => {
                         const btn = document.createElement('button');
-                        btn.className = 'size-btn' + (index === 1 ? ' active' : '');
+                        btn.className = 'size-option' + (index === 0 ? ' active' : '');
                         btn.textContent = size;
-                        btn.onclick = function() { selectSize(this); };
+                        btn.onclick = function() { selectSize(size, this); };
                         sizeContainer.appendChild(btn);
                     });
+                    const selectedSizeSpan = document.getElementById('selectedSize');
+                    if (selectedSizeSpan) selectedSizeSpan.textContent = productData.sizes[0];
+                    if (typeof selectedSize !== 'undefined') selectedSize = productData.sizes[0];
                 }
             }
             
             // Update colors if provided
             if (productData.colors && productData.colors.length > 0) {
-                const colorContainer = document.querySelector('.color-buttons');
+                const colorContainer = document.querySelector('.color-options-detail');
                 if (colorContainer) {
                     colorContainer.innerHTML = '';
+
+                    const colorMap = {
+                        'Schwarz': '#000000',
+                        'Weiss': '#f5f5f5',
+                        'Weiß': '#f5f5f5',
+                        'Navy': '#001f3f',
+                        'Grau': '#808080',
+                        'Hellgrau': '#d8d8d8',
+                        'Beige': '#f5f5dc',
+                        'Burgundy': '#800020',
+                        'Camel': '#c19a6b',
+                        'Olive': '#556b2f',
+                        'Creme': '#f3ead7',
+                        'Dunkelblau': '#1f2f46'
+                    };
+
                     productData.colors.forEach((color, index) => {
                         const btn = document.createElement('button');
-                        btn.className = 'color-btn' + (index === 0 ? ' active' : '');
-                        btn.textContent = color;
-                        btn.onclick = function() { selectColor(this); };
+                        btn.className = 'color-option' + (index === 0 ? ' active' : '');
+                        btn.title = color;
+                        btn.style.background = colorMap[color] || '#d0d0d0';
+                        if (color === 'Weiß' || color === 'Weiss') {
+                            btn.style.border = '1px solid #ddd';
+                        }
+                        btn.onclick = function() { selectColor(color, this); };
                         colorContainer.appendChild(btn);
                     });
                     const selectedColorSpan = document.getElementById('selectedColor');
                     if (selectedColorSpan) selectedColorSpan.textContent = productData.colors[0];
+                    if (typeof selectedColor !== 'undefined') selectedColor = productData.colors[0];
                 }
             }
             
