@@ -138,12 +138,12 @@ function selectHoodieColorDropdown(color, hex, label, e) { if (e) e.stopPropagat
         beige: 'linear-gradient(135deg, #f5f5dc 0%, #e0dbc3 100%)'
     };
     var descMap = {
-        black: 'Premium Cotton in Schwarz',
-        white: 'Premium Cotton in Weiß',
-        gray: 'Premium Cotton in Grau',
-        navy: 'Premium Cotton in Navy',
-        olive: 'Premium Cotton in Olive',
-        beige: 'Premium Cotton in Beige'
+        black: 'Entspannter Baumwoll-Hoodie – urban cool',
+        white: 'Entspannter Baumwoll-Hoodie – urban cool',
+        gray: 'Entspannter Baumwoll-Hoodie – urban cool',
+        navy: 'Entspannter Baumwoll-Hoodie – urban cool',
+        olive: 'Entspannter Baumwoll-Hoodie – urban cool',
+        beige: 'Entspannter Baumwoll-Hoodie – urban cool'
     };
     // Setze Hintergrund
     var hoodieImage = document.getElementById('hoodie-image');
@@ -237,37 +237,37 @@ function selectHoodieColor(color, btn) {
     let colorName = 'Schwarz';
     let bg = 'linear-gradient(135deg, #000000 0%, #434343 100%)';
     let img = 'assets/images/hoodie-mockup.png';
-    let descText = 'Premium Cotton in Schwarz';
+    let descText = 'Entspannter Baumwoll-Hoodie – urban cool';
     switch (color) {
         case 'white':
             colorName = 'Weiß';
             bg = 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)';
             img = 'assets/images/hoodie-mockup-white.png';
-            descText = 'Premium Cotton in Weiß';
+            descText = 'Entspannter Baumwoll-Hoodie – urban cool';
             break;
         case 'gray':
             colorName = 'Grau';
             bg = 'linear-gradient(135deg, #808080 0%, #b0b0b0 100%)';
             img = 'assets/images/hoodie-mockup-gray.png';
-            descText = 'Premium Cotton in Grau';
+            descText = 'Entspannter Baumwoll-Hoodie – urban cool';
             break;
         case 'navy':
             colorName = 'Navy';
             bg = 'linear-gradient(135deg, #001f3f 0%, #3a3a60 100%)';
             img = 'assets/images/hoodie-mockup-navy.png';
-            descText = 'Premium Cotton in Navy';
+            descText = 'Entspannter Baumwoll-Hoodie – urban cool';
             break;
         case 'olive':
             colorName = 'Olive';
             bg = 'linear-gradient(135deg, #556B2F 0%, #8FBC8F 100%)';
             img = 'assets/images/hoodie-mockup-olive.png';
-            descText = 'Premium Cotton in Olive';
+            descText = 'Entspannter Baumwoll-Hoodie – urban cool';
             break;
         case 'beige':
             colorName = 'Beige';
             bg = 'linear-gradient(135deg, #f5f5dc 0%, #e9e4c9 100%)';
             img = 'assets/images/hoodie-mockup-beige.png';
-            descText = 'Premium Cotton in Beige';
+            descText = 'Entspannter Baumwoll-Hoodie – urban cool';
             break;
     }
     hoodieImageDiv.style.background = bg;
