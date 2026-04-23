@@ -161,5 +161,79 @@
   "accountTotalLabel": "Total",
   "accountViewDetails": "Voir les détails",
   "accountNone": "Aucune",
-  "askNexara": "Demander à Nexara"
+  "askNexara": "Demander à Nexara",
+  "productDescriptions": {
+    "Klassischer Blazer": {
+      "description": "Ce blazer classique en laine italienne premium est le vêtement parfait pour le gentleman exigeant. Avec sa silhouette intemporelle et son savoir-faire de première classe, il ajoute une note élégante à toute tenue. Idéal pour les réunions d'affaires, les occasions formelles et l'élégance quotidienne.",
+      "features": ["Laine italienne premium (Super 120s)", "Coupe classique à 2 boutons", "Doublure en viscose", "Deux poches latérales avec passepoil", "Poche poitrine pour mouchoir", "Parfait pour le business et les occasions formelles"],
+      "materials": ["90% laine peignée (italienne, Super 120s)", "10% cachemire", "Doublure: 100% viscose"],
+      "care": ["Nettoyage à sec uniquement", "Ne pas javelliser", "Ne pas sécher à la machine", "Repasser à basse température", "Suspendre sur cintre"]
+    },
+    "Polo Hemd": {
+      "description": "Ce polo classique en coton égyptien combine l'élégance intemporelle avec le confort suprême. Le savoir-faire fin et le matériau premium en font le compagnon parfait pour les loisirs et le business-casual. Un classique qui ne sort jamais de mode.",
+      "features": ["Coton égyptien premium", "Forme polo classique", "Patte de boutonnage avec boutons-pression", "Bord de col et manche de couleur contrastante", "Ourlet de manche coupé lâche", "Coutures d'épaule renforcées pour la durabilité"],
+      "materials": ["100% coton égyptien", "Poids: 200 g/m²", "Savoir-faire de haute qualité"],
+      "care": ["Laver à la machine à 30°C", "Laver avec des couleurs similaires", "Sécher à basse température", "Repasser à température moyenne"]
+    },
+    "Knit Zip-Polo": {
+      "description": "Le Knit Zip-Polo innovant allie le charme d'un polo classique avec la praticité fonctionnelle d'une fermeture éclair. Confectionné à partir du meilleur matériel tricoté, il offre une liberté de mouvement optimale et un confort respirable pour les porteurs actifs.",
+      "features": ["Structure fine en mélange coton premium", "Fermeture éclair pratique 1/4", "Coupe ajustée", "Fermetures éclair YKK de haute qualité", "Bandes élastiques et ourlets de manche", "Aspect sportif et moderne"],
+      "materials": ["90% coton, 10% polyester", "Qualité maille fine", "Durable et stable en forme"],
+      "care": ["Laver à la machine à 30°C (cycle délicat)", "Laver à l'envers", "Sécher à plat", "Repasser à basse température"]
+    },
+    "Chino Hose": {
+      "description": "Le pantalon chino classique est un incontournable intemporel pour le gentleman moderne. Fabriqué à partir d'un mélange coton haut de gamme, il offre le mélange parfait de confort et d'élégance. Sa polyvalence en fait le compagnon idéal pour le business-casual jusqu'à la tenue de loisirs.",
+      "features": ["Coupe slim avec un look moderne", "Coutures renforcées pour la durabilité", "Poches profondes avec poche à monnaie", "Fermeture classique à bouton et fermeture éclair", "Ceinture intérieure ajustable pour un ajustement parfait", "Palette de couleurs moderne et intemporelle"],
+      "materials": ["98% coton, 2% élasthane", "Tissu twill durable", "Sensation agréable et durable"],
+      "care": ["Laver à la machine à 40°C", "Laver avec des couleurs similaires", "Sécher à basse température", "Repasser légèrement si nécessaire"]
+    },
+    "Elegante Weste": {
+      "description": "Ce gilet en laine raffiné est la pièce maîtresse pour les tenues élaborées. Avec sa structure délicate et son savoir-faire de première classe, il confère souveraineté et style au porteur. Parfait comme pièce de superposition pour les occasions formelles et dressy-casual.",
+      "features": ["Tissu mélange laine premium", "Encolure classique en V", "Quatre poches extérieures", "Poche intérieure pour les petits objets", "Sangle arrière ajustable", "Patte de boutons élégante avec boutons en nacre"],
+      "materials": ["85% laine peignée, 15% soie", "Doublure jacquard de haute qualité", "Fabrication premium"],
+      "care": ["Nettoyage à sec recommandé", "Ranger sur cintre", "Protéger du soleil intense", "Nettoyage professionnel si nécessaire"]
+    },
+    "Quarter Zipper": {
+      "description": "Le Quarter Zipper en mélange cachemire luxueux est le pont parfait entre l'élégance et le confort. La fermeture éclair pratique 1/4 permet un ajustement flexible de la température, tandis que les matériaux premium offrent une sensation incomparable. Une pièce d'investissement pour les porteurs exigeants.",
+      "features": ["Mélange cachemire-coton premium", "Fermeture éclair 1/4 pour la flexibilité", "Col ras du cou côtelé", "Bandes élastiques et ourlets de manche", "Savoir-faire de haute qualité", "Design intemporel et discret"],
+      "materials": ["50% cachemire, 50% coton", "Ultra-doux et respirant", "Durable et de haute qualité"],
+      "care": ["Lavage à la main ou cycle délicat à 30°C", "Utiliser un détergent doux", "Sécher à plat", "Ne pas repasser - sécher à l'air"]
+    },
+    "Strickpullover": {
+      "description": "Ce pull en cachemire premium incarne le luxe intemporel et un confort incomparable. Le matériau ultra-doux épouse doucement le corps et offre une silhouette élégante qui convient à toute occasion. Un classique qui dure une vie.",
+      "features": ["100% cachemire premium", "Dos sans couture (couture latérale uniquement)", "Col ras du cou côtelé et poignets", "Coupe élégante et flatteuse", "Savoir-faire de haute qualité", "Équilibre parfait entre l'élégance et le confort"],
+      "materials": ["100% cachemire de qualité premium", "À longue fibre et doux", "Élégance intemporelle"],
+      "care": ["Lavage à la main à l'eau froide", "Utiliser un détergent spécifique cachemire", "Sécher à plat sur une surface plane", "Ne pas tordre ni serrer"]
+    },
+    "Leinenhose": {
+      "description": "Le pantalon en lin léger est l'essentiel estival parfait pour l'homme soucieux de son style. Fabriqué en lin pur et haut de gamme, il offre une respirabilité extraordinaire et un look élégant et décontracté. Idéal pour les journées chaudes et l'élégance décontractée.",
+      "features": ["100% lin pur irlandais", "Coupe décontractée et élégante", "Deux grandes poches avant", "Volants latéraux ajustables", "Fermeture classique à bouton", "Variations de couleur naturelles pour l'authenticité"],
+      "materials": ["100% lin irlandais", "Naturel et respirant", "Respectueux de l'environnement"],
+      "care": ["Laver à la machine à 30°C", "Laver avec des couleurs similaires", "Sécher à plat ou suspendu", "Vaporiser légèrement ou repasser avec un chiffon humide"]
+    },
+    "Oversized Hoodie": {
+      "description": "Le Sweat à Capuche Oversize est la pièce culturelle urbaine par excellence. Avec sa coupe décontractée et son coton premium, il offre un confort maximal sans sacrifier le style. Parfait pour les amateurs de streetwear qui l'aiment casual et cool.",
+      "features": ["100% coton premium", "Coupe oversize et décontractée", "Poche kangourou avant avec fermeture éclair", "Cordons de serrage ajustables dans la capuche", "Intérieur brossé pour un confort supplémentaire", "Coutures flatlock durables"],
+      "materials": ["100% coton biologique", "Poids 280 g/m²", "Durable et stable en forme"],
+      "care": ["Laver à la machine à 30°C", "Retourner avant le lavage", "Sécher à basse température ou suspendre", "Repasser à basse température si nécessaire"]
+    },
+    "T-Shirt": {
+      "description": "Ce t-shirt graphique en édition limitée est bien plus qu'un vêtement – c'est une déclaration. Avec du coton premium et des impressions de design exclusif, il devient un favori dans toute garde-robe. Les quantités limitées garantissent l'exclusivité.",
+      "features": ["100% coton premium", "Graphique exclusif en édition limitée", "Encolure ras du cou classique", "Traitement d'impression professionnel", "Couleurs durables grâce aux techniques d'impression spéciales", "Ajustement confortable et classique"],
+      "materials": ["100% coton biologique", "150 g/m² léger", "Sensation douce sur la peau"],
+      "care": ["Laver à la machine à 30°C (cycle délicat)", "Laver le graphique vers l'intérieur", "Sécher à très basse température", "Ne pas repasser directement sur le graphique"]
+    },
+    "Cargo Pants": {
+      "description": "Le pantalon cargo combine la fonctionnalité avec le style streetwear moderne. Avec plusieurs poches bien pensées, il offre des solutions pratiques pour la vie quotidienne et l'aventure. Fabrication de haute qualité et couleurs intemporelles – une déclaration pour le fashionista pratique.",
+      "features": ["Matériau solide en toile coton", "Six poches cargo fonctionnelles", "Bandes latérales ajustables pour l'ajustement", "Détails de fermeture éclair sur les jambes", "Silhouette effilée pour un look moderne", "Couture double pour la durabilité"],
+      "materials": ["100% toile coton", "Poids 12 oz", "Durable et résistant à l'eau"],
+      "care": ["Laver à la machine à 40°C", "Laver avec des couleurs similaires", "Sécher à la machine ou suspendre", "Repasser uniquement si nécessaire"]
+    },
+    "Trainerhose": {
+      "description": "Le pantalon de survêtement est l'essentiel athleisure moderne qui allie parfaitement le confort et le style. Avec sa coupe effilée et ses matériaux premium, il est idéal pour l'entraînement, les loisirs et l'élégance quotidienne décontractée. Intemporel, polyvalent et absolument portable.",
+      "features": ["Mélange coton-polyester premium", "Coupe effilée avec un attrait moderne", "Deux poches avant profondes", "Dos élastique avec cordon de serrage", "Poches à fermeture éclair à la cheville (facultatif)", "Traitement Softshell pour un confort supplémentaire"],
+      "materials": ["80% coton, 20% polyester", "Tissé et peigné", "Respirant et stable en forme"],
+      "care": ["Laver à la machine à 30°C", "Laver avec des couleurs similaires", "Sécher à basse température", "Repasser légèrement si désiré"]
+    }
+  }
 }

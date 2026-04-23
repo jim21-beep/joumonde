@@ -663,7 +663,7 @@
         const savedLanguage = localStorage.getItem('language') || 'de';
         const languageSelector = document.getElementById('language-selector');
         if (languageSelector) languageSelector.value = savedLanguage;
-        await loadLanguage(savedLanguage);
+        const translations = await loadLanguage(savedLanguage);
         updatePageContent();
 
         const productData = JSON.parse(sessionStorage.getItem('selectedProduct'));
@@ -782,7 +782,7 @@
 
             // Load product descriptions from database
             if (productData && productDatabase[productData.name]) {
-                const prodInfo = productDatabase[productData.name];
+                const prodInfo = translations?.productDescriptions?.[productData.name] || productDatabase[productData.name];
                 
                 // Load main description
                 const descEl = document.getElementById('product-main-description');
@@ -816,6 +816,20 @@
     const _origChangeLangDetail = changeLanguage;
     changeLanguage = async function(lang) {
         await _origChangeLangDetail(lang);
+                // Reload product descriptions for new language
+                const translations = await loadLanguage(lang);
+                const productData = JSON.parse(sessionStorage.getItem('selectedProduct'));
+                if (productData && translations?.productDescriptions?.[productData.name]) {
+                    const prodInfo = translations.productDescriptions[productData.name];
+                    const descEl = document.getElementById('product-main-description');
+                    if (descEl) descEl.textContent = prodInfo.description;
+                    const featuresList = document.getElementById('product-features-list');
+                    if (featuresList) featuresList.innerHTML = prodInfo.features.map(f => `<li>${f}</li>`).join('');
+                    const materialList = document.getElementById('product-material-list');
+                    if (materialList) materialList.innerHTML = prodInfo.materials.map(m => `<li>${m}</li>`).join('');
+                    const careList = document.getElementById('product-care-list');
+                    if (careList) careList.innerHTML = prodInfo.care.map(c => `<li>${c}</li>`).join('');
+                }
         updatePageContent();
     };
     </script>
