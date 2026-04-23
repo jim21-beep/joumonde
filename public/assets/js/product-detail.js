@@ -1,3 +1,272 @@
+// Product Descriptions Database
+const productDatabase = {
+    'Klassischer Blazer': {
+        description: 'Dieser klassische Blazer aus hochwertiger italienischer Wolle ist das perfekte Kleidungsstück für den anspruchsvollen Gentleman. Mit seiner zeitlosen Silhouette und erstklassigen Verarbeitung verleiht er jedem Outfit eine elegante Note. Ideal für Geschäftstreffen, formelle Anlässe und alltägliche Eleganz.',
+        features: [
+            'Premium italienische Wolle (Super 120s)',
+            'Klassischer 2-Knopf-Schnitt',
+            'Innenfutter aus Viskose',
+            'Zwei Seitentaschen mit Paspeln',
+            'Brusttasche für Einstecktuch',
+            'Perfekt für Business & formelle Anlässe'
+        ],
+        materials: [
+            '90% Schurwolle (italienisch, Super 120s)',
+            '10% Kaschmir',
+            'Futter: 100% Viskose'
+        ],
+        care: [
+            'Nur chemische Reinigung',
+            'Nicht bleichen',
+            'Nicht im Trockner trocknen',
+            'Bügeln bei niedriger Temperatur',
+            'Mit Kleiderbügel aufhängen'
+        ]
+    },
+    'Polo Hemd': {
+        description: 'Das klassische Poloshirt aus ägyptischer Baumwolle kombiniert zeitlose Eleganz mit höchstem Tragekomfort. Die feine Verarbeitung und das Premium-Material machen es zum perfekten Begleiter für Freizeit und Business-Casual. Ein Klassiker, der niemals aus der Mode kommt.',
+        features: [
+            'Premium ägyptische Baumwolle',
+            'Klassische Poloform',
+            'Knopfleiste mit Druckknöpfen',
+            'Kontrastfarbige Kragen- und Ärmelbiesen',
+            'Locker geschnittenes Ärmelbündchen',
+            'Verdickte Schulternähte für Langlebigkeit'
+        ],
+        materials: [
+            '100% ägyptische Baumwolle',
+            'Grammatur: 200 g/m²',
+            'Hochwertige Verarbeitung'
+        ],
+        care: [
+            'Maschinenwäsche bei 30°C',
+            'Mit ähnlichen Farben waschen',
+            'Im Schattentumbler trocknen',
+            'Bei mittlerer Temperatur bügeln'
+        ]
+    },
+    'Knit Zip-Polo': {
+        description: 'Das innovative Knit Zip-Polo vereint den Charme eines klassischen Poloshirts mit der praktischen Funktionalität eines Reißverschlusses. Aus feinstem gestricktem Material gefertigt, bietet es optimale Bewegungsfreiheit und atmungsaktiven Komfort für aktive Träger.',
+        features: [
+            'Feinstrick-Struktur aus Premium-Baumwollmix',
+            'Praktischer 1/4-Reißverschluss',
+            'Figurbetonte Schnittform',
+            'Hochwertige YKK-Reißverschlüsse',
+            'Elastische Bund- und Ärmelabschlüsse',
+            'Moderner, sportlicher Look'
+        ],
+        materials: [
+            '90% Baumwolle, 10% Polyester',
+            'Feinstrick-Qualität',
+            'Strapazierfähig und formstabil'
+        ],
+        care: [
+            'Maschinenwäsche bei 30°C (Feinwäsche)',
+            'Innen waschen',
+            'Flach trocknen',
+            'Bei niedriger Temperatur bügeln'
+        ]
+    },
+    'Chino Hose': {
+        description: 'Die klassische Chino-Hose ist ein zeitloser Staple für den modernen Gentleman. Aus hochwertigem Baumwoll-Mix gefertigt, bietet sie den perfekten Mix aus Komfort und Eleganz. Ihre Vielseitigkeit macht sie zum idealen Begleiter für Business-Casual bis Freizeit.',
+        features: [
+            'Slim-Fit Schnitt mit modernem Aussehen',
+            'Verstärkte Nähte für Langlebigkeit',
+            'Tiefe Taschen mit Münzfach',
+            'Klassischer Knopfverschluss und Reißverschluss',
+            'Verstellbare Innenbundweite für perfekte Passform',
+            'Moderne, zeitlose Farbpalette'
+        ],
+        materials: [
+            '98% Baumwolle, 2% Elasthan',
+            'Strapazierfähiger Twill-Stoff',
+            'Angenehm griff und langlebig'
+        ],
+        care: [
+            'Maschinenwäsche bei 40°C',
+            'Mit ähnlichen Farben waschen',
+            'Tumbler auf niedriger Temperatur',
+            'Bei Bedarf leicht ausbügeln'
+        ]
+    },
+    'Elegante Weste': {
+        description: 'Diese raffinierte Wollweste ist das Sahnestück für aufwändig zusammengestellte Outfits. Mit ihrer zierlichen Struktur und erstklassigen Verarbeitung verleiht sie dem Träger Souveränität und Stil. Perfekt als Layering-Piece für formelle und dressy-casual Gelegenheiten.',
+        features: [
+            'Premium Woll-Mischgewebe',
+            'Klassischer V-Ausschnitt',
+            'Vier Außentaschen',
+            'Innentasche für kleine Gegenstände',
+            'Verstellbare Rückenschnalle',
+            'Elegante Knopfleiste mit Perlmuttknöpfen'
+        ],
+        materials: [
+            '85% Schurwolle, 15% Seide',
+            'Hochwertiges Jacquard-Futter',
+            'Premium Verarbeitung'
+        ],
+        care: [
+            'Nur chemische Reinigung empfohlen',
+            'Auf Kleiderbügel lagern',
+            'Vor starker Sonneneinstrahlung schützen',
+            'Bei Bedarf fachgerecht reinigen'
+        ]
+    },
+    'Quarter Zipper': {
+        description: 'Der Quarter Zipper aus luxuriösem Kaschmir-Mix ist die perfekte Brücke zwischen Eleganz und Komfort. Der praktische 1/4-Reißverschluss ermöglicht flexible Temperaturanpassung, während die Premium-Materialien ein unvergleichliches Tragegefühl bieten. Ein Investment-Piece für anspruchsvolle Träger.',
+        features: [
+            'Kaschmir-Baumwolle Premium-Mix',
+            '1/4-Reißverschluss für Flexibilität',
+            'Gerippter Rundhals',
+            'Elastische Bund- und Ärmelabschlüsse',
+            'Hochwertige Verarbeitung',
+            'Zeitloses Understatement-Design'
+        ],
+        materials: [
+            '50% Kaschmir, 50% Baumwolle',
+            'Ultrasoft und atmungsaktiv',
+            'Langlebig und hochwertig'
+        ],
+        care: [
+            'Handwäsche oder Feinwäsche bei 30°C',
+            'Mit mildem Waschmittel',
+            'Flach trocknen',
+            'Nicht bügeln - an der Luft trocknen'
+        ]
+    },
+    'Strickpullover': {
+        description: 'Dieser Premium-Kaschmir Pullover verkörpert zeitlose Luxus und unvergleichlichen Komfort. Das ultraweiche Material schmiegt sich sanft an den Körper an und bietet eine elegante Silhouette, die zu jedem Anlass passt. Ein Klassiker, der ein Leben lang hält.',
+        features: [
+            '100% Premium-Kaschmir',
+            'Nahtlose Rückseite (nur Seitennaht)',
+            'Gerippter Rundhals und Bündchen',
+            'Eleganter, figurbetonte Schnitt',
+            'Hochwertige Verarbeitung',
+            'Perfekte Balance zwischen Eleganz und Komfort'
+        ],
+        materials: [
+            '100% Premium-Grade Kaschmir',
+            'Langfaserig und weich',
+            'Zeitlos elegant'
+        ],
+        care: [
+            'Handwäsche in kaltem Wasser',
+            'Mit Kaschmir-Spezialwaschmittel',
+            'Flach trocknen auf ebener Fläche',
+            'Nicht auswringen oder verdrehen'
+        ]
+    },
+    'Leinenhose': {
+        description: 'Die leichte Leinenhose ist das perfekte Sommer-Essential für den stilbewussten Mann. Aus purem, hochwertigem Leinen gefertigt, bietet sie atemberaubende Atmungsaktivität und einen eleganten, lockeren Look. Ideal für warme Tage und entspannte Eleganz.',
+        features: [
+            '100% reines irisches Leinen',
+            'Lockerer, eleganter Schnitt',
+            'Zwei große Vordertaschen',
+            'Verstellbare Seitenbündel',
+            'Klassischer Knopfverschluss',
+            'Natürliche Farbvariationen für Authentizität'
+        ],
+        materials: [
+            '100% irisches Leinen',
+            'Naturbelassen und atmungsaktiv',
+            'Umweltfreundlich'
+        ],
+        care: [
+            'Maschinenwäsche bei 30°C',
+            'Mit ähnlichen Farben waschen',
+            'Flach oder hängend trocknen',
+            'Leicht dampfen oder mit feuchtem Tuch glätten'
+        ]
+    },
+    'Oversized Hoodie': {
+        description: 'Das Oversized Hoodie ist das urbane Kultur-Stück schlechthin. Mit seinem entspannten Schnitt und Premium-Baumwolle bietet es maximalen Komfort ohne dabei Style zu opfern. Perfekt für Streetwear-Enthusiasten, die es casual und cool mögen.',
+        features: [
+            '100% hochwertige Baumwolle',
+            'Oversized, entspannter Schnitt',
+            'Kangaroo-Frontpocket mit Rei\u00dfverschluss',
+            'Verstellbare Kordelz\u00fcge in Kapuze',
+            'Geb\u00fcrstete Innenseite f\u00fcr Extra-Komfort',
+            'Langlebige Flatlock-N\u00e4hte'
+        ],
+        materials: [
+            '100% Bio-Baumwolle',
+            '280 g/m\u00b2 Gewicht',
+            'Strapazierfähig und formstabil'
+        ],
+        care: [
+            'Maschinenwäsche bei 30°C',
+            'Umkehren vor dem Waschen',
+            'Tumbler auf niedriger Temperatur oder h\u00e4ngend trocknen',
+            'Bei niedriger Temperatur bügeln, falls n\u00f6tig'
+        ]
+    },
+    'T-Shirt': {
+        description: 'Dieses Limited-Edition Graphic T-Shirt ist mehr als nur ein Kleidungsstück – es ist ein Statement. Mit hochwertiger Baumwolle und exklusiven Design-Prints, wird es zum Favoriten in jeder Garderobe. Limitierte St\u00fcckzahlen garantieren Exklusivit\u00e4t.',
+        features: [
+            '100% hochwertige Baumwolle',
+            'Exklusives Limited-Edition Graphic',
+            'Klassischer Rundhalsausschnitt',
+            'Professionelle Druckverarbeitung',
+            'Haltbare Farben durch spezielle Druck-Techniken',
+            'Bequeme, klassische Passform'
+        ],
+        materials: [
+            '100% Bio-Baumwolle',
+            '150 g/m\u00b2 Leichtgewicht',
+            'Sanfte Hautanf\u00fchligkeit'
+        ],
+        care: [
+            'Maschinenwäsche bei 30°C (Schonwaschgang)',
+            'Mit Grafik nach innen waschen',
+            'Tumbler auf sehr niedriger Temperatur',
+            'Nicht direkt auf der Grafik bügeln'
+        ]
+    },
+    'Cargo Pants': {
+        description: 'Die Cargo-Hose vereint Funktionalität mit modernem Streetwear-Style. Mit mehreren durchdachten Taschen bietet sie praktische L\u00f6sungen f\u00fcr Alltag und Abenteuer. Hochwertig verarbeitet und in zeitlosen Farben – ein Statement für den praktischen Fashionista.',
+        features: [
+            'Robustes Baumwoll-Canvas-Material',
+            'Sechs funktionale Cargo-Taschen',
+            'Verstellbare Seitenriegel f\u00fcr Fit',
+            'Rei\u00dfverschluss-Details an den Beinen',
+            'Tapered Silhouette f\u00fcr modernen Look',
+            'Doppelte N\u00e4hte f\u00fcr Langlebigkeit'
+        ],
+        materials: [
+            '100% Baumwoll-Canvas',
+            '12 oz. Gewicht',
+            'Strapazierfähig und wasserfest'
+        ],
+        care: [
+            'Maschinenwäsche bei 40°C',
+            'Mit ähnlichen Farben waschen',
+            'Tumbler oder h\u00e4ngend trocknen',
+            'Ausbügeln nur bei Bedarf'
+        ]
+    },
+    'Trainerhose': {
+        description: 'Die Trainerhose ist das moderne Athleisure-Essential das Komfort und Style perfekt verbindet. Mit ihrem tapered Cut und Premium-Materialien ist sie ideal f\u00fcr Training, Freizeit und entspannte Alltags-Eleganz. Zeitlos, vielseitig und absolut tragbar.',
+        features: [
+            'Premium Baumwolle-Polyester-Mix',
+            'Tapered Schnitt mit modernem Appeal',
+            'Zwei tiefe Vordertaschen',
+            'Elastische R\u00fcckenseite mit Tunnelzug',
+            'Rei\u00dfverschluss-Knöcheltaschen (optional)',
+            'Softshell-Verarbeitung f\u00fcr Extra-Komfort'
+        ],
+        materials: [
+            '80% Baumwolle, 20% Polyester',
+            'Gewebt und gekämmt',
+            'Atmungsaktiv und formstabil'
+        ],
+        care: [
+            'Maschinenwäsche bei 30°C',
+            'Mit ähnlichen Farben waschen',
+            'Tumbler auf niedriger Temperatur',
+            'Leicht ausbügeln falls gew\u00fcnscht'
+        ]
+    }
+};
+
 // Product Detail Page JavaScript
 
 // Gallery Images

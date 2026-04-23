@@ -246,14 +246,9 @@
                                 </svg>
                             </button>
                             <div class="accordion-content active">
-                                <p>Dieser klassische Blazer aus hochwertiger italienischer Wolle ist das perfekte Kleidungsstück für den anspruchsvollen Gentleman. Mit seiner zeitlosen Silhouette und erstklassigen Verarbeitung verleiht er jedem Outfit eine elegante Note.</p>
-                                <ul>
-                                    <li>Premium italienische Wolle (Super 120s)</li>
-                                    <li>Klassischer 2-Knopf-Schnitt</li>
-                                    <li>Innenfutter aus Viskose</li>
-                                    <li>Zwei Seitentaschen mit Paspeln</li>
-                                    <li>Brusttasche für Einstecktuch</li>
-                                    <li>Perfekt für Business & formelle Anlässe</li>
+                                <p id="product-main-description">Laden...</p>
+                                <ul id="product-features-list">
+                                    <li>Feature wird geladen...</li>
                                 </ul>
                             </div>
                         </div>
@@ -266,18 +261,14 @@
                             </button>
                             <div class="accordion-content">
                                 <p><strong>Material:</strong></p>
-                                <ul>
-                                    <li>90% Schurwolle (italienisch, Super 120s)</li>
+                                <ul id="product-material-list">
+                                    <li>Material wird geladen...</li>
                                     <li>10% Kaschmir</li>
                                     <li>Futter: 100% Viskose</li>
                                 </ul>
                                 <p><strong>Pflegehinweise:</strong></p>
-                                <ul>
-                                    <li>Nur chemische Reinigung</li>
-                                    <li>Nicht bleichen</li>
-                                    <li>Nicht im Trockner trocknen</li>
-                                    <li>Bügeln bei niedriger Temperatur</li>
-                                    <li>Mit Kleiderbügel aufhängen</li>
+                                <ul id="product-care-list">
+                                    <li>Pflegehinweise werden geladen...</li>
                                 </ul>
                             </div>
                         </div>
@@ -786,6 +777,33 @@
                     thumbImg.alt = productData.name;
                     thumbImg.style.cssText = 'width:100%; height:100%; object-fit:cover;';
                     firstThumb.appendChild(thumbImg);
+                }
+            }
+
+            // Load product descriptions from database
+            if (productData && productDatabase[productData.name]) {
+                const prodInfo = productDatabase[productData.name];
+                
+                // Load main description
+                const descEl = document.getElementById('product-main-description');
+                if (descEl) descEl.textContent = prodInfo.description;
+                
+                // Load features
+                const featuresList = document.getElementById('product-features-list');
+                if (featuresList) {
+                    featuresList.innerHTML = prodInfo.features.map(f => `<li>${f}</li>`).join('');
+                }
+                
+                // Load materials
+                const materialList = document.getElementById('product-material-list');
+                if (materialList) {
+                    materialList.innerHTML = prodInfo.materials.map(m => `<li>${m}</li>`).join('');
+                }
+                
+                // Load care instructions
+                const careList = document.getElementById('product-care-list');
+                if (careList) {
+                    careList.innerHTML = prodInfo.care.map(c => `<li>${c}</li>`).join('');
                 }
             }
 
