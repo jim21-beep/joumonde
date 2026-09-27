@@ -187,18 +187,18 @@
                         <label>Farbe: <span id="selectedColor">Navy</span></label>
                         <div class="color-options-detail">
                             <button class="color-option active" onclick="selectColor('Navy', this)" style="background: #001f3f;" title="Navy"></button>
-                            <button class="color-option" onclick="selectColor('Schwarz', this)" style="background: #000000;" title="Schwarz"></button>
-                            <button class="color-option" onclick="selectColor('Grau', this)" style="background: #808080;" title="Grau"></button>
+                            <button class="color-option" onclick="selectColor('Schwarz', this)" style="background: #000000;" title="Schwarz" aria-label="Farbe Schwarz wählen"></button>
+                            <button class="color-option" onclick="selectColor('Grau', this)" style="background: #808080;" title="Grau" aria-label="Farbe Grau wählen"></button>
                         </div>
                     </div>
 
                     <!-- Quantity -->
                     <div class="product-detail-quantity">
-                        <label>Menge:</label>
+                        <label for="quantity">Menge:</label>
                         <div class="quantity-selector">
-                            <button onclick="decreaseQuantity()">−</button>
+                            <button onclick="decreaseQuantity()" aria-label="Menge verringern">−</button>
                             <input type="number" id="quantity" value="1" min="1" max="5" readonly>
-                            <button onclick="increaseQuantity()">+</button>
+                            <button onclick="increaseQuantity()" aria-label="Menge erhöhen">+</button>
                         </div>
                     </div>
 
@@ -659,6 +659,7 @@
     <script src="assets/js/analytics.js"></script>
     <script src="assets/js/script.js"></script>
     <script src="assets/js/product-detail.js"></script>
+    <script src="assets/js/config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-client.js"></script>
     <script src="assets/js/account-system.js"></script>
@@ -747,6 +748,7 @@
                         const btn = document.createElement('button');
                         btn.className = 'color-option' + (index === 0 ? ' active' : '');
                         btn.title = color;
+                        btn.setAttribute('aria-label', 'Farbe ' + color + ' wählen');
                         btn.style.background = colorMap[color] || '#d0d0d0';
                         if (color === 'Weiß' || color === 'Weiss') {
                             btn.style.border = '1px solid #ddd';

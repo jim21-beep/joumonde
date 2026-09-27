@@ -839,7 +839,22 @@ function updateCart() {
     
     // Update cart items display
     if (cart.length === 0) {
-        cartItemsContainer.innerHTML = `<p class="empty-cart-message">${t('cartEmpty')}</p>`;
+        cartItemsContainer.innerHTML = `
+            <div class="empty-cart-message">
+                <p>${t('cartEmpty')}</p>
+                <button type="button" class="checkout-btn" style="margin-top:1rem;" data-empty-cart-cta>${t('shopNow')}</button>
+            </div>
+        `;
+        const emptyCartCta = cartItemsContainer.querySelector('[data-empty-cart-cta]');
+        if (emptyCartCta) {
+            emptyCartCta.addEventListener('click', () => {
+                if (window.location.pathname.includes('shop.html')) {
+                    toggleCart();
+                } else {
+                    window.location.href = 'shop.html';
+                }
+            });
+        }
         
         // Setze Subtotal und Total auf 0.00
         const subtotalElement = document.getElementById('cart-subtotal');
@@ -1063,6 +1078,8 @@ function showNotification(message) {
     
     const notification = document.createElement('div');
     notification.className = 'notification';
+    notification.setAttribute('role', 'status');
+    notification.setAttribute('aria-live', 'polite');
     notification.textContent = message;
     notification.style.cssText = `
         position: fixed;
@@ -1242,35 +1259,38 @@ function toggleSearch() {
         { name: 'Nécessaire', price: null, collection: 'Accessories', mainCategory: 'Taschen & Lederwaren', subCategory: 'Travel', section: null, status: 'planned' }
     ];
     
+    let searchDebounceTimer = null;
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase();
-        
-        if (query.length < 2) {
-            searchResults.innerHTML = `<p class="search-hint">${t('searchHint')}</p>`;
-            return;
-        }
-        
-        const results = products.filter(p =>
-            p.name.toLowerCase().includes(query) ||
-            p.collection.toLowerCase().includes(query) ||
-            p.mainCategory.toLowerCase().includes(query) ||
-            p.subCategory.toLowerCase().includes(query)
-        );
-        
-        if (results.length === 0) {
-            searchResults.innerHTML = `<p class="search-no-results">${t('searchNoResults')}</p>`;
-            return;
-        }
-        
-        searchResults.innerHTML = results.map(p => `
-            <div class="search-result-item" onclick="handleSearchResultClick('${p.name.replace(/'/g, "\\'")}')">
-                <div>
-                    <h4>${p.name}</h4>
-                    <span class="search-category">${p.collection} • ${p.mainCategory}${p.status === 'planned' ? ' • Bald verfügbar' : ''}</span>
+        clearTimeout(searchDebounceTimer);
+        searchDebounceTimer = setTimeout(() => {
+            if (query.length < 2) {
+                searchResults.innerHTML = `<p class="search-hint">${t('searchHint')}</p>`;
+                return;
+            }
+
+            const results = products.filter(p =>
+                p.name.toLowerCase().includes(query) ||
+                p.collection.toLowerCase().includes(query) ||
+                p.mainCategory.toLowerCase().includes(query) ||
+                p.subCategory.toLowerCase().includes(query)
+            );
+
+            if (results.length === 0) {
+                searchResults.innerHTML = `<p class="search-no-results">${t('searchNoResults')}</p>`;
+                return;
+            }
+
+            searchResults.innerHTML = results.map(p => `
+                <div class="search-result-item" onclick="handleSearchResultClick('${p.name.replace(/'/g, "\\'")}')">
+                    <div>
+                        <h4>${p.name}</h4>
+                        <span class="search-category">${p.collection} • ${p.mainCategory}${p.status === 'planned' ? ' • Bald verfügbar' : ''}</span>
+                    </div>
+                    <span class="search-price">${p.price != null ? `CHF ${p.price.toFixed(2)}` : 'Coming Soon'}</span>
                 </div>
-                <span class="search-price">${p.price != null ? `CHF ${p.price.toFixed(2)}` : 'Coming Soon'}</span>
-            </div>
-        `).join('');
+            `).join('');
+        }, 250);
     });
     
     searchModal.onclick = (e) => {
@@ -1619,7 +1639,7 @@ async function submitOrder(e) {
 
     if (email) {
         try {
-            const res = await fetch('https://sbxffjszderijikxarho.supabase.co/functions/v1/send-newsletter-confirmation', {
+            const res = await fetch(`${window.__ENV__?.SUPABASE_URL}/functions/v1/send-newsletter-confirmation`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -3189,7 +3209,7 @@ async function submitNewsletter(event) {
     if (submitBtn) { submitBtn.textContent = 'Senden...'; submitBtn.disabled = true; }
 
     try {
-        const res = await fetch('https://sbxffjszderijikxarho.supabase.co/functions/v1/send-newsletter-confirmation', {
+        const res = await fetch(`${window.__ENV__?.SUPABASE_URL}/functions/v1/send-newsletter-confirmation`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ type: 'newsletter', email, source: 'footer-form' })
@@ -3223,3 +3243,52 @@ async function submitNewsletter(event) {
         if (submitBtn) { submitBtn.textContent = originalText; submitBtn.disabled = false; }
     }
 }
+
+// Close any open modal/sidebar with the Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key !== 'Escape') return;
+
+    const searchModal = document.querySelector('.search-modal');
+    if (searchModal) {
+        searchModal.classList.remove('active');
+        setTimeout(() => searchModal.remove(), 300);
+        return;
+    }
+
+    const checkoutModal = document.querySelector('.checkout-modal');
+    if (checkoutModal) {
+        checkoutModal.remove();
+        document.body.classList.remove('modal-open');
+        return;
+    }
+
+    const otherModal = document.querySelector('.contact-modal, .account-modal, .address-form-modal, .order-details-modal');
+    if (otherModal) {
+        otherModal.remove();
+        return;
+    }
+
+    const cartSidebar = document.getElementById('cart-sidebar');
+    if (cartSidebar && cartSidebar.classList.contains('active')) {
+        toggleCart();
+    }
+});
+
+// Back-to-top button (injected once, works across all pages using this script)
+(function initScrollToTopButton() {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = 'scroll-top-btn';
+    btn.setAttribute('aria-label', 'Nach oben scrollen');
+    btn.innerHTML = '&#8593;';
+    document.body.appendChild(btn);
+
+    btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', () => {
+        btn.classList.toggle('visible', window.scrollY > 400);
+    }, { passive: true });
+})();
+

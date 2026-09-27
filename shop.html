@@ -161,12 +161,12 @@
                     <div class="filter-group">
                         <h4>Preis (CHF)</h4>
                         <div class="price-inputs">
-                            <input type="number" id="minPrice" placeholder="Min" min="0" onchange="applyFilters()">
+                            <input type="number" id="minPrice" placeholder="Min" min="0" aria-label="Mindestpreis in CHF" onchange="applyFilters()">
                             <span>-</span>
-                            <input type="number" id="maxPrice" placeholder="Max" min="0" onchange="applyFilters()">
+                            <input type="number" id="maxPrice" placeholder="Max" min="0" aria-label="Höchstpreis in CHF" onchange="applyFilters()">
                         </div>
                         <div class="price-range">
-                            <input type="range" id="priceRange" min="0" max="500" value="500" oninput="updatePriceRange(this.value)">
+                            <input type="range" id="priceRange" min="0" max="500" value="500" aria-label="Preisobergrenze" oninput="updatePriceRange(this.value)">
                             <span class="range-value">bis <span id="rangeValue">500</span> CHF</span>
                         </div>
                     </div>
@@ -207,31 +207,31 @@
                         <h4>Farbe</h4>
                         <div class="color-options">
                             <label class="color-checkbox" title="Schwarz">
-                                <input type="checkbox" value="black" onchange="applyFilters()">
+                                <input type="checkbox" value="black" aria-label="Schwarz" onchange="applyFilters()">
                                 <span class="color-swatch" style="background: #000000;"></span>
                             </label>
                             <label class="color-checkbox" title="Weiß">
-                                <input type="checkbox" value="white" onchange="applyFilters()">
+                                <input type="checkbox" value="white" aria-label="Weiß" onchange="applyFilters()">
                                 <span class="color-swatch" style="background: #ffffff; border: 1px solid #ddd;"></span>
                             </label>
                             <label class="color-checkbox" title="Navy">
-                                <input type="checkbox" value="navy" onchange="applyFilters()">
+                                <input type="checkbox" value="navy" aria-label="Navy" onchange="applyFilters()">
                                 <span class="color-swatch" style="background: #001f3f;"></span>
                             </label>
                             <label class="color-checkbox" title="Grau">
-                                <input type="checkbox" value="gray" onchange="applyFilters()">
+                                <input type="checkbox" value="gray" aria-label="Grau" onchange="applyFilters()">
                                 <span class="color-swatch" style="background: #808080;"></span>
                             </label>
                             <label class="color-checkbox" title="Beige">
-                                <input type="checkbox" value="beige" onchange="applyFilters()">
+                                <input type="checkbox" value="beige" aria-label="Beige" onchange="applyFilters()">
                                 <span class="color-swatch" style="background: #f5f5dc;"></span>
                             </label>
                             <label class="color-checkbox" title="Burgundy">
-                                <input type="checkbox" value="burgundy" onchange="applyFilters()">
+                                <input type="checkbox" value="burgundy" aria-label="Burgundy" onchange="applyFilters()">
                                 <span class="color-swatch" style="background: #800020;"></span>
                             </label>
                             <label class="color-checkbox" title="Camel">
-                                <input type="checkbox" value="camel" onchange="applyFilters()">
+                                <input type="checkbox" value="camel" aria-label="Camel" onchange="applyFilters()">
                                 <span class="color-swatch" style="background: #C19A6B;"></span>
                             </label>
                         </div>
@@ -1012,6 +1012,7 @@
 
         <script src="assets/js/analytics.js"></script>
         <script src="assets/js/script.js"></script>
+        <script src="assets/js/config.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
         <script src="assets/js/supabase-client.js"></script>
         <script src="assets/js/account-system.js"></script>

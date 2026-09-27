@@ -529,15 +529,16 @@ function createReviewElement(review) {
     reviewDiv.className = review.verified ? 'review-item verified' : 'review-item';
     
     const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
-    const initials = review.name.split(' ').map(n => n[0]).join('').toUpperCase();
+    const safeName = escapeHtml(review.name || '');
+    const initials = String(review.name || '').split(' ').map(n => n[0]).join('').toUpperCase();
     const dateStr = new Date(review.date).toLocaleDateString('de-DE');
     
     reviewDiv.innerHTML = `
         <div class="review-header">
             <div class="reviewer-info">
-                <div class="reviewer-avatar">${initials}</div>
+                <div class="reviewer-avatar">${escapeHtml(initials)}</div>
                 <div>
-                    <div class="reviewer-name">${review.name}</div>
+                    <div class="reviewer-name">${safeName}</div>
                     ${review.verified ? '<div class="review-verified">✓ Verifizierter Kauf</div>' : ''}
                 </div>
             </div>
@@ -548,8 +549,8 @@ function createReviewElement(review) {
                 <div class="review-date">${dateStr}</div>
             </div>
         </div>
-        <h4 class="review-title">${review.title}</h4>
-        <p class="review-text">${review.text}</p>
+        <h4 class="review-title">${escapeHtml(review.title || '')}</h4>
+        <p class="review-text">${escapeHtml(review.text || '')}</p>
         <div class="review-helpful">
             <button onclick="markHelpful(this)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

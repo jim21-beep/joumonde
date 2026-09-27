@@ -1,22 +1,96 @@
-// Coming Soon Page JavaScript
+// Joumonde Landing Page — interactions (cursor glow, scroll reveal, Nexara demo, newsletter, admin login)
 
-function updateCountdown() {
-    const launchDate = new Date('2026-05-11T00:00:00').getTime();
-    const timer = setInterval(() => {
-        const now = Date.now();
-        const distance = launchDate - now;
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        document.getElementById('days').innerText = String(Math.max(days,0)).padStart(2, '0');
-        document.getElementById('hours').innerText = String(Math.max(hours,0)).padStart(2, '0');
-        document.getElementById('minutes').innerText = String(Math.max(minutes,0)).padStart(2, '0');
-        document.getElementById('seconds').innerText = String(Math.max(seconds,0)).padStart(2, '0');
-        if (distance < 0) clearInterval(timer);
-    }, 1000);
+// ===== Cursor glow (desktop pointer devices only) =====
+(function initCursorGlow() {
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+    const glow = document.querySelector('.cursor-glow');
+    if (!glow) return;
+    window.addEventListener('mousemove', (e) => {
+        glow.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        glow.classList.add('active');
+    }, { passive: true });
+})();
+
+// ===== Scroll reveal =====
+(function initScrollReveal() {
+    const targets = document.querySelectorAll('.reveal');
+    if (!targets.length) return;
+
+    if (!('IntersectionObserver' in window)) {
+        targets.forEach(el => el.classList.add('is-visible'));
+        return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            const isNexara = entry.target.id === 'nexara-section';
+
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                if (isNexara) {
+                    playNexaraDemo();
+                } else {
+                    observer.unobserve(entry.target);
+                }
+            } else if (isNexara) {
+                // Leaving the viewport resets the demo so it replays fresh on the next scroll-in.
+                resetNexaraDemo();
+            }
+        });
+    }, { threshold: 0.2 });
+
+    targets.forEach(el => observer.observe(el));
+})();
+
+// ===== Nexara chat demo (cosmetic, no backend call) =====
+let nexaraDemoTimers = [];
+
+function resetNexaraDemo() {
+    nexaraDemoTimers.forEach(clearTimeout);
+    nexaraDemoTimers = [];
+    const body = document.getElementById('nexara-demo-body');
+    if (body) body.innerHTML = '';
 }
 
+function playNexaraDemo() {
+    resetNexaraDemo();
+
+    const body = document.getElementById('nexara-demo-body');
+    if (!body) return;
+
+    const steps = [
+        { delay: 300, type: 'user', text: 'Welche Grösse passt zu mir?' },
+        { delay: 900, type: 'typing' },
+        { delay: 1600, type: 'bot', text: 'Sag mir einfach deine Masse – ich finde in Sekunden die perfekte Passform. 👌' },
+        { delay: 1000, type: 'user', text: 'Wann kommt meine Bestellung an?' },
+        { delay: 900, type: 'typing' },
+        { delay: 1600, type: 'bot', text: 'Ich behalte deinen Versand jederzeit für dich im Blick – frag mich einfach danach.' }
+    ];
+
+    let elapsed = 0;
+    let typingEl = null;
+
+    steps.forEach(step => {
+        elapsed += step.delay;
+        const timerId = setTimeout(() => {
+            if (step.type === 'typing') {
+                typingEl = document.createElement('div');
+                typingEl.className = 'nexara-typing';
+                typingEl.innerHTML = '<span></span><span></span><span></span>';
+                body.appendChild(typingEl);
+            } else {
+                if (typingEl) { typingEl.remove(); typingEl = null; }
+                const msg = document.createElement('div');
+                msg.className = `nexara-msg ${step.type}`;
+                msg.textContent = step.text;
+                body.appendChild(msg);
+            }
+        }, elapsed);
+        nexaraDemoTimers.push(timerId);
+    });
+}
+
+// ===== Newsletter signup =====
 async function handleNewsletterSignup(event) {
     event.preventDefault();
     const email = event.target.querySelector('input[type="email"]').value.trim().toLowerCase();
@@ -79,9 +153,13 @@ function validateEmail(email) {
 }
 
 function showNotification(message, type) {
-    // Simple notification (can be replaced with better UI)
+    const existing = document.querySelector('.notification');
+    if (existing) existing.remove();
+
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
+    notification.setAttribute('role', 'status');
+    notification.setAttribute('aria-live', 'polite');
     notification.textContent = message;
     notification.style.cssText = `
         position: fixed;
@@ -96,18 +174,16 @@ function showNotification(message, type) {
         animation: slideIn 0.3s ease;
         font-size: 0.95rem;
     `;
-    
+
     document.body.appendChild(notification);
-    
+
     setTimeout(() => {
         notification.style.animation = 'slideOut 0.3s ease';
         setTimeout(() => notification.remove(), 300);
     }, 3000);
 }
 
-document.addEventListener('DOMContentLoaded', updateCountdown);
-
-// Admin Login System
+// ===== Admin login =====
 const ADMIN_CODE = 'Joumonde2026'; // Ändere diesen Code nach deinen Wünschen
 
 function openAdminLogin(event) {
@@ -132,36 +208,24 @@ function checkAdminCode(event) {
     event.preventDefault();
     const inputCode = document.getElementById('adminCode').value;
     const errorMsg = document.getElementById('adminError');
-    
+
     if (inputCode === ADMIN_CODE) {
-        // Correct code - save session and redirect
         sessionStorage.setItem('adminAuthenticated', 'true');
         sessionStorage.setItem('adminLoginTime', Date.now());
         window.location.href = 'shop.html';
     } else {
-        // Wrong code - show error
         errorMsg.style.display = 'block';
         document.getElementById('adminCode').value = '';
         document.getElementById('adminCode').focus();
-        
-        // Hide error after 3 seconds
-        setTimeout(() => {
-            errorMsg.style.display = 'none';
-        }, 3000);
+        setTimeout(() => { errorMsg.style.display = 'none'; }, 3000);
     }
 }
 
-// Close modal on outside click
 document.addEventListener('click', function(event) {
     const modal = document.getElementById('adminModal');
-    if (modal && event.target === modal) {
-        closeAdminModal();
-    }
+    if (modal && event.target === modal) closeAdminModal();
 });
 
-// Close modal on ESC key
 document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        closeAdminModal();
-    }
+    if (event.key === 'Escape') closeAdminModal();
 });

@@ -6851,3 +6851,42 @@ button.loading::after {
         page-break-inside: avoid;
     }
 }
+
+/* ===== BACK TO TOP BUTTON ===== */
+#scroll-top-btn {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    background: var(--bg);
+    color: var(--gold);
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+    z-index: 2500;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+#scroll-top-btn.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+#scroll-top-btn:hover {
+    background: var(--gold);
+    color: var(--bg);
+}
+
+@media print {
+    #scroll-top-btn {
+        display: none !important;
+    }
+}

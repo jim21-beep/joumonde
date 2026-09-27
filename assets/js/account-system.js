@@ -381,7 +381,7 @@ function showAccountDashboard() {
         <div class="account-dashboard">
             <div class="dashboard-header">
                 <div class="user-avatar-large">${getDashboardAvatarMarkup()}</div>
-                <h2>${currentUser.firstName} ${currentUser.lastName}</h2>
+                <h2>${escapeHtml(currentUser.firstName)} ${escapeHtml(currentUser.lastName)}</h2>
             </div>
             
             <div class="dashboard-tabs">
@@ -534,9 +534,9 @@ function getDashboardAddresses() {
             <div class="address-card ${addr.isDefault ? 'default' : ''}">
                 ${addr.isDefault ? '<span class="default-badge">Standard</span>' : ''}
                 <div class="address-content">
-                    <strong>${addr.name || (currentUser.firstName + ' ' + currentUser.lastName)}</strong>
-                    <p>${addr.street}<br>${addr.zip} ${addr.city}<br>${addr.country}</p>
-                    ${addr.phone ? `<p>Tel: ${addr.phone}</p>` : ''}
+                    <strong>${escapeHtml(addr.name || (currentUser.firstName + ' ' + currentUser.lastName))}</strong>
+                    <p>${escapeHtml(addr.street)}<br>${escapeHtml(addr.zip)} ${escapeHtml(addr.city)}<br>${escapeHtml(addr.country)}</p>
+                    ${addr.phone ? `<p>Tel: ${escapeHtml(addr.phone)}</p>` : ''}
                 </div>
                 <div class="address-actions">
                     ${!addr.isDefault ? `<button onclick="setDefaultAddress('${addr.id}')">${accountT('accountAddressSetDefault', 'Als Standard')}</button>` : ''}
@@ -584,11 +584,11 @@ function getDashboardPreferences() {
                         <div class="profile-name-fields">
                             <div class="form-group">
                                 <label>Vorname</label>
-                                <input type="text" name="firstName" value="${currentUser.firstName || ''}" required>
+                                <input type="text" name="firstName" value="${escapeHtml(currentUser.firstName || '')}" required>
                             </div>
                             <div class="form-group">
                                 <label>Nachname</label>
-                                <input type="text" name="lastName" value="${currentUser.lastName || ''}" required>
+                                <input type="text" name="lastName" value="${escapeHtml(currentUser.lastName || '')}" required>
                             </div>
                         </div>
                     </div>
@@ -783,12 +783,17 @@ function showAddAddressForm() {
 
 async function saveAddress(event) {
     event.preventDefault();
+    const submitBtn = event.target.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn ? submitBtn.textContent : '';
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Speichern...'; }
+
     const formData = new FormData(event.target);
     const { data: authData } = await supabaseClient.auth.getUser();
     const userId = authData?.user?.id || currentUser?.id;
 
     if (!userId) {
         showNotification('Sitzung ungueltig. Bitte neu einloggen.', 'error');
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalBtnText; }
         return;
     }
 
@@ -814,6 +819,7 @@ async function saveAddress(event) {
 
     if (error) {
         console.error('Address insert failed:', error);
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalBtnText; }
         if (error.code === '42501') {
             showNotification('Adresse konnte nicht gespeichert werden (RLS/Policy blockiert). SQL-Fix in Supabase ausfuehren.', 'error');
             return;
@@ -888,21 +894,21 @@ function editAddress(addressId) {
                 <h3>Adresse bearbeiten</h3>
                 <form onsubmit="updateAddress(event, '${addressId}')">
                     <div class="form-group">
-                        <input type="text" name="street" placeholder="Straße & Hausnummer *" value="${address.street}" required>
+                        <input type="text" name="street" placeholder="Straße & Hausnummer *" value="${escapeHtml(address.street)}" required>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <input type="text" name="zip" placeholder="PLZ *" value="${address.zip}" required>
+                            <input type="text" name="zip" placeholder="PLZ *" value="${escapeHtml(address.zip)}" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" name="city" placeholder="Stadt *" value="${address.city}" required>
+                            <input type="text" name="city" placeholder="Stadt *" value="${escapeHtml(address.city)}" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" name="country" placeholder="Land *" value="${address.country}" required>
+                        <input type="text" name="country" placeholder="Land *" value="${escapeHtml(address.country)}" required>
                     </div>
                     <div class="form-group">
-                        <input type="tel" name="phone" placeholder="Telefon (optional)" value="${address.phone || ''}">
+                        <input type="tel" name="phone" placeholder="Telefon (optional)" value="${escapeHtml(address.phone || '')}">
                     </div>
                     <div class="form-actions">
                         <button type="button" onclick="closeAddressForm()" class="btn-secondary">Abbrechen</button>
@@ -918,6 +924,10 @@ function editAddress(addressId) {
 
 async function updateAddress(event, addressId) {
     event.preventDefault();
+    const submitBtn = event.target.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn ? submitBtn.textContent : '';
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Speichern...'; }
+
     const formData = new FormData(event.target);
 
     const newData = {
@@ -929,7 +939,11 @@ async function updateAddress(event, addressId) {
     };
 
     const { error } = await supabaseClient.from('addresses').update(newData).eq('id', addressId);
-    if (error) { showNotification('Fehler beim Aktualisieren.', 'error'); return; }
+    if (error) {
+        showNotification('Fehler beim Aktualisieren.', 'error');
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalBtnText; }
+        return;
+    }
 
     const idx = currentUser.addresses.findIndex(a => a.id === addressId);
     if (idx !== -1) currentUser.addresses[idx] = { ...currentUser.addresses[idx], ...newData };
@@ -1072,7 +1086,7 @@ window.openCheckout = function() {
 // Send Registration Notification Email
 async function sendRegistrationEmail(user) {
     try {
-        await fetch('https://sbxffjszderijikxarho.supabase.co/functions/v1/send-newsletter-confirmation', {
+        await fetch(`${window.__ENV__?.SUPABASE_URL}/functions/v1/send-newsletter-confirmation`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -1092,7 +1106,7 @@ async function sendRegistrationEmail(user) {
 // Send Order Confirmation Email
 async function sendOrderConfirmationEmail(user, order) {
     try {
-        await fetch('https://sbxffjszderijikxarho.supabase.co/functions/v1/send-newsletter-confirmation', {
+        await fetch(`${window.__ENV__?.SUPABASE_URL}/functions/v1/send-newsletter-confirmation`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
