@@ -1,0 +1,424 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allgemeine Geschäftsbedingungen (AGB) - Joumonde</title>
+    <meta name="description" content="Allgemeine Geschäftsbedingungen des Joumonde Online-Shops. Gültig für alle Bestellungen auf joumonde.com.">
+    <link rel="icon" type="image/png" href="assets/images/jm.png">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EFD7P54PRE"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EFD7P54PRE');
+    </script>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        .legal-page {
+            padding: 8rem 0 6rem;
+            background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+            min-height: 60vh;
+        }
+        .legal-page .container {
+            max-width: 860px;
+        }
+        .legal-page h1 {
+            font-family: 'Garamond', 'Georgia', serif;
+            font-size: 2.8rem;
+            font-weight: 200;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        .legal-divider {
+            width: 60px;
+            height: 1px;
+            background: #d4af37;
+            margin: 1.5rem auto 3rem;
+        }
+        .legal-section {
+            margin-bottom: 2.5rem;
+        }
+        .legal-section h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px solid rgba(218,165,32,0.25);
+        }
+        .legal-section p, .legal-section ul, .legal-section li {
+            font-size: 1rem;
+            color: #444;
+            line-height: 1.8;
+        }
+        .legal-section ul {
+            padding-left: 1.3rem;
+        }
+        .legal-meta {
+            font-size: 0.85rem;
+            color: #888;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #d4af37;
+            text-decoration: none;
+            font-size: 0.95rem;
+            margin-bottom: 2.5rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="shop.html">
+                    <img src="assets/images/joumonde.png" alt="Joumonde Logo" class="logo-image">
+                </a>
+            </div>
+            <button class="mobile-menu-btn" aria-label="Menü" onclick="toggleMobileMenu()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <ul class="nav-links">
+                <li><a href="shop.html">Home</a></li>
+                <li><a href="shop.html#old-money">Old Money</a></li>
+                <li><a href="shop.html#streetwear">Streetwear</a></li>
+                <li class="nav-dropdown" id="nav-dropdown-kollektionen">
+                    <button class="nav-dropdown-trigger" onclick="toggleNavDropdown()">Kollektionen <span class="nav-dropdown-chevron">▾</span></button>
+                    <div class="nav-dropdown-menu">
+                        <div class="nav-dropdown-item" onclick="showNavComingSoon('Accessories')">Accessories <span class="nav-soon-badge">Soon</span></div>
+                        <div class="nav-dropdown-item" onclick="showNavComingSoon('Essentials')">Essentials <span class="nav-soon-badge">Soon</span></div>
+                        <div class="nav-dropdown-item" onclick="showNavComingSoon('Seasonal')">Seasonal <span class="nav-soon-badge">Soon</span></div>
+                        <div class="nav-dropdown-item" onclick="showNavComingSoon('Gift &amp; Sets')">Gift &amp; Sets <span class="nav-soon-badge">Soon</span></div>
+                    </div>
+                </li>
+            </ul>
+            <div class="nav-icons">
+                <select class="currency-selector" id="currency-selector" onchange="changeCurrency(this.value)">
+                    <option value="CHF" selected>CHF</option>
+                    <option value="EUR">EUR</option>
+                    <option value="USD">USD</option>
+                </select>
+                <select class="language-selector" id="language-selector" onchange="changeLanguage(this.value)">
+                    <option value="de" selected>DE</option>
+                    <option value="en">EN</option>
+                    <option value="fr">FR</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <main class="legal-page">
+        <div class="container">
+            <a href="shop.html" class="back-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                Zurück zum Shop
+            </a>
+            <h1>Allgemeine Geschäftsbedingungen</h1>
+            <div class="legal-divider"></div>
+            <p class="legal-meta">Stand: April 2026 · Joumonde</p>
+
+            <div class="legal-section">
+                <h2>§ 1 Geltungsbereich</h2>
+                <p>Diese Allgemeinen Geschäftsbedingungen gelten für alle Verträge, die zwischen Joumonde (nachfolgend „Anbieter") und dem Kunden (nachfolgend „Käufer") über den Online-Shop unter joumonde.com geschlossen werden. Abweichende Bedingungen des Käufers werden nicht anerkannt, es sei denn, der Anbieter stimmt ihrer Geltung ausdrücklich schriftlich zu.</p>
+            </div>
+
+            <div class="legal-section">
+                <h2>§ 2 Vertragsschluss</h2>
+                <p>Die Darstellung der Produkte im Online-Shop stellt kein rechtlich bindendes Angebot dar. Durch Klick auf „In den Warenkorb" und anschliessende Bestätigung der Bestellung gibt der Käufer ein verbindliches Angebot ab. Der Vertrag kommt mit Absendung der Bestellbestätigungsmail durch den Anbieter zustande.</p>
+            </div>
+
+            <div class="legal-section">
+                <h2>§ 3 Preise und Zahlungsbedingungen</h2>
+                <p>Alle angegebenen Preise verstehen sich in Schweizer Franken (CHF) inklusive der gesetzlichen Mehrwertsteuer. Folgende Zahlungsarten stehen zur Verfügung:</p>
+                <ul>
+                    <li>Kreditkarte (Visa, Mastercard, American Express)</li>
+                    <li>PayPal</li>
+                    <li>Klarna (Kauf auf Rechnung)</li>
+                    <li>Vorkasse (Überweisung)</li>
+                </ul>
+                <p>Bei Zahlung per Vorkasse ist der Betrag innerhalb von 7 Tagen zu überweisen. Bei Nicht-Zahlung verfällt die Bestellung.</p>
+            </div>
+
+            <div class="legal-section">
+                <h2>§ 4 Lieferung</h2>
+                <p>Die Lieferung erfolgt an die vom Käufer angegebene Lieferadresse. Lieferbeschränkungen sind dem Bestellprozess zu entnehmen. Lieferzeiten sind unverbindliche Richtwerte und gelten ab Zahlungseingang (Werktage). Der Anbieter haftet nicht für durch den Versanddienstleister verursachte Verzögerungen.</p>
+            </div>
+
+            <div class="legal-section">
+                <h2>§ 5 Widerrufsrecht und Rückgabe</h2>
+                <p>Käufer haben das Recht, innerhalb von <strong>14 Tagen</strong> nach Erhalt der Ware ohne Angabe von Gründen vom Vertrag zurückzutreten. Zur Ausübung des Widerrufsrechts sind folgende Bedingungen zu beachten:</p>
+                <ul>
+                    <li>Artikel müssen ungetragen und ungewaschen sein</li>
+                    <li>Originaletiketten müssen noch angebracht sein</li>
+                    <li>Rücksendung innerhalb der Frist an die angegebene Adresse</li>
+                </ul>
+                <p>Retouren innerhalb der Schweiz sind kostenlos. Für internationale Rücksendungen trägt der Käufer die Versandkosten. Die Rückerstattung des Kaufpreises erfolgt innerhalb von 5–7 Werktagen nach Eingang der retournierten Ware.</p>
+            </div>
+
+            <div class="legal-section">
+                <h2>§ 6 Eigentumsvorbehalt</h2>
+                <p>Die Waren bleiben bis zur vollständigen Bezahlung des Kaufpreises Eigentum des Anbieters.</p>
+            </div>
+
+            <div class="legal-section">
+                <h2>§ 7 Gewährleistung</h2>
+                <p>Es gelten die gesetzlichen Gewährleistungsrechte. Bei Mängeln hat der Käufer Anspruch auf Nacherfüllung (Nachbesserung oder Ersatzlieferung). Weitergehende Rechte bleiben unberührt. Reklamationen sind schriftlich an info@joumonde.com zu richten.</p>
+            </div>
+
+            <div class="legal-section">
+                <h2>§ 8 Datenschutz</h2>
+                <p>Die Erhebung, Verarbeitung und Nutzung personenbezogener Daten erfolgt ausschliesslich zum Zweck der Vertragsabwicklung und im Einklang mit dem Schweizer Datenschutzgesetz (DSG) sowie der DSGVO. Weitere Informationen finden sich in der <a href="cookie-policy.html" style="color:#d4af37;">Datenschutzerklärung</a>.</p>
+            </div>
+
+            <div class="legal-section">
+                <h2>§ 9 Haftungsbeschränkung</h2>
+                <p>Der Anbieter haftet für Vorsatz und grobe Fahrlässigkeit unbeschränkt. Bei leichter Fahrlässigkeit haftet der Anbieter nur bei Verletzung wesentlicher Vertragspflichten. Eine darüber hinausgehende Haftung ist ausgeschlossen, soweit gesetzlich zulässig.</p>
+            </div>
+
+            <div class="legal-section">
+                <h2>§ 10 Anwendbares Recht und Gerichtsstand</h2>
+                <p>Es gilt Schweizer Recht. Gerichtsstand ist Zürich, Schweiz. Für Verbraucher mit Wohnsitz in der EU gelten ergänzend die zwingenden Verbraucherschutzvorschriften des jeweiligen EU-Mitgliedstaats.</p>
+            </div>
+
+            <div class="legal-section">
+                <h2>Kontakt</h2>
+                <p>Joumonde<br>E-Mail: <a href="mailto:info@joumonde.com" style="color:#d4af37;">info@joumonde.com</a><br>Telefon: +41 44 123 45 67</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="assets/images/joumonde.png" alt="Joumonde Logo" class="footer-logo">
+                    <p>Premium Fashion Shop</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="shop.html#old-money">Old Money</a></li>
+                        <li><a href="shop.html#streetwear">Streetwear</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Informationen</h4>
+                    <ul>
+                        <li><a href="about.html">Über Uns</a></li>
+                        <li><a href="shop.html#contact">Kontakt</a></li>
+                        <li><a href="versand.html">Versand &amp; Retouren</a></li>
+                        <li><a href="agb.html" class="active">AGB</a></li>
+                        <li><a href="cookie-policy.html">Datenschutz</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Joumonde. Alle Rechte vorbehalten.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/analytics.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            const legalContainer = document.querySelector('.legal-page .container');
+            const originalHtml = legalContainer ? legalContainer.innerHTML : '';
+            const legalTemplates = {
+                en: `
+                    <a href="shop.html" class="back-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        Back to Shop
+                    </a>
+                    <h1>Terms and Conditions</h1>
+                    <div class="legal-divider"></div>
+                    <p class="legal-meta">Updated: April 2026 · Joumonde</p>
+
+                    <div class="legal-section">
+                        <h2>Section 1 Scope</h2>
+                        <p>These Terms and Conditions apply to all contracts concluded between Joumonde ("Provider") and the customer ("Buyer") via the online shop at joumonde.com. Deviating terms of the Buyer are not accepted unless explicitly agreed in writing by the Provider.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Section 2 Conclusion of Contract</h2>
+                        <p>The presentation of products in the online shop does not constitute a legally binding offer. By clicking "Add to cart" and confirming the order, the Buyer submits a binding offer. The contract is concluded when the Provider sends the order confirmation email.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Section 3 Prices and Payment Terms</h2>
+                        <p>All prices are stated in Swiss Francs (CHF) and include statutory VAT. Available payment methods:</p>
+                        <ul>
+                            <li>Credit card (Visa, Mastercard, American Express)</li>
+                            <li>PayPal</li>
+                            <li>Klarna (invoice)</li>
+                            <li>Prepayment (bank transfer)</li>
+                        </ul>
+                        <p>For prepayment, the amount must be transferred within 7 days. If payment is not received, the order is cancelled.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Section 4 Delivery</h2>
+                        <p>Delivery is made to the shipping address specified by the Buyer. Delivery restrictions are shown during checkout. Delivery times are non-binding estimates and apply from payment receipt (business days). The Provider is not liable for delays caused by shipping carriers.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Section 5 Right of Withdrawal and Returns</h2>
+                        <p>Buyers may withdraw from the contract within <strong>14 days</strong> after receiving the goods without giving reasons. Conditions:</p>
+                        <ul>
+                            <li>Items must be unworn and unwashed</li>
+                            <li>Original tags must still be attached</li>
+                            <li>Return shipment within the deadline to the specified address</li>
+                        </ul>
+                        <p>Returns within Switzerland are free of charge. For international returns, shipping costs are borne by the Buyer. Refunds are processed within 5-7 business days after receipt of returned goods.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Section 6 Retention of Title</h2>
+                        <p>Goods remain the property of the Provider until full payment of the purchase price.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Section 7 Warranty</h2>
+                        <p>Statutory warranty rights apply. In case of defects, the Buyer is entitled to subsequent performance (repair or replacement). Further rights remain unaffected. Complaints must be sent in writing to info@joumonde.com.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Section 8 Data Protection</h2>
+                        <p>Collection, processing and use of personal data is carried out exclusively for contract fulfillment and in accordance with Swiss data protection law and GDPR. Further information can be found in the <a href="cookie-policy.html" style="color:#d4af37;">Privacy Policy</a>.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Section 9 Limitation of Liability</h2>
+                        <p>The Provider is fully liable for intent and gross negligence. For slight negligence, liability is limited to breaches of essential contractual obligations. Any further liability is excluded as far as legally permitted.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Section 10 Applicable Law and Jurisdiction</h2>
+                        <p>Swiss law applies. Place of jurisdiction is Zurich, Switzerland. For consumers residing in the EU, mandatory consumer protection rules of the respective EU Member State also apply.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Contact</h2>
+                        <p>Joumonde<br>Email: <a href="mailto:info@joumonde.com" style="color:#d4af37;">info@joumonde.com</a><br>Phone: +41 44 123 45 67</p>
+                    </div>
+                `,
+                fr: `
+                    <a href="shop.html" class="back-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        Retour a la boutique
+                    </a>
+                    <h1>Conditions Generales</h1>
+                    <div class="legal-divider"></div>
+                    <p class="legal-meta">Mise a jour: avril 2026 · Joumonde</p>
+
+                    <div class="legal-section">
+                        <h2>Article 1 Champ d'application</h2>
+                        <p>Les presentes Conditions Generales s'appliquent a tous les contrats conclus entre Joumonde ("Fournisseur") et le client ("Acheteur") via la boutique en ligne joumonde.com. Les conditions divergentes de l'Acheteur ne sont pas reconnues sauf accord ecrit explicite du Fournisseur.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Article 2 Formation du contrat</h2>
+                        <p>La presentation des produits dans la boutique en ligne ne constitue pas une offre juridiquement contraignante. En cliquant sur "Ajouter au panier" puis en confirmant la commande, l'Acheteur soumet une offre ferme. Le contrat est conclu lors de l'envoi de l'e-mail de confirmation de commande.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Article 3 Prix et modalites de paiement</h2>
+                        <p>Tous les prix sont indiques en francs suisses (CHF) et incluent la TVA legale. Moyens de paiement disponibles :</p>
+                        <ul>
+                            <li>Carte de credit (Visa, Mastercard, American Express)</li>
+                            <li>PayPal</li>
+                            <li>Klarna (paiement sur facture)</li>
+                            <li>Prepaiement (virement bancaire)</li>
+                        </ul>
+                        <p>En cas de prepaiement, le montant doit etre verse sous 7 jours. A defaut de paiement, la commande est annulee.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Article 4 Livraison</h2>
+                        <p>La livraison est effectuee a l'adresse indiquee par l'Acheteur. Les restrictions de livraison sont affichees pendant le processus de commande. Les delais de livraison sont des estimations non contractuelles et courent a compter de la reception du paiement (jours ouvrables). Le Fournisseur n'est pas responsable des retards causes par le transporteur.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Article 5 Droit de retractation et retours</h2>
+                        <p>L'Acheteur peut se retracter dans un delai de <strong>14 jours</strong> apres reception des articles, sans justification. Conditions :</p>
+                        <ul>
+                            <li>Articles non portes et non laves</li>
+                            <li>Etiquettes d'origine toujours attachees</li>
+                            <li>Retour envoye dans le delai a l'adresse indiquee</li>
+                        </ul>
+                        <p>Les retours en Suisse sont gratuits. Pour les retours internationaux, les frais d'expedition sont a la charge de l'Acheteur. Le remboursement est effectue sous 5 a 7 jours ouvrables apres reception du retour.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Article 6 Reserve de propriete</h2>
+                        <p>Les marchandises restent la propriete du Fournisseur jusqu'au paiement integral du prix d'achat.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Article 7 Garantie</h2>
+                        <p>Les droits legaux de garantie s'appliquent. En cas de defaut, l'Acheteur a droit a une execution ulterieure (reparation ou remplacement). Les autres droits restent reserves. Les reclamations doivent etre adressees par ecrit a info@joumonde.com.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Article 8 Protection des donnees</h2>
+                        <p>La collecte, le traitement et l'utilisation des donnees personnelles sont effectues uniquement pour l'execution du contrat et conformement a la loi suisse sur la protection des donnees et au RGPD. Vous trouverez plus d'informations dans la <a href="cookie-policy.html" style="color:#d4af37;">Politique de confidentialite</a>.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Article 9 Limitation de responsabilite</h2>
+                        <p>Le Fournisseur est pleinement responsable en cas de faute intentionnelle ou de negligence grave. En cas de negligence legere, la responsabilite est limitee a la violation d'obligations contractuelles essentielles. Toute responsabilite supplementaire est exclue dans la mesure permise par la loi.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Article 10 Droit applicable et juridiction competente</h2>
+                        <p>Le droit suisse est applicable. Le for juridique est Zurich, Suisse. Pour les consommateurs domicilies dans l'UE, les regles imperatives de protection des consommateurs de l'Etat membre concerne s'appliquent egalement.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>Contact</h2>
+                        <p>Joumonde<br>Email: <a href="mailto:info@joumonde.com" style="color:#d4af37;">info@joumonde.com</a><br>Telephone: +41 44 123 45 67</p>
+                    </div>
+                `
+            };
+
+            function applyAgbTranslation(lang) {
+                if (!legalContainer) return;
+                if (lang === 'en' || lang === 'fr') {
+                    legalContainer.innerHTML = legalTemplates[lang];
+                } else {
+                    legalContainer.innerHTML = originalHtml;
+                }
+            }
+
+            const savedLanguage = localStorage.getItem('language') || 'de';
+            const langSel = document.getElementById('language-selector');
+            if (langSel) {
+                langSel.value = savedLanguage;
+                langSel.addEventListener('change', function() {
+                    const selected = langSel.value || 'de';
+                    applyAgbTranslation(selected);
+                });
+            }
+            const currSel = document.getElementById('currency-selector');
+            if (currSel) currSel.value = localStorage.getItem('currency') || 'CHF';
+
+            applyAgbTranslation(savedLanguage);
+        });
+    </script>
+</body>
+</html>

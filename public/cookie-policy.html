@@ -1,0 +1,562 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datenschutzerklärung | Joumonde</title>
+    <meta name="description" content="Datenschutzerklärung von Joumonde – Informationen zur Verarbeitung Ihrer personenbezogenen Daten gemäss DSG und DSGVO.">
+    <link rel="icon" type="image/png" href="assets/images/jm.png">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EFD7P54PRE"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EFD7P54PRE');
+    </script>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        .legal-page {
+            padding: 8rem 0 6rem;
+            background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+            min-height: 60vh;
+        }
+        .legal-page .container {
+            max-width: 860px;
+        }
+        .legal-page h1 {
+            font-family: 'Garamond', 'Georgia', serif;
+            font-size: 2.8rem;
+            font-weight: 200;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        .legal-divider {
+            width: 60px;
+            height: 1px;
+            background: #d4af37;
+            margin: 1.5rem auto 3rem;
+        }
+        .legal-section {
+            margin-bottom: 2.5rem;
+        }
+        .legal-section h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px solid rgba(218,165,32,0.25);
+        }
+        .legal-section p, .legal-section ul, .legal-section li {
+            font-size: 1rem;
+            color: #444;
+            line-height: 1.8;
+        }
+        .legal-section ul {
+            padding-left: 1.3rem;
+        }
+        .legal-meta {
+            font-size: 0.85rem;
+            color: #888;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #d4af37;
+            text-decoration: none;
+            font-size: 0.95rem;
+            margin-bottom: 2.5rem;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="shop.html">
+                    <img src="assets/images/joumonde.png" alt="Joumonde Logo" class="logo-image">
+                </a>
+            </div>
+            <button class="mobile-menu-btn" aria-label="Menü" onclick="toggleMobileMenu()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <ul class="nav-links">
+                <li><a href="shop.html">Home</a></li>
+                <li><a href="shop.html#old-money">Old Money</a></li>
+                <li><a href="shop.html#streetwear">Streetwear</a></li>
+                <li class="nav-dropdown" id="nav-dropdown-kollektionen">
+                    <button class="nav-dropdown-trigger" onclick="toggleNavDropdown()">Kollektionen <span class="nav-dropdown-chevron">▾</span></button>
+                    <div class="nav-dropdown-menu">
+                        <div class="nav-dropdown-item" onclick="showNavComingSoon('Accessories')">Accessories <span class="nav-soon-badge">Soon</span></div>
+                        <div class="nav-dropdown-item" onclick="showNavComingSoon('Essentials')">Essentials <span class="nav-soon-badge">Soon</span></div>
+                        <div class="nav-dropdown-item" onclick="showNavComingSoon('Seasonal')">Seasonal <span class="nav-soon-badge">Soon</span></div>
+                        <div class="nav-dropdown-item" onclick="showNavComingSoon('Gift &amp; Sets')">Gift &amp; Sets <span class="nav-soon-badge">Soon</span></div>
+                    </div>
+                </li>
+            </ul>
+            <div class="nav-icons">
+                <select class="currency-selector" id="currency-selector" onchange="changeCurrency(this.value)">
+                    <option value="CHF" selected>CHF</option>
+                    <option value="EUR">EUR</option>
+                    <option value="USD">USD</option>
+                </select>
+                <select class="language-selector" id="language-selector" onchange="changeLanguage(this.value)">
+                    <option value="de" selected>DE</option>
+                    <option value="en">EN</option>
+                    <option value="fr">FR</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <main class="legal-page">
+        <div class="container">
+            <a href="shop.html" class="back-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                Zurück zum Shop
+            </a>
+            <h1>Datenschutzerklärung</h1>
+            <div class="legal-divider"></div>
+            <p class="legal-meta">Stand: April 2026 · Joumonde</p>
+
+            <div class="legal-section">
+                <h2>1. Verantwortliche Stelle</h2>
+                <p>Verantwortlich für die Datenverarbeitung auf dieser Website ist:<br>
+                Joumonde<br>
+                E-Mail: <a href="mailto:info@joumonde.com" style="color:#d4af37;">info@joumonde.com</a><br>
+                Telefon: +41 44 123 45 67</p>
+            </div>
+
+            <div class="legal-section">
+                <h2>2. Erhebung und Verarbeitung personenbezogener Daten</h2>
+                <p>Wir erheben personenbezogene Daten, wenn du unsere Website besuchst, ein Konto erstellst oder eine Bestellung aufgibst. Dazu gehören folgende Datenkategorien:</p>
+                <ul>
+                    <li><strong>Kontaktdaten:</strong> Name, E-Mail-Adresse, Telefonnummer</li>
+                    <li><strong>Adressdaten:</strong> Liefer- und Rechnungsadresse</li>
+                    <li><strong>Bestelldaten:</strong> Gekaufte Produkte, Bestellhistorie, Zahlungsinformationen</li>
+                    <li><strong>Zugangsdaten:</strong> Login-Daten für dein Kundenkonto (verschlüsselt gespeichert)</li>
+                    <li><strong>Nutzungsdaten:</strong> IP-Adresse, Browsertyp, besuchte Seiten, Verweildauer</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2>3. Zweck der Datenverarbeitung</h2>
+                <p>Wir verarbeiten deine Daten ausschliesslich für folgende Zwecke:</p>
+                <ul>
+                    <li>Abwicklung von Bestellungen und Zahlungen</li>
+                    <li>Versand und Lieferung von Waren</li>
+                    <li>Verwaltung deines Kundenkontos</li>
+                    <li>Kommunikation bei Fragen und Supportanfragen</li>
+                    <li>Versand des Newsletters (nur mit ausdrücklicher Einwilligung)</li>
+                    <li>Verbesserung unseres Angebots durch anonyme Nutzungsanalysen</li>
+                    <li>Erfüllung gesetzlicher Pflichten</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2>4. Rechtsgrundlage</h2>
+                <p>Die Verarbeitung deiner Daten erfolgt auf folgenden Rechtsgrundlagen gemäss DSGVO Art. 6 und dem Schweizer Datenschutzgesetz (DSG):</p>
+                <ul>
+                    <li><strong>Vertragserfüllung (Art. 6 Abs. 1 lit. b DSGVO):</strong> Verarbeitung zur Abwicklung deiner Bestellung</li>
+                    <li><strong>Einwilligung (Art. 6 Abs. 1 lit. a DSGVO):</strong> Newsletter-Versand nach Anmeldung</li>
+                    <li><strong>Berechtigtes Interesse (Art. 6 Abs. 1 lit. f DSGVO):</strong> Sicherheit, Missbrauchsprävention, Websiteanalyse</li>
+                    <li><strong>Rechtliche Verpflichtung (Art. 6 Abs. 1 lit. c DSGVO):</strong> Aufbewahrungspflichten nach Schweizer Handels- und Steuerrecht</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2>5. Datenweitergabe an Dritte</h2>
+                <p>Wir geben deine Daten nur weiter, soweit es für die Vertragserfüllung notwendig ist oder du eingewilligt hast. Partner, die im Rahmen der Auftragsverarbeitung Daten erhalten können:</p>
+                <ul>
+                    <li><strong>Zahlungsdienstleister:</strong> Stripe, PayPal, Klarna (für die Zahlungsabwicklung)</li>
+                    <li><strong>Versanddienstleister:</strong> Post CH, DHL (für die Lieferung)</li>
+                    <li><strong>Hosting &amp; Backend:</strong> Supabase (Datenbankdienst, Server in der EU)</li>
+                    <li><strong>Analysen:</strong> Google Analytics (anonymisiert, IP-Kürzung aktiv)</li>
+                </ul>
+                <p>Eine Weitergabe an Dritte zu Werbezwecken ohne deine Einwilligung erfolgt nicht.</p>
+            </div>
+
+            <div class="legal-section">
+                <h2>6. Speicherdauer</h2>
+                <p>Wir speichern deine Daten nur so lange, wie es für den jeweiligen Zweck erforderlich ist oder gesetzlich vorgeschrieben ist:</p>
+                <ul>
+                    <li><strong>Bestelldaten:</strong> 10 Jahre (gesetzliche Aufbewahrungspflicht)</li>
+                    <li><strong>Kontodaten:</strong> Bis zur Löschung des Kontos auf Anfrage</li>
+                    <li><strong>Newsletter:</strong> Bis zur Abmeldung</li>
+                    <li><strong>Nutzungsdaten / Logs:</strong> 90 Tage</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h2>7. Cookies und Tracking</h2>
+                <p>Unsere Website verwendet Cookies – kleine Textdateien, die auf deinem Gerät gespeichert werden. Wir unterscheiden:</p>
+                <ul>
+                    <li><strong>Notwendige Cookies:</strong> Für Warenkorb, Login und Grundfunktionen der Website – immer aktiv</li>
+                    <li><strong>Analyse-Cookies:</strong> Google Analytics zur anonymen Nutzungsanalyse – nur mit Einwilligung</li>
+                    <li><strong>Marketing-Cookies:</strong> Für personalisierte Werbung – nur mit Einwilligung</li>
+                </ul>
+                <p>Du kannst deine Cookie-Einstellungen jederzeit über das Cookie-Banner am unteren Seitenrand anpassen oder zurücksetzen.</p>
+            </div>
+
+            <div class="legal-section">
+                <h2>8. Deine Rechte</h2>
+                <p>Du hast gegenüber uns folgende Rechte bezüglich deiner personenbezogenen Daten:</p>
+                <ul>
+                    <li><strong>Auskunftsrecht:</strong> Du kannst jederzeit Auskunft über die gespeicherten Daten verlangen</li>
+                    <li><strong>Berichtigungsrecht:</strong> Unrichtige Daten können korrigiert werden</li>
+                    <li><strong>Löschungsrecht:</strong> Du kannst die Löschung deiner Daten verlangen ("Recht auf Vergessenwerden")</li>
+                    <li><strong>Einschränkung:</strong> Du kannst die Verarbeitung einschränken lassen</li>
+                    <li><strong>Datenübertragbarkeit:</strong> Du kannst deine Daten in einem maschinenlesbaren Format erhalten</li>
+                    <li><strong>Widerspruchsrecht:</strong> Du kannst der Verarbeitung auf Basis berechtigter Interessen widersprechen</li>
+                    <li><strong>Widerruf:</strong> Erteilte Einwilligungen (z.B. Newsletter) können jederzeit widerrufen werden</li>
+                </ul>
+                <p>Zur Ausübung deiner Rechte schreibe uns an: <a href="mailto:info@joumonde.com" style="color:#d4af37;">info@joumonde.com</a></p>
+            </div>
+
+            <div class="legal-section">
+                <h2>9. Newsletter</h2>
+                <p>Wenn du dich für unseren Newsletter anmeldest, verarbeiten wir deine E-Mail-Adresse auf Grundlage deiner ausdrücklichen Einwilligung. Du kannst den Newsletter jederzeit über den Abmelde-Link am Ende jeder E-Mail oder direkt unter <a href="newsletter-unsubscribe.html" style="color:#d4af37;">joumonde.com/newsletter-unsubscribe</a> abbestellen.</p>
+            </div>
+
+            <div class="legal-section">
+                <h2>10. Datensicherheit</h2>
+                <p>Wir setzen technische und organisatorische Sicherheitsmassnahmen ein, um deine Daten gegen Manipulation, Verlust und unberechtigten Zugriff zu schützen. Unsere Website wird über HTTPS (SSL/TLS) übertragen. Passwörter werden ausschliesslich als gehashte Werte gespeichert und sind für uns nicht einsehbar.</p>
+            </div>
+
+            <div class="legal-section">
+                <h2>11. Beschwerderecht</h2>
+                <p>Du hast das Recht, dich bei der zuständigen Datenschutzbehörde zu beschweren. In der Schweiz ist dies der Eidgenössische Datenschutz- und Öffentlichkeitsbeauftragte (EDÖB), Feldeggweg 1, 3003 Bern (<a href="https://www.edoeb.admin.ch" target="_blank" rel="noopener" style="color:#d4af37;">www.edoeb.admin.ch</a>).</p>
+            </div>
+
+            <div class="legal-section">
+                <h2>12. Änderungen dieser Datenschutzerklärung</h2>
+                <p>Wir behalten uns vor, diese Datenschutzerklärung bei Bedarf anzupassen, um aktuellen rechtlichen Anforderungen zu entsprechen oder Änderungen unserer Dienste umzusetzen. Die jeweils aktuelle Version ist auf dieser Seite abrufbar.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="assets/images/joumonde.png" alt="Joumonde Logo" class="footer-logo">
+                    <p>Premium Fashion Shop</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="shop.html#old-money">Old Money</a></li>
+                        <li><a href="shop.html#streetwear">Streetwear</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Informationen</h4>
+                    <ul>
+                        <li><a href="about.html">Über Uns</a></li>
+                        <li><a href="shop.html#contact">Kontakt</a></li>
+                        <li><a href="versand.html">Versand &amp; Retouren</a></li>
+                        <li><a href="agb.html">AGB</a></li>
+                        <li><a href="cookie-policy.html" class="active">Datenschutz</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Joumonde. Alle Rechte vorbehalten.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/analytics.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            const legalContainer = document.querySelector('.legal-page .container');
+            const originalHtml = legalContainer ? legalContainer.innerHTML : '';
+            const legalTemplates = {
+                en: `
+                    <a href="shop.html" class="back-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        Back to Shop
+                    </a>
+                    <h1>Privacy Policy</h1>
+                    <div class="legal-divider"></div>
+                    <p class="legal-meta">Updated: April 2026 · Joumonde</p>
+
+                    <div class="legal-section">
+                        <h2>1. Data Controller</h2>
+                        <p>The controller responsible for data processing on this website is:<br>
+                        Joumonde<br>
+                        Email: <a href="mailto:info@joumonde.com" style="color:#d4af37;">info@joumonde.com</a><br>
+                        Phone: +41 44 123 45 67</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>2. Collection and Processing of Personal Data</h2>
+                        <p>We collect personal data when you visit our website, create an account, or place an order. Categories include:</p>
+                        <ul>
+                            <li><strong>Contact data:</strong> name, email address, phone number</li>
+                            <li><strong>Address data:</strong> shipping and billing address</li>
+                            <li><strong>Order data:</strong> purchased products, order history, payment information</li>
+                            <li><strong>Access data:</strong> login data for your customer account (stored encrypted)</li>
+                            <li><strong>Usage data:</strong> IP address, browser type, visited pages, session duration</li>
+                        </ul>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>3. Purpose of Processing</h2>
+                        <p>We process your data exclusively for the following purposes:</p>
+                        <ul>
+                            <li>Order and payment processing</li>
+                            <li>Shipping and delivery of goods</li>
+                            <li>Management of your customer account</li>
+                            <li>Communication for questions and support requests</li>
+                            <li>Newsletter distribution (only with explicit consent)</li>
+                            <li>Improvement of our services through anonymized analytics</li>
+                            <li>Fulfillment of legal obligations</li>
+                        </ul>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>4. Legal Basis</h2>
+                        <p>Your data is processed based on GDPR Article 6 and Swiss data protection law:</p>
+                        <ul>
+                            <li><strong>Contract performance (Art. 6(1)(b) GDPR):</strong> processing required to fulfill your order</li>
+                            <li><strong>Consent (Art. 6(1)(a) GDPR):</strong> newsletter dispatch after signup</li>
+                            <li><strong>Legitimate interest (Art. 6(1)(f) GDPR):</strong> security, fraud prevention, website analytics</li>
+                            <li><strong>Legal obligation (Art. 6(1)(c) GDPR):</strong> retention obligations under Swiss commercial and tax law</li>
+                        </ul>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>5. Data Sharing with Third Parties</h2>
+                        <p>We only share your data where necessary for contract fulfillment or where you have consented. Recipients may include:</p>
+                        <ul>
+                            <li><strong>Payment providers:</strong> Stripe, PayPal, Klarna</li>
+                            <li><strong>Shipping providers:</strong> Swiss Post, DHL</li>
+                            <li><strong>Hosting & backend:</strong> Supabase (database service, servers in the EU)</li>
+                            <li><strong>Analytics:</strong> Google Analytics (anonymized, IP masking enabled)</li>
+                        </ul>
+                        <p>We do not share data with third parties for advertising purposes without your explicit consent.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>6. Storage Period</h2>
+                        <p>We store your data only as long as necessary for the respective purpose or as legally required:</p>
+                        <ul>
+                            <li><strong>Order data:</strong> 10 years</li>
+                            <li><strong>Account data:</strong> until account deletion upon request</li>
+                            <li><strong>Newsletter data:</strong> until unsubscribe</li>
+                            <li><strong>Usage data / logs:</strong> 90 days</li>
+                        </ul>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>7. Cookies and Tracking</h2>
+                        <p>Our website uses cookies - small text files stored on your device. We distinguish:</p>
+                        <ul>
+                            <li><strong>Necessary cookies:</strong> for cart, login and core website functionality</li>
+                            <li><strong>Analytics cookies:</strong> Google Analytics for anonymous usage analysis, only with consent</li>
+                            <li><strong>Marketing cookies:</strong> for personalized advertising, only with consent</li>
+                        </ul>
+                        <p>You can update or reset your cookie settings at any time via the cookie banner at the bottom of the page.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>8. Your Rights</h2>
+                        <p>You have the following rights regarding your personal data:</p>
+                        <ul>
+                            <li><strong>Right of access:</strong> request information about stored data</li>
+                            <li><strong>Right to rectification:</strong> correction of inaccurate data</li>
+                            <li><strong>Right to erasure:</strong> request deletion of your data</li>
+                            <li><strong>Right to restriction:</strong> request restriction of processing</li>
+                            <li><strong>Right to data portability:</strong> receive your data in a machine-readable format</li>
+                            <li><strong>Right to object:</strong> object to processing based on legitimate interests</li>
+                            <li><strong>Right to withdraw consent:</strong> withdraw consent at any time</li>
+                        </ul>
+                        <p>To exercise your rights, contact us at: <a href="mailto:info@joumonde.com" style="color:#d4af37;">info@joumonde.com</a></p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>9. Newsletter</h2>
+                        <p>If you subscribe to our newsletter, we process your email address based on your explicit consent. You can unsubscribe anytime via the unsubscribe link in each email or directly at <a href="newsletter-unsubscribe.html" style="color:#d4af37;">joumonde.com/newsletter-unsubscribe</a>.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>10. Data Security</h2>
+                        <p>We implement technical and organizational measures to protect your data against manipulation, loss, and unauthorized access. Our website is transmitted via HTTPS (SSL/TLS). Passwords are stored only as hashed values and are not visible to us.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>11. Right to Lodge a Complaint</h2>
+                        <p>You have the right to lodge a complaint with the competent data protection authority. In Switzerland this is the Federal Data Protection and Information Commissioner (FDPIC), Feldeggweg 1, 3003 Bern (<a href="https://www.edoeb.admin.ch" target="_blank" rel="noopener" style="color:#d4af37;">www.edoeb.admin.ch</a>).</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>12. Changes to This Privacy Policy</h2>
+                        <p>We reserve the right to amend this privacy policy where necessary to comply with legal requirements or to reflect changes in our services. The latest version is always available on this page.</p>
+                    </div>
+                `,
+                fr: `
+                    <a href="shop.html" class="back-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        Retour a la boutique
+                    </a>
+                    <h1>Politique de confidentialite</h1>
+                    <div class="legal-divider"></div>
+                    <p class="legal-meta">Mise a jour: avril 2026 · Joumonde</p>
+
+                    <div class="legal-section">
+                        <h2>1. Responsable du traitement</h2>
+                        <p>Le responsable du traitement des donnees sur ce site est :<br>
+                        Joumonde<br>
+                        Email: <a href="mailto:info@joumonde.com" style="color:#d4af37;">info@joumonde.com</a><br>
+                        Telephone: +41 44 123 45 67</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>2. Collecte et traitement des donnees personnelles</h2>
+                        <p>Nous collectons des donnees personnelles lorsque vous visitez notre site, creez un compte ou passez une commande. Categories :</p>
+                        <ul>
+                            <li><strong>Coordonnees :</strong> nom, adresse e-mail, numero de telephone</li>
+                            <li><strong>Donnees d'adresse :</strong> adresse de livraison et de facturation</li>
+                            <li><strong>Donnees de commande :</strong> produits achetes, historique des commandes, informations de paiement</li>
+                            <li><strong>Donnees d'acces :</strong> identifiants du compte client (stockes de maniere chiffree)</li>
+                            <li><strong>Donnees d'utilisation :</strong> adresse IP, type de navigateur, pages visitees, duree de consultation</li>
+                        </ul>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>3. Finalite du traitement</h2>
+                        <p>Nous traitons vos donnees uniquement pour les finalites suivantes :</p>
+                        <ul>
+                            <li>Traitement des commandes et des paiements</li>
+                            <li>Expedition et livraison des marchandises</li>
+                            <li>Gestion de votre compte client</li>
+                            <li>Communication pour les demandes et le support</li>
+                            <li>Envoi de la newsletter (uniquement avec consentement explicite)</li>
+                            <li>Amelioration de nos services via des analyses anonymisees</li>
+                            <li>Respect des obligations legales</li>
+                        </ul>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>4. Base juridique</h2>
+                        <p>Le traitement de vos donnees repose sur l'article 6 du RGPD et la loi suisse sur la protection des donnees :</p>
+                        <ul>
+                            <li><strong>Execution du contrat (art. 6, par. 1, b RGPD) :</strong> traitement necessaire a l'execution de votre commande</li>
+                            <li><strong>Consentement (art. 6, par. 1, a RGPD) :</strong> envoi de la newsletter apres inscription</li>
+                            <li><strong>Interet legitime (art. 6, par. 1, f RGPD) :</strong> securite, prevention des abus, analyses du site</li>
+                            <li><strong>Obligation legale (art. 6, par. 1, c RGPD) :</strong> obligations de conservation en droit suisse</li>
+                        </ul>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>5. Transmission des donnees a des tiers</h2>
+                        <p>Nous partageons vos donnees uniquement lorsque cela est necessaire a l'execution du contrat ou avec votre consentement :</p>
+                        <ul>
+                            <li><strong>Prestataires de paiement :</strong> Stripe, PayPal, Klarna</li>
+                            <li><strong>Prestataires logistiques :</strong> Swiss Post, DHL</li>
+                            <li><strong>Hebergement & backend :</strong> Supabase (serveurs dans l'UE)</li>
+                            <li><strong>Analyses :</strong> Google Analytics (anonymise, masquage IP actif)</li>
+                        </ul>
+                        <p>Aucune transmission a des fins publicitaires n'est effectuee sans votre consentement explicite.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>6. Duree de conservation</h2>
+                        <p>Nous conservons vos donnees uniquement pendant la duree necessaire ou imposee legalement :</p>
+                        <ul>
+                            <li><strong>Donnees de commande :</strong> 10 ans</li>
+                            <li><strong>Donnees de compte :</strong> jusqu'a suppression du compte</li>
+                            <li><strong>Newsletter :</strong> jusqu'au desabonnement</li>
+                            <li><strong>Donnees d'utilisation / logs :</strong> 90 jours</li>
+                        </ul>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>7. Cookies et suivi</h2>
+                        <p>Notre site utilise des cookies, de petits fichiers texte enregistres sur votre appareil. Nous distinguons :</p>
+                        <ul>
+                            <li><strong>Cookies necessaires :</strong> panier, connexion et fonctions essentielles</li>
+                            <li><strong>Cookies d'analyse :</strong> Google Analytics, uniquement avec consentement</li>
+                            <li><strong>Cookies marketing :</strong> publicite personnalisee, uniquement avec consentement</li>
+                        </ul>
+                        <p>Vous pouvez modifier ou reinitialiser vos preferences cookies a tout moment via la banniere cookies en bas de page.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>8. Vos droits</h2>
+                        <p>Vous disposez des droits suivants concernant vos donnees personnelles :</p>
+                        <ul>
+                            <li><strong>Droit d'acces :</strong> demander des informations sur les donnees stockees</li>
+                            <li><strong>Droit de rectification :</strong> corriger des donnees inexactes</li>
+                            <li><strong>Droit a l'effacement :</strong> demander la suppression de vos donnees</li>
+                            <li><strong>Droit a la limitation :</strong> limiter le traitement</li>
+                            <li><strong>Droit a la portabilite :</strong> recevoir vos donnees dans un format lisible par machine</li>
+                            <li><strong>Droit d'opposition :</strong> s'opposer a un traitement fonde sur l'interet legitime</li>
+                            <li><strong>Droit de retrait du consentement :</strong> retirer votre consentement a tout moment</li>
+                        </ul>
+                        <p>Pour exercer vos droits, contactez-nous a : <a href="mailto:info@joumonde.com" style="color:#d4af37;">info@joumonde.com</a></p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>9. Newsletter</h2>
+                        <p>Si vous vous inscrivez a la newsletter, nous traitons votre adresse e-mail sur la base de votre consentement explicite. Vous pouvez vous desinscrire a tout moment via le lien de desinscription dans chaque e-mail ou directement a <a href="newsletter-unsubscribe.html" style="color:#d4af37;">joumonde.com/newsletter-unsubscribe</a>.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>10. Securite des donnees</h2>
+                        <p>Nous appliquons des mesures techniques et organisationnelles pour proteger vos donnees contre la manipulation, la perte et les acces non autorises. Notre site utilise HTTPS (SSL/TLS). Les mots de passe sont stockes uniquement sous forme hachee et ne sont pas lisibles pour nous.</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>11. Droit de reclamation</h2>
+                        <p>Vous avez le droit de deposer une reclamation aupres de l'autorite de protection des donnees competente. En Suisse, il s'agit du PFPDT, Feldeggweg 1, 3003 Berne (<a href="https://www.edoeb.admin.ch" target="_blank" rel="noopener" style="color:#d4af37;">www.edoeb.admin.ch</a>).</p>
+                    </div>
+
+                    <div class="legal-section">
+                        <h2>12. Modifications de cette politique de confidentialite</h2>
+                        <p>Nous nous reservons le droit d'adapter cette politique de confidentialite afin de respecter les exigences legales en vigueur ou de refléter des changements de nos services. La version la plus recente est disponible sur cette page.</p>
+                    </div>
+                `
+            };
+
+            function applyPrivacyTranslation(lang) {
+                if (!legalContainer) return;
+                if (lang === 'en' || lang === 'fr') {
+                    legalContainer.innerHTML = legalTemplates[lang];
+                } else {
+                    legalContainer.innerHTML = originalHtml;
+                }
+            }
+
+            const savedLanguage = localStorage.getItem('language') || 'de';
+            const langSel = document.getElementById('language-selector');
+            if (langSel) {
+                langSel.value = savedLanguage;
+                langSel.addEventListener('change', function() {
+                    const selected = langSel.value || 'de';
+                    applyPrivacyTranslation(selected);
+                });
+            }
+            const currSel = document.getElementById('currency-selector');
+            if (currSel) currSel.value = localStorage.getItem('currency') || 'CHF';
+
+            applyPrivacyTranslation(savedLanguage);
+        });
+    </script>
+</body>
+</html>
