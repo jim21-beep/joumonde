@@ -899,9 +899,11 @@ const AI_PROVIDER = (process.env.AI_PROVIDER || 'groq').toLowerCase();
 const gemini = AI_PROVIDER === 'gemini' ? new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY }) : null;
 
 // Supabase client (service role – bypasses RLS)
+// Project URL is not a secret (public per Supabase design), so it has a safe fallback and
+// doesn't depend on Render environment variables being wired up correctly.
 const { createClient } = require('@supabase/supabase-js');
 const supabaseAdmin = createClient(
-    process.env.SUPABASE_URL || '',
+    process.env.SUPABASE_URL || 'https://sbxffjszderijikxarho.supabase.co',
     process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 );
 
