@@ -1,5 +1,37 @@
 // Joumonde Landing Page — interactions (cursor glow, scroll reveal, Nexara demo, newsletter, admin login)
 
+// ===== Marquee ticker (fills any screen width so the loop never visibly cuts) =====
+(function initMarquee() {
+    const track = document.getElementById('hero-marquee-track');
+    if (!track) return;
+
+    const originalHTML = track.innerHTML;
+    const PIXELS_PER_SECOND = 70; // keeps a constant, comfortable scroll speed at any width
+
+    function rebuild() {
+        track.innerHTML = originalHTML;
+        // Keep duplicating the sequence until it comfortably covers more than one screen width.
+        let guard = 0;
+        while (track.scrollWidth < window.innerWidth * 2 && guard < 20) {
+            track.insertAdjacentHTML('beforeend', originalHTML);
+            guard++;
+        }
+        // Duplicate once more so the -50% loop always jumps between two identical, full-width halves.
+        track.insertAdjacentHTML('beforeend', track.innerHTML);
+
+        const halfWidth = track.scrollWidth / 2;
+        track.style.animationDuration = `${(halfWidth / PIXELS_PER_SECOND).toFixed(1)}s`;
+    }
+
+    rebuild();
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(rebuild, 250);
+    });
+})();
+
 // ===== Cursor glow (desktop pointer devices only) =====
 (function initCursorGlow() {
     if (!window.matchMedia('(pointer: fine)').matches) return;
