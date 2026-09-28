@@ -1029,13 +1029,18 @@
             #nexara-bubble {
                 position: fixed; bottom: 28px; right: 28px; z-index: 9999;
                 width: 56px; height: 56px; border-radius: 50%;
-                background: #d4af37; border: none; cursor: pointer;
-                box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+                background: #1a1a1a; border: 2px solid #d4af37; cursor: pointer;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.35);
                 display: flex; align-items: center; justify-content: center;
                 transition: transform 0.2s;
             }
             #nexara-bubble:hover { transform: scale(1.08); }
-            #nexara-bubble svg { width: 26px; height: 26px; fill: #1a1a1a; }
+            #nexara-bubble-icon {
+                font-family: 'Garamond', 'Georgia', serif;
+                font-size: 28px;
+                line-height: 1;
+                color: #d4af37;
+            }
             #nexara-window {
                 position: fixed; bottom: 96px; right: 28px; z-index: 9999;
                 width: 340px; max-height: 480px;
@@ -1075,9 +1080,7 @@
         </style>
 
         <button id="nexara-bubble" onclick="toggleNexara()" aria-label="Chat öffnen">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
-            </svg>
+            <span id="nexara-bubble-icon" aria-hidden="true">✦</span>
         </button>
 
         <div id="nexara-window">

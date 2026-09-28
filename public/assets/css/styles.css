@@ -6853,9 +6853,10 @@ button.loading::after {
 }
 
 /* ===== BACK TO TOP BUTTON ===== */
+/* Bottom-left so it never overlaps the Nexara chat bubble (bottom-right on shop.html) */
 #scroll-top-btn {
     position: fixed;
-    right: 24px;
+    left: 24px;
     bottom: 24px;
     width: 46px;
     height: 46px;
