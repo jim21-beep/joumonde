@@ -218,6 +218,30 @@ body {
     transform: scale(1.05);
 }
 
+.brand-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+.brand-logo-text {
+    font-family: 'Garamond', 'Georgia', 'Times New Roman', serif;
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    white-space: nowrap;
+}
+
+/* Dark backgrounds: same tracked serif, rendered in a gold gradient instead of solid dark */
+.footer-section .brand-logo-text {
+    font-size: 1.35rem;
+    background: linear-gradient(135deg, #d4af37 0%, #f4d372 50%, #c9a961 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
 .nav-links {
     display: flex;
     list-style: none;
@@ -554,6 +578,13 @@ body {
     height: 100px;
     width: auto;
     opacity: 0.9;
+}
+.section-logo.brand-logo {
+    display: flex;
+    justify-content: center;
+}
+.section-logo .brand-logo-text {
+    font-size: 2.6rem;
 }
 
 .section-logo-jm {
