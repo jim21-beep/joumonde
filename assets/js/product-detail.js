@@ -566,7 +566,8 @@ function createReviewElement(review) {
 
 // Mark Review as Helpful
 function markHelpful(button) {
-    const countSpan = button.querySelector('svg + text') || button.childNodes[button.childNodes.length - 1];
+    // CSS "svg + text" never matches a plain text node, so this always falls through to the last child.
+    const countSpan = button.childNodes[button.childNodes.length - 1];
     let count = parseInt(countSpan.textContent.match(/\d+/)[0]);
     count++;
     button.innerHTML = button.innerHTML.replace(/\(\d+\)/, `(${count})`);
