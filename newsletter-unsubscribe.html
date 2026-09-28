@@ -46,11 +46,21 @@
         
         .logo {
             margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
         }
         
         .logo img {
             max-width: 150px;
             height: auto;
+        }
+
+        .logo .brand-logo-text {
+            font-size: 1.7rem;
+            background: linear-gradient(135deg, #d4af37 0%, #f4d372 50%, #c9a961 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         h1 {
@@ -158,7 +168,7 @@
 <body>
     <div class="container">
         <div class="logo">
-            <img src="assets/images/joumonde.png" alt="Joumonde Logo">
+            <span class="brand-logo"><span class="brand-logo-text">Joumonde</span></span>
         </div>
         
         <h1>Newsletter abbestellen</h1>
