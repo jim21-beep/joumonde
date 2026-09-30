@@ -437,28 +437,6 @@ body::after {
     text-align: center;
 }
 
-.shop-preview-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: 1px solid rgba(212,175,55,0.5);
-    padding: 20px 56px;
-    font-size: 1.1rem;
-    color: var(--gold);
-    text-decoration: none;
-    font-weight: 400;
-    letter-spacing: 0.08em;
-    font-family: var(--serif);
-    transition: all 0.3s ease;
-}
-.shop-preview-btn:hover {
-    background: rgba(212,175,55,0.1);
-    border-color: var(--gold);
-    box-shadow: 0 8px 30px rgba(212,175,55,0.3);
-    transform: translateY(-2px);
-}
-
 /* Newsletter */
 .newsletter-section {
     text-align: center;

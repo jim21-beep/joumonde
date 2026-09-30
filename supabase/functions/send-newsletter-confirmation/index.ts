@@ -294,9 +294,9 @@ serve(async (req) => {
           </p>
         </div>
         <div style="text-align:center;margin:30px 0;">
-          <a href="https://joumonde.com/shop-preview.html"
+          <a href="https://joumonde.com/#preview"
              style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#d4af37,#c9a961);color:#1a1a1a;text-decoration:none;border-radius:8px;font-weight:bold;font-size:1rem;">
-            Shop Preview ansehen
+            Kollektionen entdecken
           </a>
         </div>
         <p style="color:#555;font-size:0.8rem;text-align:center;margin-top:40px;">
