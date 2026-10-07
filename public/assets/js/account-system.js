@@ -59,6 +59,12 @@ async function handleRegister(event) {
     const password  = (form.elements['password']  || form.querySelectorAll('input[type="password"]')[0]).value;
     const passwordConfirm = (form.elements['passwordConfirm'] || form.querySelectorAll('input[type="password"]')[1]).value;
     const newsletter = false;
+    const submitButton = form.querySelector('button[type="submit"]');
+
+    if (!window.supabaseClient?.auth) {
+        showAccountMessage(accountT('accountLoginUnavailable', 'Anmeldung ist momentan nicht verfügbar. Bitte lade die Seite neu und versuche es erneut.'), 'error');
+        return;
+    }
 
     if (!firstName || !lastName || !email || !password) {
         showAccountMessage(accountT('accountRequiredFieldsError', 'Bitte fülle alle Pflichtfelder aus.'), 'error'); return;
@@ -72,20 +78,28 @@ async function handleRegister(event) {
 
     showAccountMessage(accountT('accountCreating', 'Konto wird erstellt…'), 'info');
 
-    const { data, error } = await supabaseClient.auth.signUp({
-        email,
-        password,
-        options: { data: { firstName, lastName, newsletter } }
-    });
+    submitButton.disabled = true;
+    try {
+        const { error } = await window.supabaseClient.auth.signUp({
+            email,
+            password,
+            options: { data: { firstName, lastName, newsletter } }
+        });
 
-    if (error) {
-        showAccountMessage(error.message, 'error'); return;
+        if (error) {
+            showAccountMessage(error.message, 'error'); return;
+        }
+
+        if (typeof trackSignup === 'function') trackSignup('email');
+        sendRegistrationEmail({ firstName, lastName, email, preferences: { newsletter } });
+        showAccountMessage(accountT('accountConfirmEmail', 'Konto erstellt! Bitte bestätige deine E-Mail-Adresse.'), 'success');
+        form.reset();
+    } catch (error) {
+        console.error('Registration request failed:', error.message);
+        showAccountMessage(accountT('accountLoginUnavailable', 'Registrierung ist momentan nicht verfügbar. Bitte versuche es erneut.'), 'error');
+    } finally {
+        submitButton.disabled = false;
     }
-
-    if (typeof trackSignup === 'function') trackSignup('email');
-    sendRegistrationEmail({ firstName, lastName, email, preferences: { newsletter } });
-    showAccountMessage(accountT('accountConfirmEmail', 'Konto erstellt! Bitte bestätige deine E-Mail-Adresse.'), 'success');
-    form.reset();
 }
 
 // Login – Supabase Auth
@@ -223,7 +237,7 @@ window.logoutUser = async function logoutUser(scope = 'local') {
     currentUser = null;
     refreshCartShippingProgress();
     document.body.classList.remove('modal-open');
-    window.location.href = 'shop.html?openAccount=1';
+    window.location.href = 'account.html';
 }
 
 // Update Account UI
@@ -259,19 +273,287 @@ function updateAccountUI() {
 function showAccountMessage(message, type) {
     const messageDiv = document.createElement('div');
     messageDiv.className = `account-message ${type}`;
+    messageDiv.setAttribute('role', type === 'error' ? 'alert' : 'status');
     messageDiv.textContent = message;
     
-    const modal = document.querySelector('.account-modal .auth-modal-panel') || document.querySelector('.account-modal .contact-modal-content');
-    const existingMessage = modal.querySelector('.account-message');
+    const messageTarget = document.querySelector('.account-modal .auth-modal-panel')
+        || document.querySelector('.account-modal .contact-modal-content')
+        || document.querySelector('.account-auth-panel');
+    if (!messageTarget) return;
+
+    const existingMessage = messageTarget.querySelector('.account-message');
     if (existingMessage) {
         existingMessage.remove();
     }
     
-    modal.insertBefore(messageDiv, modal.firstChild);
+    const firstForm = messageTarget.querySelector('.account-auth-form');
+    messageTarget.insertBefore(messageDiv, firstForm || messageTarget.firstChild);
     
     if (type === 'error') {
         setTimeout(() => messageDiv.remove(), 3000);
     }
+}
+
+async function sendAccountLoginCode(resend = false) {
+    const emailInput = document.getElementById('account-login-email');
+    const submitButton = document.getElementById('account-send-code');
+    const resendButton = document.getElementById('account-resend-code');
+    const email = emailInput?.value.trim().toLowerCase();
+
+    if (!window.supabaseClient?.auth) {
+        showAccountMessage(accountT('accountLoginUnavailable', 'Anmeldung ist momentan nicht verfügbar. Bitte lade die Seite neu und versuche es erneut.'), 'error');
+        return;
+    }
+    if (!emailInput?.checkValidity()) {
+        emailInput?.reportValidity();
+        return;
+    }
+
+    if (submitButton) submitButton.disabled = true;
+    if (resendButton) resendButton.disabled = true;
+    showAccountMessage(accountT('accountPageSendingCode', 'Anmeldecode wird gesendet …'), 'info');
+
+    try {
+        const { error } = await window.supabaseClient.auth.signInWithOtp({
+            email,
+            options: {
+                shouldCreateUser: true,
+                emailRedirectTo: `${window.location.origin}${window.location.pathname}`
+            }
+        });
+
+        if (error) {
+            console.error('Email sign-in code request failed:', error.message);
+            showAccountMessage(accountT('accountPageCodeSendError', 'Der Anmeldecode konnte nicht gesendet werden. Bitte versuche es erneut.'), 'error');
+            return;
+        }
+
+        document.getElementById('account-login-email-value').textContent = email;
+        document.getElementById('account-page-email-form').hidden = true;
+        document.getElementById('account-page-code-step').hidden = false;
+        document.body.classList.add('account-code-active');
+        document.getElementById('account-google-login').hidden = true;
+        document.querySelector('.account-auth-divider').hidden = true;
+        document.getElementById('account-page-auth-title').textContent = accountT('accountPageEnterCodeTitle', 'Code eingeben');
+        document.getElementById('account-page-auth-subtitle').textContent = accountT(
+            'accountPageCodePrompt',
+            'Gib den 6-stelligen Code ein, den wir dir per E-Mail gesendet haben.'
+        );
+        if (resend) {
+            showAccountMessage(accountT('accountPageCodeResent', 'Wir haben dir einen neuen Code gesendet.'), 'success');
+        } else {
+            document.querySelector('.account-auth-panel .account-message')?.remove();
+        }
+        document.querySelector('.account-code-digit').focus();
+    } catch (error) {
+        console.error('Email sign-in code request failed:', error.message);
+        showAccountMessage(accountT('accountPageCodeSendError', 'Der Anmeldecode konnte nicht gesendet werden. Bitte versuche es erneut.'), 'error');
+    } finally {
+        if (submitButton?.isConnected) submitButton.disabled = false;
+        if (resendButton?.isConnected) resendButton.disabled = false;
+    }
+}
+
+async function verifyAccountLoginCode(event) {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const email = document.getElementById('account-login-email')?.value.trim().toLowerCase();
+    const codeInputs = [...document.querySelectorAll('.account-code-digit')];
+    const token = codeInputs.map(input => input.value).join('');
+    const submitButton = document.getElementById('account-verify-code');
+
+    if (!window.supabaseClient?.auth) {
+        showAccountMessage(accountT('accountLoginUnavailable', 'Anmeldung ist momentan nicht verfügbar. Bitte lade die Seite neu und versuche es erneut.'), 'error');
+        return;
+    }
+    if (!email || !/^\d{6}$/.test(token)) {
+        codeInputs.find(input => !input.value)?.focus();
+        return;
+    }
+
+    if (form.dataset.verifying === 'true') return;
+    form.dataset.verifying = 'true';
+    if (submitButton) submitButton.disabled = true;
+    codeInputs.forEach(input => { input.disabled = true; });
+    showAccountMessage(accountT('accountPageVerifyingCode', 'Code wird überprüft …'), 'info');
+
+    let focusFirstCode = false;
+    try {
+        const { error } = await window.supabaseClient.auth.verifyOtp({
+            email,
+            token,
+            type: 'email'
+        });
+
+        if (error) {
+            showAccountMessage(accountT('accountPageInvalidCode', 'Der Code ist ungültig oder abgelaufen. Bitte prüfe ihn und versuche es erneut.'), 'error');
+            codeInputs.forEach(input => { input.value = ''; });
+            focusFirstCode = true;
+            return;
+        }
+
+        if (typeof trackLogin === 'function') trackLogin('email_otp');
+        event.target.reset();
+    } catch (error) {
+        console.error('Email sign-in code verification failed:', error.message);
+        showAccountMessage(accountT('accountPageInvalidCode', 'Der Code ist ungültig oder abgelaufen. Bitte prüfe ihn und versuche es erneut.'), 'error');
+        codeInputs.forEach(input => { input.value = ''; });
+        focusFirstCode = true;
+    } finally {
+        if (form.isConnected) form.dataset.verifying = 'false';
+        codeInputs.forEach(input => { if (input.isConnected) input.disabled = false; });
+        if (submitButton?.isConnected) submitButton.disabled = false;
+        if (focusFirstCode && codeInputs[0].isConnected) codeInputs[0].focus();
+    }
+}
+
+function handleAccountCodeInput(event) {
+    const input = event.target;
+    const codeInputs = [...document.querySelectorAll('.account-code-digit')];
+    const currentIndex = codeInputs.indexOf(input);
+    const digits = input.value.replace(/\D/g, '');
+
+    if (digits.length > 1) {
+        digits.slice(0, codeInputs.length - currentIndex).split('').forEach((digit, offset) => {
+            codeInputs[currentIndex + offset].value = digit;
+        });
+    } else {
+        input.value = digits;
+    }
+
+    const nextEmpty = codeInputs.findIndex(codeInput => !codeInput.value);
+    if (nextEmpty !== -1) {
+        codeInputs[nextEmpty].focus();
+    } else {
+        document.getElementById('account-page-code-form').requestSubmit();
+    }
+}
+
+function handleAccountCodeKeydown(event) {
+    const codeInputs = [...document.querySelectorAll('.account-code-digit')];
+    const index = codeInputs.indexOf(event.target);
+
+    if (event.key === 'Backspace' && !event.target.value && index > 0) {
+        codeInputs[index - 1].value = '';
+        codeInputs[index - 1].focus();
+    } else if (event.key === 'ArrowLeft' && index > 0) {
+        event.preventDefault();
+        codeInputs[index - 1].focus();
+    } else if (event.key === 'ArrowRight' && index < codeInputs.length - 1) {
+        event.preventDefault();
+        codeInputs[index + 1].focus();
+    }
+}
+
+function handleAccountCodePaste(event) {
+    event.preventDefault();
+
+    const codeInputs = [...document.querySelectorAll('.account-code-digit')];
+    const pastedDigits = event.clipboardData.getData('text').replace(/\D/g, '').slice(0, codeInputs.length);
+    if (!pastedDigits) return;
+
+    codeInputs.forEach((input, index) => {
+        input.value = pastedDigits[index] || '';
+    });
+
+    if (pastedDigits.length === codeInputs.length) {
+        document.getElementById('account-page-code-form').requestSubmit();
+    } else {
+        codeInputs[pastedDigits.length].focus();
+    }
+}
+
+function changeAccountLoginEmail() {
+    document.querySelectorAll('.account-code-digit').forEach(input => { input.value = ''; });
+    document.getElementById('account-page-code-step').hidden = true;
+    document.getElementById('account-page-email-form').hidden = false;
+    document.body.classList.remove('account-code-active');
+    document.getElementById('account-google-login').hidden = false;
+    document.querySelector('.account-auth-divider').hidden = false;
+    document.querySelector('.account-auth-panel .account-message')?.remove();
+    document.getElementById('account-page-auth-title').textContent = accountT('accountPageLoginTitle', 'Anmelden');
+    document.getElementById('account-page-auth-subtitle').textContent = accountT('accountPageLoginSubtitle', 'Melde dich mit deiner E-Mail-Adresse an.');
+    document.getElementById('account-login-email').focus();
+}
+
+async function signInWithGoogle() {
+        if (!window.supabaseClient?.auth) {
+            showAccountMessage(accountT('accountLoginUnavailable', 'Anmeldung ist momentan nicht verfügbar. Bitte lade die Seite neu und versuche es erneut.'), 'error');
+            return;
+        }
+
+        const button = document.getElementById('account-google-login');
+        if (button) button.disabled = true;
+
+        try {
+            const { error } = await window.supabaseClient.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: `${window.location.origin}${window.location.pathname}${window.location.search}`
+                }
+            });
+
+            if (error) {
+                console.error('Google sign-in failed:', error.message);
+                showAccountMessage('Die Anmeldung mit Google ist momentan nicht verfügbar. Bitte melde dich mit deiner E-Mail-Adresse an.', 'error');
+            }
+        } catch (error) {
+            console.error('Google sign-in request failed:', error.message);
+            showAccountMessage('Die Anmeldung mit Google ist momentan nicht verfügbar. Bitte melde dich mit deiner E-Mail-Adresse an.', 'error');
+        } finally {
+            if (button?.isConnected) button.disabled = false;
+        }
+    }
+
+function renderAccountSignInPage() {
+        const accountPageRoot = document.getElementById('account-page-root');
+        if (!accountPageRoot) return;
+
+        document.body.classList.add('account-page-auth');
+        document.querySelector('.account-page-avatar')?.setAttribute('hidden', '');
+        accountPageRoot.innerHTML = `
+            <section class="account-auth-panel" aria-labelledby="account-page-auth-title">
+                <h1 id="account-page-auth-title">${accountT('accountPageLoginTitle', 'Anmelden')}</h1>
+                <p class="account-auth-subtitle" id="account-page-auth-subtitle">${accountT('accountPageLoginSubtitle', 'Melde dich ganz einfach mit deiner E-Mail-Adresse an.')}</p>
+
+                <button type="button" class="account-google-button" id="account-google-login" onclick="signInWithGoogle()">
+                    <svg viewBox="0 0 48 48" aria-hidden="true">
+                        <path fill="#4285F4" d="M43.6 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h11c-.5 2.5-1.9 4.6-4 6v5h6.5c3.8-3.5 6.1-8.6 6.1-14.7z"/>
+                        <path fill="#34A853" d="M24 44c5.5 0 10.1-1.8 13.5-4.8l-6.5-5c-1.8 1.2-4.1 2-7 2-5.3 0-9.8-3.6-11.4-8.4H5.9v5.2C9.3 39.6 16.1 44 24 44z"/>
+                        <path fill="#FBBC05" d="M12.6 27.8a12 12 0 0 1 0-7.6V15H5.9a20 20 0 0 0 0 18z"/>
+                        <path fill="#EA4335" d="M24 11.8c3 0 5.7 1 7.8 3.1l5.8-5.8C34.1 5.7 29.5 4 24 4 16.1 4 9.3 8.4 5.9 15l6.7 5.2c1.6-4.8 6.1-8.4 11.4-8.4z"/>
+                    </svg>
+                    <span>${accountT('accountPageGoogle', 'Weiter mit Google')}</span>
+                </button>
+
+                <div class="account-auth-divider" aria-hidden="true"><span>${accountT('accountPageEmailDivider', 'oder mit E-Mail')}</span></div>
+
+                <form id="account-page-email-form" class="account-auth-form" onsubmit="event.preventDefault(); sendAccountLoginCode()">
+                    <label for="account-login-email">${accountT('accountPageEmailAddress', 'E-Mail-Adresse')}</label>
+                    <input id="account-login-email" type="email" name="email" autocomplete="email" placeholder="${accountT('accountPageEmailPlaceholder', 'name@beispiel.ch')}" required>
+                    <button type="submit" class="account-auth-submit" id="account-send-code">${accountT('accountPageSendCode', 'Code per E-Mail senden')}</button>
+                </form>
+
+                <div id="account-page-code-step" class="account-auth-code-step" hidden>
+                    <p class="account-auth-code-copy">
+                        <span>${accountT('accountPageSentTo', 'Gesendet an')}</span>
+                        <strong id="account-login-email-value"></strong>
+                        <button type="button" class="account-auth-change-email" onclick="changeAccountLoginEmail()">${accountT('accountPageChangeEmail', 'Ändern')}</button>
+                    </p>
+                    <form id="account-page-code-form" class="account-auth-form" onsubmit="verifyAccountLoginCode(event)">
+                        <label class="sr-only" id="account-code-label">${accountT('accountPageCodeLabel', '6-stelliger Code')}</label>
+                        <div class="account-code-inputs" role="group" aria-labelledby="account-code-label">
+                            ${Array.from({ length: 6 }, (_, index) => `<input class="account-code-digit" type="text" inputmode="numeric" autocomplete="${index === 0 ? 'one-time-code' : 'off'}" pattern="[0-9]" maxlength="1" aria-label="${accountT('accountPageCodeDigit', 'Ziffer')} ${index + 1}" required oninput="handleAccountCodeInput(event)" onkeydown="handleAccountCodeKeydown(event)" onpaste="handleAccountCodePaste(event)">`).join('')}
+                        </div>
+                        <button type="submit" class="sr-only" id="account-verify-code">${accountT('accountPageVerifyCode', 'Anmelden')}</button>
+                    </form>
+                    <button type="button" class="account-auth-text-button" id="account-resend-code" onclick="sendAccountLoginCode(true)">${accountT('accountPageResendCode', 'Code erneut senden')}</button>
+                </div>
+
+                <p class="account-auth-legal">${accountT('accountPageLegal', 'Wenn du fortfährst, stimmst du unseren')} <a href="agb.html">${accountT('terms', 'AGB')}</a> ${accountT('accountPageAnd', 'und der')} <a href="cookie-policy.html">${accountT('privacyPolicy', 'Datenschutzerklärung')}</a>${accountT('accountPageAgree', 'zu.')}</p>
+                <a class="account-auth-back" href="shop.html">${accountT('accountPageBackShop', 'Zurück zum Shop')}</a>
+            </section>`;
 }
 
 // Show Notification
@@ -299,25 +581,14 @@ function showNotification(message, type = 'info') {
 
 // Toggle Account Modal
 function toggleAccount() {
-    if (currentUser) {
-        window.location.href = 'account.html';
+    const modal = document.getElementById('account-modal');
+    if (modal?.classList.contains('active')) {
+        modal.classList.remove('active');
+        document.body.classList.remove('modal-open');
         return;
     }
 
-    const modal = document.getElementById('account-modal');
-    if (!modal) return;
-    
-    // Check if modal is currently open
-    if (modal.classList.contains('active')) {
-        // Close modal
-        modal.classList.remove('active');
-        document.body.classList.remove('modal-open');
-    } else {
-        // Open modal
-        modal.classList.add('active');
-        document.body.classList.add('modal-open');
-        switchAccountTab('login');
-    }
+    window.location.href = 'account.html';
 }
 
 // Switch Account Tab
@@ -404,6 +675,8 @@ function showAccountDashboard() {
     `;
 
     if (accountPageRoot) {
+        document.body.classList.remove('account-page-auth');
+        document.querySelector('.account-page-avatar')?.removeAttribute('hidden');
         accountPageRoot.innerHTML = `<div class="account-page-shell account-dashboard-panel">${dashboardMarkup}</div>`;
         return;
     }
@@ -1317,15 +1590,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (document.getElementById('account-page-root')) showAccountDashboard();
     } else {
         updateAccountUI();
-        const accountPageRoot = document.getElementById('account-page-root');
-        if (accountPageRoot) {
-            accountPageRoot.innerHTML = `
-                <div class="account-page-empty">
-                    <h1>${accountT('accountLoginRequired', 'Bitte melde dich an')}</h1>
-                    <p>${accountT('accountLoginRequiredHint', 'Melde dich an, um dein Profil und deine Bestellungen zu sehen.')}</p>
-                    <a class="btn-primary" href="shop.html?openAccount=1">${accountT('accountLogin', 'Anmelden')}</a>
-                </div>`;
-        }
+        renderAccountSignInPage();
     }
 
     // Auf Login/Logout reagieren (auch in anderen Tabs)
@@ -1342,6 +1607,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 window.location.href = 'account.html';
                 return;
             }
+            showAccountDashboard();
             // Modal schliessen falls offen
             const modal = document.getElementById('account-modal');
             if (modal && modal.classList.contains('active')) {

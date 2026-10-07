@@ -402,6 +402,377 @@ body.landing-page .nexara-more-link {
     color: #51483b;
 }
 
+.account-page.account-page-auth {
+    display: flex;
+    min-height: 100vh;
+    min-height: 100svh;
+    flex-direction: column;
+    background: #fbfaf7;
+}
+
+.account-page-auth .account-page-header {
+    display: flex;
+    min-height: 64px;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    background: transparent;
+}
+
+.account-page-auth .account-page-brand {
+    color: #51483b;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.account-page-auth .account-page-avatar[hidden] {
+    display: none;
+}
+
+.account-page-auth .account-page-main {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 1rem 1.25rem 2rem;
+}
+
+.account-auth-panel {
+    width: min(100%, 340px);
+    padding: 1.5rem 0;
+}
+
+.account-auth-panel [hidden] {
+    display: none !important;
+}
+
+.account-auth-panel h1 {
+    margin: 1.6rem 0 0.35rem;
+    color: #302a22;
+    font-size: 1.65rem;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+}
+
+.account-code-active .account-auth-panel h1 {
+    margin: 0 0 0.15rem;
+    font-size: 1.2rem;
+    letter-spacing: 0;
+}
+
+.account-code-active .account-auth-subtitle,
+.account-code-active .account-auth-legal,
+.account-code-active .account-auth-back {
+    display: none;
+}
+
+.account-auth-subtitle {
+    margin: 0 0 1.4rem;
+    color: #766d60;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.account-auth-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.25rem;
+    padding: 0.25rem;
+    border: 1px solid #e8e1d5;
+    background: #f3f0e9;
+}
+
+.account-auth-tab {
+    min-height: 42px;
+    padding: 0.6rem 0.75rem;
+    border: 0;
+    background: transparent;
+    color: #766d60;
+    font: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.account-auth-tab.active {
+    background: #fff;
+    color: #302a22;
+    box-shadow: 0 1px 4px rgba(54, 43, 30, 0.1);
+}
+
+.account-google-button,
+.account-auth-submit {
+    display: flex;
+    width: 100%;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    box-sizing: border-box;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d8d0c3;
+    background: #fff;
+    color: #302a22;
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.account-google-button:hover,
+.account-auth-submit:hover {
+    background: #f3f0e9;
+}
+
+.account-google-button svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+}
+
+.account-auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 1.25rem 0;
+    color: #8a8175;
+    font-size: 0.82rem;
+}
+
+.account-auth-divider::before,
+.account-auth-divider::after {
+    height: 1px;
+    flex: 1;
+    background: #e8e1d5;
+    content: '';
+}
+
+.account-auth-form {
+    display: grid;
+    gap: 0.55rem;
+}
+
+.account-auth-form[hidden] {
+    display: none;
+}
+
+.account-auth-code-copy {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.2rem 0.4rem;
+    margin: 0 0 1rem;
+    color: #766d60;
+    font-size: 0.82rem;
+    line-height: 1.55;
+}
+
+.account-auth-code-copy strong {
+    color: #625b50;
+    font-weight: 400;
+}
+
+.account-auth-change-email {
+    min-height: 28px;
+    margin-left: 0.2rem;
+    padding: 0 0.25rem;
+    border: 0;
+    background: transparent;
+    color: #51483b;
+    font: inherit;
+    font-size: 0.82rem;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+}
+
+.account-code-inputs {
+    display: flex;
+    justify-content: flex-start;
+    gap: clamp(0.35rem, 0.8vw, 0.55rem);
+}
+
+.account-auth-form .account-code-digit {
+    width: clamp(36px, 5vw, 44px);
+    height: 52px;
+    min-height: 52px;
+    box-sizing: border-box;
+    padding: 0;
+    border: 1px solid #e2ded7;
+    border-radius: 9px;
+    background: #fff;
+    color: #302a22;
+    font-size: 1.2rem;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.account-auth-form .account-code-digit:focus {
+    border-color: #51483b;
+    outline: 0;
+    box-shadow: 0 0 0 1px #51483b;
+}
+
+.account-auth-form .account-code-digit:disabled {
+    background: #f6f4ef;
+    cursor: wait;
+}
+
+.account-auth-text-button {
+    display: block;
+    width: fit-content;
+    min-height: 44px;
+    margin: 0.45rem auto 0;
+    padding: 0.55rem 0.75rem;
+    border: 0;
+    background: transparent;
+    color: #625b50;
+    font: inherit;
+    font-size: 0.84rem;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+}
+
+.account-auth-text-button:disabled {
+    cursor: wait;
+    opacity: 0.6;
+}
+
+.account-auth-code-step > .account-auth-text-button {
+    margin: 0.65rem 0 0;
+    padding-left: 0;
+    color: #766d60;
+}
+
+.account-auth-form label {
+    margin-top: 0.5rem;
+    color: #51483b;
+    font-size: 0.82rem;
+    font-weight: 500;
+}
+
+.account-auth-form input {
+    width: 100%;
+    min-height: 46px;
+    box-sizing: border-box;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid #ded8ce;
+    border-radius: 2px;
+    background: #fff;
+    color: #302a22;
+    font: inherit;
+    font-size: 0.95rem;
+}
+
+.account-auth-form input:focus {
+    border-color: #9b8b72;
+    outline: 2px solid rgba(155, 139, 114, 0.2);
+}
+
+.account-auth-name-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.7rem;
+}
+
+.account-auth-name-fields > div {
+    display: grid;
+    gap: 0.55rem;
+}
+
+.account-auth-submit {
+    margin-top: 0.7rem;
+    border-color: #766d60;
+    background: #766d60;
+    color: #fff;
+}
+
+.account-auth-submit:hover {
+    border-color: #51483b;
+    background: #51483b;
+    color: #fff;
+}
+
+.account-auth-submit:disabled,
+.account-google-button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+.account-auth-legal {
+    margin: 1.2rem 0 0;
+    color: #8a8175;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.account-auth-legal a,
+.account-auth-back {
+    color: #625b50;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.account-auth-back {
+    display: block;
+    width: fit-content;
+    margin: 1.1rem auto 0;
+    font-size: 0.82rem;
+    text-align: center;
+}
+
+.account-auth-panel .account-message {
+    margin: 0 0 1rem;
+}
+
+@media (max-width: 480px) {
+    .account-page-auth .account-page-header {
+        min-height: 60px;
+    }
+
+    .account-page-auth .account-page-main {
+        align-items: flex-start;
+        padding: clamp(4rem, 14vh, 7rem) 1.25rem 2rem;
+    }
+
+    .account-auth-panel {
+        padding: 0;
+    }
+
+    .account-auth-panel h1 {
+        margin-top: 0.6rem;
+    }
+}
+
+.account-code-active.account-page-auth .account-page-main {
+    align-items: flex-start;
+    padding: clamp(10rem, calc(66vh - 4rem), 28rem) 1.25rem 0;
+}
+
+.account-code-active .account-auth-panel {
+    padding: 0;
+}
+
+.account-code-active .account-auth-panel .account-message {
+    margin-bottom: 0.65rem;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.82rem;
+}
+
+@media (max-width: 480px) {
+    .account-code-active.account-page-auth .account-page-main {
+        padding: clamp(4rem, 14vh, 7rem) 1.25rem 2rem;
+    }
+}
+
 .newsletter-unsubscribe-page {
     display: block;
     min-height: 100vh;
