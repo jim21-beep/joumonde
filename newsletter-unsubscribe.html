@@ -14,6 +14,8 @@
         gtag('js', new Date());
         gtag('config', 'G-EFD7P54PRE');
     </script>
+    <link rel="stylesheet" href="assets/css/site-footer.css">
+    <link rel="stylesheet" href="assets/css/site-pages.css">
     
     <style>
         * {
@@ -24,24 +26,21 @@
         
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            color: #fff;
+            background: #fbfaf7;
+            color: #302a22;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            padding: 3rem 1rem;
         }
         
         .container {
             max-width: 500px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 12px;
+            background: #fff;
+            border: 1px solid #e8e1d5;
+            border-radius: 0;
             padding: 3rem 2rem;
             text-align: center;
+            box-shadow: 0 12px 32px rgba(54, 43, 30, 0.06);
         }
         
         .logo {
@@ -57,14 +56,11 @@
 
         .logo .brand-logo-text {
             font-size: 1.7rem;
-            background: linear-gradient(135deg, #d4af37 0%, #f4d372 50%, #c9a961 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #51483b;
         }
         
         h1 {
-            color: #d4af37;
+            color: #51483b;
             font-size: 2rem;
             margin-bottom: 1rem;
         }
@@ -82,31 +78,31 @@
         input[type="email"] {
             width: 100%;
             padding: 1rem;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            border-radius: 4px;
+            border: 1px solid #d8cdbb;
+            background: #fffdf8;
+            color: #302a22;
+            border-radius: 0;
             font-size: 1rem;
             transition: all 0.3s ease;
         }
         
         input[type="email"]:focus {
             outline: none;
-            border-color: #d4af37;
-            background: rgba(255, 255, 255, 0.15);
+            border-color: #88765d;
+            background: #fff;
         }
         
         input[type="email"]::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: #766d60;
         }
         
         button {
             width: 100%;
             padding: 1rem;
-            background: linear-gradient(135deg, #d4af37 0%, #c9b037 100%);
-            color: #1a1a1a;
+            background: #e8e2d6;
+            color: #51483b;
             border: none;
-            border-radius: 4px;
+            border-radius: 0;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
@@ -115,7 +111,7 @@
         
         button:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+            box-shadow: 0 4px 12px rgba(54, 43, 30, 0.12);
         }
         
         button:disabled {
@@ -145,7 +141,7 @@
         .back-link {
             display: inline-block;
             margin-top: 2rem;
-            color: #d4af37;
+            color: #766d60;
             text-decoration: none;
             transition: opacity 0.3s ease;
         }
@@ -165,7 +161,7 @@
         }
     </style>
 </head>
-<body>
+<body class="newsletter-unsubscribe-page">
     <div class="container">
         <div class="logo">
             <span class="brand-logo"><span class="brand-logo-text">Joumonde</span></span>
@@ -196,6 +192,8 @@
         
         <a href="index.html" class="back-link">← Zurück zur Homepage</a>
     </div>
+
+    <div data-site-footer></div>
     
     <script>
         document.getElementById('unsubscribe-form').addEventListener('submit', async function(e) {
@@ -249,5 +247,6 @@
             messageDiv.style.display = 'block';
         }
     </script>
+    <script src="assets/js/site-footer.js"></script>
 </body>
 </html>

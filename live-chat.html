@@ -10,19 +10,19 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --gold: #d4af37;
-            --gold-dark: #c9a961;
-            --bg: #0a0a0a;
-            --bg-secondary: #111111;
-            --bg-card: #1a1a1a;
-            --text: #f5f0e8;
-            --text-muted: #888;
-            --border: #2a2a2a;
+            --accent: #766d60;
+            --accent-dark: #51483b;
+            --bg: #fbfaf7;
+            --bg-secondary: #f3f0e9;
+            --bg-card: #fff;
+            --text: #302a22;
+            --text-muted: #766d60;
+            --border: #e8e1d5;
         }
 
         html, body {
             height: 100%;
-            font-family: 'Georgia', serif;
+            font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
             background: var(--bg);
             color: var(--text);
         }
@@ -46,7 +46,7 @@
         }
 
         .chat-navbar .logo {
-            color: var(--gold);
+            color: var(--accent-dark);
             font-size: 1.4rem;
             letter-spacing: 0.2em;
             text-decoration: none;
@@ -71,7 +71,7 @@
             font-size: 0.8rem;
             transition: all 0.2s;
         }
-        .logout-btn:hover { border-color: var(--gold); color: var(--gold); }
+        .logout-btn:hover { border-color: #b9aa91; color: var(--accent-dark); background: #e8e2d6; }
 
         /* ── Login screen ── */
         #chat-login {
@@ -85,14 +85,14 @@
         .login-box {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 2px;
             padding: 2.5rem 2rem;
             width: 100%;
             max-width: 380px;
         }
 
         .login-box h2 {
-            color: var(--gold);
+            color: var(--accent-dark);
             text-align: center;
             margin-bottom: 0.4rem;
             letter-spacing: 0.05em;
@@ -121,23 +121,23 @@
             outline: none;
             transition: border-color 0.2s;
         }
-        .form-field input:focus { border-color: var(--gold); }
+        .form-field input:focus { border-color: #b9aa91; }
 
-        .btn-gold {
+        .chat-primary-btn {
             width: 100%;
             padding: 0.8rem;
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            color: #1a1a1a;
-            border: none;
-            border-radius: 8px;
+            background: #e8e2d6;
+            color: #51483b;
+            border: 1px solid #b9aa91;
+            border-radius: 2px;
             font-weight: 700;
             font-size: 0.95rem;
             cursor: pointer;
             margin-top: 0.25rem;
             transition: opacity 0.2s;
         }
-        .btn-gold:hover { opacity: 0.9; }
-        .btn-gold:disabled { opacity: 0.45; cursor: not-allowed; }
+        .chat-primary-btn:hover { background: #dcd3c4; }
+        .chat-primary-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
         .login-error {
             color: #e74c3c;
@@ -153,7 +153,7 @@
             font-size: 0.82rem;
             color: var(--text-muted);
         }
-        .login-register-hint a { color: var(--gold); }
+        .login-register-hint a { color: var(--accent); }
 
         /* ── Chat App ── */
         #chat-app {
@@ -181,7 +181,7 @@
 
         .sessions-panel h3 {
             padding: 1.1rem 1.25rem;
-            color: var(--gold);
+            color: var(--accent-dark);
             font-size: 0.78rem;
             letter-spacing: 0.12em;
             text-transform: uppercase;
@@ -202,7 +202,7 @@
             border-left: 3px solid transparent;
         }
         .session-item:hover { background: var(--bg-card); }
-        .session-item.active { background: var(--bg-card); border-left-color: var(--gold); }
+        .session-item.active { background: #f3f0e9; border-left-color: #b9aa91; }
 
         .session-name { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.2rem; }
         .session-email { font-size: 0.77rem; color: var(--text-muted); }
@@ -277,8 +277,8 @@
             word-break: break-word;
         }
         .bubble.sent {
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            color: #1a1a1a;
+            background: #e8e2d6;
+            color: #51483b;
             border-radius: 14px 14px 3px 14px;
         }
         .bubble.received {
@@ -319,11 +319,11 @@
             line-height: 1.4;
             transition: border-color 0.2s;
         }
-        .chat-input-area textarea:focus { border-color: var(--gold); }
+        .chat-input-area textarea:focus { border-color: #b9aa91; }
 
         .send-btn {
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            color: #1a1a1a;
+            background: #e8e2d6;
+            color: #51483b;
             border: none;
             border-radius: 8px;
             width: 44px;
@@ -393,7 +393,7 @@
             <div class="form-field">
                 <input type="password" id="login-password" placeholder="Passwort" required>
             </div>
-            <button type="submit" class="btn-gold" id="login-btn">Anmelden &amp; Chat starten</button>
+            <button type="submit" class="chat-primary-btn" id="login-btn">Anmelden &amp; Chat starten</button>
         </form>
         <p class="login-error" id="login-error"></p>
         <p class="login-register-hint">

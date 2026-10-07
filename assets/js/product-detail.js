@@ -480,6 +480,19 @@ function selectSize(size, button) {
     button.classList.add('active');
 }
 
+window.applyPreferredSizeToProductDetail = function applyPreferredSizeToProductDetail() {
+    const sizeButtons = Array.from(document.querySelectorAll('.size-option'));
+    if (sizeButtons.length === 0) return;
+
+    const availableSizes = sizeButtons.map(button => button.textContent.trim());
+    const usesPantsSizing = availableSizes.some(size => /^\d+$/.test(size));
+    const preferredSize = usesPantsSizing
+        ? localStorage.getItem('defaultPantsSize')
+        : localStorage.getItem('defaultTopSize') || localStorage.getItem('defaultSize');
+    const selectedButton = sizeButtons.find(button => button.textContent.trim() === preferredSize) || sizeButtons[0];
+    selectSize(selectedButton.textContent.trim(), selectedButton);
+};
+
 // Color Selection
 let selectedColor = 'Navy';
 function selectColor(color, button) {

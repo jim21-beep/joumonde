@@ -17,6 +17,17 @@ window.getCurrentUserId = function getCurrentUserId() {
     return currentUser && currentUser.id ? currentUser.id : null;
 };
 
+window.getCurrentShippingCountry = function getCurrentShippingCountry() {
+    if (!currentUser || !Array.isArray(currentUser.addresses)) return null;
+    const defaultAddress = currentUser.addresses.find(address => address.isDefault)
+        || currentUser.addresses[0];
+    return defaultAddress?.country?.trim() || null;
+};
+
+function refreshCartShippingProgress() {
+    if (typeof window.updateCart === 'function') window.updateCart();
+}
+
 function getAvatarStorageKey(userId) {
     return `profileAvatar_${userId}`;
 }
@@ -34,63 +45,6 @@ function getDashboardAvatarMarkup() {
     }
     return `<span>${initials}</span>`;
 }
-
-function updateProfileAvatarPreview(previewEl, avatarUrl) {
-    if (!previewEl) return;
-    const initials = getUserInitials(currentUser?.firstName, currentUser?.lastName);
-    if (avatarUrl) {
-        previewEl.innerHTML = `<img src="${avatarUrl}" alt="Profilbild" class="profile-avatar-preview-image">`;
-    } else {
-        previewEl.innerHTML = `<span>${initials}</span>`;
-    }
-}
-
-function updateProfileImageFilenameLabel(filename) {
-    const label = document.getElementById('profile-upload-filename');
-    if (!label) return;
-    label.textContent = filename || accountT('accountProfileImageFilenameHint', 'PNG oder JPG, maximal 2 MB');
-}
-
-window.handleProfileAvatarChange = function handleProfileAvatarChange(event) {
-    const file = event?.target?.files?.[0];
-    if (!file) return;
-
-    if (!file.type.startsWith('image/')) {
-        showNotification(accountT('accountAvatarTypeError', 'Bitte wähle eine gültige Bilddatei aus.'), 'error');
-        event.target.value = '';
-        return;
-    }
-
-    if (file.size > 2 * 1024 * 1024) {
-        showNotification(accountT('accountAvatarSizeError', 'Das Profilbild ist zu groß (max. 2 MB).'), 'error');
-        event.target.value = '';
-        return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-        const preview = document.getElementById('profile-avatar-preview');
-        updateProfileAvatarPreview(preview, String(reader.result || ''));
-        updateProfileImageFilenameLabel(file.name);
-        const removeInput = document.querySelector('input[name="removeProfileImage"]');
-        if (removeInput) removeInput.value = '0';
-    };
-    reader.readAsDataURL(file);
-};
-
-window.removeProfileAvatar = function removeProfileAvatar() {
-    const preview = document.getElementById('profile-avatar-preview');
-    updateProfileAvatarPreview(preview, null);
-    updateProfileImageFilenameLabel(accountT('accountProfileImageRemoved', 'Kein Bild ausgewählt'));
-
-    const fileInput = document.querySelector('input[name="profileImage"]');
-    if (fileInput) fileInput.value = '';
-
-    const removeInput = document.querySelector('input[name="removeProfileImage"]');
-    if (removeInput) removeInput.value = '1';
-};
-
-
 
 // ==================== AUTHENTICATION ====================
 
@@ -177,14 +131,15 @@ async function loginUser(supabaseUser, isActualLogin = true) {
         preferences: {
             newsletter:      profile.newsletter      || false,
             defaultCurrency: profile.default_currency || 'CHF',
-            defaultLanguage: profile.default_language || 'de',
-            defaultSize:     profile.default_size     || null,
-            defaultTopSize:  profile.default_size     || null,
-            defaultPantsSize: localStorage.getItem('defaultPantsSize') || null
+            defaultSize:     profile.default_size || localStorage.getItem('defaultTopSize') || localStorage.getItem('defaultSize') || null,
+            defaultTopSize:  profile.default_size || localStorage.getItem('defaultTopSize') || localStorage.getItem('defaultSize') || null,
+            defaultPantsSize: supabaseUser.user_metadata?.defaultPantsSize || localStorage.getItem('defaultPantsSize') || null
         },
         addresses: addresses.map(a => ({
-            id: a.id, street: a.street, zip: a.zip, city: a.city,
-            country: a.country, phone: a.phone, isDefault: a.is_default
+            id: a.id, firstName: a.first_name || '', lastName: a.last_name || '',
+            company: a.company || '', street: a.street, addressExtra: a.address_extra || '',
+            zip: a.zip, city: a.city, country: a.country, phone: a.phone,
+            isDefault: a.is_default
         })),
         orderHistory: orders.map(o => ({
             id: o.id, date: o.created_at, status: o.status,
@@ -212,8 +167,6 @@ async function loginUser(supabaseUser, isActualLogin = true) {
     if (isActualLogin) {
         if (currentUser.preferences.defaultCurrency && typeof changeCurrency === 'function')
             changeCurrency(currentUser.preferences.defaultCurrency);
-        if (currentUser.preferences.defaultLanguage && typeof changeLanguage === 'function')
-            changeLanguage(currentUser.preferences.defaultLanguage);
     }
 
     // Wishlist: load user's own wishlist from localStorage namespace
@@ -233,31 +186,35 @@ async function loginUser(supabaseUser, isActualLogin = true) {
     }
 
     updateAccountUI();
+    refreshCartShippingProgress();
     if (isActualLogin) {
         showNotification(`${accountT('accountWelcomeBack', 'Willkommen zurueck')}, ${currentUser.firstName}!`, 'success');
     }
 }
 
 // Logout – Supabase Auth
-window.logoutUser = async function logoutUser() {
+window.logoutUser = async function logoutUser(scope = 'local') {
     // Save user's wishlist under their ID namespace before logout
     if (currentUser && currentUser.id && typeof wishlist !== 'undefined') {
         localStorage.setItem(`wishlist_${currentUser.id}`, JSON.stringify(wishlist));
-        // Reset to anonymous (empty) after saving
-        if (typeof wishlist !== 'undefined') wishlist = [];
-        if (typeof updateWishlistCount === 'function') updateWishlistCount();
     }
-    await supabaseClient.auth.signOut();
+    const { error } = await supabaseClient.auth.signOut({ scope });
+    if (error) {
+        showNotification(accountT('accountLogoutError', 'Abmelden fehlgeschlagen. Bitte versuche es erneut.'), 'error');
+        return;
+    }
+    if (typeof wishlist !== 'undefined') wishlist = [];
+    if (typeof updateWishlistCount === 'function') updateWishlistCount();
     currentUser = null;
-    const modal = document.getElementById('account-modal');
-    if (modal) modal.classList.remove('active');
+    refreshCartShippingProgress();
     document.body.classList.remove('modal-open');
-    window.location.reload();
+    window.location.href = 'shop.html?openAccount=1';
 }
 
 // Update Account UI
 function updateAccountUI() {
     const accountBtn = document.querySelector('.account-btn');
+    if (!accountBtn) return;
     
     if (currentUser) {
         // User is logged in
@@ -327,7 +284,13 @@ function showNotification(message, type = 'info') {
 
 // Toggle Account Modal
 function toggleAccount() {
+    if (currentUser) {
+        window.location.href = 'account.html';
+        return;
+    }
+
     const modal = document.getElementById('account-modal');
+    if (!modal) return;
     
     // Check if modal is currently open
     if (modal.classList.contains('active')) {
@@ -336,15 +299,9 @@ function toggleAccount() {
         document.body.classList.remove('modal-open');
     } else {
         // Open modal
-        if (currentUser) {
-            // User is logged in - show dashboard
-            showAccountDashboard();
-        } else {
-            // User is not logged in - show login/register
-            modal.classList.add('active');
-            document.body.classList.add('modal-open');
-            switchAccountTab('login'); // Default to login tab
-        }
+        modal.classList.add('active');
+        document.body.classList.add('modal-open');
+        switchAccountTab('login');
     }
 }
 
@@ -372,12 +329,17 @@ function switchAccountTab(tab) {
 
 // Show Account Dashboard
 function showAccountDashboard() {
+    const accountPageRoot = document.getElementById('account-page-root');
     const modal = document.getElementById('account-modal');
-    // Support both the new auth panel and the legacy contact-modal-content (other pages)
-    const modalContent = modal.querySelector('.auth-modal-panel') || modal.querySelector('.contact-modal-content');
+    const modalContent = modal?.querySelector('.auth-modal-panel') || modal?.querySelector('.contact-modal-content');
+    const pageAvatar = document.querySelector('.account-page-avatar');
+
+    if (pageAvatar) {
+        pageAvatar.innerHTML = getDashboardAvatarMarkup();
+        pageAvatar.setAttribute('aria-label', `Profilbild ${getUserInitials(currentUser?.firstName, currentUser?.lastName)}`);
+    }
     
-    modalContent.innerHTML = `
-        <button class="contact-close" onclick="toggleAccount()">&times;</button>
+    const dashboardMarkup = `
         <div class="account-dashboard">
             <div class="dashboard-header">
                 <div class="user-avatar-large">${getDashboardAvatarMarkup()}</div>
@@ -385,32 +347,57 @@ function showAccountDashboard() {
             </div>
             
             <div class="dashboard-tabs">
-                <button class="dashboard-tab active" onclick="showDashboardSection('overview')">${accountT('accountOverview', 'Uebersicht')}</button>
-                <button class="dashboard-tab" onclick="showDashboardSection('orders')">${accountT('accountOrders', 'Bestellungen')}</button>
-                <button class="dashboard-tab" onclick="showDashboardSection('addresses')">${accountT('accountAddresses', 'Adressen')}</button>
-                <button class="dashboard-tab" onclick="showDashboardSection('preferences')">${accountT('accountSettings', 'Einstellungen')}</button>
+                <button class="dashboard-tab active" onclick="showDashboardSection('orders')">${accountT('accountOrders', 'Bestellungen')}</button>
+                <button class="dashboard-tab" onclick="showDashboardSection('profile')">${accountT('accountProfile', 'Profil')}</button>
             </div>
             
             <div class="dashboard-content">
-                <div id="dashboard-overview" class="dashboard-section active">
-                    ${getDashboardOverview()}
+                <div id="dashboard-profile" class="dashboard-section">
+                    ${getDashboardPreferences()}
+                    <div class="profile-address-section">
+                        ${getDashboardAddresses()}
+                    </div>
+                    <section class="profile-marketing-section">
+                        <form class="marketing-preferences-form" onsubmit="event.preventDefault()">
+                            <div class="preferences-section-header">
+                                <h3>${accountT('accountMarketingSettings', 'Marketing-Einstellungen')}</h3>
+                                <span class="marketing-save-status preferences-save-status" role="status" aria-live="polite"></span>
+                            </div>
+                            <label class="marketing-preference-row">
+                            <span class="marketing-preference-label">
+                                <span class="marketing-preference-icon" aria-hidden="true">✉</span>
+                                <span>${accountT('accountEmail', 'E-Mail')}</span>
+                            </span>
+                            <span class="marketing-toggle">
+                                <input type="checkbox" name="newsletter" onchange="saveMarketingPreferences(event)" ${currentUser.preferences.newsletter ? 'checked' : ''}>
+                                <span class="marketing-toggle-track" aria-hidden="true"></span>
+                            </span>
+                            </label>
+                        </form>
+                    </section>
+                    ${getDashboardSizePreferences()}
+                    <div class="dashboard-footer">
+                        <button class="btn-logout" onclick="logoutUser()">${accountT('accountLogout', 'Abmelden')}</button>
+                        <button class="btn-logout-all" onclick="logoutUser('global')">${accountT('accountLogoutAllDevices', 'Von allen Geräten abmelden')}</button>
+                    </div>
                 </div>
-                <div id="dashboard-orders" class="dashboard-section">
+                <div id="dashboard-orders" class="dashboard-section active">
                     ${getDashboardOrders()}
                 </div>
-                <div id="dashboard-addresses" class="dashboard-section">
-                    ${getDashboardAddresses()}
-                </div>
-                <div id="dashboard-preferences" class="dashboard-section">
-                    ${getDashboardPreferences()}
-                </div>
-            </div>
-            
-            <div class="dashboard-footer">
-                <button class="btn-logout" onclick="logoutUser()">${accountT('accountLogout', 'Abmelden')}</button>
             </div>
         </div>
     `;
+
+    if (accountPageRoot) {
+        accountPageRoot.innerHTML = `<div class="account-page-shell account-dashboard-panel">${dashboardMarkup}</div>`;
+        return;
+    }
+
+    if (!modal || !modalContent) return;
+    if (modalContent.classList.contains('auth-modal-panel')) {
+        modalContent.classList.add('account-dashboard-panel');
+    }
+    modalContent.innerHTML = `<button class="contact-close" onclick="toggleAccount()">&times;</button>${dashboardMarkup}`;
     
     modal.classList.add('active');
     document.body.classList.add('modal-open');
@@ -420,67 +407,55 @@ function showAccountDashboard() {
 function showDashboardSection(section) {
     const tabs = document.querySelectorAll('.dashboard-tab');
     const sections = document.querySelectorAll('.dashboard-section');
-    
-    tabs.forEach(tab => tab.classList.remove('active'));
-    sections.forEach(sec => sec.classList.remove('active'));
-    
-    const tabIndex = ['overview', 'orders', 'addresses', 'preferences'].indexOf(section);
-    tabs[tabIndex].classList.add('active');
-    document.getElementById(`dashboard-${section}`).classList.add('active');
-}
+    const selectedTab = Array.from(tabs).find(tab => tab.getAttribute('onclick')?.includes(`'${section}'`));
+    const selectedSection = document.getElementById(`dashboard-${section}`);
+    if (!selectedTab || !selectedSection) return;
 
-// Dashboard Overview
-function getDashboardOverview() {
-    const totalOrders = currentUser.orderHistory.length;
-    const totalSpent = currentUser.orderHistory.reduce((sum, order) => sum + order.total, 0);
-    
-    return `
-        <h3>${accountT('accountOverviewWelcome', 'Willkommen zurueck!')}</h3>
-        <div class="overview-stats">
-            <div class="stat-card">
-                <div class="stat-icon">📦</div>
-                <div class="stat-value">${totalOrders}</div>
-                <div class="stat-label">${accountT('accountOrders', 'Bestellungen')}</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">💰</div>
-                <div class="stat-value">CHF ${totalSpent.toFixed(2)}</div>
-                <div class="stat-label">${accountT('accountTotalSpent', 'Gesamt ausgegeben')}</div>
-            </div>
-        </div>
-        
-        <div class="quick-actions">
-            <h4>${accountT('accountQuickAccess', 'Schnellzugriff')}</h4>
-            <button onclick="showDashboardSection('orders')" class="quick-action-btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="1" y="3" width="15" height="13"></rect>
-                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
-                </svg>
-                ${accountT('accountViewOrders', 'Bestellungen ansehen')}
-            </button>
-            <button onclick="showDashboardSection('addresses')" class="quick-action-btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                </svg>
-                ${accountT('accountManageAddresses', 'Adressen verwalten')}
-            </button>
-        </div>
-    `;
+    tabs.forEach(tab => tab.classList.toggle('active', tab === selectedTab));
+    sections.forEach(item => item.classList.toggle('active', item === selectedSection));
 }
 
 // Dashboard Orders
 function getDashboardOrders() {
     if (currentUser.orderHistory.length === 0) {
+        const featuredProducts = [
+            'klassischer Blazer.jpg',
+            'PoloCasual.jpg',
+            'ripped knit zip-polo.jpg',
+            'Bundfalthose.jpg',
+            'Weste.jpg',
+            'Quarter Zipper.jpg',
+            'Strickpullover.jpg',
+            'Leinenhose.jpg',
+            'Kaschmirpullover.jpg',
+            'oxfordhemd.jpg',
+            'Wollmantel.jpg',
+            'Hoodie.jpg',
+            'T-Shirt.jpg',
+            'Trainerhose.jpg'
+        ];
         return `
-            <h3>${accountT('accountOrders', 'Bestellungen')}</h3>
-            <div class="empty-state">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="1" y="3" width="15" height="13"></rect>
-                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
-                </svg>
-                <p>${accountT('accountNoOrdersYet', 'Sie haben noch keine Bestellungen.')}</p>
-                <button onclick="toggleAccount(); document.getElementById('old-money').scrollIntoView({behavior: 'smooth'})" class="btn-primary">${accountT('accountShopNow', 'Jetzt shoppen')}</button>
+            <div class="orders-welcome-card">
+                <div class="orders-welcome-copy">
+                    <div>
+                        <h3>${accountT('accountOrdersWelcomeTitle', 'Willkommen')}</h3>
+                        <p>${accountT('accountOrdersWelcomeText', 'Bereit zum Shoppen?')}</p>
+                    </div>
+                    <a href="shop.html?collection=old-money" class="orders-welcome-button">${accountT('accountShopNow', 'Jetzt shoppen')}</a>
+                </div>
+                <div class="orders-welcome-products" aria-hidden="true">
+                    <div class="orders-welcome-wheel">
+                        ${featuredProducts.map((image, index) => {
+                            return `
+                            <div class="orders-welcome-product" style="--wheel-angle: ${index * (360 / featuredProducts.length)}deg">
+                                <div class="orders-welcome-product-face">
+                                    <img src="assets/images/${image}" alt="" loading="lazy">
+                                </div>
+                            </div>
+                        `;
+                        }).join('')}
+                    </div>
+                </div>
             </div>
         `;
     }
@@ -520,77 +495,78 @@ function getDashboardAddresses() {
     const addressesHTML = currentUser.addresses.length > 0
         ? currentUser.addresses.map(addr => `
             <div class="address-card ${addr.isDefault ? 'default' : ''}">
-                ${addr.isDefault ? '<span class="default-badge">Standard</span>' : ''}
+                <span class="address-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"></path>
+                        <circle cx="12" cy="10" r="2.5"></circle>
+                    </svg>
+                </span>
                 <div class="address-content">
-                    <strong>${escapeHtml(addr.name || (currentUser.firstName + ' ' + currentUser.lastName))}</strong>
-                    <p>${escapeHtml(addr.street)}<br>${escapeHtml(addr.zip)} ${escapeHtml(addr.city)}<br>${escapeHtml(addr.country)}</p>
-                    ${addr.phone ? `<p>Tel: ${escapeHtml(addr.phone)}</p>` : ''}
+                    <div class="address-title-line">
+                        <strong>${escapeHtml([addr.firstName, addr.lastName].filter(Boolean).join(' ') || [currentUser.firstName, currentUser.lastName].filter(Boolean).join(' '))}</strong>
+                        ${addr.isDefault ? `<span class="default-badge">Standard</span>` : ''}
+                    </div>
+                    <p class="address-single-line">${escapeHtml([
+                        addr.street,
+                        addr.addressExtra,
+                        [addr.zip, addr.city].filter(Boolean).join(' '),
+                        addr.country
+                    ].filter(Boolean).join(', '))}</p>
                 </div>
-                <div class="address-actions">
-                    ${!addr.isDefault ? `<button onclick="setDefaultAddress('${addr.id}')">${accountT('accountAddressSetDefault', 'Als Standard')}</button>` : ''}
-                    <button onclick="editAddress('${addr.id}')">${accountT('accountAddressEdit', 'Bearbeiten')}</button>
-                    <button onclick="deleteAddress('${addr.id}')" class="btn-delete">${accountT('accountAddressDelete', 'Loeschen')}</button>
-                </div>
+                <button type="button" class="address-open-button" onclick="editAddress('${addr.id}')" aria-label="${accountT('accountAddressEdit', 'Adresse bearbeiten')}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                        <path d="m9 18 6-6-6-6"></path>
+                    </svg>
+                </button>
             </div>
         `).join('')
         : `<div class="empty-state"><p>${accountT('accountNoSavedAddresses', 'Keine Adressen gespeichert.')}</p></div>`;
     
     return `
-        <h3>${accountT('accountAddresses', 'Adressen')}</h3>
-        <button class="btn-primary" onclick="showAddAddressForm()">+ ${accountT('accountAddAddress', 'Neue Adresse hinzufuegen')}</button>
+        <div class="address-section-header">
+            <h3>${accountT('accountAddresses', 'Adressen')}</h3>
+            <button type="button" class="addresses-add-button" onclick="showAddAddressForm()">${accountT('accountAddressAddButton', 'Hinzufügen')}</button>
+        </div>
         <div class="addresses-list">${addressesHTML}</div>
     `;
 }
 
 // Dashboard Preferences
 function getDashboardPreferences() {
-    const initials = getUserInitials(currentUser?.firstName, currentUser?.lastName);
-    const avatarPreview = currentUser?.avatarUrl
-        ? `<img src="${currentUser.avatarUrl}" alt="Profilbild" class="profile-avatar-preview-image">`
-        : `<span>${initials}</span>`;
-
     return `
-        <h3>${accountT('accountSettings', 'Einstellungen')}</h3>
-        <form class="preferences-form" onsubmit="savePreferences(event)">
-            <div class="settings-card settings-card-compact profile-settings-card">
-                <h4>${accountT('accountProfile', 'Profil')}</h4>
-                <div class="profile-settings-grid">
-                    <div class="profile-media-panel">
-                        <div class="profile-image-editor">
-                            <div class="profile-avatar-preview" id="profile-avatar-preview">${avatarPreview}</div>
-                            <div class="profile-upload-controls">
-                                <label for="profile-image-input" class="profile-upload-link">Bild ändern</label>
-                                <button type="button" class="profile-avatar-remove-link" onclick="removeProfileAvatar()">Entfernen</button>
-                            </div>
-                            <span id="profile-upload-filename" class="profile-upload-filename">PNG oder JPG, maximal 2 MB</span>
-                            <input id="profile-image-input" class="profile-file-input" type="file" name="profileImage" accept="image/*" onchange="handleProfileAvatarChange(event)">
-                            <input type="hidden" name="removeProfileImage" value="0">
-                        </div>
-                    </div>
-
-                    <div class="profile-form-panel">
-                        <div class="profile-name-fields">
-                            <div class="form-group">
-                                <label>Vorname</label>
-                                <input type="text" name="firstName" value="${escapeHtml(currentUser.firstName || '')}" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Nachname</label>
-                                <input type="text" name="lastName" value="${escapeHtml(currentUser.lastName || '')}" required>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <section class="profile-contact-section">
+            <div class="profile-section-heading">
+                <h3>${escapeHtml([currentUser.firstName, currentUser.lastName].filter(Boolean).join(' ') || currentUser.email || '')}</h3>
+                <button type="button" class="profile-edit-button" onclick="openProfileEditDialog()">${accountT('accountAddressEdit', 'Bearbeiten')}</button>
             </div>
+            <div class="profile-email-row">
+                <span>${accountT('accountEmail', 'E-Mail')}</span>
+                <strong>${escapeHtml(currentUser.email || '')}</strong>
+            </div>
+        </section>
+    `;
+}
 
-            <div class="settings-card settings-card-compact">
-                <h4>${accountT('accountShopping', 'Shopping')}</h4>
-                <p class="settings-hint">${accountT('accountSettingsHintShopping', 'Wird beim Hinzufuegen in den Warenkorb automatisch vorausgewaehlt.')}</p>
-
-                <div class="settings-form-grid">
-                    <div class="form-group">
-                        <label>${accountT('accountDefaultSize', 'Standardgroesse Oberkoerper')}</label>
-                        <select name="defaultTopSize">
+function getDashboardSizePreferences() {
+    return `
+        <form class="preferences-form" onsubmit="event.preventDefault()">
+            <div class="settings-card settings-card-compact preferences-settings-card">
+                <div class="preferences-section-header">
+                    <div>
+                        <h4>${accountT('accountDefaultSizes', 'Meine Größen')}</h4>
+                        <p class="settings-hint">${accountT('accountSettingsHintShopping', 'Deine Voreinstellungen werden automatisch gespeichert.')}</p>
+                    </div>
+                    <span class="preferences-save-status" role="status" aria-live="polite"></span>
+                </div>
+                <div class="preferences-list">
+                    <label class="preference-row">
+                        <span class="preference-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                                <path d="m8 4 4 2 4-2 4 2-2 5-2-1v10H8V10l-2 1-2-5 4-2Z"></path>
+                            </svg>
+                        </span>
+                        <span class="preference-label">${accountT('accountDefaultTopSize', 'Standardgröße Oberteile')}</span>
+                        <select name="defaultTopSize" aria-label="${accountT('accountDefaultTopSize', 'Standardgröße Oberteile')}" onchange="savePreferences(event)">
                             <option value="">${accountT('accountNone', 'Keine')}</option>
                             <option value="S" ${currentUser.preferences.defaultTopSize === 'S' ? 'selected' : ''}>S</option>
                             <option value="M" ${currentUser.preferences.defaultTopSize === 'M' ? 'selected' : ''}>M</option>
@@ -598,107 +574,198 @@ function getDashboardPreferences() {
                             <option value="XL" ${currentUser.preferences.defaultTopSize === 'XL' ? 'selected' : ''}>XL</option>
                             <option value="XXL" ${currentUser.preferences.defaultTopSize === 'XXL' ? 'selected' : ''}>XXL</option>
                         </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>${accountT('accountDefaultSize', 'Standardgroesse Hose')}</label>
-                        <select name="defaultPantsSize">
+                    </label>
+                    <label class="preference-row">
+                        <span class="preference-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                                <path d="M6 3h12l-1 7-2 11h-3l-1-9-1 9H7L5 10 6 3Z"></path>
+                                <path d="M6 7h12M12 3v9"></path>
+                            </svg>
+                        </span>
+                        <span class="preference-label">${accountT('accountDefaultPantsSize', 'Standardgröße Hosen')}</span>
+                        <select name="defaultPantsSize" aria-label="${accountT('accountDefaultPantsSize', 'Standardgröße Hosen')}" onchange="savePreferences(event)">
                             <option value="">${accountT('accountNone', 'Keine')}</option>
                             <option value="30" ${currentUser.preferences.defaultPantsSize === '30' ? 'selected' : ''}>30</option>
                             <option value="32" ${currentUser.preferences.defaultPantsSize === '32' ? 'selected' : ''}>32</option>
                             <option value="34" ${currentUser.preferences.defaultPantsSize === '34' ? 'selected' : ''}>34</option>
                             <option value="36" ${currentUser.preferences.defaultPantsSize === '36' ? 'selected' : ''}>36</option>
                         </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>${accountT('accountDefaultCurrency', 'Standardwaehrung')}</label>
-                        <select name="defaultCurrency">
+                    </label>
+                    <label class="preference-row">
+                        <span class="preference-icon preference-icon-currency" aria-hidden="true">CHF</span>
+                        <span class="preference-label">${accountT('accountDefaultCurrency', 'Standardwährung')}</span>
+                        <select name="defaultCurrency" aria-label="${accountT('accountDefaultCurrency', 'Standardwährung')}" onchange="savePreferences(event)">
                             <option value="CHF" ${currentUser.preferences.defaultCurrency === 'CHF' ? 'selected' : ''}>CHF</option>
                             <option value="EUR" ${currentUser.preferences.defaultCurrency === 'EUR' ? 'selected' : ''}>EUR</option>
                             <option value="USD" ${currentUser.preferences.defaultCurrency === 'USD' ? 'selected' : ''}>USD</option>
                         </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>${accountT('accountDefaultLanguage', 'Standardsprache')}</label>
-                        <select name="defaultLanguage">
-                            <option value="de" ${currentUser.preferences.defaultLanguage === 'de' ? 'selected' : ''}>Deutsch</option>
-                            <option value="en" ${currentUser.preferences.defaultLanguage === 'en' ? 'selected' : ''}>English</option>
-                            <option value="fr" ${currentUser.preferences.defaultLanguage === 'fr' ? 'selected' : ''}>Français</option>
-                        </select>
-                    </div>
+                    </label>
                 </div>
             </div>
-            
-            <button type="submit" class="btn-primary">${accountT('accountSaveSettings', 'Einstellungen speichern')}</button>
         </form>
-        
-        <div class="danger-zone">
-            <h4>${accountT('accountDangerZone', 'Gefahrenzone')}</h4>
-            <button class="btn-danger" onclick="deleteAccount()">${accountT('accountDeleteAccount', 'Konto loeschen')}</button>
-        </div>
     `;
+}
+
+function openProfileEditDialog() {
+    let dialog = document.getElementById('profile-edit-dialog');
+    if (!dialog) {
+        document.body.insertAdjacentHTML('beforeend', `
+            <dialog class="profile-edit-dialog" id="profile-edit-dialog" aria-labelledby="profile-edit-title">
+                <form class="profile-edit-form" onsubmit="saveProfileDetails(event)" oninput="updateProfileEditDirtyState(this)">
+                    <div class="profile-edit-dialog-heading">
+                        <h2 id="profile-edit-title">${accountT('accountProfileEditTitle', 'Profil bearbeiten')}</h2>
+                        <button type="button" class="profile-edit-close" onclick="closeProfileEditDialog()" aria-label="${accountT('accountClose', 'Schließen')}">&times;</button>
+                    </div>
+                    <div class="profile-edit-name-fields">
+                        <label>
+                            <span>${accountT('accountFirstName', 'Vorname')}</span>
+                            <input name="firstName" type="text" value="${escapeHtml(currentUser.firstName || '')}" autocomplete="given-name" required>
+                        </label>
+                        <label>
+                            <span>${accountT('accountLastName', 'Nachname')}</span>
+                            <input name="lastName" type="text" value="${escapeHtml(currentUser.lastName || '')}" autocomplete="family-name" required>
+                        </label>
+                    </div>
+                    <label class="profile-edit-email-field">
+                        <span>${accountT('accountEmailAddress', 'E-Mail-Adresse')}</span>
+                        <input name="email" type="email" value="${escapeHtml(currentUser.email || '')}" autocomplete="email" required>
+                    </label>
+                    <p class="profile-edit-email-hint">${accountT('accountProfileEmailHint', 'Diese E-Mail-Adresse wird für die Anmeldung und für Bestellupdates verwendet.')}</p>
+                    <p class="profile-edit-email-status" role="status" aria-live="polite"></p>
+                    <div class="profile-edit-dialog-actions">
+                        <button type="button" class="profile-edit-cancel" onclick="closeProfileEditDialog()">${accountT('accountProfileCancel', 'Stornieren')}</button>
+                        <button type="submit" class="profile-edit-submit" disabled>${accountT('accountSave', 'Speichern')}</button>
+                    </div>
+                </form>
+            </dialog>
+        `);
+        dialog = document.getElementById('profile-edit-dialog');
+        dialog.addEventListener('click', event => {
+            if (event.target === dialog) closeProfileEditDialog();
+        });
+    }
+
+    const form = dialog.querySelector('form');
+    form.elements.firstName.value = currentUser.firstName || '';
+    form.elements.lastName.value = currentUser.lastName || '';
+    form.elements.email.value = currentUser.email || '';
+    updateProfileEditDirtyState(form);
+    dialog.querySelector('.profile-edit-email-status').textContent = '';
+    dialog.showModal();
+    form.elements.firstName.focus();
+    form.elements.firstName.select();
+}
+
+function updateProfileEditDirtyState(form) {
+    const isDirty = form.elements.firstName.value.trim() !== (currentUser.firstName || '')
+        || form.elements.lastName.value.trim() !== (currentUser.lastName || '')
+        || form.elements.email.value.trim().toLowerCase() !== (currentUser.email || '').toLowerCase();
+    const submitButton = form.querySelector('button[type="submit"]');
+    if (submitButton) submitButton.disabled = !isDirty;
+}
+
+function closeProfileEditDialog() {
+    const dialog = document.getElementById('profile-edit-dialog');
+    if (dialog?.open) dialog.close();
+}
+
+async function saveProfileDetails(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const status = form.querySelector('.profile-edit-email-status');
+    const submitButton = form.querySelector('button[type="submit"]');
+    const firstName = form.elements.firstName.value.trim();
+    const lastName = form.elements.lastName.value.trim();
+    const email = form.elements.email.value.trim().toLowerCase();
+    if (!email || !currentUser) return;
+
+    if (!firstName || !lastName) return;
+    const nameChanged = firstName !== currentUser.firstName || lastName !== currentUser.lastName;
+    const emailChanged = email !== currentUser.email;
+    if (!nameChanged && !emailChanged) {
+        closeProfileEditDialog();
+        return;
+    }
+
+    if (submitButton) submitButton.disabled = true;
+
+    if (nameChanged) {
+        const { error: profileError } = await supabaseClient.from('profiles').update({
+            first_name: firstName,
+            last_name: lastName
+        }).eq('id', currentUser.id);
+        if (profileError) {
+            if (submitButton) submitButton.disabled = false;
+            showNotification(profileError.message || accountT('accountProfileUpdateError', 'Das Profil konnte nicht aktualisiert werden.'), 'error');
+            return;
+        }
+        currentUser.firstName = firstName;
+        currentUser.lastName = lastName;
+    }
+
+    if (emailChanged) {
+        if (status) status.textContent = accountT('accountEmailUpdating', 'E-Mail wird aktualisiert …');
+        const { error: emailError } = await supabaseClient.auth.updateUser({ email });
+        if (emailError) {
+            if (submitButton) submitButton.disabled = false;
+            closeProfileEditDialog();
+            showAccountDashboard();
+            showDashboardSection('profile');
+            showNotification(emailError.message || accountT('accountEmailUpdateError', 'Die E-Mail-Adresse konnte nicht aktualisiert werden.'), 'error');
+            return;
+        }
+    }
+
+    closeProfileEditDialog();
+    showAccountDashboard();
+    showDashboardSection('profile');
+    if (emailChanged) {
+        showNotification(accountT('accountEmailConfirmationSent', 'Bitte bestätige die neue E-Mail-Adresse über den zugesandten Link.'), 'info');
+    } else {
+        showNotification(accountT('accountProfileSaved', 'Dein Profil wurde aktualisiert.'), 'success');
+    }
 }
 
 // Einstellungen in Supabase speichern
 async function savePreferences(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-
-    const firstName = String(formData.get('firstName') || '').trim();
-    const lastName = String(formData.get('lastName') || '').trim();
-    if (!firstName || !lastName) {
-        showNotification(accountT('accountPreferencesRequired', 'Bitte Vorname und Nachname ausfüllen.'), 'error');
-        return;
-    }
+    const form = event.target.closest('.preferences-form');
+    if (!form) return;
+    const formData = new FormData(form);
+    const saveStatus = form.querySelector('.preferences-save-status');
 
     const prefs = {
         defaultSize:     formData.get('defaultTopSize') || null,
         defaultTopSize:  formData.get('defaultTopSize') || null,
         defaultPantsSize: formData.get('defaultPantsSize') || null,
-        defaultCurrency: formData.get('defaultCurrency'),
-        defaultLanguage: formData.get('defaultLanguage')
+        defaultCurrency: formData.get('defaultCurrency')
     };
 
+    if (saveStatus) saveStatus.textContent = accountT('accountSettingsSaving', 'Speichert …');
+
     const { error } = await supabaseClient.from('profiles').update({
-        first_name:       firstName,
-        last_name:        lastName,
         default_size:     prefs.defaultTopSize,
-        default_currency: prefs.defaultCurrency,
-        default_language: prefs.defaultLanguage
+        default_currency: prefs.defaultCurrency
     }).eq('id', currentUser.id);
 
     if (error) {
-        showNotification(accountT('accountSaveError', 'Fehler beim Speichern der Einstellungen.'), 'error'); return;
+        event.target.value = currentUser.preferences[event.target.name] || '';
+        if (saveStatus) saveStatus.textContent = '';
+        showNotification(accountT('accountSaveError', 'Fehler beim Speichern der Einstellungen.'), 'error');
+        return;
     }
 
-    const removeAvatar = formData.get('removeProfileImage') === '1';
-    const avatarFile = formData.get('profileImage');
-    const avatarKey = getAvatarStorageKey(currentUser.id);
-
-    if (removeAvatar) {
-        localStorage.removeItem(avatarKey);
-        currentUser.avatarUrl = null;
-    } else if (avatarFile && avatarFile instanceof File && avatarFile.size > 0) {
-        const avatarDataUrl = await new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(String(reader.result || ''));
-            reader.onerror = () => reject(new Error('avatar-read-failed'));
-            reader.readAsDataURL(avatarFile);
-        }).catch(() => null);
-
-        if (!avatarDataUrl) {
-            showNotification(accountT('accountProfileImageProcessError', 'Profilbild konnte nicht verarbeitet werden.'), 'error');
+    if (prefs.defaultPantsSize !== currentUser.preferences.defaultPantsSize) {
+        const { error: sizePreferenceError } = await supabaseClient.auth.updateUser({
+            data: { defaultPantsSize: prefs.defaultPantsSize }
+        });
+        if (sizePreferenceError) {
+            event.target.value = currentUser.preferences.defaultPantsSize || '';
+            if (saveStatus) saveStatus.textContent = '';
+            showNotification(accountT('accountSaveError', 'Fehler beim Speichern der Einstellungen.'), 'error');
             return;
         }
-
-        localStorage.setItem(avatarKey, avatarDataUrl);
-        currentUser.avatarUrl = avatarDataUrl;
     }
 
-    currentUser.firstName = firstName;
-    currentUser.lastName = lastName;
     currentUser.preferences = { ...currentUser.preferences, ...prefs };
     // Top size is synced via profile; pants size is stored locally for now.
     if (typeof setPreferredSizes === 'function') {
@@ -707,66 +774,135 @@ async function savePreferences(event) {
         setPreferredSize(prefs.defaultTopSize);
     }
     if (typeof changeCurrency === 'function') changeCurrency(prefs.defaultCurrency);
-    if (typeof changeLanguage === 'function') changeLanguage(prefs.defaultLanguage);
 
     updateAccountUI();
-    showAccountDashboard();
-    showDashboardSection('preferences');
-    showNotification(accountT('accountSaveSuccess', 'Einstellungen gespeichert!'), 'success');
+    if (saveStatus) {
+        saveStatus.textContent = accountT('accountSettingsSaved', 'Gespeichert');
+        window.setTimeout(() => {
+            if (saveStatus.isConnected) saveStatus.textContent = '';
+        }, 2200);
+    }
+}
+
+async function saveMarketingPreferences(event) {
+    const checkbox = event.target;
+    const newsletter = checkbox.checked;
+    const saveStatus = checkbox.closest('.marketing-preferences-form')?.querySelector('.marketing-save-status');
+    if (saveStatus) saveStatus.textContent = accountT('accountSettingsSaving', 'Speichert …');
+
+    const { error } = await supabaseClient.from('profiles').update({ newsletter }).eq('id', currentUser.id);
+
+    if (error) {
+        checkbox.checked = currentUser.preferences.newsletter;
+        if (saveStatus) saveStatus.textContent = '';
+        showNotification(accountT('accountSaveError', 'Fehler beim Speichern der Einstellungen.'), 'error');
+        return;
+    }
+
+    currentUser.preferences.newsletter = newsletter;
+    if (saveStatus) {
+        saveStatus.textContent = accountT('accountSettingsSaved', 'Gespeichert');
+        window.setTimeout(() => {
+            if (saveStatus.isConnected) saveStatus.textContent = '';
+        }, 2200);
+    }
 }
 
 window.refreshAccountLanguageUI = function refreshAccountLanguageUI() {
+    const accountPageRoot = document.getElementById('account-page-root');
     const modal = document.getElementById('account-modal');
-    if (!modal || !modal.classList.contains('active') || !currentUser) return;
+    if (!currentUser || (!accountPageRoot && (!modal || !modal.classList.contains('active')))) return;
 
-    const activeSection = document.querySelector('.dashboard-section.active')?.id?.replace('dashboard-', '') || 'overview';
+    const activeSection = document.querySelector('.dashboard-section.active')?.id?.replace('dashboard-', '') || 'profile';
     showAccountDashboard();
     showDashboardSection(activeSection);
 };
 
 // Add Address
-function showAddAddressForm() {
-    const form = `
+function getAddressFormMarkup(address = null, addressId = null) {
+    const countries = [
+        { value: 'Schweiz', label: accountT('switzerland', 'Schweiz') },
+        { value: 'Deutschland', label: accountT('germany', 'Deutschland') },
+        { value: 'Österreich', label: accountT('austria', 'Österreich') },
+        { value: 'Frankreich', label: accountT('france', 'Frankreich') },
+        { value: 'Italien', label: accountT('italy', 'Italien') },
+        { value: 'Andere', label: accountT('otherCountry', 'Andere') }
+    ];
+    const currentCountry = address?.country || accountT('switzerland', 'Schweiz');
+    if (!countries.some(country => country.value === currentCountry)) {
+        countries.push({ value: currentCountry, label: currentCountry });
+    }
+    const countryOptions = countries.map(country =>
+        `<option value="${escapeHtml(country.value)}" ${country.value === currentCountry ? 'selected' : ''}>${escapeHtml(country.label)}</option>`
+    ).join('');
+    const isFirstAddress = !address && currentUser.addresses.length === 0;
+    const heading = address
+        ? accountT('accountAddressEditTitle', 'Adresse bearbeiten')
+        : accountT('accountAddressAddTitle', 'Adresse hinzufügen');
+    const onsubmit = address
+        ? `updateAddress(event, '${addressId}')`
+        : 'saveAddress(event)';
+
+    return `
         <div class="address-form-modal" id="address-form-modal" onclick="if(event.target===this)closeAddressForm()">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3>${accountT('accountNewAddress', 'Neue Adresse hinzufügen')}</h3>
+                    <h3>${heading}</h3>
                     <button type="button" class="modal-close" onclick="closeAddressForm()" aria-label="${accountT('accountClose', 'Schließen')}">&times;</button>
                 </div>
-                <div class="modal-divider"></div>
-                <form onsubmit="saveAddress(event)">
-                    <div class="form-group">
-                        <label>${accountT('accountStreet', 'Straße & Hausnummer')} <span class="required">*</span></label>
-                        <input type="text" name="street" placeholder="${accountT('accountStreetExample', 'z. B. Musterstrasse 12')}" required>
+                <form onsubmit="${onsubmit}" oninput="updateAddressSaveButton(this)" onchange="updateAddressSaveButton(this)">
+                    <div class="form-group country-group">
+                        <label for="address-country">${accountT('accountCountryRegion', 'Land/Region')}</label>
+                        <select id="address-country" name="country" required>${countryOptions}</select>
                     </div>
-                    <div class="form-row">
+                    <div class="address-form-grid">
                         <div class="form-group">
-                            <label>${accountT('accountPostalCode', 'PLZ')} <span class="required">*</span></label>
-                            <input type="text" name="zip" placeholder="8001" required>
+                            <input type="text" name="firstName" placeholder="${accountT('accountFirstName', 'Vorname')}" value="${escapeHtml(address?.firstName || '')}" autocomplete="given-name" required>
                         </div>
                         <div class="form-group">
-                            <label>${accountT('accountCity', 'Stadt')} <span class="required">*</span></label>
-                            <input type="text" name="city" placeholder="Zürich" required>
+                            <input type="text" name="lastName" placeholder="${accountT('accountLastName', 'Nachname')}" value="${escapeHtml(address?.lastName || '')}" autocomplete="family-name" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>${accountT('accountCountry', 'Land')} <span class="required">*</span></label>
-                        <input type="text" name="country" value="${accountT('switzerland', 'Schweiz')}" required>
+                        <input type="text" name="company" placeholder="${accountT('accountCompanyOptional', 'Unternehmen')}" value="${escapeHtml(address?.company || '')}" autocomplete="organization">
                     </div>
                     <div class="form-group">
-                        <label>${accountT('accountPhoneOptional', 'Telefon (optional)')}</label>
-                        <input type="tel" name="phone" placeholder="+41 79 123 45 67">
+                        <input type="text" name="street" placeholder="${accountT('accountStreet', 'Straße und Hausnummer')}" value="${escapeHtml(address?.street || '')}" autocomplete="address-line1" required>
                     </div>
+                    <div class="form-group">
+                        <input type="text" name="addressExtra" placeholder="${accountT('accountAddressExtraOptional', 'Zusätzliche Adressangaben (optional)')}" value="${escapeHtml(address?.addressExtra || '')}" autocomplete="address-line2">
+                    </div>
+                    <div class="address-form-grid">
+                        <div class="form-group">
+                            <input type="text" name="zip" placeholder="${accountT('accountPostalCode', 'Postleitzahl')}" value="${escapeHtml(address?.zip || '')}" autocomplete="postal-code" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="city" placeholder="${accountT('accountCity', 'Ort')}" value="${escapeHtml(address?.city || '')}" autocomplete="address-level2" required>
+                        </div>
+                    </div>
+                    <label class="address-default-option">
+                        <input type="checkbox" name="isDefault" ${address?.isDefault || isFirstAddress ? 'checked' : ''}>
+                        <span>${accountT('accountAddressMakeDefault', 'Das ist meine Standardadresse')}</span>
+                    </label>
                     <div class="form-actions">
-                        <button type="button" onclick="closeAddressForm()" class="btn-secondary">${accountT('accountCancel', 'Abbrechen')}</button>
-                        <button type="submit" class="btn-primary">${accountT('accountSave', 'Speichern')}</button>
+                        ${address ? `<button type="button" onclick="deleteAddress('${addressId}')" class="address-delete-button">${accountT('accountAddressDelete', 'Löschen')}</button>` : ''}
+                        <button type="button" onclick="closeAddressForm()" class="address-cancel-button">${accountT('accountAddressCancel', 'Stornieren')}</button>
+                        <button type="submit" class="btn-primary" disabled>${accountT('accountSave', 'Speichern')}</button>
                     </div>
                 </form>
             </div>
         </div>
     `;
-    
-    document.body.insertAdjacentHTML('beforeend', form);
+}
+
+function showAddAddressForm() {
+    document.body.insertAdjacentHTML('beforeend', getAddressFormMarkup());
+    updateAddressSaveButton(document.querySelector('#address-form-modal form'));
+}
+
+function updateAddressSaveButton(form) {
+    const submitButton = form.querySelector('button[type="submit"]');
+    if (submitButton) submitButton.disabled = !form.checkValidity();
 }
 
 async function saveAddress(event) {
@@ -786,14 +922,18 @@ async function saveAddress(event) {
     }
 
     const isFirst = currentUser.addresses.length === 0;
+    const isDefault = formData.get('isDefault') === 'on' || isFirst;
     const newAddr = {
         user_id:    userId,
+        first_name: formData.get('firstName'),
+        last_name:  formData.get('lastName'),
+        company:    formData.get('company') || null,
         street:     formData.get('street'),
+        address_extra: formData.get('addressExtra') || null,
         zip:        formData.get('zip'),
         city:       formData.get('city'),
         country:    formData.get('country'),
-        phone:      formData.get('phone') || null,
-        is_default: isFirst
+        is_default: isDefault
     };
 
     let { data, error } = await supabaseClient.from('addresses').insert(newAddr).select().single();
@@ -812,14 +952,29 @@ async function saveAddress(event) {
         return;
     }
 
+    if (isDefault) {
+        const { error: defaultError } = await supabaseClient.from('addresses')
+            .update({ is_default: false }).eq('user_id', userId).neq('id', data.id);
+        if (defaultError) {
+            await supabaseClient.from('addresses').delete().eq('id', data.id);
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalBtnText; }
+            showNotification(accountT('accountAddressSaveError', 'Adresse konnte nicht gespeichert werden. Bitte versuche es erneut.'), 'error');
+            return;
+        }
+    }
+
+    if (isDefault) currentUser.addresses.forEach(address => { address.isDefault = false; });
     currentUser.addresses.push({
-        id: data.id, street: data.street, zip: data.zip, city: data.city,
-        country: data.country, phone: data.phone, isDefault: data.is_default
+        id: data.id, firstName: data.first_name, lastName: data.last_name,
+        company: data.company, street: data.street, addressExtra: data.address_extra,
+        zip: data.zip, city: data.city, country: data.country, phone: data.phone,
+        isDefault: data.is_default
     });
 
     closeAddressForm();
     showAccountDashboard();
-    showDashboardSection('addresses');
+    showDashboardSection('profile');
+    refreshCartShippingProgress();
     showNotification(accountT('accountAddressAdded', 'Adresse hinzugefügt!'), 'success');
 }
 
@@ -830,7 +985,6 @@ async function upsertProfileForCurrentUser(userId) {
         last_name: currentUser?.lastName || '',
         newsletter: !!(currentUser?.preferences?.newsletter),
         default_currency: currentUser?.preferences?.defaultCurrency || 'CHF',
-        default_language: currentUser?.preferences?.defaultLanguage || 'de',
         default_size: currentUser?.preferences?.defaultTopSize || currentUser?.preferences?.defaultSize || null
     };
 
@@ -848,7 +1002,8 @@ async function setDefaultAddress(addressId) {
 
     currentUser.addresses.forEach(a => a.isDefault = (a.id === addressId));
     showAccountDashboard();
-    showDashboardSection('addresses');
+    showDashboardSection('profile');
+    refreshCartShippingProgress();
     showNotification(accountT('accountAddressDefaultChanged', 'Standardadresse geändert!'), 'success');
 }
 
@@ -863,7 +1018,8 @@ async function deleteAddress(addressId) {
             await supabaseClient.from('addresses').update({ is_default: true }).eq('id', currentUser.addresses[0].id);
         }
         showAccountDashboard();
-        showDashboardSection('addresses');
+        showDashboardSection('profile');
+        refreshCartShippingProgress();
         showNotification(accountT('accountAddressDeleted', 'Adresse gelöscht!'), 'success');
     }
 }
@@ -871,39 +1027,8 @@ async function deleteAddress(addressId) {
 function editAddress(addressId) {
     const address = currentUser.addresses.find(a => a.id === addressId);
     if (!address) return;
-    
-    const form = `
-        <div class="address-form-modal" id="address-form-modal">
-            <div class="modal-content">
-                <h3>${accountT('accountAddressEditTitle', 'Adresse bearbeiten')}</h3>
-                <form onsubmit="updateAddress(event, '${addressId}')">
-                    <div class="form-group">
-                        <input type="text" name="street" placeholder="${accountT('accountStreet', 'Straße & Hausnummer')} *" value="${escapeHtml(address.street)}" required>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <input type="text" name="zip" placeholder="${accountT('accountPostalCode', 'PLZ')} *" value="${escapeHtml(address.zip)}" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="city" placeholder="${accountT('accountCity', 'Stadt')} *" value="${escapeHtml(address.city)}" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" name="country" placeholder="${accountT('accountCountry', 'Land')} *" value="${escapeHtml(address.country)}" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="tel" name="phone" placeholder="${accountT('accountPhoneOptional', 'Telefon (optional)')}" value="${escapeHtml(address.phone || '')}">
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" onclick="closeAddressForm()" class="btn-secondary">${accountT('accountCancel', 'Abbrechen')}</button>
-                        <button type="submit" class="btn-primary">${accountT('accountSave', 'Speichern')}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    `;
-    
-    document.body.insertAdjacentHTML('beforeend', form);
+    document.body.insertAdjacentHTML('beforeend', getAddressFormMarkup(address, addressId));
+    updateAddressSaveButton(document.querySelector('#address-form-modal form'));
 }
 
 async function updateAddress(event, addressId) {
@@ -915,12 +1040,26 @@ async function updateAddress(event, addressId) {
     const formData = new FormData(event.target);
 
     const newData = {
+        first_name: formData.get('firstName'),
+        last_name: formData.get('lastName'),
+        company: formData.get('company') || null,
         street:  formData.get('street'),
+        address_extra: formData.get('addressExtra') || null,
         zip:     formData.get('zip'),
         city:    formData.get('city'),
         country: formData.get('country'),
-        phone:   formData.get('phone') || null
+        is_default: formData.get('isDefault') === 'on'
     };
+
+    if (newData.is_default) {
+        const { error: defaultError } = await supabaseClient.from('addresses')
+            .update({ is_default: false }).eq('user_id', currentUser.id);
+        if (defaultError) {
+            showNotification(accountT('accountAddressUpdateError', 'Adresse konnte nicht aktualisiert werden.'), 'error');
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalBtnText; }
+            return;
+        }
+    }
 
     const { error } = await supabaseClient.from('addresses').update(newData).eq('id', addressId);
     if (error) {
@@ -930,11 +1069,23 @@ async function updateAddress(event, addressId) {
     }
 
     const idx = currentUser.addresses.findIndex(a => a.id === addressId);
-    if (idx !== -1) currentUser.addresses[idx] = { ...currentUser.addresses[idx], ...newData };
+    if (idx !== -1) {
+        currentUser.addresses.forEach(address => {
+            if (newData.is_default) address.isDefault = false;
+        });
+        currentUser.addresses[idx] = {
+            ...currentUser.addresses[idx], firstName: newData.first_name,
+            lastName: newData.last_name, company: newData.company,
+            street: newData.street, addressExtra: newData.address_extra,
+            zip: newData.zip, city: newData.city, country: newData.country,
+            isDefault: newData.is_default
+        };
+    }
 
     closeAddressForm();
     showAccountDashboard();
-    showDashboardSection('addresses');
+    showDashboardSection('profile');
+    refreshCartShippingProgress();
     showNotification(accountT('accountAddressUpdated', 'Adresse aktualisiert!'), 'success');
 }
 
@@ -945,6 +1096,7 @@ async function deleteAccount() {
             await supabaseClient.auth.signOut();
             currentUser = null;
             updateAccountUI();
+            refreshCartShippingProgress();
             showNotification(accountT('accountDeleted', 'Konto wurde gelöscht.'), 'info');
         }
     }
@@ -1052,8 +1204,8 @@ window.openCheckout = function() {
                 // Use positional selectors (matches DOM order in script.js checkout form)
                 // [0]=Vorname [1]=Nachname [2]=Email [3]=Tel [4]=Straße [5]=PLZ [6]=Stadt [7]=Land
                 const fields = checkoutForm.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]');
-                if (fields[0]) fields[0].value = currentUser.firstName;
-                if (fields[1]) fields[1].value = currentUser.lastName;
+                if (fields[0]) fields[0].value = defaultAddress?.firstName || currentUser.firstName;
+                if (fields[1]) fields[1].value = defaultAddress?.lastName || currentUser.lastName;
                 if (fields[2]) fields[2].value = currentUser.email;
                 if (defaultAddress) {
                     if (fields[4]) fields[4].value = defaultAddress.street || '';
@@ -1147,8 +1299,18 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (session) {
         _sessionRestored = true;
         await loginUser(session.user, false);
+        if (document.getElementById('account-page-root')) showAccountDashboard();
     } else {
         updateAccountUI();
+        const accountPageRoot = document.getElementById('account-page-root');
+        if (accountPageRoot) {
+            accountPageRoot.innerHTML = `
+                <div class="account-page-empty">
+                    <h1>${accountT('accountLoginRequired', 'Bitte melde dich an')}</h1>
+                    <p>${accountT('accountLoginRequiredHint', 'Melde dich an, um dein Profil und deine Bestellungen zu sehen.')}</p>
+                    <a class="btn-primary" href="shop.html?openAccount=1">${accountT('accountLogin', 'Anmelden')}</a>
+                </div>`;
+        }
     }
 
     // Auf Login/Logout reagieren (auch in anderen Tabs)
@@ -1161,6 +1323,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                 // Actual fresh login from handleLogin()
                 await loginUser(session.user, true);
             }
+            if (!document.getElementById('account-page-root')) {
+                window.location.href = 'account.html';
+                return;
+            }
             // Modal schliessen falls offen
             const modal = document.getElementById('account-modal');
             if (modal && modal.classList.contains('active')) {
@@ -1171,8 +1337,18 @@ document.addEventListener('DOMContentLoaded', async function() {
             _sessionRestored = false;
             currentUser = null;
             updateAccountUI();
+            refreshCartShippingProgress();
         }
     });
+
+    if (new URLSearchParams(window.location.search).has('openAccount')) {
+        const accountModal = document.getElementById('account-modal');
+        if (accountModal) {
+            accountModal.classList.add('active');
+            document.body.classList.add('modal-open');
+            switchAccountTab('login');
+        }
+    }
 
     // Wrap submitOrder without changing core checkout behavior.
     // The actual order save/email is handled in script.js + edge function.

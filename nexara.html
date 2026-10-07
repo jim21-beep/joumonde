@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexara – Dein Shopping-Assistent | Joumonde</title>
+    <meta name="description" content="Lerne Nexara kennen: Joumondes digitaler Shopping-Assistent für Fragen zu Produkten, Größen, Bestellung und Versand.">
+    <link rel="icon" type="image/png" href="assets/images/joumonde-logo.png">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/site-footer.css">
+    <link rel="stylesheet" href="assets/css/site-pages.css">
+</head>
+<body>
+    <nav class="navbar" aria-label="Hauptnavigation">
+        <div class="container">
+            <div class="logo">
+                <a href="shop.html" aria-label="Joumonde Startseite">
+                    <span class="brand-logo"><span class="brand-logo-text">Joumonde</span></span>
+                </a>
+            </div>
+            <button class="mobile-menu-btn" aria-label="Menü öffnen" aria-expanded="false" onclick="toggleMobileMenu()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <ul class="nav-links">
+                <li><a href="shop.html">Startseite</a></li>
+                <li><a href="shop.html?collection=old-money">Old Money</a></li>
+                <li><a href="shop.html?collection=casual">Casual</a></li>
+                <li class="nav-dropdown" id="nav-dropdown-kollektionen">
+                    <button class="nav-dropdown-trigger" onclick="toggleNavDropdown()">Kollektionen <span class="nav-dropdown-chevron">▾</span></button>
+                    <div class="nav-dropdown-menu">
+                        <a class="nav-dropdown-item" href="shop.html#accessories">Accessories</a>
+                        <div class="nav-dropdown-item" onclick="showNavComingSoon('Essentials')">Essentials <span class="nav-soon-badge">Soon</span></div>
+                        <div class="nav-dropdown-item" onclick="showNavComingSoon('Seasonal')">Seasonal <span class="nav-soon-badge">Soon</span></div>
+                        <div class="nav-dropdown-item" onclick="showNavComingSoon('Gift &amp; Sets')">Gift &amp; Sets <span class="nav-soon-badge">Soon</span></div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="site-info-page">
+        <header class="site-info-hero">
+            <h1>Nexara</h1>
+            <p>Deine digitale Shopping-Begleitung bei Joumonde – für Fragen, Orientierung und Unterstützung während deines Einkaufs.</p>
+        </header>
+        <div class="site-info-content">
+            <section class="site-info-grid" aria-label="Was Nexara für dich tun kann">
+                <article class="site-info-card">
+                    <h2>Produkte entdecken</h2>
+                    <p>Frag nach unseren Styles und erhalte Unterstützung dabei, passende Produkte und Kollektionen zu finden.</p>
+                </article>
+                <article class="site-info-card">
+                    <h2>Größen &amp; Styling</h2>
+                    <p>Wenn du bei einer Größe oder einem Look unsicher bist, kannst du Nexara um eine Orientierung bitten.</p>
+                </article>
+                <article class="site-info-card">
+                    <h2>Bestellung &amp; Versand</h2>
+                    <p>Nexara hilft bei allgemeinen Fragen rund um den Einkauf und verweist dich bei Bedarf auf die passenden Informationen.</p>
+                </article>
+            </section>
+            <section class="site-info-card nexara-how-it-works">
+                <h2>So funktioniert es</h2>
+                <ol>
+                    <li>Öffne den Joumonde-Shop über den Button unten.</li>
+                    <li>Wähle das Nexara-Symbol am unteren Rand des Shops.</li>
+                    <li>Schreib deine Frage in den Chat und sende sie ab.</li>
+                </ol>
+                <p>Nexara ist eine digitale Unterstützung. Bei persönlichen Anliegen erreichst du uns zusätzlich unter <a href="mailto:info@joumonde.com">info@joumonde.com</a>.</p>
+            </section>
+            <div class="site-info-actions">
+                <a class="site-info-button" href="shop.html?openNexara=1">Nexara im Shop öffnen</a>
+                <a class="site-info-button" href="faq.html">Häufige Fragen</a>
+            </div>
+        </div>
+    </main>
+
+    <div data-site-footer></div>
+    <script src="assets/js/analytics.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/site-footer.js"></script>
+</body>
+</html>

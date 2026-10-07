@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 
 <head>
@@ -38,14 +38,16 @@
         gtag('config', 'G-EFD7P54PRE');
     </script>
     <link rel="stylesheet" href="assets/css/landing.css">
+    <link rel="stylesheet" href="assets/css/site-footer.css">
+    <link rel="stylesheet" href="assets/css/site-pages.css">
 </head>
 
-<body>
+<body class="landing-page">
     <div class="cursor-glow" aria-hidden="true"></div>
 
     <div class="hero-marquee" aria-hidden="true">
         <div class="hero-marquee-track" id="hero-marquee-track">
-            <span>OLD MONEY</span><span>✦</span><span>CASUAL</span><span>✦</span><span>SWISS PREMIUM FASHION</span><span>✦</span><span>NEXARA AI ASSISTANT</span><span>✦</span>
+            <span>OLD MONEY</span><span>✦</span><span>CASUAL</span><span>✦</span><span>SWISS PREMIUM FASHION</span><span>✦</span>
         </div>
     </div>
 
@@ -87,18 +89,6 @@
             </div>
         </section>
 
-        <section class="section nexara-section reveal" id="nexara-section">
-            <div class="nexara-copy">
-                <div class="nexara-badge">✦ Neu bei Joumonde</div>
-                <h2>Nexara – Dein persönlicher Shopping-Assistent</h2>
-                <p>Style-Beratung, Grössen-Empfehlungen und Bestell-Support in Echtzeit: <strong>Nexara</strong> begleitet dich beim Launch rund um die Uhr durch deinen Einkauf.</p>
-            </div>
-            <div class="nexara-demo" aria-hidden="true">
-                <div class="nexara-demo-header"><span class="nexara-demo-dot"></span> Nexara</div>
-                <div class="nexara-demo-body" id="nexara-demo-body"></div>
-            </div>
-        </section>
-
         <section class="section mini-shop-preview reveal" id="preview">
             <div class="mini-preview-heading">
                 <span>Ein erster Blick</span>
@@ -118,40 +108,39 @@
                     <span>Trainerhose</span>
                 </div>
                 <div class="mini-preview-card">
-                    <img src="assets/images/hoodie-mockup.png" alt="Premium Hoodie">
+                    <img src="assets/images/Hoodie.jpg" alt="Premium Hoodie">
                     <span>Premium Hoodie</span>
                 </div>
             </div>
         </section>
 
-        <section class="section newsletter-section reveal">
-            <div class="newsletter-title">Sei die/der Erste informiert</div>
-            <div class="newsletter-subtitle">Melde dich an und erhalte exklusive Updates zum Launch</div>
+        <section class="section newsletter-section reveal" id="newsletter">
+            <h2 class="newsletter-title">Bleib auf dem Laufenden</h2>
+            <p class="newsletter-subtitle">Melde dich an und erfahre als Erstes von neuen Produkten und exklusiven Angeboten.</p>
             <form class="newsletter-form" onsubmit="handleNewsletterSignup(event)">
-                <input type="email" name="email" placeholder="Deine E-Mail Adresse" required>
-                <button type="submit" class="cta-primary">Jetzt anmelden ➜</button>
+                <input type="email" name="email" placeholder="Deine E-Mail-Adresse" aria-label="Deine E-Mail-Adresse" required>
+                <button type="submit" class="cta-primary">Anmelden</button>
             </form>
+            <p class="newsletter-legal-note">Mit deiner Anmeldung stimmst du den <a href="agb.html">AGB</a> und der <a href="cookie-policy.html">Datenschutzerklärung</a> zu.</p>
+            <p class="newsletter-admin"><a href="#" onclick="openAdminLogin(event)">Admin</a></p>
         </section>
-
-        <footer class="page-footer">
-            <p class="footer-note">✨ Sei dabei, wenn wir live gehen</p>
-            <p class="footer-admin"><a href="#" onclick="openAdminLogin(event)">Admin</a></p>
-        </footer>
     </main>
+
+    <div data-site-footer></div>
 
     <!-- Admin Login Modal -->
     <div id="adminModal" class="admin-modal" style="display: none;">
         <div class="admin-modal-content">
-            <h2 style="color: #d4af37; margin-bottom: 1.5rem; font-family: 'Garamond', serif;">Administrator Login</h2>
+            <h2 style="color: #89785f; margin-bottom: 1.5rem; font-family: 'Garamond', serif;">Administrator Login</h2>
             <form onsubmit="checkAdminCode(event)" style="display: flex; flex-direction: column; gap: 1rem;">
                 <input type="password" id="adminCode" name="adminCode" placeholder="Admin Code eingeben"
-                    style="padding: 0.8rem; border: 2px solid rgba(212, 175, 55, 0.3); background: rgba(255, 255, 255, 0.05); color: white; border-radius: 8px; font-size: 1rem;"
+                    style="padding: 0.8rem; border: 2px solid rgba(137, 120, 95, 0.3); background: rgba(255, 255, 255, 0.05); color: white; border-radius: 8px; font-size: 1rem;"
                     required>
                 <div style="display: flex; gap: 1rem;">
                     <button type="button" onclick="closeAdminModal()"
                         style="flex: 1; padding: 0.8rem; background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; cursor: pointer; font-size: 1rem;">Abbrechen</button>
                     <button type="submit"
-                        style="flex: 1; padding: 0.8rem; background: linear-gradient(135deg, #d4af37, #c9a961); color: #1a1a1a; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600;">Einloggen</button>
+                        style="flex: 1; padding: 0.8rem; background: linear-gradient(135deg, #89785f, #78654c); color: #1a1a1a; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600;">Einloggen</button>
                 </div>
             </form>
             <p id="adminError" style="color: #ff6b6b; font-size: 0.9rem; margin-top: 1rem; display: none;">Falscher
@@ -165,6 +154,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-client.js"></script>
     <script src="assets/js/landing.js"></script>
+    <script src="assets/js/site-footer.js"></script>
 </body>
 
 </html>

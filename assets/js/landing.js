@@ -198,7 +198,7 @@ function showNotification(message, type) {
         top: 20px;
         right: 20px;
         padding: 1rem 1.5rem;
-        background: ${type === 'success' ? '#d4af37' : type === 'error' ? '#c0392b' : '#3498db'};
+        background: ${type === 'success' ? '#89785f' : type === 'error' ? '#c0392b' : '#3498db'};
         color: white;
         border-radius: 8px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.2);

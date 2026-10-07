@@ -269,7 +269,14 @@ document.addEventListener('DOMContentLoaded', function() {
 // Shopping Cart State
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let currentCurrency = localStorage.getItem('currency') || 'CHF';
-let currentLanguage = localStorage.getItem('language') || 'de';
+function getBrowserPreferredLanguage() {
+    const browserLanguages = navigator.languages?.length ? navigator.languages : [navigator.language];
+    const matchingLanguage = browserLanguages.find(language =>
+        ['de', 'en', 'fr'].includes(language.split('-')[0].toLowerCase())
+    );
+    return matchingLanguage ? matchingLanguage.split('-')[0].toLowerCase() : 'de';
+}
+let currentLanguage = localStorage.getItem('language') || getBrowserPreferredLanguage();
 
 const PRODUCT_SIZE_OPTIONS = {
     'Klassischer Blazer': ['S', 'M', 'L', 'XL'],
@@ -379,6 +386,10 @@ function applyPreferredSizeToProductSelectors() {
             select.value = preferred;
         }
     });
+
+    if (typeof window.applyPreferredSizeToProductDetail === 'function') {
+        window.applyPreferredSizeToProductDetail();
+    }
 }
 
 window.setPreferredSizes = function setPreferredSizes(topSize, pantsSize) {
@@ -423,6 +434,22 @@ const currencyRates = {
     'EUR': 0.95,
     'USD': 1.10
 };
+const FREE_SHIPPING_THRESHOLDS_CHF = { CH: 100, EU: 150 };
+const EU_SHIPPING_COUNTRIES = new Set([
+    'austria', 'osterreich', 'belgium', 'belgien', 'belgique',
+    'bulgaria', 'bulgarien', 'croatia', 'kroatien', 'croatie',
+    'cyprus', 'zypern', 'chypre', 'czechrepublic', 'tschechien', 'republiquetcheque',
+    'denmark', 'danemark', 'daenemark', 'estonia', 'estland', 'estonie',
+    'finland', 'finnland', 'finlande', 'france', 'frankreich',
+    'germany', 'deutschland', 'allemagne', 'greece', 'griechenland', 'grece',
+    'hungary', 'ungarn', 'hongrie', 'ireland', 'irland', 'irlande',
+    'italy', 'italien', 'italie', 'latvia', 'lettland', 'lettonie',
+    'lithuania', 'litauen', 'lituanie', 'luxembourg', 'luxemburg',
+    'malta', 'netherlands', 'niederlande', 'paysbas', 'poland', 'polen', 'pologne',
+    'portugal', 'romania', 'rumaenien', 'roumanie', 'slovakia', 'slowakei', 'slovaquie',
+    'slovenia', 'slowenien', 'slovenie', 'spain', 'spanien', 'espagne',
+    'sweden', 'schweden', 'suede'
+]);
 
 // Currency symbols
 const currencySymbols = {
@@ -777,7 +804,9 @@ function updatePageContent() {
     const cartHeader = document.querySelector('.cart-header h2');
     const clearCartBtn = document.querySelector('.clear-cart-btn');
     const checkoutBtn = document.querySelector('.checkout-btn');
-    if (cartHeader) cartHeader.textContent = t('cart');
+    if (cartHeader?.firstChild?.nodeType === Node.TEXT_NODE) {
+        cartHeader.firstChild.textContent = `${t('cart')} `;
+    }
     if (clearCartBtn) clearCartBtn.textContent = t('clearCart');
     if (checkoutBtn) checkoutBtn.textContent = t('checkout');
     
@@ -1011,8 +1040,28 @@ function updatePageContent() {
 // Toggle Cart Sidebar
 function toggleCart() {
     const cartSidebar = document.getElementById('cart-sidebar');
+    if (!cartSidebar) return;
     cartSidebar.classList.toggle('active');
 }
+
+const PRODUCT_IMAGE_MAP = {
+    'Klassischer Blazer': 'assets/images/klassischer%20Blazer.jpg',
+    'Ledergürtel': 'assets/images/Ledergürtel.jpg',
+    'Kaschmirpullover': 'assets/images/Kaschmirpullover.jpg',
+    'Oxford Hemd': 'assets/images/oxfordhemd.jpg',
+    'Wollmantel': 'assets/images/Wollmantel.jpg',
+    'Polo Hemd': 'assets/images/PoloCasual.jpg',
+    'Knit Zip-Polo': 'assets/images/ripped knit zip-polo.jpg',
+    'Strickpullover': 'assets/images/Strickpullover.jpg',
+    'Bundfalthose': 'assets/images/Bundfalthose.jpg',
+    'Elegante Weste': 'assets/images/Weste.jpg',
+    'Quarter Zipper': 'assets/images/Quarter Zipper.jpg',
+    'Leinenhose': 'assets/images/Leinenhose.jpg',
+    'Oversized Hoodie': 'assets/images/Hoodie.jpg',
+    'T-Shirt': 'assets/images/T-Shirt.jpg',
+    'Trainerhose': 'assets/images/Trainerhose.jpg',
+    'Jeans': 'assets/images/Jeans.jpg'
+};
 
 // Add Item to Cart
 // Navigate to Product Detail Page
@@ -1020,24 +1069,6 @@ function viewProductDetail(productName, price, description, colors, sizes) {
     // Fixed name → image mapping (never use array index)
     const streetwearProducts = new Set(['Oversized Hoodie', 'T-Shirt', 'Cargo Pants', 'Jeans', 'Trainerhose']);
     const accessoryProducts = new Set(['Ledergürtel']);
-    const imageMap = {
-        'Klassischer Blazer': 'assets/images/klassischer_blazer.png',
-        'Ledergürtel': 'assets/images/Ledergürtel.jpg',
-        'Kaschmirpullover': 'assets/images/Kaschmirpullover.jpg',
-        'Oxford Hemd': 'assets/images/oxford_hemd.png',
-        'Wollmantel': 'assets/images/Wollmantel.jpg',
-        'Polo Hemd': 'assets/images/Polo.jpg',
-        'Knit Zip-Polo': 'assets/images/ripped knit zip-polo.jpg',
-        'Strickpullover': 'assets/images/Strickpullover.jpg',
-        'Bundfalthose': 'assets/images/Bundfalthose.jpg',
-        'Elegante Weste': 'assets/images/weste.png',
-        'Quarter Zipper': 'assets/images/Quarter Zipper.jpg',
-        'Leinenhose': 'assets/images/Leinenhose.jpg',
-        'Oversized Hoodie': 'assets/images/Hoodie.jpg',
-        'T-Shirt': 'assets/images/T-Shirt.jpg',
-        'Trainerhose': 'assets/images/Trainerhose.jpg'
-    };
-
     // Store product data in sessionStorage
     const productData = {
         name: productName,
@@ -1046,7 +1077,7 @@ function viewProductDetail(productName, price, description, colors, sizes) {
         description: description,
         colors: colors || [],
         sizes: sizes || ['S', 'M', 'L', 'XL'],
-        image: imageMap[productName] || null
+        image: PRODUCT_IMAGE_MAP[productName] || null
     };
     
     sessionStorage.setItem('selectedProduct', JSON.stringify(productData));
@@ -1094,21 +1125,88 @@ function addToCart(productName, price, color = null, explicitSize = null) {
 }
 
 // Update Cart Display
+function updateCartShippingProgress(subtotal) {
+    const progress = document.getElementById('cart-shipping-progress');
+    if (!progress) return;
+
+    const country = typeof window.getCurrentShippingCountry === 'function'
+        ? window.getCurrentShippingCountry()
+        : null;
+    const normalizedCountry = typeof country === 'string'
+        ? country.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '')
+        : '';
+    const isSwitzerland = ['ch', 'schweiz', 'switzerland', 'suisse', 'svizzera'].includes(normalizedCountry);
+    const isEu = EU_SHIPPING_COUNTRIES.has(normalizedCountry);
+    const threshold = isSwitzerland
+        ? FREE_SHIPPING_THRESHOLDS_CHF.CH
+        : isEu
+            ? FREE_SHIPPING_THRESHOLDS_CHF.EU
+            : null;
+    progress.hidden = !country;
+    progress.dataset.available = String(threshold !== null);
+
+    if (!country) return;
+
+    if (threshold === null) {
+        const message = progress.querySelector('[data-shipping-message]');
+        const amount = progress.querySelector('[data-shipping-amount]');
+        const suffix = progress.querySelector('[data-shipping-suffix]');
+        const track = progress.querySelector('.cart-shipping-track');
+        if (message) message.textContent = t('shippingThresholdUnavailable');
+        if (amount) amount.textContent = '';
+        if (suffix) suffix.textContent = '';
+        if (track) track.hidden = true;
+        progress.dataset.reached = 'false';
+        return;
+    }
+
+    const track = progress.querySelector('.cart-shipping-track');
+    if (track) track.hidden = false;
+    const remaining = Math.max(0, threshold - subtotal);
+    const percentage = Math.min(100, (subtotal / threshold) * 100);
+    const reached = remaining === 0;
+    const message = progress.querySelector('[data-shipping-message]');
+    const amount = progress.querySelector('[data-shipping-amount]');
+    const suffix = progress.querySelector('[data-shipping-suffix]');
+    const fill = progress.querySelector('.cart-shipping-fill');
+    const formattedRemaining = `${currencySymbols[currentCurrency]} ${(remaining * currencyRates[currentCurrency]).toFixed(2)}`;
+
+    if (message) message.textContent = t(reached ? 'freeShippingReached' : 'freeShippingPrefix');
+    if (amount) amount.textContent = reached ? '' : formattedRemaining;
+    if (suffix) suffix.textContent = reached ? '' : t('freeShippingSuffix');
+    if (track) track.setAttribute('aria-label', t('freeShippingProgressLabel'));
+    if (track) track.setAttribute('aria-valuenow', String(Math.floor(percentage * 10) / 10));
+    if (fill) fill.style.width = `${percentage}%`;
+    progress.dataset.reached = String(reached);
+}
+
 function updateCart() {
     const cartItemsContainer = document.getElementById('cart-items');
     const cartCountElement = document.querySelector('.cart-count');
+    const cartDrawerCount = document.getElementById('cart-drawer-count');
+    const cartSidebar = document.getElementById('cart-sidebar');
     const cartTotalElement = document.getElementById('cart-total');
     
     normalizeCartItemSizes();
 
     // Save cart to localStorage
     localStorage.setItem('cart', JSON.stringify(cart));
+
+    const cartSubtotalChf = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const subtotal = cartSubtotalChf * currencyRates[currentCurrency];
     
     // Update cart count
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     if (cartCountElement) {
         cartCountElement.textContent = totalItems;
     }
+    if (cartDrawerCount) {
+        cartDrawerCount.textContent = `(${totalItems})`;
+    }
+    if (cartSidebar) {
+        cartSidebar.dataset.emptyCart = String(cart.length === 0);
+    }
+    updateCartShippingProgress(cartSubtotalChf);
 
     // Some pages only show the cart icon count but not the full cart sidebar.
     if (!cartItemsContainer || !cartTotalElement) {
@@ -1119,8 +1217,12 @@ function updateCart() {
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = `
             <div class="empty-cart-message">
+                <span class="empty-cart-icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" fill="none"><path d="M12 17h24l2 23H10l2-23Z" stroke="currentColor" stroke-width="1.5"/><path d="M18 18v-3a6 6 0 0 1 12 0v3" stroke="currentColor" stroke-width="1.5"/><path d="M19 26h10" stroke="currentColor" stroke-width="1.5"/></svg>
+                </span>
+                <span class="empty-cart-eyebrow">${t('cartEmptyPrompt')}</span>
                 <p>${t('cartEmpty')}</p>
-                <button type="button" class="checkout-btn" style="margin-top:1rem;" data-empty-cart-cta>${t('shopNow')}</button>
+                <button type="button" class="empty-cart-cta" data-empty-cart-cta>${t('shopNow')} <span aria-hidden="true">→</span></button>
             </div>
         `;
         const emptyCartCta = cartItemsContainer.querySelector('[data-empty-cart-cta]');
@@ -1153,15 +1255,23 @@ function updateCart() {
     
     cartItemsContainer.innerHTML = cart.map((item, index) => `
         <div class="cart-item">
-            <div class="cart-item-info">
-                <h4>${translateProductName(item.name)}</h4>
-                <div class="cart-item-meta">
-                    <label>${t('size')}</label>
-                    <select class="cart-size-select" onchange="updateCartItemSize(${index}, this.value)">
-                        ${getAvailableSizesForProduct(item.name).map(size => `
-                            <option value="${size}" ${item.size === size ? 'selected' : ''}>${size}</option>
-                        `).join('')}
-                    </select>
+            <div class="cart-item-image">
+                ${PRODUCT_IMAGE_MAP[item.name] ? `<img src="${PRODUCT_IMAGE_MAP[item.name]}" alt="" loading="lazy">` : '<span aria-hidden="true">J</span>'}
+            </div>
+            <div class="cart-item-content">
+                <div class="cart-item-title-row">
+                    <h4>${translateProductName(item.name)}</h4>
+                    <button type="button" class="remove-item-btn" onclick="removeFromCart(${index})" aria-label="${t('removeCartItem')}: ${translateProductName(item.name)}">&times;</button>
+                </div>
+                <p class="cart-item-price">${formatPrice(item.price)}</p>
+                <div class="cart-item-options">
+                    <label>${t('size')}
+                        <select class="cart-size-select" onchange="updateCartItemSize(${index}, this.value)">
+                            ${getAvailableSizesForProduct(item.name).map(size => `
+                                <option value="${size}" ${item.size === size ? 'selected' : ''}>${size}</option>
+                            `).join('')}
+                        </select>
+                    </label>
                     ${(() => {
                         const colors = getAvailableColorsForProduct(item.name);
                         if (colors.length <= 1) {
@@ -1169,31 +1279,27 @@ function updateCart() {
                         }
                         const options = item.color && !colors.includes(item.color) ? [item.color, ...colors] : colors;
                         return `
-                            <label>${t('filterColor')}</label>
-                            <select class="cart-color-select" onchange="updateCartItemColor(${index}, this.value)">
-                                ${!item.color ? '<option value="" selected>--</option>' : ''}
-                                ${options.map(color => `
-                                    <option value="${color}" ${item.color === color ? 'selected' : ''}>${translateColorName(color)}</option>
-                                `).join('')}
-                            </select>
+                            <label>${t('filterColor')}
+                                <select class="cart-color-select" onchange="updateCartItemColor(${index}, this.value)">
+                                    ${!item.color ? '<option value="" selected>--</option>' : ''}
+                                    ${options.map(color => `
+                                        <option value="${color}" ${item.color === color ? 'selected' : ''}>${translateColorName(color)}</option>
+                                    `).join('')}
+                                </select>
+                            </label>
                         `;
                     })()}
                 </div>
-                <p class="cart-item-price">${formatPrice(item.price)}</p>
                 <div class="cart-item-quantity">
-                    <button class="qty-btn" onclick="updateQuantity(${index}, -1)">-</button>
+                    <button class="qty-btn" onclick="updateQuantity(${index}, -1)" aria-label="Menge verringern">−</button>
                     <span>${item.quantity}</span>
-                    <button class="qty-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                    <button class="qty-btn" onclick="updateQuantity(${index}, 1)" aria-label="Menge erhöhen">+</button>
                 </div>
             </div>
-            <button class="remove-item-btn" onclick="removeFromCart(${index})">&times;</button>
         </div>
     `).join('');
     
     // Calculate subtotal
-    let subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    // Apply currency conversion to subtotal
-    subtotal = subtotal * currencyRates[currentCurrency];
     let total = subtotal;
     
     // Update subtotal display
@@ -1201,7 +1307,7 @@ function updateCart() {
     if (subtotalElement) {
         subtotalElement.textContent = formatPrice(subtotal);
     }
-    
+
     // Apply discount code if exists
     const appliedDiscount = parseFloat(localStorage.getItem('appliedDiscountAmount')) || 0;
     const discountCode = localStorage.getItem('appliedDiscountCode') || '';
@@ -2542,7 +2648,7 @@ document.addEventListener('click', function(event) {
     const cartSidebar = document.getElementById('cart-sidebar');
     const cartBtn = document.querySelector('.cart-btn');
     
-    if (cartSidebar.classList.contains('active') && 
+    if (cartSidebar && cartBtn && cartSidebar.classList.contains('active') &&
         !cartSidebar.contains(event.target) && 
         !cartBtn.contains(event.target)) {
         cartSidebar.classList.remove('active');
@@ -3572,21 +3678,3 @@ document.addEventListener('keydown', function(e) {
         toggleCart();
     }
 });
-
-// Back-to-top button (injected once, works across all pages using this script)
-(function initScrollToTopButton() {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.id = 'scroll-top-btn';
-    btn.setAttribute('aria-label', 'Nach oben scrollen');
-    btn.innerHTML = '&#8593;';
-    document.body.appendChild(btn);
-
-    btn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    window.addEventListener('scroll', () => {
-        btn.classList.toggle('visible', window.scrollY > 400);
-    }, { passive: true });
-})();
