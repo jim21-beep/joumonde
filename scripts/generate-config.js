@@ -1,5 +1,5 @@
-// Generates public/assets/js/config.js from environment variables at build/deploy time,
-// so the Supabase project URL and publishable anon key never live in version control.
+// Generates public/assets/js/config.js from environment variables at build/deploy time.
+// Only the browser-safe publishable/anon key belongs in frontend configuration.
 const fs = require('fs');
 const path = require('path');
 

@@ -7,9 +7,6 @@ backend/node_modules/
 .env.local
 .env.*.local
 
-# Generated runtime config (contains Supabase URL/anon key, injected at build time)
-public/assets/js/config.js
-
 # Supabase CLI local link/session state
 supabase/.temp/
 
