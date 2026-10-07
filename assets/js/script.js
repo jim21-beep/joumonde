@@ -3592,16 +3592,6 @@ if (cartSidebar) {
     }
 }
 
-// Prevent iOS double-tap zoom on buttons
-let lastTouchEnd = 0;
-document.addEventListener('touchend', function(e) {
-    const now = Date.now();
-    if (now - lastTouchEnd <= 300) {
-        e.preventDefault();
-    }
-    lastTouchEnd = now;
-}, { passive: false });
-
 // Optimize images on mobile (lazy loading)
 if ('loading' in HTMLImageElement.prototype) {
     const images = document.querySelectorAll('img[data-src]');

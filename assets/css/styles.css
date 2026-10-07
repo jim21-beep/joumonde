@@ -150,6 +150,7 @@ h6 {
 .touch-device input[type="button"] {
     cursor: pointer;
     user-select: none;
+    touch-action: manipulation;
 }
 
 .container {
