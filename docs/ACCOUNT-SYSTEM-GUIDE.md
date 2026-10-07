@@ -1,30 +1,20 @@
 # Joumonde Account System - Benutzerhandbuch
 
-## 📋 Übersicht
+## Übersicht
 
-Das Account-System ermöglicht Benutzern die Erstellung von Konten, Anmeldung, Verwaltung von Adressen, Bestellverlauf und persönlichen Einstellungen.
+Das Account-System verwendet Supabase Auth für die passwortlose Anmeldung sowie Supabase-Datenbanktabellen für Profile, Adressen und Bestellungen.
 
 ## ✨ Features
 
-### 1. Benutzerregistrierung
-- **Vorname & Nachname**: Erforderlich
-- **E-Mail**: Muss gültig sein und darf nicht bereits registriert sein
-- **Passwort**: Mindestens 6 Zeichen
-- **Newsletter-Abonnement**: Optional
-- **AGB & Datenschutz**: Akzeptanz erforderlich
+### 1. Registrierung und Anmeldung
+- Neue und bestehende Benutzer geben ihre E-Mail-Adresse auf `account.html` ein.
+- Supabase Auth sendet einen sechsstelligen Einmalcode; es gibt kein Passwort und keinen separaten Registrierungsablauf.
+- Der Code wird direkt auf `account.html` eingegeben und mit `verifyOtp` geprüft.
+- Alternativ ist Google OAuth verfügbar.
+- Der Shop verwendet den E-Mail-Code-Ablauf für die Anmeldung.
+- Die Supabase-Auth-Mailvorlage muss `{{ .Token }}` ausgeben, damit der Code in der E-Mail sichtbar ist.
 
-**Validierung:**
-- Überprüft auf leere Felder
-- Passwörter müssen übereinstimmen
-- E-Mail-Format wird validiert
-- Duplikate werden erkannt
-
-### 2. Benutzeranmeldung
-- **E-Mail & Passwort**: Authentifizierung
-- **"Angemeldet bleiben"**: Session-Persistenz
-- **Passwort vergessen**: Link vorhanden (Backend erforderlich)
-
-### 3. Account Dashboard
+### 2. Account Dashboard
 
 #### **Übersicht-Tab**
 Zeigt wichtige Statistiken:
@@ -72,90 +62,30 @@ Zeigt wichtige Statistiken:
 **Gefahrenzone:**
 - ⚠️ Konto löschen (mit Bestätigung)
 
-### 4. Checkout-Integration
+### 3. Checkout-Integration
 - **Auto-Fill**: Formulare werden mit Benutzerdaten vorausgefüllt
 - **Standard-Adresse**: Automatisch ausgewählt
 - **Bestellhistorie**: Alle Käufe werden gespeichert
 
-### 5. Sicherheit
-- **Passwort-Hashing**: Einfache Base64-Verschlüsselung (⚠️ Für Produktion verbessern!)
-- **Session-Management**: localStorage mit "Angemeldet bleiben"-Option
-- **Logout-Funktion**: Sicheres Abmelden
+### 4. Sicherheit
+- Die Authentifizierung und Session-Verwaltung erfolgen über Supabase Auth.
+- Der Browser speichert keine Kontopasswörter.
+- Einmalcodes sind zeitlich begrenzt und werden serverseitig von Supabase geprüft.
 
 ## 🔧 Technische Details
 
-### localStorage-Struktur
+### Authentifizierung
 
-```javascript
-// Aktueller Benutzer
-{
-  "currentUser": {
-    "id": "1640000000000",
-    "firstName": "Max",
-    "lastName": "Mustermann",
-    "email": "max@example.com",
-    "password": "hashed_password",
-    "addresses": [...],
-    "orderHistory": [...],
-    "preferences": {...}
-  }
-}
+`sendAccountLoginCode()` in `public/assets/js/account-system.js` sendet den Code über `supabase.auth.signInWithOtp()` und erlaubt bei Bedarf die Kontoerstellung. `verifyAccountLoginCode()` prüft den sechsstelligen Code mit `supabase.auth.verifyOtp({ type: 'email' })`.
 
-// Alle Benutzer
-{
-  "allUsers": [
-    {...user1},
-    {...user2}
-  ]
-}
-
-// Remember Me
-{
-  "rememberMe": "true"
-}
-```
-
-### User-Klasse
-
-```javascript
-class User {
-  id: string              // Timestamp-basiert
-  firstName: string
-  lastName: string
-  email: string
-  password: string        // Gehashed
-  createdAt: string       // ISO Datum
-  addresses: Address[]
-  orderHistory: Order[]
-  preferences: {
-    newsletter: boolean
-    defaultSize: string | null
-    defaultCurrency: string
-    defaultLanguage: string
-  }
-  wishlist: []
-  savedPaymentMethods: []
-}
-```
+Die Supabase-Session wird über Supabase Auth wiederhergestellt. Es werden keine Passwörter oder separaten lokalen Konten gespeichert.
 
 ### Wichtige Funktionen
 
-#### Registrierung
+#### E-Mail-Code anfordern und prüfen
 ```javascript
-handleRegister(event)
-- Validiert Formulardaten
-- Erstellt neuen User
-- Speichert in localStorage
-- Auto-Login nach Registrierung
-```
-
-#### Login
-```javascript
-handleLogin(event)
-- Findet Benutzer per E-Mail
-- Verifiziert Passwort
-- Setzt currentUser
-- Aktualisiert UI
+sendAccountLoginCode()
+verifyAccountLoginCode(event)
 ```
 
 #### Dashboard
@@ -238,19 +168,11 @@ Nutzt aus `script.js`:
 
 ## 🚀 Verwendung
 
-### Benutzer registrieren
-1. Klick auf Account-Button
-2. Wechsel zu "Registrieren"-Tab
-3. Formular ausfüllen
-4. Klick auf "Registrieren"
-→ Auto-Login + Willkommens-Notification
-
 ### Anmelden
-1. Klick auf Account-Button
-2. E-Mail & Passwort eingeben
-3. Optional: "Angemeldet bleiben" aktivieren
-4. Klick auf "Anmelden"
-→ Dashboard öffnet sich
+1. Account-Button öffnen.
+2. E-Mail-Adresse eingeben und den Code anfordern.
+3. Den sechsstelligen Code aus der E-Mail direkt auf `account.html` eingeben.
+→ Supabase Auth meldet den Benutzer an und öffnet das Dashboard.
 
 ### Adresse hinzufügen
 1. Dashboard → Adressen-Tab
@@ -275,22 +197,12 @@ Nutzt aus `script.js`:
 ## ⚠️ Wichtige Hinweise
 
 ### Sicherheit
-**⚠️ WARNUNG**: Das aktuelle Passwort-Hashing (Base64) ist NICHT sicher für Produktionsumgebungen!
-
-**Für Produktion empfohlen:**
-- bcrypt.js für Passwort-Hashing
-- Backend-Authentifizierung
-- JWT für Sessions
-- HTTPS obligatorisch
-
-### localStorage-Limits
-- Maximale Größe: ~5-10MB je Browser
-- Keine Verschlüsselung
-- Nicht für sensible Daten
+- Supabase Auth verwaltet Identitäten und Sessions.
+- Der Browser speichert keine Kontopasswörter.
+- Der Code wird durch Supabase zeitlich begrenzt und serverseitig geprüft.
 
 ### Browser-Kompatibilität
 - Alle modernen Browser unterstützt
-- localStorage erforderlich
 - JavaScript aktiviert
 
 ## 🐛 Fehlerbehebung
@@ -298,18 +210,8 @@ Nutzt aus `script.js`:
 ### "E-Mail bereits registriert"
 → Diese E-Mail ist schon in Verwendung. Andere E-Mail nutzen oder anmelden.
 
-### "Passwörter stimmen nicht überein"
-→ Passwort und Passwortwiederholung müssen identisch sein.
-
-### "Passwort muss mindestens 6 Zeichen lang sein"
-→ Längeres Passwort wählen.
-
 ### Dashboard öffnet sich nicht
 → Browser-Konsole prüfen (F12), JavaScript-Fehler suchen.
-
-### Daten gehen verloren
-→ localStorage wird beim Browser-Cache-Löschen gelöscht.
-→ "Angemeldet bleiben" aktivieren für Session-Persistenz.
 
 ## 📊 Analytics-Integration
 
@@ -333,13 +235,8 @@ dataLayer.push({
 
 ## 🔮 Zukünftige Erweiterungen
 
-**Geplante Features:**
-- Backend-Integration (Node.js/PHP)
-- E-Mail-Verifizierung
-- Passwort-Reset per E-Mail
-- Soziale Login-Optionen (Google, Facebook)
+**Mögliche spätere Erweiterungen:**
 - Zwei-Faktor-Authentifizierung
-- Bestellstatus-E-Mails
 - Profilbild-Upload
 - Bonuspunkte-System
 - Geschenkkarten
@@ -349,14 +246,9 @@ dataLayer.push({
 Bei Fragen oder Problemen:
 - Entwickler kontaktieren
 - Browser-Konsole prüfen (F12)
-- localStorage inspizieren:
-  ```javascript
-  console.log(localStorage.getItem('currentUser'));
-  console.log(localStorage.getItem('allUsers'));
-  ```
 
 ---
 
 **Version**: 1.0.0  
-**Letzte Aktualisierung**: Januar 2025  
+**Letzte Aktualisierung**: Oktober 2026
 **Autor**: GitHub Copilot für Joumonde

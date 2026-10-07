@@ -1603,6 +1603,23 @@ const INJECTION_PATTERNS = [
     /(\bgroq\b.*\bkey\b|\bkey\b.*\bgroq\b)/i,
 ];
 
+const GROQ_FALLBACK_MODEL = 'llama-3.3-70b-versatile';
+
+async function createNexaraCompletion(options) {
+    const configuredModel = process.env.GROQ_MODEL || GROQ_FALLBACK_MODEL;
+    try {
+        return await groq.chat.completions.create({ ...options, model: configuredModel });
+    } catch (error) {
+        const modelUnavailable = error?.status === 404
+            || error?.code === 'model_not_found'
+            || /model_not_found|model .* does not exist/i.test(error?.message || '');
+        if (!modelUnavailable || configuredModel === GROQ_FALLBACK_MODEL) throw error;
+
+        console.warn(`Configured Groq model "${configuredModel}" is unavailable; retrying with "${GROQ_FALLBACK_MODEL}".`);
+        return groq.chat.completions.create({ ...options, model: GROQ_FALLBACK_MODEL });
+    }
+}
+
 app.post('/api/chat', async (req, res) => {
     const { message, lat, lon, city, lang, history } = req.body;
     if (!message) return res.status(400).json({ message: 'Message is required' });
@@ -1793,8 +1810,7 @@ app.post('/api/chat', async (req, res) => {
             reply = geminiResult.text;
         } else {
             // Groq with Tool Calling
-            const firstCompletion = await groq.chat.completions.create({
-                model: process.env.GROQ_MODEL || 'llama-3.3-70b-versatile',
+            const firstCompletion = await createNexaraCompletion({
                 max_tokens: 300,
                 messages,
                 tools: NEXARA_TOOLS,
@@ -1815,8 +1831,7 @@ app.post('/api/chat', async (req, res) => {
                     });
                 }
                 // Second call: let Nexara formulate the final answer
-                const secondCompletion = await groq.chat.completions.create({
-                    model: process.env.GROQ_MODEL || 'llama-3.3-70b-versatile',
+                const secondCompletion = await createNexaraCompletion({
                     max_tokens: 200,
                     messages
                 });
@@ -1845,7 +1860,7 @@ app.post('/api/chat', async (req, res) => {
         res.json({ reply: finalReply });
     } catch (error) {
         console.error('AI error:', error);
-        res.status(500).json({ message: 'Failed to get response from AI', debug: error?.message || String(error) });
+        res.status(503).json({ message: 'Nexara ist vorübergehend nicht erreichbar. Bitte versuche es gleich noch einmal.' });
     }
 });
 

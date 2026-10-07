@@ -101,13 +101,12 @@ serve(async (req) => {
                 <strong style="color:#d4af37;">so schnell wie möglich</strong> darum kümmern.
               </p>
               <p style="color:#aaa;font-size:0.9rem;line-height:1.7;margin-bottom:2rem;">
-                In der Regel antworten wir innerhalb von 24 Stunden. Solltest du dringend Hilfe benötigen,
-                nutze gerne unseren Live-Chat — dort sind wir sofort für dich da.
+                In der Regel antworten wir innerhalb von 24 Stunden. Bei Fragen zu Joumonde hilft dir Nexara direkt im Shop weiter.
               </p>
               <div style="text-align:center;margin:2rem 0;">
-                <a href="https://joumonde.com/live-chat.html"
+                <a href="https://joumonde.com/shop.html?openNexara=1"
                    style="display:inline-block;padding:14px 32px;background:linear-gradient(135deg,#d4af37,#c9a961);color:#1a1a1a;text-decoration:none;border-radius:8px;font-weight:700;font-size:1rem;">
-                  💬 Live-Chat starten
+                  ✦ Nexara fragen
                 </a>
               </div>
               <hr style="border:none;border-top:1px solid #2a2a2a;margin:2rem 0;">

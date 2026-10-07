@@ -48,96 +48,6 @@ function getDashboardAvatarMarkup() {
 
 // ==================== AUTHENTICATION ====================
 
-// Register New User – Supabase Auth
-async function handleRegister(event) {
-    event.preventDefault();
-
-    const form = event.target;
-    const firstName = (form.elements['firstName'] || form.querySelector('input[name="firstName"]')).value.trim();
-    const lastName  = (form.elements['lastName']  || form.querySelector('input[name="lastName"]')).value.trim();
-    const email     = (form.elements['email']     || form.querySelector('input[type="email"]')).value.trim().toLowerCase();
-    const password  = (form.elements['password']  || form.querySelectorAll('input[type="password"]')[0]).value;
-    const passwordConfirm = (form.elements['passwordConfirm'] || form.querySelectorAll('input[type="password"]')[1]).value;
-    const newsletter = false;
-    const submitButton = form.querySelector('button[type="submit"]');
-
-    if (!window.supabaseClient?.auth) {
-        showAccountMessage(accountT('accountLoginUnavailable', 'Anmeldung ist momentan nicht verfügbar. Bitte lade die Seite neu und versuche es erneut.'), 'error');
-        return;
-    }
-
-    if (!firstName || !lastName || !email || !password) {
-        showAccountMessage(accountT('accountRequiredFieldsError', 'Bitte fülle alle Pflichtfelder aus.'), 'error'); return;
-    }
-    if (password !== passwordConfirm) {
-        showAccountMessage(accountT('accountPasswordMismatchError', 'Passwörter stimmen nicht überein.'), 'error'); return;
-    }
-    if (password.length < 6) {
-        showAccountMessage(accountT('accountPasswordTooShortError', 'Das Passwort muss mindestens 6 Zeichen lang sein.'), 'error'); return;
-    }
-
-    showAccountMessage(accountT('accountCreating', 'Konto wird erstellt…'), 'info');
-
-    submitButton.disabled = true;
-    try {
-        const { error } = await window.supabaseClient.auth.signUp({
-            email,
-            password,
-            options: { data: { firstName, lastName, newsletter } }
-        });
-
-        if (error) {
-            showAccountMessage(error.message, 'error'); return;
-        }
-
-        if (typeof trackSignup === 'function') trackSignup('email');
-        sendRegistrationEmail({ firstName, lastName, email, preferences: { newsletter } });
-        showAccountMessage(accountT('accountConfirmEmail', 'Konto erstellt! Bitte bestätige deine E-Mail-Adresse.'), 'success');
-        form.reset();
-    } catch (error) {
-        console.error('Registration request failed:', error.message);
-        showAccountMessage(accountT('accountLoginUnavailable', 'Registrierung ist momentan nicht verfügbar. Bitte versuche es erneut.'), 'error');
-    } finally {
-        submitButton.disabled = false;
-    }
-}
-
-// Login – Supabase Auth
-async function handleLogin(event) {
-    event.preventDefault();
-
-    const form = event.target;
-    const email    = form.querySelector('input[type="email"]').value.trim().toLowerCase();
-    const password = form.querySelector('input[type="password"]').value;
-    const submitButton = form.querySelector('button[type="submit"]');
-
-    if (!window.supabaseClient?.auth) {
-        showAccountMessage(accountT('accountLoginUnavailable', 'Anmeldung ist momentan nicht verfügbar. Bitte lade die Seite neu und versuche es erneut.'), 'error');
-        return;
-    }
-
-    showAccountMessage(accountT('accountSigningIn', 'Anmeldung läuft…'), 'info');
-    submitButton.disabled = true;
-
-    try {
-        const { error } = await window.supabaseClient.auth.signInWithPassword({ email, password });
-
-        if (error) {
-            showAccountMessage(accountT('accountLoginError', 'E-Mail oder Passwort ist falsch.'), 'error');
-            return;
-        }
-
-        if (typeof trackLogin === 'function') trackLogin('email');
-        form.reset();
-        // onAuthStateChange übernimmt loginUser()
-    } catch (error) {
-        console.error('Login request failed:', error.message);
-        showAccountMessage(accountT('accountLoginUnavailable', 'Anmeldung ist momentan nicht verfügbar. Bitte versuche es erneut.'), 'error');
-    } finally {
-        submitButton.disabled = false;
-    }
-}
-
 // Profil + Daten aus Supabase laden und currentUser befüllen
 // isActualLogin = false when restoring session on page load (no notification, no language override)
 async function loginUser(supabaseUser, isActualLogin = true) {
@@ -217,7 +127,7 @@ async function loginUser(supabaseUser, isActualLogin = true) {
     updateAccountUI();
     refreshCartShippingProgress();
     if (isActualLogin) {
-        showNotification(`${accountT('accountWelcomeBack', 'Willkommen zurueck')}, ${currentUser.firstName}!`, 'success');
+        showNotification(`${accountT('accountWelcomeBack', 'Willkommen zurueck')}, ${currentUser.firstName || currentUser.email}!`, 'success');
     }
 }
 
@@ -256,7 +166,7 @@ function updateAccountUI() {
                 <span style="position: absolute; top: -5px; right: -5px; width: 8px; height: 8px; background: #4caf50; border-radius: 50%; border: 2px solid white;"></span>
             </div>
         `;
-        accountBtn.setAttribute('title', currentUser.firstName + ' ' + currentUser.lastName);
+        accountBtn.setAttribute('title', [currentUser.firstName, currentUser.lastName].filter(Boolean).join(' ') || currentUser.email);
     } else {
         // User is logged out
         accountBtn.innerHTML = `
@@ -473,38 +383,32 @@ function changeAccountLoginEmail() {
     document.querySelector('.account-auth-divider').hidden = false;
     document.querySelector('.account-auth-panel .account-message')?.remove();
     document.getElementById('account-page-auth-title').textContent = accountT('accountPageLoginTitle', 'Anmelden');
-    document.getElementById('account-page-auth-subtitle').textContent = accountT('accountPageLoginSubtitle', 'Melde dich mit deiner E-Mail-Adresse an.');
+    document.getElementById('account-page-auth-subtitle').textContent = accountT('accountPageLoginSubtitle', 'Melde dich mit einem Code per E-Mail oder mit Google an.');
     document.getElementById('account-login-email').focus();
 }
 
 async function signInWithGoogle() {
-        if (!window.supabaseClient?.auth) {
-            showAccountMessage(accountT('accountLoginUnavailable', 'Anmeldung ist momentan nicht verfügbar. Bitte lade die Seite neu und versuche es erneut.'), 'error');
-            return;
-        }
-
-        const button = document.getElementById('account-google-login');
-        if (button) button.disabled = true;
-
-        try {
-            const { error } = await window.supabaseClient.auth.signInWithOAuth({
-                provider: 'google',
-                options: {
-                    redirectTo: `${window.location.origin}${window.location.pathname}${window.location.search}`
-                }
-            });
-
-            if (error) {
-                console.error('Google sign-in failed:', error.message);
-                showAccountMessage('Die Anmeldung mit Google ist momentan nicht verfügbar. Bitte melde dich mit deiner E-Mail-Adresse an.', 'error');
-            }
-        } catch (error) {
-            console.error('Google sign-in request failed:', error.message);
-            showAccountMessage('Die Anmeldung mit Google ist momentan nicht verfügbar. Bitte melde dich mit deiner E-Mail-Adresse an.', 'error');
-        } finally {
-            if (button?.isConnected) button.disabled = false;
-        }
+    if (!window.supabaseClient?.auth) {
+        showAccountMessage(accountT('accountLoginUnavailable', 'Anmeldung ist momentan nicht verfügbar. Bitte lade die Seite neu und versuche es erneut.'), 'error');
+        return;
     }
+
+    const button = document.getElementById('account-google-login');
+    button.disabled = true;
+    try {
+        const { error } = await window.supabaseClient.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: `${window.location.origin}${window.location.pathname}${window.location.search}`
+            }
+        });
+        if (error) throw error;
+    } catch (error) {
+        console.error('Google sign-in failed:', error.message);
+        showAccountMessage('Die Anmeldung mit Google ist momentan nicht verfügbar. Bitte versuche es erneut.', 'error');
+        if (button.isConnected) button.disabled = false;
+    }
+}
 
 function renderAccountSignInPage() {
         const accountPageRoot = document.getElementById('account-page-root');
@@ -515,7 +419,7 @@ function renderAccountSignInPage() {
         accountPageRoot.innerHTML = `
             <section class="account-auth-panel" aria-labelledby="account-page-auth-title">
                 <h1 id="account-page-auth-title">${accountT('accountPageLoginTitle', 'Anmelden')}</h1>
-                <p class="account-auth-subtitle" id="account-page-auth-subtitle">${accountT('accountPageLoginSubtitle', 'Melde dich ganz einfach mit deiner E-Mail-Adresse an.')}</p>
+                <p class="account-auth-subtitle" id="account-page-auth-subtitle">${accountT('accountPageLoginSubtitle', 'Melde dich mit einem Code per E-Mail oder mit Google an.')}</p>
 
                 <button type="button" class="account-google-button" id="account-google-login" onclick="signInWithGoogle()">
                     <svg viewBox="0 0 48 48" aria-hidden="true">
@@ -591,28 +495,6 @@ function toggleAccount() {
     window.location.href = 'account.html';
 }
 
-// Switch Account Tab
-function switchAccountTab(tab) {
-    const tabs = document.querySelectorAll('.auth-tab, .account-tab');
-    const loginForm = document.getElementById('login-form');
-    const registerForm = document.getElementById('register-form');
-    const indicator = document.querySelector('.auth-tab-indicator');
-    
-    tabs.forEach(t => t.classList.remove('active'));
-    
-    if (tab === 'login') {
-        tabs[0].classList.add('active');
-        loginForm.style.display = 'block';
-        registerForm.style.display = 'none';
-        if (indicator) indicator.classList.remove('slide-right');
-    } else {
-        tabs[1].classList.add('active');
-        loginForm.style.display = 'none';
-        registerForm.style.display = 'block';
-        if (indicator) indicator.classList.add('slide-right');
-    }
-}
-
 // Show Account Dashboard
 function showAccountDashboard() {
     const accountPageRoot = document.getElementById('account-page-root');
@@ -629,7 +511,7 @@ function showAccountDashboard() {
         <div class="account-dashboard">
             <div class="dashboard-header">
                 <div class="user-avatar-large">${getDashboardAvatarMarkup()}</div>
-                <h2>${escapeHtml(currentUser.firstName)} ${escapeHtml(currentUser.lastName)}</h2>
+                <h2>${escapeHtml([currentUser.firstName, currentUser.lastName].filter(Boolean).join(' ') || currentUser.email)}</h2>
             </div>
             
             <div class="dashboard-tabs">
@@ -1467,15 +1349,8 @@ function closeOrderDetailsModal() {
 }
 
 function requestReturnFromModal(orderId) {
-    // Open live-chat with return context pre-filled
-    const chatBtn = document.querySelector('.live-chat-btn, [onclick*="live-chat"]');
-    if (window.location.href.includes('live-chat')) {
-        const input = document.getElementById('chat-input') || document.querySelector('input[placeholder]');
-        if (input) input.value = `Retoure Bestellung ${orderId}`;
-    } else {
-        sessionStorage.setItem('chatPreFill', `Retoure Bestellung ${orderId}`);
-        window.open('live-chat.html', '_blank');
-    }
+    sessionStorage.setItem('nexaraPrefill', `Ich möchte eine Retoure für Bestellung ${orderId} beantragen.`);
+    window.location.assign('shop.html?openNexara=1');
 }
 
 // ==================== CHECKOUT INTEGRATION ====================
@@ -1511,26 +1386,6 @@ window.openCheckout = function() {
 };
 
 // ==================== EMAIL NOTIFICATIONS ====================
-
-// Send Registration Notification Email
-async function sendRegistrationEmail(user) {
-    try {
-        await fetch(`${window.__ENV__?.SUPABASE_URL}/functions/v1/send-newsletter-confirmation`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                type: 'registration',
-                email: user.email,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                registeredAt: new Date().toLocaleString('de-DE')
-            })
-        });
-        console.log('✅ Registrierungs-E-Mail gesendet');
-    } catch (err) {
-        console.log('⚠️ E-Mail-Versand fehlgeschlagen:', err);
-    }
-}
 
 // Send Order Confirmation Email
 async function sendOrderConfirmationEmail(user, order) {
@@ -1600,7 +1455,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 // This SIGNED_IN was triggered by the page-load session restore above – skip duplicate
                 _sessionRestored = false;
             } else {
-                // Actual fresh login from handleLogin()
+                // Fresh passwordless email-code login.
                 await loginUser(session.user, true);
             }
             if (!document.getElementById('account-page-root')) {
@@ -1627,7 +1482,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (accountModal) {
             accountModal.classList.add('active');
             document.body.classList.add('modal-open');
-            switchAccountTab('login');
         }
     }
 
@@ -1672,104 +1526,3 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     };
 });
-
-// ==================== DEVELOPER TOOLS ====================
-
-// Create test account (call from console: createTestAccount())
-window.createTestAccount = function() {
-    const testUser = new User(
-        'Joumonde',
-        'Admin',
-        'info@joumonde.com',
-        'admin123'
-    );
-    
-    // Add test preferences
-    testUser.preferences.newsletter = true;
-    testUser.preferences.defaultSize = 'L';
-    testUser.preferences.defaultTopSize = 'L';
-    testUser.preferences.defaultPantsSize = '32';
-    testUser.preferences.defaultCurrency = 'CHF';
-    
-    // Add test address
-    testUser.addAddress({
-        street: 'Bahnhofstrasse 1',
-        zip: '8001',
-        city: 'Zürich',
-        country: 'Schweiz',
-        phone: '+41 44 123 45 67'
-    });
-    
-    // Add test order
-    testUser.addOrder({
-        items: [
-            { name: 'Signature Blazer', price: 299.90, quantity: 1 },
-            { name: 'Classic Hoodie', price: 89.90, quantity: 2 }
-        ],
-        total: 479.70,
-        shippingAddress: testUser.addresses[0]
-    });
-    
-    // Save user
-    allUsers.push(testUser);
-    localStorage.setItem('allUsers', JSON.stringify(allUsers));
-    
-    console.log('✅ Test-Konto erstellt!');
-    console.log('E-Mail: info@joumonde.com');
-    console.log('Passwort: admin123');
-    console.log('');
-    console.log('Du kannst dich jetzt anmelden!');
-    
-    return testUser;
-};
-
-// Quick login (call from console: quickLogin())
-window.quickLogin = function() {
-    const user = allUsers.find(u => u.email === 'info@joumonde.com');
-    if (user) {
-        loginUser(Object.assign(new User('', '', '', ''), user));
-        console.log('✅ Als info@joumonde.com eingeloggt!');
-    } else {
-        console.log('❌ Test-Konto existiert nicht. Führe erst createTestAccount() aus.');
-    }
-};
-
-// View all users (call from console: viewAllUsers())
-window.viewAllUsers = function() {
-    console.log('Registrierte Benutzer:', allUsers.length);
-    allUsers.forEach((u, i) => {
-        console.log(`${i + 1}. ${u.firstName} ${u.lastName} (${u.email})`);
-    });
-    return allUsers;
-};
-
-// Reset all accounts (call from console: resetAccounts())
-window.resetAccounts = function() {
-    if (confirm('Alle Accounts löschen? Diese Aktion kann nicht rückgängig gemacht werden.')) {
-        localStorage.removeItem('allUsers');
-        localStorage.removeItem('currentUser');
-        localStorage.removeItem('rememberMe');
-        allUsers = [];
-        currentUser = null;
-        updateAccountUI();
-        console.log('✅ Alle Accounts wurden gelöscht.');
-    }
-};
-
-// Show account system status
-window.accountStatus = function() {
-    console.log('=== ACCOUNT SYSTEM STATUS ===');
-    console.log('Registrierte Benutzer:', allUsers.length);
-    console.log('Aktueller Benutzer:', currentUser ? `${currentUser.firstName} ${currentUser.lastName}` : 'Nicht angemeldet');
-    console.log('Remember Me:', localStorage.getItem('rememberMe') === 'true' ? 'Aktiv' : 'Inaktiv');
-    console.log('');
-    console.log('Verfügbare Befehle:');
-    console.log('- createTestAccount() - Test-Konto erstellen');
-    console.log('- quickLogin() - Schnell als Test-User einloggen');
-    console.log('- viewAllUsers() - Alle Benutzer anzeigen');
-    console.log('- resetAccounts() - Alle Accounts löschen');
-    console.log('- accountStatus() - Diesen Status anzeigen');
-};
-
-console.log('%c🔐 Account System geladen!', 'color: #4caf50; font-weight: bold; font-size: 14px;');
-console.log('%cTipp: Führe accountStatus() aus für verfügbare Befehle', 'color: #666; font-size: 12px;');

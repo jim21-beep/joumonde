@@ -729,15 +729,15 @@
                 <span class="auth-brand-ornament">✦</span>
             </div>
 
-            <div class="auth-tab-switcher">
-                <button class="auth-tab active" id="tab-login" onclick="switchAccountTab('login')">Anmelden</button>
-                <button class="auth-tab" id="tab-register" onclick="switchAccountTab('register')">Registrieren</button>
-                <div class="auth-tab-indicator"></div>
+            <div class="account-form auth-form-panel">
+                <p class="auth-greeting">Anmelden oder Konto erstellen</p>
+                <p>Gib deine E-Mail-Adresse ein und bestätige sie mit dem Code, den wir dir senden. Für ein neues Konto ist keine separate Registrierung nötig.</p>
+                <a class="auth-submit-btn" href="account.html">Mit E-Mail-Code fortfahren</a>
             </div>
 
-            <div id="login-form" class="account-form auth-form-panel">
+            <template id="legacy-login-form">
                 <p class="auth-greeting">Willkommen zurück</p>
-                <form onsubmit="handleLogin(event)" class="auth-form">
+                <form onsubmit="event.preventDefault()" class="auth-form">
                     <div class="auth-field">
                         <label class="auth-label">E-Mail</label>
                         <input type="email" class="auth-input" placeholder="ihre@email.de" required>
@@ -760,11 +760,11 @@
                     </div>
                     <button type="submit" class="auth-submit-btn">Anmelden</button>
                 </form>
-            </div>
+            </template>
 
-            <div id="register-form" class="account-form auth-form-panel" style="display: none;">
+            <template id="legacy-register-form">
                 <p class="auth-greeting">Konto erstellen</p>
-                <form onsubmit="handleRegister(event)" class="auth-form">
+                <form onsubmit="event.preventDefault()" class="auth-form">
                     <div class="auth-field">
                         <label class="auth-label">Name</label>
                         <input type="text" name="lastName" class="auth-input" placeholder="Mustermann" required>
@@ -793,7 +793,7 @@
                     </div>
                     <button type="submit" class="auth-submit-btn">Konto erstellen</button>
                 </form>
-            </div>
+            </template>
         </div>
     </div>
 
@@ -1055,13 +1055,17 @@
             }
 
             const nexaraHistory = [];
+            let nexaraRequestPending = false;
 
             async function sendNexara() {
                 const input = document.getElementById('nexara-input');
                 const messages = document.getElementById('nexara-messages');
                 const typing = document.getElementById('nexara-typing');
                 const text = input.value.trim();
-                if (!text) return;
+                const sendButton = document.getElementById('nexara-send');
+                if (!text || nexaraRequestPending) return;
+                nexaraRequestPending = true;
+                sendButton.disabled = true;
 
                 input.value = '';
                 const userMsg = document.createElement('div');
@@ -1089,6 +1093,7 @@
                             lang: document.getElementById('language-selector')?.value || currentLanguage || 'de'
                         })
                     });
+                    if (!res.ok) throw new Error(`Nexara request failed with status ${res.status}`);
                     const data = await res.json();
                     // Execute action commands from Nexara
                     if (data.action?.type === 'changeLanguage') {
@@ -1108,16 +1113,27 @@
                 } catch {
                     const errMsg = document.createElement('div');
                     errMsg.className = 'nexara-msg bot';
-                    errMsg.textContent = 'Verbindungsfehler. Bitte versuche es später erneut.';
+                    errMsg.textContent = 'Nexara ist gerade vorübergehend nicht erreichbar. Bitte versuche es gleich noch einmal.';
                     messages.appendChild(errMsg);
                 } finally {
+                    nexaraRequestPending = false;
+                    sendButton.disabled = false;
                     typing.style.display = 'none';
                     messages.scrollTop = messages.scrollHeight;
                 }
             }
 
             if (new URLSearchParams(window.location.search).get('openNexara') === '1') {
-                window.setTimeout(toggleNexara, 0);
+                window.setTimeout(() => {
+                    toggleNexara();
+                    const prefill = sessionStorage.getItem('nexaraPrefill');
+                    if (prefill) {
+                        sessionStorage.removeItem('nexaraPrefill');
+                        const input = document.getElementById('nexara-input');
+                        input.value = prefill;
+                        input.focus();
+                    }
+                }, 0);
             }
         </script>
 
