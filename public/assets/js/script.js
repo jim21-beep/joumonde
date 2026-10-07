@@ -1578,6 +1578,24 @@ function toggleNavDropdown() {
     dropdown.querySelector('.nav-dropdown-trigger')?.setAttribute('aria-expanded', String(isOpen));
 }
 
+function bindTouchFriendlyToggle(button, toggle) {
+    let lastTouchToggle = -Infinity;
+
+    button.addEventListener('pointerup', event => {
+        if (event.pointerType !== 'touch') return;
+        lastTouchToggle = performance.now();
+        toggle();
+    });
+
+    button.addEventListener('click', event => {
+        if (performance.now() - lastTouchToggle < 800) {
+            event.preventDefault();
+            return;
+        }
+        toggle();
+    });
+}
+
 function showNavComingSoon(collection) {
     const message = t('collectionSoonMessage').replace('{collection}', t(collection));
     showNotification(message);
@@ -1627,12 +1645,16 @@ document.addEventListener('DOMContentLoaded', function() {
     if (mobileBtn) {
         mobileBtn.setAttribute('aria-expanded', 'false');
         mobileBtn.setAttribute('aria-controls', 'site-primary-navigation');
+        mobileBtn.removeAttribute('onclick');
+        bindTouchFriendlyToggle(mobileBtn, toggleMobileMenu);
     }
     if (navLinks) navLinks.id = 'site-primary-navigation';
     syncMobileNavigationAccessibility();
 
     document.querySelectorAll('.nav-dropdown-trigger').forEach(trigger => {
         trigger.setAttribute('aria-expanded', 'false');
+        trigger.removeAttribute('onclick');
+        bindTouchFriendlyToggle(trigger, toggleNavDropdown);
     });
 });
 
