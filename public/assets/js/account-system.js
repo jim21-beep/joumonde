@@ -95,18 +95,33 @@ async function handleLogin(event) {
     const form = event.target;
     const email    = form.querySelector('input[type="email"]').value.trim().toLowerCase();
     const password = form.querySelector('input[type="password"]').value;
+    const submitButton = form.querySelector('button[type="submit"]');
 
-    showAccountMessage(accountT('accountSigningIn', 'Anmeldung läuft…'), 'info');
-
-    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-
-    if (error) {
-        showAccountMessage(accountT('accountLoginError', 'E-Mail oder Passwort ist falsch.'), 'error'); return;
+    if (!window.supabaseClient?.auth) {
+        showAccountMessage(accountT('accountLoginUnavailable', 'Anmeldung ist momentan nicht verfügbar. Bitte lade die Seite neu und versuche es erneut.'), 'error');
+        return;
     }
 
-    if (typeof trackLogin === 'function') trackLogin('email');
-    form.reset();
-    // onAuthStateChange übernimmt loginUser()
+    showAccountMessage(accountT('accountSigningIn', 'Anmeldung läuft…'), 'info');
+    submitButton.disabled = true;
+
+    try {
+        const { error } = await window.supabaseClient.auth.signInWithPassword({ email, password });
+
+        if (error) {
+            showAccountMessage(accountT('accountLoginError', 'E-Mail oder Passwort ist falsch.'), 'error');
+            return;
+        }
+
+        if (typeof trackLogin === 'function') trackLogin('email');
+        form.reset();
+        // onAuthStateChange übernimmt loginUser()
+    } catch (error) {
+        console.error('Login request failed:', error.message);
+        showAccountMessage(accountT('accountLoginUnavailable', 'Anmeldung ist momentan nicht verfügbar. Bitte versuche es erneut.'), 'error');
+    } finally {
+        submitButton.disabled = false;
+    }
 }
 
 // Profil + Daten aus Supabase laden und currentUser befüllen
