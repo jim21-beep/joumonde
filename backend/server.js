@@ -472,7 +472,7 @@ app.patch('/api/orders/:orderId/status', async (req, res) => {
         .from('orders')
         .update({ status, updated_at: new Date().toISOString() })
         .eq('id', normalizedOrderId)
-        .select('id, status, total, currency, created_at, updated_at')
+        .select('id, email, status, total, currency, created_at, updated_at')
         .single();
 
     if (updateErr || !updatedOrder) {
@@ -486,8 +486,8 @@ app.patch('/api/orders/:orderId/status', async (req, res) => {
     }
     
     const order = updatedOrder;
-    const user = users.find(u => u.email === (order.email || ''));
-    if (user) {
+    const customer = users.find(u => u.email === (order.email || ''));
+    if (customer) {
         let subject = '';
         let message = '';
         
@@ -519,7 +519,7 @@ app.patch('/api/orders/:orderId/status', async (req, res) => {
             subject,
             html: `
                 <h2>Order Status Update</h2>
-                <p>Hi ${user.firstName},</p>
+                <p>Hi ${customer.firstName},</p>
                 <p>${message}</p>
                 <p><strong>Order ID:</strong> ${orderId}</p>
                 <p><strong>Status:</strong> ${status}</p>
