@@ -754,8 +754,8 @@ function updatePageContent() {
     if (contactCtaBtn) contactCtaBtn.textContent = t('sendMessage');
     if (submitContactBtn) submitContactBtn.textContent = t('sendMessage');
 
-    const nexaraBtn = document.querySelector('button[onclick*="toggleNexara"]');
-    if (nexaraBtn) nexaraBtn.textContent = `✦ ${t('askNexara')}`;
+    const nexaraBtn = document.getElementById('nexara-bubble');
+    if (nexaraBtn) nexaraBtn.setAttribute('aria-label', t('askNexara'));
     
     // Footer
     const footerSections = document.querySelectorAll('.footer-section');
