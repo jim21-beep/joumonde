@@ -353,9 +353,7 @@ app.post('/api/orders', async (req, res) => {
             totalAmount,
             currency,
             shippingAddress,
-            paymentMethod,
-            paymentStatus,
-            userId
+            paymentMethod
         } = req.body || {};
 
         if (!email || !Array.isArray(items) || items.length === 0) {
@@ -373,21 +371,13 @@ app.post('/api/orders', async (req, res) => {
             verifiedEmail = user?.email || null;
         }
 
-        // Logging für Debugging
-        console.log('[ORDER-DEBUG]', {
-            receivedUserId: userId,
-            verifiedUserId,
-            profileId: verifiedUserId || userId || null,
-            accessToken: accessToken ? (accessToken.slice(0, 8) + '...') : null
-        });
-
         const finalOrderId = (orderId || ('JM' + Date.now().toString()));
         const finalCurrency = currency || 'CHF';
         const finalEmail = (verifiedEmail || email || '').toLowerCase().trim();
         const normalizedPaymentMethod = ['card', 'amex', 'paypal'].includes(paymentMethod) ? paymentMethod : 'card';
-        const normalizedPaymentStatus = paymentStatus || 'pending';
+        const normalizedPaymentStatus = 'pending';
         const paymentProvider = normalizedPaymentMethod === 'paypal' ? 'paypal' : 'card';
-        const profileId = verifiedUserId || userId || null;
+        const profileId = verifiedUserId || null;
 
         const orderPayload = {
             id: finalOrderId,
@@ -460,8 +450,22 @@ app.post('/api/orders', async (req, res) => {
 
 // Update order status and send notification email
 app.patch('/api/orders/:orderId/status', async (req, res) => {
+    const accessToken = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
+    if (!accessToken) {
+        return res.status(401).json({ message: 'Authentication required' });
+    }
+
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(accessToken);
+    if (authError || user?.app_metadata?.role !== 'admin') {
+        return res.status(403).json({ message: 'Administrator access required' });
+    }
+
     const { orderId } = req.params;
     const { status } = req.body;
+    const allowedStatuses = ['Bearbeitung', 'Versendet', 'Geliefert', 'Storniert', 'Retoure beantragt', 'Retourniert', 'processing', 'shipped', 'delivered', 'cancelled'];
+    if (!allowedStatuses.includes(status)) {
+        return res.status(400).json({ message: 'Invalid order status' });
+    }
     const normalizedOrderId = (orderId || '').toUpperCase();
 
     const { data: updatedOrder, error: updateErr } = await supabaseAdmin

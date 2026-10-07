@@ -48,7 +48,7 @@ function updateProfileAvatarPreview(previewEl, avatarUrl) {
 function updateProfileImageFilenameLabel(filename) {
     const label = document.getElementById('profile-upload-filename');
     if (!label) return;
-    label.textContent = filename || 'PNG oder JPG, maximal 2 MB';
+    label.textContent = filename || accountT('accountProfileImageFilenameHint', 'PNG oder JPG, maximal 2 MB');
 }
 
 window.handleProfileAvatarChange = function handleProfileAvatarChange(event) {
@@ -56,13 +56,13 @@ window.handleProfileAvatarChange = function handleProfileAvatarChange(event) {
     if (!file) return;
 
     if (!file.type.startsWith('image/')) {
-        showNotification('Bitte ein gueltiges Bild auswaehlen.', 'error');
+        showNotification(accountT('accountAvatarTypeError', 'Bitte wähle eine gültige Bilddatei aus.'), 'error');
         event.target.value = '';
         return;
     }
 
     if (file.size > 2 * 1024 * 1024) {
-        showNotification('Profilbild ist zu gross (max. 2MB).', 'error');
+        showNotification(accountT('accountAvatarSizeError', 'Das Profilbild ist zu groß (max. 2 MB).'), 'error');
         event.target.value = '';
         return;
     }
@@ -81,7 +81,7 @@ window.handleProfileAvatarChange = function handleProfileAvatarChange(event) {
 window.removeProfileAvatar = function removeProfileAvatar() {
     const preview = document.getElementById('profile-avatar-preview');
     updateProfileAvatarPreview(preview, null);
-    updateProfileImageFilenameLabel('Kein Bild ausgewaehlt');
+    updateProfileImageFilenameLabel(accountT('accountProfileImageRemoved', 'Kein Bild ausgewählt'));
 
     const fileInput = document.querySelector('input[name="profileImage"]');
     if (fileInput) fileInput.value = '';
@@ -107,16 +107,16 @@ async function handleRegister(event) {
     const newsletter = false;
 
     if (!firstName || !lastName || !email || !password) {
-        showAccountMessage('Bitte füllen Sie alle Pflichtfelder aus.', 'error'); return;
+        showAccountMessage(accountT('accountRequiredFieldsError', 'Bitte fülle alle Pflichtfelder aus.'), 'error'); return;
     }
     if (password !== passwordConfirm) {
-        showAccountMessage('Passwörter stimmen nicht überein.', 'error'); return;
+        showAccountMessage(accountT('accountPasswordMismatchError', 'Passwörter stimmen nicht überein.'), 'error'); return;
     }
     if (password.length < 6) {
-        showAccountMessage('Passwort muss mindestens 6 Zeichen lang sein.', 'error'); return;
+        showAccountMessage(accountT('accountPasswordTooShortError', 'Das Passwort muss mindestens 6 Zeichen lang sein.'), 'error'); return;
     }
 
-    showAccountMessage('Konto wird erstellt…', 'info');
+    showAccountMessage(accountT('accountCreating', 'Konto wird erstellt…'), 'info');
 
     const { data, error } = await supabaseClient.auth.signUp({
         email,
@@ -130,7 +130,7 @@ async function handleRegister(event) {
 
     if (typeof trackSignup === 'function') trackSignup('email');
     sendRegistrationEmail({ firstName, lastName, email, preferences: { newsletter } });
-    showAccountMessage('Konto erstellt! Bitte bestätige deine E-Mail-Adresse.', 'success');
+    showAccountMessage(accountT('accountConfirmEmail', 'Konto erstellt! Bitte bestätige deine E-Mail-Adresse.'), 'success');
     form.reset();
 }
 
@@ -142,12 +142,12 @@ async function handleLogin(event) {
     const email    = form.querySelector('input[type="email"]').value.trim().toLowerCase();
     const password = form.querySelector('input[type="password"]').value;
 
-    showAccountMessage('Anmeldung läuft…', 'info');
+    showAccountMessage(accountT('accountSigningIn', 'Anmeldung läuft…'), 'info');
 
     const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
     if (error) {
-        showAccountMessage('E-Mail oder Passwort ist falsch.', 'error'); return;
+        showAccountMessage(accountT('accountLoginError', 'E-Mail oder Passwort ist falsch.'), 'error'); return;
     }
 
     if (typeof trackLogin === 'function') trackLogin('email');
@@ -279,7 +279,7 @@ function updateAccountUI() {
                 <circle cx="12" cy="7" r="4"></circle>
             </svg>
         `;
-        accountBtn.setAttribute('title', 'Anmelden');
+        accountBtn.setAttribute('title', accountT('accountLogin', 'Anmelden'));
     }
 }
 
@@ -661,7 +661,7 @@ async function savePreferences(event) {
     const firstName = String(formData.get('firstName') || '').trim();
     const lastName = String(formData.get('lastName') || '').trim();
     if (!firstName || !lastName) {
-        showNotification('Bitte Vorname und Nachname ausfuellen.', 'error');
+        showNotification(accountT('accountPreferencesRequired', 'Bitte Vorname und Nachname ausfüllen.'), 'error');
         return;
     }
 
@@ -701,7 +701,7 @@ async function savePreferences(event) {
         }).catch(() => null);
 
         if (!avatarDataUrl) {
-            showNotification('Profilbild konnte nicht verarbeitet werden.', 'error');
+            showNotification(accountT('accountProfileImageProcessError', 'Profilbild konnte nicht verarbeitet werden.'), 'error');
             return;
         }
 
@@ -742,36 +742,36 @@ function showAddAddressForm() {
         <div class="address-form-modal" id="address-form-modal" onclick="if(event.target===this)closeAddressForm()">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3>Neue Adresse hinzufügen</h3>
-                    <button type="button" class="modal-close" onclick="closeAddressForm()" aria-label="Schliessen">&times;</button>
+                    <h3>${accountT('accountNewAddress', 'Neue Adresse hinzufügen')}</h3>
+                    <button type="button" class="modal-close" onclick="closeAddressForm()" aria-label="${accountT('accountClose', 'Schließen')}">&times;</button>
                 </div>
                 <div class="modal-divider"></div>
                 <form onsubmit="saveAddress(event)">
                     <div class="form-group">
-                        <label>Straße & Hausnummer <span class="required">*</span></label>
-                        <input type="text" name="street" placeholder="z.B. Musterstrasse 12" required>
+                        <label>${accountT('accountStreet', 'Straße & Hausnummer')} <span class="required">*</span></label>
+                        <input type="text" name="street" placeholder="${accountT('accountStreetExample', 'z. B. Musterstrasse 12')}" required>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>PLZ <span class="required">*</span></label>
+                            <label>${accountT('accountPostalCode', 'PLZ')} <span class="required">*</span></label>
                             <input type="text" name="zip" placeholder="8001" required>
                         </div>
                         <div class="form-group">
-                            <label>Stadt <span class="required">*</span></label>
+                            <label>${accountT('accountCity', 'Stadt')} <span class="required">*</span></label>
                             <input type="text" name="city" placeholder="Zürich" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Land <span class="required">*</span></label>
-                        <input type="text" name="country" value="Schweiz" required>
+                        <label>${accountT('accountCountry', 'Land')} <span class="required">*</span></label>
+                        <input type="text" name="country" value="${accountT('switzerland', 'Schweiz')}" required>
                     </div>
                     <div class="form-group">
-                        <label>Telefon <span class="optional">(optional)</span></label>
+                        <label>${accountT('accountPhoneOptional', 'Telefon (optional)')}</label>
                         <input type="tel" name="phone" placeholder="+41 79 123 45 67">
                     </div>
                     <div class="form-actions">
-                        <button type="button" onclick="closeAddressForm()" class="btn-secondary">Abbrechen</button>
-                        <button type="submit" class="btn-primary">Speichern</button>
+                        <button type="button" onclick="closeAddressForm()" class="btn-secondary">${accountT('accountCancel', 'Abbrechen')}</button>
+                        <button type="submit" class="btn-primary">${accountT('accountSave', 'Speichern')}</button>
                     </div>
                 </form>
             </div>
@@ -785,14 +785,14 @@ async function saveAddress(event) {
     event.preventDefault();
     const submitBtn = event.target.querySelector('button[type="submit"]');
     const originalBtnText = submitBtn ? submitBtn.textContent : '';
-    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Speichern...'; }
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = accountT('accountAddressSaving', 'Speichern…'); }
 
     const formData = new FormData(event.target);
     const { data: authData } = await supabaseClient.auth.getUser();
     const userId = authData?.user?.id || currentUser?.id;
 
     if (!userId) {
-        showNotification('Sitzung ungueltig. Bitte neu einloggen.', 'error');
+        showNotification(accountT('accountSessionInvalid', 'Sitzung ungültig. Bitte melde dich erneut an.'), 'error');
         if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalBtnText; }
         return;
     }
@@ -820,12 +820,8 @@ async function saveAddress(event) {
     if (error) {
         console.error('Address insert failed:', error);
         if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalBtnText; }
-        if (error.code === '42501') {
-            showNotification('Adresse konnte nicht gespeichert werden (RLS/Policy blockiert). SQL-Fix in Supabase ausfuehren.', 'error');
-            return;
-        }
-        const details = error.message ? ` (${error.message})` : '';
-        showNotification(`Adresse konnte nicht gespeichert werden${details}.`, 'error'); return;
+        showNotification(accountT('accountAddressSaveError', 'Adresse konnte nicht gespeichert werden. Bitte versuche es erneut.'), 'error');
+        return;
     }
 
     currentUser.addresses.push({
@@ -836,7 +832,7 @@ async function saveAddress(event) {
     closeAddressForm();
     showAccountDashboard();
     showDashboardSection('addresses');
-    showNotification('Adresse hinzugefügt!', 'success');
+    showNotification(accountT('accountAddressAdded', 'Adresse hinzugefügt!'), 'success');
 }
 
 async function upsertProfileForCurrentUser(userId) {
@@ -865,13 +861,13 @@ async function setDefaultAddress(addressId) {
     currentUser.addresses.forEach(a => a.isDefault = (a.id === addressId));
     showAccountDashboard();
     showDashboardSection('addresses');
-    showNotification('Standardadresse geändert!', 'success');
+    showNotification(accountT('accountAddressDefaultChanged', 'Standardadresse geändert!'), 'success');
 }
 
 async function deleteAddress(addressId) {
-    if (confirm('Möchten Sie diese Adresse wirklich löschen?')) {
+    if (confirm(accountT('accountAddressDeleteConfirm', 'Möchtest du diese Adresse wirklich löschen?'))) {
         const { error } = await supabaseClient.from('addresses').delete().eq('id', addressId);
-        if (error) { showNotification('Fehler beim Löschen.', 'error'); return; }
+        if (error) { showNotification(accountT('accountAddressDeleteError', 'Adresse konnte nicht gelöscht werden.'), 'error'); return; }
 
         currentUser.addresses = currentUser.addresses.filter(a => a.id !== addressId);
         if (currentUser.addresses.length > 0 && !currentUser.addresses.some(a => a.isDefault)) {
@@ -880,7 +876,7 @@ async function deleteAddress(addressId) {
         }
         showAccountDashboard();
         showDashboardSection('addresses');
-        showNotification('Adresse gelöscht!', 'success');
+        showNotification(accountT('accountAddressDeleted', 'Adresse gelöscht!'), 'success');
     }
 }
 
@@ -891,28 +887,28 @@ function editAddress(addressId) {
     const form = `
         <div class="address-form-modal" id="address-form-modal">
             <div class="modal-content">
-                <h3>Adresse bearbeiten</h3>
+                <h3>${accountT('accountAddressEditTitle', 'Adresse bearbeiten')}</h3>
                 <form onsubmit="updateAddress(event, '${addressId}')">
                     <div class="form-group">
-                        <input type="text" name="street" placeholder="Straße & Hausnummer *" value="${escapeHtml(address.street)}" required>
+                        <input type="text" name="street" placeholder="${accountT('accountStreet', 'Straße & Hausnummer')} *" value="${escapeHtml(address.street)}" required>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <input type="text" name="zip" placeholder="PLZ *" value="${escapeHtml(address.zip)}" required>
+                            <input type="text" name="zip" placeholder="${accountT('accountPostalCode', 'PLZ')} *" value="${escapeHtml(address.zip)}" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" name="city" placeholder="Stadt *" value="${escapeHtml(address.city)}" required>
+                            <input type="text" name="city" placeholder="${accountT('accountCity', 'Stadt')} *" value="${escapeHtml(address.city)}" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" name="country" placeholder="Land *" value="${escapeHtml(address.country)}" required>
+                        <input type="text" name="country" placeholder="${accountT('accountCountry', 'Land')} *" value="${escapeHtml(address.country)}" required>
                     </div>
                     <div class="form-group">
-                        <input type="tel" name="phone" placeholder="Telefon (optional)" value="${escapeHtml(address.phone || '')}">
+                        <input type="tel" name="phone" placeholder="${accountT('accountPhoneOptional', 'Telefon (optional)')}" value="${escapeHtml(address.phone || '')}">
                     </div>
                     <div class="form-actions">
-                        <button type="button" onclick="closeAddressForm()" class="btn-secondary">Abbrechen</button>
-                        <button type="submit" class="btn-primary">Speichern</button>
+                        <button type="button" onclick="closeAddressForm()" class="btn-secondary">${accountT('accountCancel', 'Abbrechen')}</button>
+                        <button type="submit" class="btn-primary">${accountT('accountSave', 'Speichern')}</button>
                     </div>
                 </form>
             </div>
@@ -926,7 +922,7 @@ async function updateAddress(event, addressId) {
     event.preventDefault();
     const submitBtn = event.target.querySelector('button[type="submit"]');
     const originalBtnText = submitBtn ? submitBtn.textContent : '';
-    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Speichern...'; }
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = accountT('accountAddressUpdating', 'Speichern…'); }
 
     const formData = new FormData(event.target);
 
@@ -940,7 +936,7 @@ async function updateAddress(event, addressId) {
 
     const { error } = await supabaseClient.from('addresses').update(newData).eq('id', addressId);
     if (error) {
-        showNotification('Fehler beim Aktualisieren.', 'error');
+        showNotification(accountT('accountAddressUpdateError', 'Adresse konnte nicht aktualisiert werden.'), 'error');
         if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalBtnText; }
         return;
     }
@@ -951,17 +947,17 @@ async function updateAddress(event, addressId) {
     closeAddressForm();
     showAccountDashboard();
     showDashboardSection('addresses');
-    showNotification('Adresse aktualisiert!', 'success');
+    showNotification(accountT('accountAddressUpdated', 'Adresse aktualisiert!'), 'success');
 }
 
 async function deleteAccount() {
-    if (confirm('Möchten Sie Ihr Konto wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.')) {
-        if (confirm('Sind Sie sicher? Alle Ihre Daten werden gelöscht.')) {
+    if (confirm(accountT('accountDeleteConfirm', 'Möchtest du dein Konto wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.'))) {
+        if (confirm(accountT('accountDeleteConfirmAgain', 'Bist du sicher? Alle deine Daten werden gelöscht.'))) {
             await supabaseClient.from('profiles').delete().eq('id', currentUser.id);
             await supabaseClient.auth.signOut();
             currentUser = null;
             updateAccountUI();
-            showNotification('Konto wurde gelöscht.', 'info');
+            showNotification(accountT('accountDeleted', 'Konto wurde gelöscht.'), 'info');
         }
     }
 }
@@ -973,21 +969,26 @@ function viewOrderDetails(orderId) {
     const existing = document.getElementById('order-details-modal');
     if (existing) existing.remove();
 
-    const paymentLabels = { card: 'Kreditkarte', amex: 'American Express', paypal: 'PayPal' };
+    const paymentLabels = { card: accountT('creditCard', 'Kreditkarte'), amex: 'American Express', paypal: 'PayPal' };
     const paymentLabel = paymentLabels[order.paymentMethod] || order.paymentMethod || '—';
     const currency = order.currency || 'CHF';
     const statusLabels = {
-        pending: 'Ausstehend', Bearbeitung: 'In Bearbeitung', Versendet: 'Versendet',
-        Geliefert: 'Geliefert', Storniert: 'Storniert',
-        'Retoure beantragt': 'Retoure beantragt', Retourniert: 'Retourniert'
+        pending: accountT('orderPending', 'Ausstehend'),
+        Bearbeitung: accountT('orderProcessing', 'In Bearbeitung'),
+        Versendet: accountT('orderShipped', 'Versendet'),
+        Geliefert: accountT('orderDelivered', 'Geliefert'),
+        Storniert: accountT('orderCancelled', 'Storniert'),
+        'Retoure beantragt': accountT('orderReturnRequested', 'Retoure beantragt'),
+        Retourniert: accountT('orderReturned', 'Retourniert')
     };
     const statusLabel = statusLabels[order.status] || order.status || '—';
+    const dateLocale = { de: 'de-CH', en: 'en-GB', fr: 'fr-CH' }[typeof currentLanguage !== 'undefined' ? currentLanguage : 'de'] || 'de-CH';
 
     const itemsHtml = (order.items || []).map(item => `
         <div class="order-detail-row">
             <div>
-                <strong>${item.name}</strong>
-                <p>${accountT('accountQuantity', 'Menge')}: ${item.quantity}${item.size ? ` • ${accountT('accountSize', 'Grösse')}: ${item.size}` : ''}${item.color ? ` • ${item.color}` : ''}</p>
+                <strong>${typeof translateProductName === 'function' ? translateProductName(item.name) : item.name}</strong>
+                <p>${accountT('accountQuantity', 'Menge')}: ${item.quantity}${item.size ? ` • ${accountT('accountOrderSize', 'Größe')}: ${item.size}` : ''}${item.color ? ` • ${item.color}` : ''}</p>
             </div>
             <strong>${currency} ${(item.price * item.quantity).toFixed(2)}</strong>
         </div>
@@ -1007,14 +1008,14 @@ function viewOrderDetails(orderId) {
                     <span class="order-modal-label">${accountT('accountOrderPrefix', 'Bestellung')}</span>
                     <span class="order-modal-id">${order.id}</span>
                 </div>
-                <button type="button" class="modal-close" onclick="closeOrderDetailsModal()" aria-label="Schliessen">&times;</button>
+                <button type="button" class="modal-close" onclick="closeOrderDetailsModal()" aria-label="${accountT('accountClose', 'Schließen')}">&times;</button>
             </div>
             <div class="modal-divider"></div>
             <div class="order-detail-meta">
                 <p><strong>${accountT('accountStatus', 'Status')}:</strong> ${statusLabel}</p>
-                <p><strong>${accountT('accountDate', 'Datum')}:</strong> ${new Date(order.date).toLocaleDateString('de-DE')}</p>
-                <p><strong>Zahlungsmethode:</strong> ${paymentLabel}</p>
-                <p><strong>Währung:</strong> ${currency}</p>
+                <p><strong>${accountT('accountDate', 'Datum')}:</strong> ${new Date(order.date).toLocaleDateString(dateLocale)}</p>
+                <p><strong>${accountT('accountPaymentMethod', 'Zahlungsmethode')}:</strong> ${paymentLabel}</p>
+                <p><strong>${accountT('accountCurrency', 'Währung')}:</strong> ${currency}</p>
             </div>
             <div class="order-detail-items">
                 ${itemsHtml}
@@ -1024,7 +1025,7 @@ function viewOrderDetails(orderId) {
                 <strong>CHF ${order.total.toFixed(2)}</strong>
             </div>
             <div class="form-actions">
-                ${['Versendet', 'Geliefert', 'Retoure beantragt', 'Retourniert'].includes(order.status) ? '' : `<button type="button" class="btn-secondary" onclick="requestReturnFromModal('${order.id}'); closeOrderDetailsModal()">Retoure beantragen</button>`}
+                ${['Versendet', 'Geliefert', 'Retoure beantragt', 'Retourniert'].includes(order.status) ? '' : `<button type="button" class="btn-secondary" onclick="requestReturnFromModal('${order.id}'); closeOrderDetailsModal()">${accountT('accountReturnRequest', 'Retoure beantragen')}</button>`}
                 <button type="button" class="btn-primary" onclick="closeOrderDetailsModal()">${accountT('accountClose', 'Schliessen')}</button>
             </div>
         </div>

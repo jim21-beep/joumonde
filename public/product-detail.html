@@ -34,7 +34,7 @@
             <ul class="nav-links">
                 <li><a href="shop.html">Home</a></li>
                 <li><a href="shop.html#old-money">Old Money</a></li>
-                <li><a href="shop.html#streetwear">Streetwear</a></li>
+                <li><a href="shop.html#streetwear">Casual</a></li>
                 <li class="nav-dropdown" id="nav-dropdown-kollektionen">
                     <button class="nav-dropdown-trigger" onclick="toggleNavDropdown()">Kollektionen <span class="nav-dropdown-chevron">▾</span></button>
                     <div class="nav-dropdown-menu">
@@ -89,17 +89,15 @@
     <!-- Product Detail Section -->
     <section class="product-detail-section">
         <div class="container">
-            <!-- Breadcrumb -->
             <div class="breadcrumb">
-                <a href="shop.html">Home</a> 
-                <span>/</span> 
-                <a href="shop.html#old-money">Old Money</a> 
-                <span>/</span> 
+                <a href="shop.html">Home</a>
+                <span>/</span>
+                <a href="shop.html#old-money">Old Money</a>
+                <span>/</span>
                 <span>Klassischer Blazer</span>
             </div>
 
             <div class="product-detail-content">
-                <!-- Product Gallery -->
                 <div class="product-gallery">
                     <div class="gallery-main">
                         <div class="main-image" id="mainImage" style="background: linear-gradient(135deg, #f5f5dc 0%, #d3d3d3 100%);">
@@ -116,60 +114,20 @@
                         </div>
                     </div>
                     <div class="gallery-thumbnails">
-                        <div class="thumbnail active" onclick="changeMainImage(0)" style="background: linear-gradient(135deg, #f5f5dc 0%, #d3d3d3 100%);">
-                            <span class="product-placeholder">Bild 1</span>
-                        </div>
-                        <div class="thumbnail" onclick="changeMainImage(1)" style="background: linear-gradient(135deg, #d3d3d3 0%, #a8a8a8 100%);">
-                            <span class="product-placeholder">Bild 2</span>
-                        </div>
-                        <div class="thumbnail" onclick="changeMainImage(2)" style="background: linear-gradient(135deg, #c8c8c8 0%, #9c9c9c 100%);">
-                            <span class="product-placeholder">Bild 3</span>
-                        </div>
-                        <div class="thumbnail" onclick="changeMainImage(3)" style="background: linear-gradient(135deg, #e0e0e0 0%, #b8b8b8 100%);">
-                            <span class="product-placeholder">Bild 4</span>
-                        </div>
+                        <div class="thumbnail active" onclick="changeMainImage(0)" style="background: linear-gradient(135deg, #f5f5dc 0%, #d3d3d3 100%);"><span class="product-placeholder">Bild 1</span></div>
+                        <div class="thumbnail" onclick="changeMainImage(1)" style="background: linear-gradient(135deg, #d3d3d3 0%, #a8a8a8 100%);"><span class="product-placeholder">Bild 2</span></div>
+                        <div class="thumbnail" onclick="changeMainImage(2)" style="background: linear-gradient(135deg, #c8c8c8 0%, #9c9c9c 100%);"><span class="product-placeholder">Bild 3</span></div>
+                        <div class="thumbnail" onclick="changeMainImage(3)" style="background: linear-gradient(135deg, #e0e0e0 0%, #b8b8b8 100%);"><span class="product-placeholder">Bild 4</span></div>
                     </div>
                 </div>
 
-                <!-- Product Info -->
                 <div class="product-detail-info">
                     <h1 class="product-detail-title">Klassischer Blazer</h1>
                     <p class="product-detail-subtitle">Zeitloser Wollblazer mit perfekter Passform – die Essenz des Old Money Stils</p>
-                    
-                    <!-- Stock Status -->
-                    <div class="stock-status in-stock">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        <span>Auf Lager - <strong>Nur noch 5 Stück!</strong></span>
-                    </div>
-
-                    <!-- Live Viewers -->
-                    <div class="live-viewers">
-                        <span class="viewer-dot"></span>
-                        <span><strong id="viewerCount">12</strong> Personen sehen sich dies gerade an</span>
-                    </div>
-
-                    <!-- Rating -->
-                    <div class="product-detail-rating">
-                        <div class="stars">
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                        </div>
-                        <span class="rating-score">5.0</span>
-                        <a href="#reviews" class="rating-link">(48 Bewertungen)</a>
-                    </div>
-
-                    <!-- Price -->
                     <div class="product-detail-price">
                         <span class="current-price" data-price="79.99">CHF 79.90</span>
                         <span class="price-vat">inkl. MwSt., zzgl. Versand</span>
                     </div>
-
-                    <!-- Size Selection -->
                     <div class="product-detail-size">
                         <label>Größe: <span id="selectedSize">M</span></label>
                         <div class="size-options-grid">
@@ -181,8 +139,6 @@
                         </div>
                         <a href="#size-guide" class="size-guide-link-detail" onclick="openSizeGuide()">Größentabelle ansehen</a>
                     </div>
-
-                    <!-- Color Selection (if applicable) -->
                     <div class="product-detail-color">
                         <label>Farbe: <span id="selectedColor">Navy</span></label>
                         <div class="color-options-detail">
@@ -191,8 +147,6 @@
                             <button class="color-option" onclick="selectColor('Grau', this)" style="background: #808080;" title="Grau" aria-label="Farbe Grau wählen"></button>
                         </div>
                     </div>
-
-                    <!-- Quantity -->
                     <div class="product-detail-quantity">
                         <label for="quantity">Menge:</label>
                         <div class="quantity-selector">
@@ -201,7 +155,6 @@
                             <button onclick="increaseQuantity()" aria-label="Menge erhöhen">+</button>
                         </div>
                     </div>
-
                     <!-- Add to Cart/Wishlist Buttons -->
                     <div class="product-detail-actions">
                         <button class="btn-add-to-cart" onclick="addToCartFromDetail()">
@@ -218,8 +171,6 @@
                             </svg>
                         </button>
                     </div>
-
-                    <!-- Product Features -->
                     <div class="product-features">
                         <div class="feature-item">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -232,7 +183,7 @@
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
                             </svg>
-                            <span>30 Tage Rückgaberecht</span>
+                            <span>14 Tage Rückgaberecht</span>
                         </div>
                         <div class="feature-item">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -242,65 +193,37 @@
                             <span>Sichere Zahlung</span>
                         </div>
                     </div>
-
-                    <!-- Product Details Accordion -->
                     <div class="product-details-accordion">
                         <div class="accordion-item">
                             <button class="accordion-header" onclick="toggleAccordion(this)">
                                 <span>Produktbeschreibung</span>
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                             </button>
                             <div class="accordion-content active">
                                 <p id="product-main-description">Laden...</p>
-                                <ul id="product-features-list">
-                                    <li>Feature wird geladen...</li>
-                                </ul>
+                                <ul id="product-features-list"><li>Feature wird geladen...</li></ul>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <button class="accordion-header" onclick="toggleAccordion(this)">
                                 <span>Material & Pflege</span>
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                             </button>
                             <div class="accordion-content">
                                 <p><strong>Material:</strong></p>
-                                <ul id="product-material-list">
-                                    <li>Material wird geladen...</li>
-                                    <li>10% Kaschmir</li>
-                                    <li>Futter: 100% Viskose</li>
-                                </ul>
+                                <ul id="product-material-list"><li>Material wird geladen...</li></ul>
                                 <p><strong>Pflegehinweise:</strong></p>
-                                <ul id="product-care-list">
-                                    <li>Pflegehinweise werden geladen...</li>
-                                </ul>
+                                <ul id="product-care-list"><li>Pflegehinweise werden geladen...</li></ul>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <button class="accordion-header" onclick="toggleAccordion(this)">
-                                <span>Versand & Rückgabe</span>
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
+                                <span>Versand &amp; Rückgabe</span>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                             </button>
                             <div class="accordion-content">
-                                <p><strong>Versand:</strong></p>
-                                <ul>
-                                    <li>Schweiz: 1-3 Werktage (CHF 4.90)</li>
-                                    <li>Kostenloser Versand ab CHF 50</li>
-                                    <li>Express-Versand verfügbar (CHF 8.90)</li>
-                                    <li>Bestellungen bis 14 Uhr: Versand am selben Tag</li>
-                                </ul>
-                                <p><strong>Rückgabe:</strong></p>
-                                <ul>
-                                    <li>30 Tage Rückgaberecht</li>
-                                    <li>Kostenloser Rückversand (Schweiz)</li>
-                                    <li>Artikel ungetragen mit Etikett</li>
-                                    <li>Rückerstattung innerhalb 5-7 Werktagen</li>
-                                </ul>
+                                <p id="shippingPolicyText">Details zu Versandkosten und Rückgabe findest du in unserer Versandrichtlinie.</p>
+                                <a id="shippingPolicyLink" href="versand.html">Versand &amp; Retouren</a>
                             </div>
                         </div>
                     </div>
@@ -313,152 +236,11 @@
     <section id="reviews" class="reviews-section">
         <div class="container">
             <h2 class="section-title">Kundenbewertungen</h2>
-            
-            <!-- Review Summary -->
-            <div class="review-summary">
-                <div class="summary-rating">
-                    <div class="average-rating">5.0</div>
-                    <div class="stars-large">
-                        <span class="star filled">★</span>
-                        <span class="star filled">★</span>
-                        <span class="star filled">★</span>
-                        <span class="star filled">★</span>
-                        <span class="star filled">★</span>
-                    </div>
-                    <p>Basierend auf 48 Bewertungen</p>
-                </div>
-                <div class="rating-distribution">
-                    <div class="rating-bar">
-                        <span>5★</span>
-                        <div class="bar"><div class="fill" style="width: 85%"></div></div>
-                        <span>41</span>
-                    </div>
-                    <div class="rating-bar">
-                        <span>4★</span>
-                        <div class="bar"><div class="fill" style="width: 10%"></div></div>
-                        <span>5</span>
-                    </div>
-                    <div class="rating-bar">
-                        <span>3★</span>
-                        <div class="bar"><div class="fill" style="width: 4%"></div></div>
-                        <span>2</span>
-                    </div>
-                    <div class="rating-bar">
-                        <span>2★</span>
-                        <div class="bar"><div class="fill" style="width: 0%"></div></div>
-                        <span>0</span>
-                    </div>
-                    <div class="rating-bar">
-                        <span>1★</span>
-                        <div class="bar"><div class="fill" style="width: 0%"></div></div>
-                        <span>0</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Write Review Button -->
-            <button class="btn-write-review" onclick="openReviewForm()">Bewertung schreiben</button>
-
-            <!-- Review List -->
-            <div class="review-list" id="reviewList">
-                <!-- Sample Reviews -->
-                <div class="review-item verified">
-                    <div class="review-header">
-                        <div class="reviewer-info">
-                            <div class="reviewer-avatar">MS</div>
-                            <div>
-                                <div class="reviewer-name">Markus Schulz</div>
-                                <div class="review-verified">✓ Verifizierter Kauf</div>
-                            </div>
-                        </div>
-                        <div class="review-meta">
-                            <div class="review-stars">
-                                <span class="star filled">★</span>
-                                <span class="star filled">★</span>
-                                <span class="star filled">★</span>
-                                <span class="star filled">★</span>
-                                <span class="star filled">★</span>
-                            </div>
-                            <div class="review-date">vor 2 Wochen</div>
-                        </div>
-                    </div>
-                    <h4 class="review-title">Perfekte Qualität!</h4>
-                    <p class="review-text">Hervorragende Qualität und perfekte Passform! Der Blazer ist jeden Cent wert. Fühle mich wie ein Gentleman. Die Wolle ist super weich und die Verarbeitung erstklassig. Kann ich nur empfehlen!</p>
-                    <div class="review-helpful">
-                        <button onclick="markHelpful(this)">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
-                            </svg>
-                            Hilfreich (24)
-                        </button>
-                    </div>
-                </div>
-
-                <div class="review-item verified">
-                    <div class="review-header">
-                        <div class="reviewer-info">
-                            <div class="reviewer-avatar">TK</div>
-                            <div>
-                                <div class="reviewer-name">Thomas Klein</div>
-                                <div class="review-verified">✓ Verifizierter Kauf</div>
-                            </div>
-                        </div>
-                        <div class="review-meta">
-                            <div class="review-stars">
-                                <span class="star filled">★</span>
-                                <span class="star filled">★</span>
-                                <span class="star filled">★</span>
-                                <span class="star filled">★</span>
-                                <span class="star filled">★</span>
-                            </div>
-                            <div class="review-date">vor 1 Monat</div>
-                        </div>
-                    </div>
-                    <h4 class="review-title">Zeitlose Eleganz</h4>
-                    <p class="review-text">Endlich ein Blazer der Old Money Style versteht! Sitzt perfekt, Material fühlt sich luxuriös an. Bekomme regelmäßig Komplimente. Die Lieferung war auch super schnell.</p>
-                    <div class="review-helpful">
-                        <button onclick="markHelpful(this)">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
-                            </svg>
-                            Hilfreich (18)
-                        </button>
-                    </div>
-                </div>
-
-                <div class="review-item">
-                    <div class="review-header">
-                        <div class="reviewer-info">
-                            <div class="reviewer-avatar">LM</div>
-                            <div>
-                                <div class="reviewer-name">Lars Müller</div>
-                            </div>
-                        </div>
-                        <div class="review-meta">
-                            <div class="review-stars">
-                                <span class="star filled">★</span>
-                                <span class="star filled">★</span>
-                                <span class="star filled">★</span>
-                                <span class="star filled">★</span>
-                                <span class="star">★</span>
-                            </div>
-                            <div class="review-date">vor 3 Monaten</div>
-                        </div>
-                    </div>
-                    <h4 class="review-title">Sehr gut, aber teuer</h4>
-                    <p class="review-text">Qualität ist top, keine Frage. Nur der Preis ist etwas hoch. Aber man zahlt halt für Premium-Qualität. Würde ich wieder kaufen.</p>
-                    <div class="review-helpful">
-                        <button onclick="markHelpful(this)">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
-                            </svg>
-                            Hilfreich (12)
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <button class="btn-load-more-reviews">Mehr Bewertungen laden</button>
+            <div class="review-summary" id="reviewSummary" hidden></div>
+            <p class="reviews-empty" id="reviewsEmpty">Noch keine veröffentlichten Bewertungen.</p>
+            <div class="review-list" id="reviewList"></div>
+            <p class="review-eligibility" id="reviewEligibility">Bewertungen sind nur nach einem verifizierten Kauf möglich.</p>
+            <button class="btn-write-review" id="writeReviewButton" onclick="openReviewForm()" hidden>Bewertung schreiben</button>
         </div>
     </section>
 
@@ -484,22 +266,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="text" placeholder="Titel deiner Bewertung *" required>
+                    <input type="text" name="title" maxlength="80" placeholder="Titel deiner Bewertung *" required>
                 </div>
                 <div class="form-group">
-                    <input type="text" placeholder="Dein Name *" required>
-                </div>
-                <div class="form-group">
-                    <input type="email" placeholder="Deine E-Mail *" required>
-                </div>
-                <div class="form-group">
-                    <textarea placeholder="Deine Bewertung *" rows="5" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem;">
-                        <input type="checkbox" required>
-                        Ich bestätige, dass ich dieses Produkt gekauft habe
-                    </label>
+                    <textarea name="reviewText" minlength="20" maxlength="1000" placeholder="Deine Bewertung *" rows="5" required></textarea>
                 </div>
                 <button type="submit" class="btn-primary">Bewertung absenden</button>
             </form>
@@ -524,14 +294,6 @@
                     <div class="product-info">
                         <h3>Polo Hemd</h3>
                         <p class="product-description">Klassisches Poloshirt aus feiner Baumwolle</p>
-                        <div class="product-rating">
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star">★</span>
-                            <span class="rating-count">(32)</span>
-                        </div>
                         <p class="product-price">CHF 34.90</p>
                         <button class="add-to-cart-btn" onclick="addToCart('Polo Hemd', 34.99)">In den Warenkorb</button>
                     </div>
@@ -553,7 +315,7 @@
                     <h4>Shop</h4>
                     <ul>
                         <li><a href="shop.html#old-money">Old Money</a></li>
-                        <li><a href="shop.html#streetwear">Streetwear</a></li>
+                        <li><a href="shop.html#streetwear">Casual</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -677,18 +439,7 @@
         const productData = JSON.parse(sessionStorage.getItem('selectedProduct'));
         
         if (productData) {
-            // Update page title
-            document.title = productData.name + ' - Joumonde';
-            
-            // Update product title and description
-            const titleEl = document.querySelector('.product-detail-title');
-            const subtitleEl = document.querySelector('.product-detail-subtitle');
-            if (titleEl) titleEl.textContent = productData.name;
-            if (subtitleEl) subtitleEl.textContent = productData.description;
-            
-            // Update breadcrumb
-            const breadcrumbSpan = document.querySelector('.breadcrumb span:last-child');
-            if (breadcrumbSpan) breadcrumbSpan.textContent = productData.name;
+            updateProductDetailContent(productData, translations);
             
             // Update price
             const currentPriceEl = document.querySelector('.current-price');
@@ -771,7 +522,7 @@
                     if (placeholder) placeholder.remove();
                     const img = document.createElement('img');
                     img.src = productData.image;
-                    img.alt = productData.name;
+                    img.alt = translateProductName(productData.name);
                     img.style.cssText = 'width:100%; height:100%; object-fit:cover;';
                     mainImageEl.insertBefore(img, mainImageEl.firstChild);
                 }
@@ -783,36 +534,9 @@
                     if (thumbPlaceholder) thumbPlaceholder.remove();
                     const thumbImg = document.createElement('img');
                     thumbImg.src = productData.image;
-                    thumbImg.alt = productData.name;
+                    thumbImg.alt = translateProductName(productData.name);
                     thumbImg.style.cssText = 'width:100%; height:100%; object-fit:cover;';
                     firstThumb.appendChild(thumbImg);
-                }
-            }
-
-            // Load product descriptions from database
-            if (productData && productDatabase[productData.name]) {
-                const prodInfo = translations?.productDescriptions?.[productData.name] || productDatabase[productData.name];
-                
-                // Load main description
-                const descEl = document.getElementById('product-main-description');
-                if (descEl) descEl.textContent = prodInfo.description;
-                
-                // Load features
-                const featuresList = document.getElementById('product-features-list');
-                if (featuresList) {
-                    featuresList.innerHTML = prodInfo.features.map(f => `<li>${f}</li>`).join('');
-                }
-                
-                // Load materials
-                const materialList = document.getElementById('product-material-list');
-                if (materialList) {
-                    materialList.innerHTML = prodInfo.materials.map(m => `<li>${m}</li>`).join('');
-                }
-                
-                // Load care instructions
-                const careList = document.getElementById('product-care-list');
-                if (careList) {
-                    careList.innerHTML = prodInfo.care.map(c => `<li>${c}</li>`).join('');
                 }
             }
 
@@ -825,21 +549,10 @@
     const _origChangeLangDetail = changeLanguage;
     changeLanguage = async function(lang) {
         await _origChangeLangDetail(lang);
-                // Reload product descriptions for new language
-                const translations = await loadLanguage(lang);
-                const productData = JSON.parse(sessionStorage.getItem('selectedProduct'));
-                if (productData && translations?.productDescriptions?.[productData.name]) {
-                    const prodInfo = translations.productDescriptions[productData.name];
-                    const descEl = document.getElementById('product-main-description');
-                    if (descEl) descEl.textContent = prodInfo.description;
-                    const featuresList = document.getElementById('product-features-list');
-                    if (featuresList) featuresList.innerHTML = prodInfo.features.map(f => `<li>${f}</li>`).join('');
-                    const materialList = document.getElementById('product-material-list');
-                    if (materialList) materialList.innerHTML = prodInfo.materials.map(m => `<li>${m}</li>`).join('');
-                    const careList = document.getElementById('product-care-list');
-                    if (careList) careList.innerHTML = prodInfo.care.map(c => `<li>${c}</li>`).join('');
-                }
-        updatePageContent();
+        const translations = await loadLanguage(lang);
+        const productData = JSON.parse(sessionStorage.getItem('selectedProduct'));
+        if (productData) updateProductDetailContent(productData, translations);
+        await loadReviews();
     };
     </script>
 

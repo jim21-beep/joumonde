@@ -173,40 +173,42 @@ serve(async (req) => {
     } else if (type === 'order-confirmation') {
       const {
         firstName = '',
-        userId = null,
         orderId = '',
         items = [],
         total = 0,
         orderDate = '',
         currency = 'CHF',
         persistOrder = false,
-        paymentMethod = 'card',
-        paymentStatus = 'paid'
+        paymentMethod = 'card'
       } = body;
 
       if (persistOrder) {
         try {
           const db = createClient(SUPABASE_URL, SUPABASE_SERVICE);
           const normalizedPaymentMethod = ['card', 'amex', 'paypal'].includes(paymentMethod) ? paymentMethod : 'card';
-          const normalizedPaymentStatus = paymentStatus || 'paid';
           const paymentProvider = normalizedPaymentMethod === 'paypal' ? 'paypal' : 'card';
           const finalOrderId = String(orderId || ('JM' + Date.now().toString()));
+          const accessToken = req.headers.get('Authorization')?.replace(/^Bearer\s+/i, '') ?? '';
+          const { data: { user: verifiedUser }, error: authError } = accessToken
+            ? await db.auth.getUser(accessToken)
+            : { data: { user: null }, error: null };
+          if (authError) console.warn('Could not verify optional checkout session:', authError.message);
 
           const orderPayload = {
             id: finalOrderId,
-            user_id: userId || null,
+            user_id: verifiedUser?.id || null,
             status: 'Bearbeitung',
             total: Number(total || 0),
             currency,
             payment_method: normalizedPaymentMethod,
-            payment_status: normalizedPaymentStatus,
+            payment_status: 'pending',
             payment_provider: paymentProvider,
             provider_payment_id: null,
           };
 
           let { error: orderErr } = await db.from('orders').insert(orderPayload);
 
-          if (orderErr && userId) {
+          if (orderErr?.code === '23503' && verifiedUser?.id) {
             const retryPayload = { ...orderPayload, user_id: null };
             ({ error: orderErr } = await db.from('orders').insert(retryPayload));
           }

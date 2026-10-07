@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Joumonde - Premium Fashion Shop | Old Money & Streetwear</title>
-    <meta name="description" content="Joumonde - Exklusive Old Money Eleganz & moderne Streetwear. Premium Blazer, Chinos, Hoodies & mehr. Kostenloser Versand ab CHF 100. 14 Tage Rückgabe.">
-    <meta name="keywords" content="Joumonde Shop, Old Money Fashion, Streetwear Swiss, Premium Blazer, Designer Hoodie, Luxury Chinos, Swiss Fashion Store">
+    <title>Joumonde - Premium Fashion Shop | Old Money & Casual</title>
+    <meta name="description" content="Joumonde - Exklusive Old Money Eleganz & lässige Casual-Mode. Premium Blazer, Bundfalthosen, Hoodies & mehr. Kostenloser Versand ab CHF 100. 14 Tage Rückgabe.">
+    <meta name="keywords" content="Joumonde Shop, Old Money Fashion, Casual Fashion Swiss, Premium Blazer, Designer Hoodie, Pleated Trousers, Swiss Fashion Store">
     <meta name="author" content="Joumonde">
     
     <!-- Open Graph / Social Media -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://joumonde.com/shop.html">
     <meta property="og:title" content="Joumonde - Premium Fashion Shop">
-    <meta property="og:description" content="Wo Luxus auf Attitude trifft. Entdecke unsere Old Money & Streetwear Kollektionen.">
+    <meta property="og:description" content="Wo Luxus auf Attitude trifft. Entdecke unsere Old Money & Casual Kollektionen.">
     <meta property="og:image" content="https://joumonde.com/assets/images/joumonde.png">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://joumonde.com/shop.html">
     <meta property="twitter:title" content="Joumonde - Premium Fashion Shop">
-    <meta property="twitter:description" content="Wo Luxus auf Attitude trifft. Entdecke unsere Old Money & Streetwear Kollektionen.">
+    <meta property="twitter:description" content="Wo Luxus auf Attitude trifft. Entdecke unsere Old Money & Casual Kollektionen.">
     <meta property="twitter:image" content="https://joumonde.com/assets/images/joumonde.png">
     
     <link rel="icon" type="image/png" href="assets/images/joumonde-logo.png">
@@ -52,14 +52,14 @@
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#old-money">Old Money</a></li>
-                <li><a href="#streetwear">Streetwear</a></li>
+                <li><a href="#streetwear">Casual</a></li>
                 <li class="nav-dropdown" id="nav-dropdown-kollektionen">
                     <button class="nav-dropdown-trigger" onclick="toggleNavDropdown()">Kollektionen <span class="nav-dropdown-chevron">▾</span></button>
                     <div class="nav-dropdown-menu">
-                        <div class="nav-dropdown-item" onclick="showNavComingSoon('Accessories')">Accessories <span class="nav-soon-badge">Soon</span></div>
-                        <div class="nav-dropdown-item" onclick="showNavComingSoon('Essentials')">Essentials <span class="nav-soon-badge">Soon</span></div>
-                        <div class="nav-dropdown-item" onclick="showNavComingSoon('Seasonal')">Seasonal <span class="nav-soon-badge">Soon</span></div>
-                        <div class="nav-dropdown-item" onclick="showNavComingSoon('Gift &amp; Sets')">Gift &amp; Sets <span class="nav-soon-badge">Soon</span></div>
+                        <a class="nav-dropdown-item" href="#accessories" style="text-decoration: none;">Accessories</a>
+                        <div class="nav-dropdown-item" onclick="showNavComingSoon('collectionEssentials')">Essentials <span class="nav-soon-badge">Soon</span></div>
+                        <div class="nav-dropdown-item" onclick="showNavComingSoon('collectionSeasonal')">Seasonal <span class="nav-soon-badge">Soon</span></div>
+                        <div class="nav-dropdown-item" onclick="showNavComingSoon('collectionGiftSets')">Gift &amp; Sets <span class="nav-soon-badge">Soon</span></div>
                     </div>
                 </li>
             </ul>
@@ -109,7 +109,7 @@
         <div class="hero-content">
             <img src="assets/images/joumonde-logo.png" alt="JM Logo" class="hero-logo">
             <h2>Entdecke Deinen Style</h2>
-            <p>Premium Fashion - Von klassischem Old Money bis modernem Streetwear</p>
+            <p>Premium Fashion - Von klassischem Old Money bis zu lässigen Casual Styles</p>
             <button class="cta-btn" onclick="document.getElementById('old-money').scrollIntoView({behavior: 'smooth'})">Jetzt Shoppen</button>
         </div>
     </section>
@@ -263,8 +263,8 @@
                 <!-- Polo Hemd Product Card -->
                 <div class="product-card" onclick="viewProductDetail('Polo Hemd', 34.99, 'Klassisches Poloshirt aus feiner Baumwolle – versatil und elegant', ['Weiß', 'Navy', 'Schwarz', 'Grau', 'Camel'], ['S', 'M', 'L', 'XL'])" style="cursor: pointer;">
                     <div class="product-image" style="background: #f5f5f5;">
-                        <img src="assets/images/polo.png" alt="Polo Hemd" style="width:100%; height:100%; object-fit:cover;">
-                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Polo Hemd', 34.99, 'linear-gradient(135deg, #ffffff 0%, #e8e8e8 100%)', this)">
+                        <img src="assets/images/Polo.jpg" alt="Polo Hemd" style="width:100%; height:100%; object-fit:cover;">
+                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Polo Hemd', 34.99, 'assets/images/Polo.jpg', this)">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
@@ -283,8 +283,8 @@
                 <!-- Knit Zip-Polo -->
                 <div class="product-card" onclick="viewProductDetail('Knit Zip-Polo', 44.99, 'Feinstrick-Poloshirt mit Reißverschluss – Komfort und Stil vereint', ['Beige', 'Weiß', 'Schwarz'], ['S', 'M', 'L', 'XL'])" style="cursor: pointer;">
                     <div class="product-image" style="background: #f5f5f5;">
-                        <img src="assets/images/ripped-knit-polo.png" alt="Knit Zip-Polo" style="width:100%; height:100%; object-fit:cover;">
-                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Knit Zip-Polo', 44.99, 'linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%)', this)">
+                        <img src="assets/images/ripped knit zip-polo.jpg" alt="Knit Zip-Polo" style="width:100%; height:100%; object-fit:cover;">
+                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Knit Zip-Polo', 44.99, 'assets/images/ripped knit zip-polo.jpg', this)">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
@@ -298,22 +298,22 @@
                     </div>
                 </div>
 
-                <div class="product-card" onclick="viewProductDetail('Chino Hose', 51.99, 'Premium-Chino mit elegantem Sitz – vielseitig und langlebig', ['Beige', 'Camel', 'Navy', 'Grau', 'Olive'], ['30', '32', '34', '36'])" style="cursor: pointer;">
+                <div class="product-card" onclick="viewProductDetail('Bundfalthose', 51.99, 'Elegante Bundfalthose mit klassischem Sitz – vielseitig und langlebig', ['Beige', 'Camel', 'Navy', 'Grau', 'Olive'], ['30', '32', '34', '36'])" style="cursor: pointer;">
                     <div class="product-image" style="background: #f5f5f5;">
-                        <img src="assets/images/chino_hose.png" alt="Chino Hose" style="width:100%; height:100%; object-fit:cover;">
-                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Chino Hose', 51.99, 'linear-gradient(135deg, #8b7355 0%, #6b5645 100%)', this)">
+                        <img src="assets/images/Bundfalthose.jpg" alt="Bundfalthose" style="width:100%; height:100%; object-fit:cover;">
+                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Bundfalthose', 51.99, 'assets/images/Bundfalthose.jpg', this)">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
                         </button>
                     </div>
                     <div class="product-info">
-                        <h3>Chino Hose</h3>
-                        <p class="product-description">Premium-Chino mit elegantem Sitz</p>
+                        <h3>Bundfalthose</h3>
+                        <p class="product-description">Klassische Bundfalten und eleganter Sitz</p>
                         <p class="product-price" data-price="51.99" data-original-price="64.99"><span class="old-price">CHF 64.90</span> CHF 51.90</p>
                         <!-- Größe, Farbauswahl und Dropdowns entfernt -->
-                        <!-- Größentabelle entfernt (Chino Hose) -->
-                        <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('Chino Hose', 51.99, window.selectedChinoColor || 'Beige')">In den Warenkorb</button>
+                        <!-- Größentabelle entfernt (Bundfalthose) -->
+                        <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('Bundfalthose', 51.99, window.selectedChinoColor || 'Beige')">In den Warenkorb</button>
                     </div>
                 </div>
                 
@@ -340,8 +340,8 @@
                 <!-- Quarter Zipper Product Card -->
                 <div class="product-card" onclick="viewProductDetail('Quarter Zipper', 79.99, 'Luxuriöser Kaschmir-Mix mit Reißverschluss – Eleganz mit praktischem Touch', ['Creme', 'Navy', 'Grau', 'Schwarz'], ['S', 'M', 'L', 'XL'])" style="cursor: pointer;">
                     <div class="product-image" style="background: #f5f5f5;">
-                        <img src="assets/images/quarter_zipper.png" alt="Quarter Zipper Pullover" style="width:100%; height:100%; object-fit:cover;">
-                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Quarter Zipper', 79.99, 'assets/images/quarter_zipper.png', this)">
+                        <img src="assets/images/Quarter Zipper.jpg" alt="Quarter Zipper Pullover" style="width:100%; height:100%; object-fit:cover;">
+                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Quarter Zipper', 79.99, 'assets/images/Quarter Zipper.jpg', this)">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
@@ -359,8 +359,8 @@
                 
                 <div class="product-card" onclick="viewProductDetail('Strickpullover', 89.99, 'Premium-Kaschmir Pullover – zeitlos schön und unglaublich wohlig', ['Dunkelblau', 'Weiß', 'Grau', 'Beige'], ['S', 'M', 'L', 'XL'])" style="cursor: pointer;">
                     <div class="product-image" style="background: #f5f5f5;">
-                        <img src="assets/images/strickpullover.png" alt="Strickpullover" style="width:100%; height:100%; object-fit:cover;">
-                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Strickpullover', 89.99, 'linear-gradient(135deg, #2c3e50 0%, #1a252f 100%)', this)">
+                        <img src="assets/images/Strickpullover.jpg" alt="Strickpullover" style="width:100%; height:100%; object-fit:cover;">
+                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Strickpullover', 89.99, 'assets/images/Strickpullover.jpg', this)">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
@@ -378,8 +378,8 @@
 
                 <div class="product-card" onclick="viewProductDetail('Leinenhose', 54.99, 'Leichte Leinenhose – perfekt für warme Tage und läss igen Chic', ['Beige', 'Weiß', 'Hellgrau', 'Navy'], ['30', '32', '34', '36'])" style="cursor: pointer;">
                     <div class="product-image" style="background: linear-gradient(135deg, #e8dcc8 0%, #d4c4a0 100%);">
-                        <img src="assets/images/leinen.png" alt="Leinenhose" style="width:100%; height:100%; object-fit:cover;">
-                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Leinenhose', 54.99, 'linear-gradient(135deg, #e8dcc8 0%, #d4c4a0 100%)', this)">
+                        <img src="assets/images/Leinenhose.jpg" alt="Leinenhose" style="width:100%; height:100%; object-fit:cover;">
+                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Leinenhose', 54.99, 'assets/images/Leinenhose.jpg', this)">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
@@ -392,51 +392,62 @@
                         <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('Leinenhose', 54.99, 'Beige')">In den Warenkorb</button>
                     </div>
                 </div>
-        </div>
-    </section>
-
-    <!-- Similar Products Section -->
-    <section class="similar-products-section">
-        <div class="container">
-            <h3 class="similar-title">Das könnte dir auch gefallen</h3>
-            <div class="similar-grid">
-                <div class="similar-card">
-                    <div class="similar-image" style="background: #f5f5f5;">
+                <div class="product-card" onclick="viewProductDetail('Kaschmirpullover', 149.90, 'Weicher Kaschmir und eine klare Silhouette für zeitlose Looks.', ['Creme', 'Dunkelblau', 'Grau'], ['S', 'M', 'L', 'XL'])" style="cursor: pointer;">
+                    <div class="product-image" style="background: #f5f5f5;">
                         <img src="assets/images/kashmir_pullover.png" alt="Kaschmirpullover" style="width:100%; height:100%; object-fit:cover;">
+                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Kaschmirpullover', 149.90, 'assets/images/kashmir_pullover.png', this)">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
                     </div>
-                    <h4>Kaschmirpullover</h4>
-                    <p class="similar-price">CHF 149.90</p>
-                </div>
-                <div class="similar-card">
-                    <div class="similar-image" style="background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);">
-                        <span class="product-placeholder">Bild</span>
+                    <div class="product-info">
+                        <h3>Kaschmirpullover</h3>
+                        <p class="product-description">Weicher Kaschmir und eine klare Silhouette für zeitlose Looks.</p>
+                        <p class="product-price" data-price="149.90">CHF 149.90</p>
+                        <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('Kaschmirpullover', 149.90, 'Creme')">In den Warenkorb</button>
                     </div>
-                    <h4>Ledergürtel</h4>
-                    <p class="similar-price">CHF 39.90</p>
                 </div>
-                <div class="similar-card">
-                    <div class="similar-image" style="background: #f5f5f5;">
+                <div class="product-card" onclick="viewProductDetail('Oxford Hemd', 59.90, 'Ein vielseitiges Baumwollhemd für gepflegte Alltagslooks.', ['Weiß', 'Hellblau'], ['S', 'M', 'L', 'XL'])" style="cursor: pointer;">
+                    <div class="product-image" style="background: #f5f5f5;">
                         <img src="assets/images/oxford_hemd.png" alt="Oxford Hemd" style="width:100%; height:100%; object-fit:cover;">
+                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Oxford Hemd', 59.90, 'assets/images/oxford_hemd.png', this)">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
                     </div>
-                    <h4>Oxford Hemd</h4>
-                    <p class="similar-price">CHF 59.90</p>
-                </div>
-                <div class="similar-card">
-                    <div class="similar-image" style="background: #f5f5f5;">
-                        <img src="assets/images/wollmantel.png" alt="Wollmantel" style="width:100%; height:100%; object-fit:cover;">
+                    <div class="product-info">
+                        <h3>Oxford Hemd</h3>
+                        <p class="product-description">Ein vielseitiges Baumwollhemd für gepflegte Alltagslooks.</p>
+                        <p class="product-price" data-price="59.90">CHF 59.90</p>
+                        <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('Oxford Hemd', 59.90, 'Weiß')">In den Warenkorb</button>
                     </div>
-                    <h4>Wollmantel</h4>
-                    <p class="similar-price">CHF 249.90</p>
                 </div>
-            </div>
+                <div class="product-card" onclick="viewProductDetail('Wollmantel', 249.90, 'Wärmende Wollqualität mit klassischem, elegantem Schnitt.', ['Camel', 'Navy', 'Grau'], ['S', 'M', 'L', 'XL'])" style="cursor: pointer;">
+                    <div class="product-image" style="background: #f5f5f5;">
+                        <img src="assets/images/Wollmantel.jpg" alt="Wollmantel" style="width:100%; height:100%; object-fit:cover;">
+                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Wollmantel', 249.90, 'assets/images/Wollmantel.jpg', this)">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="product-info">
+                        <h3>Wollmantel</h3>
+                        <p class="product-description">Wärmende Wollqualität mit klassischem, elegantem Schnitt.</p>
+                        <p class="product-price" data-price="249.90">CHF 249.90</p>
+                        <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('Wollmantel', 249.90, 'Camel')">In den Warenkorb</button>
+                    </div>
+                </div>
         </div>
     </section>
 
-    <!-- Streetwear Collection -->
+    <!-- Casual Collection -->
     <section id="streetwear" class="collection-section streetwear-section">
         <div class="container">
             <img src="assets/images/joumonde-logo.png" alt="JM" class="section-logo section-logo-jm">
-            <h2 class="section-title">Streetwear Collection</h2>
+            <h2 class="section-title">Casual Collection</h2>
             <p class="section-subtitle">Urban Fashion mit Attitude</p>
             
             <!-- Filter Section -->
@@ -551,7 +562,7 @@
                 <div class="product-card" onclick="viewProductDetail('Oversized Hoodie', 49.99, 'Entspannter Baumwoll-Hoodie – urban cool und unglaublich bequem', ['Schwarz', 'Weiß', 'Grau', 'Navy', 'Olive', 'Beige'], ['S', 'M', 'L', 'XL'])" style="cursor: pointer;">
                     <div class="product-image" id="hoodie-image" style="background: linear-gradient(135deg, #000000 0%, #434343 100%);">
                         <img src="assets/images/hoodie-mockup.png" alt="Oversized Hoodie" style="width:100%; height:100%; object-fit:cover;">
-                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Oversized Hoodie', 49.99, 'linear-gradient(135deg, #000000 0%, #434343 100%)', this)">
+                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Oversized Hoodie', 49.99, 'assets/images/hoodie-mockup.png', this)">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
@@ -567,13 +578,13 @@
                     </div>
                 </div>
                 <div class="product-card" onclick="viewProductDetail('T-Shirt', 24.99, 'Hochwertiges T-Shirt mit limitiertem Design – Statement Piece mit Charakter', ['Schwarz', 'Weiß', 'Grau', 'Navy', 'Olive', 'Beige'], ['S', 'M', 'L', 'XL'])" style="cursor: pointer;">
-                    <div class="product-image" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);">
-                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('T-Shirt', 24.99, 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%)', this)">
+                    <div class="product-image" style="background: #f5f5f5;">
+                        <img src="assets/images/T-Shirt.jpg" alt="T-Shirt" style="width:100%; height:100%; object-fit:cover;">
+                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('T-Shirt', 24.99, 'assets/images/T-Shirt.jpg', this)">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
                         </button>
-                        <span class="product-placeholder">Bild</span>
                     </div>
                     <div class="product-info">
                         <h3>T-Shirt</h3>
@@ -602,10 +613,26 @@
                         <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('Cargo Pants', 59.99)">In den Warenkorb</button>
                     </div>
                 </div>
+                <div class="product-card" onclick="viewProductDetail('Jeans', 59.99, 'Klassische Jeans mit modernem Schnitt – vielseitig kombinierbar und alltagstauglich', ['Dunkelblau', 'Hellblau', 'Schwarz'], ['30', '32', '34', '36'])" style="cursor: pointer;">
+                    <div class="product-image" style="background: linear-gradient(135deg, #315b78 0%, #19384f 100%);">
+                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Jeans', 59.99, 'linear-gradient(135deg, #315b78 0%, #19384f 100%)', this)">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
+                        <span class="product-placeholder">Bild</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Jeans</h3>
+                        <p class="product-description">Klassische Jeans mit modernem Schnitt</p>
+                        <p class="product-price" data-price="59.99">CHF 59.90</p>
+                        <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('Jeans', 59.99, 'Dunkelblau')">In den Warenkorb</button>
+                    </div>
+                </div>
                 <div class="product-card" onclick="viewProductDetail('Trainerhose', 44.99, 'Bequeme Trainerhose mit modernem Schnitt – Athleisure Essentials', ['Schwarz', 'Weiß', 'Grau', 'Navy', 'Olive', 'Beige'], ['S', 'M', 'L', 'XL'])" style="cursor: pointer;">
                     <div class="product-image" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
-                        <img src="assets/images/trainerhose.png" alt="Trainerhose" style="width:100%; height:100%; object-fit:cover;">
-                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Trainerhose', 44.99, 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)', this)">
+                        <img src="assets/images/Trainerhose.jpg" alt="Trainerhose" style="width:100%; height:100%; object-fit:cover;">
+                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Trainerhose', 44.99, 'assets/images/Trainerhose.jpg', this)">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
@@ -621,6 +648,32 @@
                     </div>
                 </div>
             </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Accessories Collection -->
+    <section id="accessories" class="collection-section">
+        <div class="container">
+            <h2 class="section-title">Accessoires</h2>
+            <p class="section-subtitle">Stilvolle Details für jeden Look</p>
+            <div class="product-grid">
+                <div class="product-card" onclick="viewProductDetail('Ledergürtel', 39.90, 'Ledergürtel aus hochwertigem Glattleder mit dezenter Metallschließe – das vielseitige Finish für elegante und lässige Outfits', ['Dunkelbraun'], ['One Size'])" style="cursor: pointer;">
+                    <div class="product-image" style="background: #f5f5f5;">
+                        <img src="assets/images/Ledergürtel.jpg" alt="Ledergürtel" style="width:100%; height:100%; object-fit:cover;">
+                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Ledergürtel', 39.90, 'assets/images/Ledergürtel.jpg', this)">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="product-info">
+                        <h3>Ledergürtel</h3>
+                        <p class="product-description">Glattleder mit dezenter Metallschließe</p>
+                        <p class="product-price" data-price="39.90">CHF 39.90</p>
+                        <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('Ledergürtel', 39.90, 'Dunkelbraun', 'One Size')">In den Warenkorb</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -684,7 +737,7 @@
                     <h4>Shop</h4>
                     <ul>
                         <li><a href="#old-money">Old Money</a></li>
-                        <li><a href="#streetwear">Streetwear</a></li>
+                        <li><a href="#streetwear">Casual</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
