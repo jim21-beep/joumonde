@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
@@ -34,6 +34,8 @@
     </script>
     
     <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/site-footer.css">
+    <link rel="stylesheet" href="assets/css/site-pages.css">
 </head>
 <body>
     <!-- Navigation Bar (Schnelleiste) -->
@@ -50,9 +52,9 @@
                 </svg>
             </button>
             <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#old-money">Old Money</a></li>
-                <li><a href="#streetwear">Casual</a></li>
+                <li><a href="shop.html">Startseite</a></li>
+                <li><a href="shop.html?collection=old-money">Old Money</a></li>
+                <li><a href="shop.html?collection=casual">Casual</a></li>
                 <li class="nav-dropdown" id="nav-dropdown-kollektionen">
                     <button class="nav-dropdown-trigger" onclick="toggleNavDropdown()">Kollektionen <span class="nav-dropdown-chevron">▾</span></button>
                     <div class="nav-dropdown-menu">
@@ -88,9 +90,8 @@
                 </button>
                 <button class="cart-btn" aria-label="Warenkorb" onclick="toggleCart()">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="9" cy="21" r="1"></circle>
-                        <circle cx="20" cy="21" r="1"></circle>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        <path d="M5 8h14l1 13H4L5 8Z"></path>
+                        <path d="M9 8V6a3 3 0 0 1 6 0v2"></path>
                     </svg>
                     <span class="cart-count">0</span>
                 </button>
@@ -101,7 +102,6 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
-            <img src="assets/images/joumonde-logo.png" alt="JM Logo" class="hero-logo">
             <h2>Entdecke Deinen Style</h2>
             <p>Premium Fashion - Von klassischem Old Money bis zu lässigen Casual Styles</p>
             <button class="cta-btn" onclick="document.getElementById('old-money').scrollIntoView({behavior: 'smooth'})">Jetzt Shoppen</button>
@@ -238,7 +238,7 @@
             <div class="product-grid">
                 <div class="product-card" onclick="viewProductDetail('Klassischer Blazer', 79.99, 'Zeitloser Wollblazer mit perfekter Passform – die Essenz des Old Money Stils', ['Navy', 'Schwarz', 'Grau', 'Beige', 'Burgundy', 'Camel'], ['S', 'M', 'L', 'XL'])" style="cursor: pointer;">
                     <div class="product-image" style="background: #f5f5f5;">
-                        <img src="assets/images/klassischer_blazer.png" alt="Klassischer Blazer" style="width: 100%; height: 100%; object-fit: cover;">
+                        <img src="assets/images/klassischer%20Blazer.jpg" alt="Klassischer Blazer" style="width: 100%; height: 100%; object-fit: cover;">
                         <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Klassischer Blazer', 79.99, 'linear-gradient(135deg, #f5f5dc 0%, #d3d3d3 100%)', this)">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
@@ -255,8 +255,8 @@
                 <!-- Polo Hemd Product Card -->
                 <div class="product-card" onclick="viewProductDetail('Polo Hemd', 34.99, 'Klassisches Poloshirt aus feiner Baumwolle – versatil und elegant', ['Weiß', 'Navy', 'Schwarz', 'Grau', 'Camel'], ['S', 'M', 'L', 'XL'])" style="cursor: pointer;">
                     <div class="product-image" style="background: #f5f5f5;">
-                        <img src="assets/images/Polo.jpg" alt="Polo Hemd" style="width:100%; height:100%; object-fit:cover;">
-                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Polo Hemd', 34.99, 'assets/images/Polo.jpg', this)">
+                        <img src="assets/images/PoloCasual.jpg" alt="Polo Hemd" style="width:100%; height:100%; object-fit:cover;">
+                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Polo Hemd', 34.99, 'assets/images/PoloCasual.jpg', this)">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
@@ -306,8 +306,8 @@
                 <!-- Weste Product Card -->
                 <div class="product-card" onclick="viewProductDetail('Elegante Weste', 69.99, 'Raffinierte Wollweste aus bester Qualität – vollendeter Layering Look', ['Creme', 'Navy', 'Grau', 'Schwarz'], ['S', 'M', 'L', 'XL'])" style="cursor: pointer;">
                     <div class="product-image" style="background: #f5f5f5;">
-                        <img src="assets/images/weste.png" alt="Elegante Weste" style="width:100%; height:100%; object-fit:cover;">
-                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Elegante Weste', 69.99, 'assets/images/weste.png', this)">
+                        <img src="assets/images/Weste.jpg" alt="Elegante Weste" style="width:100%; height:100%; object-fit:cover;">
+                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Elegante Weste', 69.99, 'assets/images/Weste.jpg', this)">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
@@ -386,8 +386,8 @@
                 </div>
                 <div class="product-card" onclick="viewProductDetail('Oxford Hemd', 59.90, 'Ein vielseitiges Baumwollhemd für gepflegte Alltagslooks.', ['Weiß', 'Hellblau'], ['S', 'M', 'L', 'XL'])" style="cursor: pointer;">
                     <div class="product-image" style="background: #f5f5f5;">
-                        <img src="assets/images/oxford_hemd.png" alt="Oxford Hemd" style="width:100%; height:100%; object-fit:cover;">
-                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Oxford Hemd', 59.90, 'assets/images/oxford_hemd.png', this)">
+                        <img src="assets/images/oxfordhemd.jpg" alt="Oxford Hemd" style="width:100%; height:100%; object-fit:cover;">
+                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Oxford Hemd', 59.90, 'assets/images/oxfordhemd.jpg', this)">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
@@ -418,7 +418,6 @@
     <!-- Casual Collection -->
     <section id="streetwear" class="collection-section streetwear-section">
         <div class="container">
-            <img src="assets/images/joumonde-logo.png" alt="JM" class="section-logo section-logo-jm">
             <h2 class="section-title">Casual Collection</h2>
             <p class="section-subtitle">Urban Fashion mit Attitude</p>
             
@@ -581,12 +580,12 @@
                 </div>
                 <div class="product-card" onclick="viewProductDetail('Jeans', 59.99, 'Klassische Jeans mit modernem Schnitt – vielseitig kombinierbar und alltagstauglich', ['Dunkelblau', 'Hellblau', 'Schwarz'], ['30', '32', '34', '36'])" style="cursor: pointer;">
                     <div class="product-image" style="background: linear-gradient(135deg, #315b78 0%, #19384f 100%);">
-                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Jeans', 59.99, 'linear-gradient(135deg, #315b78 0%, #19384f 100%)', this)">
+                        <img src="assets/images/Jeans.jpg" alt="Jeans" style="width:100%; height:100%; object-fit:cover;">
+                        <button class="product-wishlist-btn" onclick="event.stopPropagation(); toggleWishlistItem('Jeans', 59.99, 'assets/images/Jeans.jpg', this)">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
                         </button>
-                        <span class="product-placeholder">Bild</span>
                     </div>
                     <div class="product-info">
                         <h3>Jeans</h3>
@@ -638,27 +637,6 @@
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact-section">
-        <div class="container">
-            <h2 class="section-title">Kontakt</h2>
-            <div class="contact-info">
-                <div class="contact-item">
-                    <h3>Email</h3>
-                    <p>info@joumonde.com</p>
-                </div>
-                <div class="contact-item">
-                    <h3>Telefon</h3>
-                    <p>+41 44 123 45 67</p>
-                </div>
-
-            </div>
-            <div style="text-align: center; margin-top: 3rem;">
-                <button onclick="toggleNexara()" class="contact-cta-btn">✦ Nexara fragen</button>
-            </div>
-        </div>
-    </section>
-
     <!-- Contact Form Modal -->
     <div class="contact-modal" id="contact-modal">
         <div class="contact-modal-content">
@@ -686,73 +664,22 @@
     </div>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <span class="brand-logo"><span class="brand-logo-text">Joumonde</span></span>
-                    <p>Premium Fashion Shop</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Shop</h4>
-                    <ul>
-                        <li><a href="#old-money">Old Money</a></li>
-                        <li><a href="#streetwear">Casual</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Informationen</h4>
-                    <ul>
-                        <li><a href="about.html">Über Uns</a></li>
-                        <li><a href="#contact">Kontakt</a></li>
-                        <li><a href="versand.html">Versand &amp; Retouren</a></li>
-                        <li><a href="agb.html">AGB</a></li>
-                        <li><a href="cookie-policy.html">Datenschutz</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Sei der Erste informiert!</h4>
-                    <p>Melde dich an und erhalte exklusive Updates zum Launch</p>
-                    <form class="newsletter-form" onsubmit="submitNewsletter(event)">
-                        <input type="email" id="newsletter-email" placeholder="Deine E-Mail Adresse" required>
-                        <button type="submit">Jetzt anmelden ➜</button>
-                    </form>
-                    <div class="social-icons">
-                        <a href="https://www.instagram.com/jim.lehmann/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
-                        <a href="#" aria-label="Facebook"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
-                        <a href="#" aria-label="TikTok"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a>
-                    </div>
-                </div>
-            </div>
-            <div class="trust-badges">
-                <div class="badge-item">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                    <span>SSL Verschlüsselt</span>
-                </div>
-                <div class="badge-item">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                    <span>Sichere Zahlung</span>
-                </div>
-                <div class="badge-item">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                    <span>Schneller Versand</span>
-                </div>
-                <div class="badge-item">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                    <span>14 Tage Rückgaberecht</span>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Joumonde. Alle Rechte vorbehalten.</p>
-            </div>
-        </div>
-    </footer>
+    <div data-site-footer></div>
 
     <!-- Shopping Cart Sidebar -->
     <div id="cart-sidebar" class="cart-sidebar">
         <div class="cart-header">
-            <h2>Warenkorb</h2>
-            <button class="close-cart-btn" onclick="toggleCart()">&times;</button>
+            <div class="cart-heading">
+                <span class="cart-eyebrow">JOUMONDE / SHOPPING BAG</span>
+                <h2>Warenkorb <span id="cart-drawer-count">(0)</span></h2>
+            </div>
+            <button class="close-cart-btn" onclick="toggleCart()" aria-label="Warenkorb schließen">&times;</button>
+        </div>
+        <div class="cart-shipping-progress" id="cart-shipping-progress" aria-live="polite" hidden>
+            <p><span data-shipping-message></span> <strong data-shipping-amount></strong> <span data-shipping-suffix></span></p>
+            <div class="cart-shipping-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <span class="cart-shipping-fill"></span>
+            </div>
         </div>
         <div class="cart-items" id="cart-items">
             <p class="empty-cart-message">Ihr Warenkorb ist leer</p>
@@ -999,7 +926,7 @@
                 <button onclick="acceptCookies(); closeCookieSettings();">Alle akzeptieren</button>
             </div>
             
-            <div style="text-align: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(218,165,32,0.2);">
+            <div style="text-align: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(137, 120, 95, 0.2);">
                 <a href="cookie-policy.html" style="color: var(--gold); font-size: 0.9rem; margin: 0 0.5rem;">Cookie-Richtlinie</a> • 
                 <a href="cookie-policy.html" style="color: var(--gold); font-size: 0.9rem; margin: 0 0.5rem;">Datenschutzerklärung</a>
             </div>
@@ -1026,54 +953,64 @@
             #nexara-bubble {
                 position: fixed; bottom: 28px; right: 28px; z-index: 9999;
                 width: 56px; height: 56px; border-radius: 50%;
-                background: #1a1a1a; border: 2px solid #d4af37; cursor: pointer;
-                box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+                background: #f6f2e9; border: 1px solid #d7cbb8; cursor: pointer;
+                box-shadow: 0 8px 24px rgba(54, 43, 30, 0.18);
                 display: flex; align-items: center; justify-content: center;
-                transition: transform 0.2s;
+                transition: transform 0.2s, box-shadow 0.2s;
             }
-            #nexara-bubble:hover { transform: scale(1.08); }
+            #nexara-bubble:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(54, 43, 30, 0.24); }
             #nexara-bubble-icon {
                 font-family: 'Garamond', 'Georgia', serif;
                 font-size: 28px;
                 line-height: 1;
-                color: #d4af37;
+                color: #78654c;
             }
             #nexara-window {
                 position: fixed; bottom: 96px; right: 28px; z-index: 9999;
                 width: 340px; max-height: 480px;
-                background: #1a1a1a; border-radius: 16px;
-                box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+                background: #fbf9f4; border: 1px solid #e4ddd1; border-radius: 4px;
+                box-shadow: 0 20px 60px rgba(54, 43, 30, 0.2);
                 display: none; flex-direction: column; overflow: hidden;
-                font-family: Arial, sans-serif;
+                font-family: inherit;
             }
             #nexara-header {
-                background: #d4af37; padding: 14px 18px;
+                background: #f2eee5; padding: 16px 18px;
                 display: flex; align-items: center; justify-content: space-between;
+                border-bottom: 1px solid #e4ddd1;
             }
-            #nexara-header span { font-weight: bold; color: #1a1a1a; font-size: 0.95rem; }
-            #nexara-close { background: none; border: none; cursor: pointer; font-size: 1.2rem; color: #1a1a1a; }
+            #nexara-header span { font-weight: 600; color: #302a22; font-size: 0.92rem; letter-spacing: 0.025em; }
+            #nexara-close { background: none; border: none; cursor: pointer; font-size: 1.2rem; color: #766b5d; }
             #nexara-messages {
                 flex: 1; overflow-y: auto; padding: 14px;
                 display: flex; flex-direction: column; gap: 10px;
                 max-height: 320px;
             }
-            .nexara-msg { max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 0.88rem; line-height: 1.5; }
-            .nexara-msg.bot { background: #2a2a2a; color: #eee; align-self: flex-start; }
-            .nexara-msg.user { background: #d4af37; color: #1a1a1a; align-self: flex-end; }
+            .nexara-msg { max-width: 82%; padding: 10px 13px; border-radius: 3px; font-size: 0.86rem; line-height: 1.55; }
+            .nexara-msg.bot { background: #f0ede6; color: #3e382f; align-self: flex-start; }
+            .nexara-msg.user { background: #78654c; color: #fffdf8; align-self: flex-end; }
             #nexara-input-row {
                 display: flex; padding: 10px 12px; gap: 8px;
-                border-top: 1px solid #2a2a2a;
+                border-top: 1px solid #e4ddd1;
             }
             #nexara-input {
-                flex: 1; background: #2a2a2a; border: none; border-radius: 8px;
-                padding: 9px 12px; color: #eee; font-size: 0.88rem; outline: none;
+                flex: 1; background: #fffdf9; border: 1px solid #e4ddd1; border-radius: 2px;
+                padding: 9px 12px; color: #302a22; font-size: 0.88rem; outline: none;
             }
             #nexara-send {
-                background: #d4af37; border: none; border-radius: 8px;
-                padding: 9px 14px; cursor: pointer; font-weight: bold;
-                color: #1a1a1a; font-size: 0.88rem;
+                background: #78654c; border: none; border-radius: 2px;
+                padding: 9px 14px; cursor: pointer; font-weight: 600;
+                color: #fffdf8; font-size: 0.84rem;
             }
-            #nexara-typing { color: #888; font-size: 0.8rem; padding: 0 14px 8px; display: none; }
+            #nexara-typing { color: #82796d; font-size: 0.8rem; padding: 0 14px 8px; display: none; }
+            @media (max-width: 480px) {
+                #nexara-bubble { right: 16px; bottom: 16px; }
+                #nexara-window {
+                    right: 12px;
+                    bottom: 82px;
+                    width: calc(100vw - 24px);
+                    max-width: 340px;
+                }
+            }
         </style>
 
         <button id="nexara-bubble" onclick="toggleNexara()" aria-label="Chat öffnen">
@@ -1178,7 +1115,13 @@
                     messages.scrollTop = messages.scrollHeight;
                 }
             }
+
+            if (new URLSearchParams(window.location.search).get('openNexara') === '1') {
+                window.setTimeout(toggleNexara, 0);
+            }
         </script>
 
+    <script src="assets/js/shop-routing.js"></script>
+    <script src="assets/js/site-footer.js"></script>
 </body>
 </html>

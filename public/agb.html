@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
@@ -36,7 +36,7 @@
         .legal-divider {
             width: 60px;
             height: 1px;
-            background: #d4af37;
+            background: #89785f;
             margin: 1.5rem auto 3rem;
         }
         .legal-section {
@@ -48,7 +48,7 @@
             color: #1a1a1a;
             margin-bottom: 0.75rem;
             padding-bottom: 0.4rem;
-            border-bottom: 1px solid rgba(218,165,32,0.25);
+            border-bottom: 1px solid rgba(137, 120, 95, 0.25);
         }
         .legal-section p, .legal-section ul, .legal-section li {
             font-size: 1rem;
@@ -68,13 +68,15 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            color: #d4af37;
+            color: #89785f;
             text-decoration: none;
             font-size: 0.95rem;
             margin-bottom: 2.5rem;
         }
         .back-link:hover { text-decoration: underline; }
     </style>
+    <link rel="stylesheet" href="assets/css/site-footer.css">
+    <link rel="stylesheet" href="assets/css/site-pages.css">
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -93,9 +95,9 @@
                 </svg>
             </button>
             <ul class="nav-links">
-                <li><a href="shop.html">Home</a></li>
-                <li><a href="shop.html#old-money">Old Money</a></li>
-                <li><a href="shop.html#streetwear">Casual</a></li>
+                <li><a href="shop.html">Startseite</a></li>
+                <li><a href="shop.html?collection=old-money">Old Money</a></li>
+                <li><a href="shop.html?collection=casual">Casual</a></li>
                 <li class="nav-dropdown" id="nav-dropdown-kollektionen">
                     <button class="nav-dropdown-trigger" onclick="toggleNavDropdown()">Kollektionen <span class="nav-dropdown-chevron">▾</span></button>
                     <div class="nav-dropdown-menu">
@@ -181,7 +183,7 @@
 
             <div class="legal-section">
                 <h2>§ 8 Datenschutz</h2>
-                <p>Die Erhebung, Verarbeitung und Nutzung personenbezogener Daten erfolgt ausschliesslich zum Zweck der Vertragsabwicklung und im Einklang mit dem Schweizer Datenschutzgesetz (DSG) sowie der DSGVO. Weitere Informationen finden sich in der <a href="cookie-policy.html" style="color:#d4af37;">Datenschutzerklärung</a>.</p>
+                <p>Die Erhebung, Verarbeitung und Nutzung personenbezogener Daten erfolgt ausschliesslich zum Zweck der Vertragsabwicklung und im Einklang mit dem Schweizer Datenschutzgesetz (DSG) sowie der DSGVO. Weitere Informationen finden sich in der <a href="cookie-policy.html" style="color:#89785f;">Datenschutzerklärung</a>.</p>
             </div>
 
             <div class="legal-section">
@@ -196,42 +198,13 @@
 
             <div class="legal-section">
                 <h2>Kontakt</h2>
-                <p>Joumonde<br>E-Mail: <a href="mailto:info@joumonde.com" style="color:#d4af37;">info@joumonde.com</a><br>Telefon: +41 44 123 45 67</p>
+                <p>Joumonde<br>E-Mail: <a href="mailto:info@joumonde.com" style="color:#89785f;">info@joumonde.com</a><br>Telefon: +41 44 123 45 67</p>
             </div>
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <span class="brand-logo"><span class="brand-logo-text">Joumonde</span></span>
-                    <p>Premium Fashion Shop</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Shop</h4>
-                    <ul>
-                        <li><a href="shop.html#old-money">Old Money</a></li>
-                        <li><a href="shop.html#streetwear">Casual</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Informationen</h4>
-                    <ul>
-                        <li><a href="about.html">Über Uns</a></li>
-                        <li><a href="shop.html#contact">Kontakt</a></li>
-                        <li><a href="versand.html">Versand &amp; Retouren</a></li>
-                        <li><a href="agb.html" class="active">AGB</a></li>
-                        <li><a href="cookie-policy.html">Datenschutz</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Joumonde. Alle Rechte vorbehalten.</p>
-            </div>
-        </div>
-    </footer>
+    <div data-site-footer></div>
 
     <script src="assets/js/analytics.js"></script>
     <script src="assets/js/script.js"></script>
@@ -299,7 +272,7 @@
 
                     <div class="legal-section">
                         <h2>Section 8 Data Protection</h2>
-                        <p>Collection, processing and use of personal data is carried out exclusively for contract fulfillment and in accordance with Swiss data protection law and GDPR. Further information can be found in the <a href="cookie-policy.html" style="color:#d4af37;">Privacy Policy</a>.</p>
+                        <p>Collection, processing and use of personal data is carried out exclusively for contract fulfillment and in accordance with Swiss data protection law and GDPR. Further information can be found in the <a href="cookie-policy.html" style="color:#89785f;">Privacy Policy</a>.</p>
                     </div>
 
                     <div class="legal-section">
@@ -314,7 +287,7 @@
 
                     <div class="legal-section">
                         <h2>Contact</h2>
-                        <p>Joumonde<br>Email: <a href="mailto:info@joumonde.com" style="color:#d4af37;">info@joumonde.com</a><br>Phone: +41 44 123 45 67</p>
+                        <p>Joumonde<br>Email: <a href="mailto:info@joumonde.com" style="color:#89785f;">info@joumonde.com</a><br>Phone: +41 44 123 45 67</p>
                     </div>
                 `,
                 fr: `
@@ -376,7 +349,7 @@
 
                     <div class="legal-section">
                         <h2>Article 8 Protection des donnees</h2>
-                        <p>La collecte, le traitement et l'utilisation des donnees personnelles sont effectues uniquement pour l'execution du contrat et conformement a la loi suisse sur la protection des donnees et au RGPD. Vous trouverez plus d'informations dans la <a href="cookie-policy.html" style="color:#d4af37;">Politique de confidentialite</a>.</p>
+                        <p>La collecte, le traitement et l'utilisation des donnees personnelles sont effectues uniquement pour l'execution du contrat et conformement a la loi suisse sur la protection des donnees et au RGPD. Vous trouverez plus d'informations dans la <a href="cookie-policy.html" style="color:#89785f;">Politique de confidentialite</a>.</p>
                     </div>
 
                     <div class="legal-section">
@@ -391,7 +364,7 @@
 
                     <div class="legal-section">
                         <h2>Contact</h2>
-                        <p>Joumonde<br>Email: <a href="mailto:info@joumonde.com" style="color:#d4af37;">info@joumonde.com</a><br>Telephone: +41 44 123 45 67</p>
+                        <p>Joumonde<br>Email: <a href="mailto:info@joumonde.com" style="color:#89785f;">info@joumonde.com</a><br>Telephone: +41 44 123 45 67</p>
                     </div>
                 `
             };
@@ -420,5 +393,6 @@
             applyAgbTranslation(savedLanguage);
         });
     </script>
+    <script src="assets/js/site-footer.js"></script>
 </body>
 </html>

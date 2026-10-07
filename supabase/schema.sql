@@ -26,7 +26,11 @@ create table public.profiles (
 create table public.addresses (
   id         uuid default uuid_generate_v4() primary key,
   user_id    uuid references auth.users(id) on delete cascade not null,
+  first_name text,
+  last_name  text,
+  company    text,
   street     text,
+  address_extra text,
   zip        text,
   city       text,
   country    text default 'Schweiz',
