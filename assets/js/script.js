@@ -137,20 +137,9 @@ function selectHoodieColorDropdown(color, hex, label, e) { if (e) e.stopPropagat
         olive: 'linear-gradient(135deg, #556B2F 0%, #7a9a5b 100%)',
         beige: 'linear-gradient(135deg, #f5f5dc 0%, #e0dbc3 100%)'
     };
-    var descMap = {
-        black: 'Entspannter Baumwoll-Hoodie – urban cool',
-        white: 'Entspannter Baumwoll-Hoodie – urban cool',
-        gray: 'Entspannter Baumwoll-Hoodie – urban cool',
-        navy: 'Entspannter Baumwoll-Hoodie – urban cool',
-        olive: 'Entspannter Baumwoll-Hoodie – urban cool',
-        beige: 'Entspannter Baumwoll-Hoodie – urban cool'
-    };
     // Setze Hintergrund
     var hoodieImage = document.getElementById('hoodie-image');
     if (hoodieImage && bgMap[color]) hoodieImage.style.background = bgMap[color];
-    // Setze Beschreibung
-    var desc = document.getElementById('hoodie-desc');
-    if (desc && descMap[color]) desc.textContent = descMap[color];
 }
 
 // Dropdown schließt bei Klick außerhalb
@@ -226,8 +215,6 @@ function selectHoodieColor(color, btn) {
     const hoodieImg = document.getElementById('hoodie-img');
     const hoodieImageDiv = document.getElementById('hoodie-image');
     const colorLabel = document.getElementById('hoodie-color-selected-label');
-    const desc = document.getElementById('hoodie-desc');
-    
     // Check if elements exist before proceeding
     if (!hoodieImg || !hoodieImageDiv || !colorLabel) {
         console.warn('Hoodie color selection: Missing required HTML elements. Need IDs: hoodie-img, hoodie-image, hoodie-color-selected-label');
@@ -236,44 +223,37 @@ function selectHoodieColor(color, btn) {
     
     let colorName = 'Schwarz';
     let bg = 'linear-gradient(135deg, #000000 0%, #434343 100%)';
-    let img = 'assets/images/hoodie-mockup.png';
-    let descText = 'Entspannter Baumwoll-Hoodie – urban cool';
+    let img = 'assets/images/Hoodie.jpg';
     switch (color) {
         case 'white':
             colorName = 'Weiß';
             bg = 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)';
-            img = 'assets/images/hoodie-mockup.png';
-            descText = 'Entspannter Baumwoll-Hoodie – urban cool';
+            img = 'assets/images/Hoodie.jpg';
             break;
         case 'gray':
             colorName = 'Grau';
             bg = 'linear-gradient(135deg, #808080 0%, #b0b0b0 100%)';
-            img = 'assets/images/hoodie-mockup.png';
-            descText = 'Entspannter Baumwoll-Hoodie – urban cool';
+            img = 'assets/images/Hoodie.jpg';
             break;
         case 'navy':
             colorName = 'Navy';
             bg = 'linear-gradient(135deg, #001f3f 0%, #3a3a60 100%)';
-            img = 'assets/images/hoodie-mockup.png';
-            descText = 'Entspannter Baumwoll-Hoodie – urban cool';
+            img = 'assets/images/Hoodie.jpg';
             break;
         case 'olive':
             colorName = 'Olive';
             bg = 'linear-gradient(135deg, #556B2F 0%, #8FBC8F 100%)';
-            img = 'assets/images/hoodie-mockup.png';
-            descText = 'Entspannter Baumwoll-Hoodie – urban cool';
+            img = 'assets/images/Hoodie.jpg';
             break;
         case 'beige':
             colorName = 'Beige';
             bg = 'linear-gradient(135deg, #f5f5dc 0%, #e9e4c9 100%)';
-            img = 'assets/images/hoodie-mockup.png';
-            descText = 'Entspannter Baumwoll-Hoodie – urban cool';
+            img = 'assets/images/Hoodie.jpg';
             break;
     }
     hoodieImageDiv.style.background = bg;
     hoodieImg.src = img;
     colorLabel.textContent = `${t('filterColor')}: ${translateColorName(colorName)}`;
-    if (desc) desc.textContent = descText;
     window.selectedHoodieColor = colorName;
 
     // Swatch-Highlight: Nur ein Button aktiv
@@ -312,8 +292,32 @@ const PRODUCT_SIZE_OPTIONS = {
     'Ledergürtel': ['One Size']
 };
 
+const PRODUCT_COLOR_OPTIONS = {
+    'Klassischer Blazer': ['Navy', 'Schwarz', 'Grau', 'Beige', 'Burgundy', 'Camel'],
+    'Polo Hemd': ['Weiß', 'Navy', 'Schwarz', 'Grau', 'Camel'],
+    'Knit Zip-Polo': ['Beige', 'Weiß', 'Schwarz'],
+    'Bundfalthose': ['Beige', 'Camel', 'Navy', 'Grau', 'Olive'],
+    'Elegante Weste': ['Creme', 'Navy', 'Grau', 'Schwarz'],
+    'Quarter Zipper': ['Creme', 'Navy', 'Grau', 'Schwarz'],
+    'Strickpullover': ['Dunkelblau', 'Weiß', 'Grau', 'Beige'],
+    'Leinenhose': ['Beige', 'Weiß', 'Hellgrau', 'Navy'],
+    'Kaschmirpullover': ['Creme', 'Dunkelblau', 'Grau'],
+    'Oxford Hemd': ['Weiß', 'Hellblau'],
+    'Wollmantel': ['Camel', 'Navy', 'Grau'],
+    'Oversized Hoodie': ['Schwarz', 'Weiß', 'Grau', 'Navy', 'Olive', 'Beige'],
+    'T-Shirt': ['Schwarz', 'Weiß', 'Grau', 'Navy', 'Olive', 'Beige'],
+    'Cargo Pants': ['Schwarz', 'Weiß', 'Grau', 'Navy', 'Olive', 'Beige'],
+    'Jeans': ['Dunkelblau', 'Hellblau', 'Schwarz'],
+    'Trainerhose': ['Schwarz', 'Weiß', 'Grau', 'Navy', 'Olive', 'Beige'],
+    'Ledergürtel': ['Dunkelbraun']
+};
+
 function getAvailableSizesForProduct(productName) {
     return PRODUCT_SIZE_OPTIONS[productName] || ['S', 'M', 'L', 'XL'];
+}
+
+function getAvailableColorsForProduct(productName) {
+    return PRODUCT_COLOR_OPTIONS[productName] || [];
 }
 
 function isNumericSize(size) {
@@ -566,6 +570,45 @@ async function changeLanguage(lang) {
     }
 }
 
+function renderProductCardRatings() {
+    document.querySelectorAll('.product-grid .product-card').forEach(card => {
+        const productName = card.dataset.productName
+            || card.getAttribute('onclick')?.match(/^viewProductDetail\(['"]([^'"]+)['"]/)?.[1];
+        const title = card.querySelector('.product-info h3');
+        if (!productName || !title) return;
+
+        card.dataset.productName = productName;
+
+        let rating = card.querySelector('.product-rating');
+        if (!rating) {
+            rating = document.createElement('div');
+            rating.className = 'product-rating';
+            rating.dataset.reviewCount = '0';
+            rating.dataset.averageRating = '0';
+
+            const stars = document.createElement('span');
+            stars.className = 'product-rating-stars';
+            stars.textContent = '☆☆☆☆☆';
+            stars.setAttribute('aria-hidden', 'true');
+
+            const count = document.createElement('span');
+            count.className = 'product-rating-count';
+            rating.append(stars, count);
+            title.insertAdjacentElement('afterend', rating);
+        }
+
+        const count = Number(rating.dataset.reviewCount) || 0;
+        const average = Math.min(5, Math.max(0, Number(rating.dataset.averageRating) || 0));
+        const filledStars = Math.round(average);
+        const countLabel = t(count === 1 ? 'productReviewSingular' : 'productReviewPlural');
+        const countElement = rating.querySelector('.product-rating-count');
+        const starsElement = rating.querySelector('.product-rating-stars');
+        if (starsElement) starsElement.textContent = `${'★'.repeat(filledStars)}${'☆'.repeat(5 - filledStars)}`;
+        if (countElement) countElement.textContent = `${count} ${countLabel}`;
+        rating.setAttribute('aria-label', `${average.toFixed(1)} von 5 Sternen, ${count} ${countLabel}`);
+    });
+}
+
 // Update all page content based on language
 function updatePageContent() {
     // Navigation
@@ -616,28 +659,15 @@ function updatePageContent() {
     const productTitles = [
         'classicBlazer', 'poloShirt', 'rippedKnitPolo', 'pleatedTrousers', 'elegantVest', 'quarterZipPullover', 'knitSweater', 'linenPants',
         'cashmereSweater', 'oxfordShirt', 'woolCoat',
-        'oversizedHoodie', 'graphicTee', 'cargoPants', 'jeans', 'trackPants', 'leatherBelt'
+        'hoodieProductName', 'graphicTee', 'cargoPants', 'jeans', 'trackPants', 'leatherBelt'
     ];
-    const productDescs = [
-        'blazerDesc', 'poloDesc', 'rippedKnitPoloDesc', 'pleatedTrousersDesc', 'vestDesc', 'quarterZipDesc', 'sweaterDesc',
-        'linenDesc', 'cashmereSweaterDesc', 'oxfordShirtDesc', 'woolCoatDesc',
-        'hoodieDesc', 'teeDesc', 'cargoDesc', 'jeansDesc', 'trackDesc', 'leatherBeltDesc'
-    ];
-    
     document.querySelectorAll('.product-info h3').forEach((title, i) => {
         if (productTitles[i]) title.textContent = t(productTitles[i]);
     });
-    
-    document.querySelectorAll('.product-description').forEach((desc, i) => {
-        if (productDescs[i]) desc.textContent = t(productDescs[i]);
-    });
+    renderProductCardRatings();
     
     document.querySelectorAll('.size-selector label').forEach(label => {
         label.textContent = t('size');
-    });
-    
-    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-        if (btn.childNodes[0]) btn.childNodes[0].textContent = t('addToCart');
     });
     
     // About
@@ -1003,7 +1033,7 @@ function viewProductDetail(productName, price, description, colors, sizes) {
         'Elegante Weste': 'assets/images/weste.png',
         'Quarter Zipper': 'assets/images/Quarter Zipper.jpg',
         'Leinenhose': 'assets/images/Leinenhose.jpg',
-        'Oversized Hoodie': 'assets/images/hoodie-mockup.png',
+        'Oversized Hoodie': 'assets/images/Hoodie.jpg',
         'T-Shirt': 'assets/images/T-Shirt.jpg',
         'Trainerhose': 'assets/images/Trainerhose.jpg'
     };
@@ -1132,7 +1162,22 @@ function updateCart() {
                             <option value="${size}" ${item.size === size ? 'selected' : ''}>${size}</option>
                         `).join('')}
                     </select>
-                    ${item.color ? `<span class="cart-item-color">${t('filterColor')}: ${translateColorName(item.color)}</span>` : ''}
+                    ${(() => {
+                        const colors = getAvailableColorsForProduct(item.name);
+                        if (colors.length <= 1) {
+                            return item.color ? `<span class="cart-item-color">${t('filterColor')}: ${translateColorName(item.color)}</span>` : '';
+                        }
+                        const options = item.color && !colors.includes(item.color) ? [item.color, ...colors] : colors;
+                        return `
+                            <label>${t('filterColor')}</label>
+                            <select class="cart-color-select" onchange="updateCartItemColor(${index}, this.value)">
+                                ${!item.color ? '<option value="" selected>--</option>' : ''}
+                                ${options.map(color => `
+                                    <option value="${color}" ${item.color === color ? 'selected' : ''}>${translateColorName(color)}</option>
+                                `).join('')}
+                            </select>
+                        `;
+                    })()}
                 </div>
                 <p class="cart-item-price">${formatPrice(item.price)}</p>
                 <div class="cart-item-quantity">
@@ -1217,6 +1262,28 @@ function updateCartItemSize(index, newSize) {
         cart.splice(index, 1);
     } else {
         cart[index].size = newSize;
+    }
+
+    updateCart();
+}
+
+function updateCartItemColor(index, newColor) {
+    if (!cart[index] || !newColor) return;
+
+    const item = cart[index];
+    const existingIndex = cart.findIndex((candidate, candidateIndex) => (
+        candidateIndex !== index
+        && candidate.name === item.name
+        && candidate.price === item.price
+        && (candidate.size || null) === (item.size || null)
+        && (candidate.color || null) === newColor
+    ));
+
+    if (existingIndex !== -1) {
+        cart[existingIndex].quantity += item.quantity;
+        cart.splice(index, 1);
+    } else {
+        cart[index].color = newColor;
     }
 
     updateCart();
@@ -1469,7 +1536,7 @@ function toggleSearch() {
         { name: 'Klassischer Blazer', price: 79.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Blazer', section: 'old-money', status: 'live' },
         { name: 'Polo Hemd', price: 34.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Shirts & Polos', section: 'old-money', status: 'live' },
         { name: 'Knit Zip-Polo', price: 44.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Shirts & Polos', section: 'old-money', status: 'live' },
-        { name: 'Bundfalthose', price: 51.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'old-money', status: 'live' },
+        { name: 'Bundfalthose', price: 64.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'old-money', status: 'live' },
         { name: 'Elegante Weste', price: 69.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Westen', section: 'old-money', status: 'live' },
         { name: 'Quarter Zipper', price: 79.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Knitwear', section: 'old-money', status: 'live' },
         { name: 'Strickpullover', price: 89.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Knitwear', section: 'old-money', status: 'live' },

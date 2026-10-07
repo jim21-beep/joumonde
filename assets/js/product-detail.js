@@ -377,6 +377,7 @@ window.updateProductDetailContent = function updateProductDetailContent(productD
     if (reviewsEmpty) reviewsEmpty.textContent = t('reviewsEmpty');
     if (reviewEligibility) reviewEligibility.textContent = t('reviewAfterVerifiedDelivery');
     if (writeReviewButton) writeReviewButton.textContent = t('reviewButton');
+    updateReviewControlsLanguage();
     const reviewModal = document.getElementById('review-modal');
     if (reviewModal) {
         const modalTitle = reviewModal.querySelector('h2');
@@ -393,10 +394,8 @@ window.updateProductDetailContent = function updateProductDetailContent(productD
 
     const relatedTitle = document.querySelector('.related-products-section .section-title');
     const relatedProductTitle = document.querySelector('.related-products-section .product-info h3');
-    const relatedDescription = document.querySelector('.related-products-section .product-description');
     if (relatedTitle) relatedTitle.textContent = t('similarProducts');
     if (relatedProductTitle) relatedProductTitle.textContent = t('poloShirt');
-    if (relatedDescription) relatedDescription.textContent = t('productReviewRelatedDescription');
     const relatedAddButton = document.querySelector('.related-products-section .add-to-cart-btn');
     if (relatedAddButton) relatedAddButton.textContent = t('addToCart');
 };
@@ -603,6 +602,10 @@ function toggleAccordion(button) {
 }
 
 let eligibleReviewOrderId = null;
+let productReviews = [];
+let currentReviewPage = 1;
+let currentReviewSortOrder = 'highest';
+const REVIEWS_PER_PAGE = 5;
 
 function getDetailProductName() {
     const selectedProduct = JSON.parse(sessionStorage.getItem('selectedProduct') || 'null');
@@ -667,33 +670,151 @@ async function loadReviews() {
     if (!reviewList || !productName) return;
 
     await loadLanguage(currentLanguage);
+    updateReviewControlsLanguage();
     const { data, error } = await invokeProductReviews({ action: 'list', productName });
-    const reviews = error ? [] : (data?.reviews || []);
-    reviewList.replaceChildren(...reviews.map(createReviewElement));
+    productReviews = error ? [] : (Array.isArray(data?.reviews) ? data.reviews : []);
+    currentReviewPage = 1;
 
     if (summary) {
         summary.replaceChildren();
-        summary.hidden = reviews.length === 0;
-        summary.style.display = reviews.length ? '' : 'none';
-        if (reviews.length) {
-            const average = reviews.reduce((total, review) => total + Number(review.rating), 0) / reviews.length;
-            const stars = document.createElement('div');
-            stars.className = 'stars-large';
-            stars.textContent = '★'.repeat(Math.round(average)) + '☆'.repeat(5 - Math.round(average));
-            const score = document.createElement('div');
-            score.className = 'average-rating';
-            score.textContent = average.toFixed(1);
-            const count = document.createElement('p');
-            count.textContent = t('reviewCount').replace('{count}', String(reviews.length));
-            summary.append(score, stars, count);
-        }
+        summary.hidden = false;
+        summary.style.display = '';
+        renderReviewSummary(summary, productReviews);
     }
     if (emptyState) {
-        emptyState.hidden = reviews.length > 0;
+        emptyState.hidden = productReviews.length > 0;
         emptyState.textContent = error ? t('reviewListUnavailable') : t('reviewsEmpty');
     }
 
+    const toolbar = document.getElementById('reviewsToolbar');
+    if (toolbar) toolbar.hidden = productReviews.length === 0;
+    renderReviewList();
     await loadReviewEligibility(productName);
+}
+
+function updateReviewControlsLanguage() {
+    const sortOrder = document.getElementById('reviewSortOrder');
+    if (sortOrder) {
+        const optionKeys = ['reviewSortHighest', 'reviewSortNewest', 'reviewSortOldest', 'reviewSortLowest'];
+        optionKeys.forEach((key, index) => {
+            if (sortOrder.options[index]) sortOrder.options[index].textContent = t(key);
+        });
+    }
+    const sortLabel = document.querySelector('label[for="reviewSortOrder"]');
+    if (sortLabel) sortLabel.textContent = t('reviewSortLabel');
+    const pagination = document.getElementById('reviewPagination');
+    if (pagination) pagination.setAttribute('aria-label', t('reviewPaginationLabel'));
+}
+
+function renderReviewSummary(summary, reviews) {
+    const distribution = [5, 4, 3, 2, 1].map(rating => ({
+        rating,
+        count: reviews.filter(review => Number(review.rating) === rating).length
+    }));
+    const average = reviews.length
+        ? reviews.reduce((total, review) => total + Number(review.rating), 0) / reviews.length
+        : 0;
+
+    const overall = document.createElement('div');
+    overall.className = 'summary-rating';
+    const score = document.createElement('div');
+    score.className = 'average-rating';
+    score.textContent = t('reviewAverage').replace('{average}', average.toFixed(2));
+    const stars = document.createElement('div');
+    stars.className = 'stars-large';
+    stars.textContent = `${'★'.repeat(Math.round(average))}${'☆'.repeat(5 - Math.round(average))}`;
+    stars.setAttribute('aria-label', t('reviewStarsOutOfFive').replace('{rating}', average.toFixed(2)));
+    const count = document.createElement('p');
+    count.textContent = t('reviewCount').replace('{count}', String(reviews.length));
+    overall.append(score, stars, count);
+
+    const bars = document.createElement('div');
+    bars.className = 'rating-distribution';
+    distribution.forEach(({ rating, count: ratingCount }) => {
+        const row = document.createElement('div');
+        row.className = 'rating-bar';
+        const label = document.createElement('span');
+        label.className = 'rating-bar-label';
+        label.textContent = `${rating} ★`;
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        const fill = document.createElement('div');
+        fill.className = 'fill';
+        fill.style.width = `${reviews.length ? (ratingCount / reviews.length) * 100 : 0}%`;
+        bar.append(fill);
+        const total = document.createElement('span');
+        total.className = 'rating-bar-count';
+        total.textContent = String(ratingCount);
+        row.append(label, bar, total);
+        bars.append(row);
+    });
+
+    summary.append(overall, bars);
+}
+
+function setReviewSortOrder(sortOrder) {
+    currentReviewSortOrder = sortOrder;
+    currentReviewPage = 1;
+    renderReviewList();
+}
+
+function renderReviewList() {
+    const reviewList = document.getElementById('reviewList');
+    const pagination = document.getElementById('reviewPagination');
+    if (!reviewList || !pagination) return;
+
+    const sortedReviews = [...productReviews];
+    const dateValue = review => new Date(review.created_at).getTime() || 0;
+    switch (currentReviewSortOrder) {
+        case 'newest':
+            sortedReviews.sort((a, b) => dateValue(b) - dateValue(a));
+            break;
+        case 'oldest':
+            sortedReviews.sort((a, b) => dateValue(a) - dateValue(b));
+            break;
+        case 'lowest':
+            sortedReviews.sort((a, b) => Number(a.rating) - Number(b.rating));
+            break;
+        default:
+            sortedReviews.sort((a, b) => Number(b.rating) - Number(a.rating));
+    }
+
+    const pageCount = Math.ceil(sortedReviews.length / REVIEWS_PER_PAGE);
+    currentReviewPage = Math.min(Math.max(currentReviewPage, 1), Math.max(pageCount, 1));
+    const pageStart = (currentReviewPage - 1) * REVIEWS_PER_PAGE;
+    reviewList.replaceChildren(...sortedReviews
+        .slice(pageStart, pageStart + REVIEWS_PER_PAGE)
+        .map(createReviewElement));
+
+    pagination.replaceChildren();
+    pagination.hidden = pageCount <= 1;
+    if (pageCount <= 1) return;
+
+    const addPageButton = (label, page, isActive = false, ariaLabel = '') => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = `review-page-button${isActive ? ' active' : ''}`;
+        button.textContent = label;
+        button.disabled = isActive;
+        if (ariaLabel) button.setAttribute('aria-label', ariaLabel);
+        button.addEventListener('click', () => {
+            currentReviewPage = page;
+            renderReviewList();
+        });
+        pagination.append(button);
+    };
+
+    if (currentReviewPage > 1) {
+        addPageButton('‹', currentReviewPage - 1, false, t('reviewPreviousPage'));
+    }
+    const firstVisiblePage = Math.max(1, Math.min(currentReviewPage - 2, pageCount - 4));
+    const lastVisiblePage = Math.min(pageCount, firstVisiblePage + 4);
+    for (let page = firstVisiblePage; page <= lastVisiblePage; page += 1) {
+        addPageButton(String(page), page, page === currentReviewPage, `${t('reviewPage')} ${page}`);
+    }
+    if (currentReviewPage < pageCount) {
+        addPageButton('›', currentReviewPage + 1, false, t('reviewNextPage'));
+    }
 }
 
 function createReviewElement(review) {

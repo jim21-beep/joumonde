@@ -236,9 +236,19 @@
     <section id="reviews" class="reviews-section">
         <div class="container">
             <h2 class="section-title">Kundenbewertungen</h2>
-            <div class="review-summary" id="reviewSummary" hidden></div>
+            <div class="review-summary" id="reviewSummary"></div>
             <p class="reviews-empty" id="reviewsEmpty">Noch keine veröffentlichten Bewertungen.</p>
+            <div class="reviews-toolbar" id="reviewsToolbar" hidden>
+                <label class="sr-only" for="reviewSortOrder">Bewertungen sortieren</label>
+                <select id="reviewSortOrder" onchange="setReviewSortOrder(this.value)">
+                    <option value="highest">Höchste Bewertung</option>
+                    <option value="newest">Neueste zuerst</option>
+                    <option value="oldest">Älteste zuerst</option>
+                    <option value="lowest">Niedrigste Bewertung</option>
+                </select>
+            </div>
             <div class="review-list" id="reviewList"></div>
+            <nav class="review-pagination" id="reviewPagination" aria-label="Bewertungsseiten" hidden></nav>
             <p class="review-eligibility" id="reviewEligibility">Bewertungen sind nur nach einem verifizierten Kauf möglich.</p>
             <button class="btn-write-review" id="writeReviewButton" onclick="openReviewForm()" hidden>Bewertung schreiben</button>
         </div>
@@ -293,9 +303,7 @@
                     </div>
                     <div class="product-info">
                         <h3>Polo Hemd</h3>
-                        <p class="product-description">Klassisches Poloshirt aus feiner Baumwolle</p>
                         <p class="product-price">CHF 34.90</p>
-                        <button class="add-to-cart-btn" onclick="addToCart('Polo Hemd', 34.99)">In den Warenkorb</button>
                     </div>
                 </div>
                 <!-- Add more related products as needed -->
