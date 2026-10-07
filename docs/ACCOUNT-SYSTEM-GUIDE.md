@@ -8,11 +8,20 @@ Das Account-System verwendet Supabase Auth für die passwortlose Anmeldung sowie
 
 ### 1. Registrierung und Anmeldung
 - Neue und bestehende Benutzer geben ihre E-Mail-Adresse auf `account.html` ein.
-- Supabase Auth sendet einen sechsstelligen Einmalcode; es gibt kein Passwort und keinen separaten Registrierungsablauf.
-- Der Code wird direkt auf `account.html` eingegeben und mit `verifyOtp` geprüft.
+- Die Edge Function `email-login-code` sendet einen sechsstelligen Einmalcode; es gibt kein Passwort und keinen separaten Registrierungsablauf.
+- Der Code wird direkt auf `account.html` eingegeben. Der Server prüft ihn einmalig und tauscht ihn anschließend gegen einen kurzlebigen Supabase-Magic-Link-Token, mit dem der Browser eine normale Supabase-Session erhält.
 - Alternativ ist Google OAuth verfügbar.
 - Der Shop verwendet den E-Mail-Code-Ablauf für die Anmeldung.
-- Die Supabase-Auth-Mailvorlage muss `{{ .Token }}` ausgeben, damit der Code in der E-Mail sichtbar ist.
+
+#### Deployment des eigenen Codes
+1. Die Migration `supabase/migrations/20261007203000_email_login_codes.sql` im Supabase SQL Editor ausführen.
+2. Die Edge Function `email-login-code` in das Joumonde-Supabase-Projekt deployen.
+3. Sicherstellen, dass die vorhandenen Function-Secrets `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` und `RESEND_API_KEY` für Edge Functions verfügbar sind.
+4. Danach mit einem bestehenden Konto einen neuen Code anfordern und Anmeldung sowie erneute Codeanforderung testen.
+
+Codes werden mit HMAC serverseitig geschützt gespeichert, laufen nach zehn Minuten ab, sind nur einmal verwendbar und erlauben höchstens fünf Prüfversuche. Pro E-Mail-Adresse gilt eine Versandpause von 60 Sekunden; zusätzlich werden Versand- und Prüfversuche pro IP begrenzt. Antworten auf Codeanforderungen verraten nicht, ob eine E-Mail-Adresse bereits registriert ist.
+
+Der Code wird nicht von Supabase Auth erzeugt. Änderungen an Supabase’ Magic-Link-/OTP-Mailvorlage ändern daher diesen sechsstelligen Codeversand nicht.
 
 ### 2. Account Dashboard
 
@@ -70,15 +79,15 @@ Zeigt wichtige Statistiken:
 ### 4. Sicherheit
 - Die Authentifizierung und Session-Verwaltung erfolgen über Supabase Auth.
 - Der Browser speichert keine Kontopasswörter.
-- Einmalcodes sind zeitlich begrenzt und werden serverseitig von Supabase geprüft.
+- Einmalcodes sind zeitlich begrenzt, werden serverseitig geprüft und sind nur einmal verwendbar.
 
 ## 🔧 Technische Details
 
 ### Authentifizierung
 
-`sendAccountLoginCode()` in `public/assets/js/account-system.js` sendet den Code über `supabase.auth.signInWithOtp()` und erlaubt bei Bedarf die Kontoerstellung. `verifyAccountLoginCode()` prüft den sechsstelligen Code mit `supabase.auth.verifyOtp({ type: 'email' })`.
+`sendAccountLoginCode()` und `verifyAccountLoginCode()` verwenden die Edge Function `email-login-code` für den sechsstelligen Code. Nach erfolgreicher Prüfung erstellt der Server über Supabase Admin einen Magic-Link-Token; der Browser tauscht dessen Hash mit `supabase.auth.verifyOtp({ token_hash, type: 'email' })` in eine Supabase-Session um.
 
-Die Supabase-Session wird über Supabase Auth wiederhergestellt. Es werden keine Passwörter oder separaten lokalen Konten gespeichert.
+Die Supabase-Session wird weiterhin vollständig von Supabase Auth verwaltet und wiederhergestellt. Es werden keine Passwörter oder separaten lokalen Konten gespeichert. Der separate Code wird nur gehasht in der Datenbank gespeichert und nach erfolgreicher Prüfung gelöscht.
 
 ### Wichtige Funktionen
 
@@ -199,7 +208,7 @@ Nutzt aus `script.js`:
 ### Sicherheit
 - Supabase Auth verwaltet Identitäten und Sessions.
 - Der Browser speichert keine Kontopasswörter.
-- Der Code wird durch Supabase zeitlich begrenzt und serverseitig geprüft.
+- Der Code wird serverseitig zeitlich begrenzt und geprüft; Fehlversuche sind begrenzt und erfolgreiche Codes sind nur einmal verwendbar.
 
 ### Browser-Kompatibilität
 - Alle modernen Browser unterstützt

@@ -126,6 +126,7 @@
   "accountPageSendCode": "Code per E-Mail senden",
   "accountPageSendingCode": "Anmeldecode wird gesendet …",
   "accountPageCodeSendError": "Der Anmeldecode konnte nicht gesendet werden. Bitte versuche es erneut.",
+  "accountPageRateLimited": "Zu viele Code-Anfragen. Bitte warte einen Moment und versuche es erneut.",
   "accountPageEnterCodeTitle": "Code eingeben",
   "accountPageCodeSent": "Wir haben dir einen Anmeldecode per E-Mail gesendet.",
   "accountPageCodeSentStatus": "Prüfe dein Postfach auf deinen Anmeldecode.",

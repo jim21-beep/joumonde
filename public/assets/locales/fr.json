@@ -126,6 +126,7 @@
   "accountPageSendCode": "Envoyer le code par e-mail",
   "accountPageSendingCode": "Envoi du code de connexion …",
   "accountPageCodeSendError": "Impossible d'envoyer le code de connexion. Veuillez réessayer.",
+  "accountPageRateLimited": "Trop de demandes de code. Veuillez patienter un instant et réessayer.",
   "accountPageEnterCodeTitle": "Saisissez votre code",
   "accountPageCodeSent": "Nous vous avons envoyé un code de connexion par e-mail.",
   "accountPageCodeSentStatus": "Consultez votre boîte de réception pour le code.",

@@ -397,9 +397,17 @@ body.landing-page .nexara-more-link {
 }
 
 .account-page-avatar {
-    border-color: #d8cdbb;
-    background: #fffdf8;
-    color: #51483b;
+    border-color: #8a8f98;
+    background: #8a8f98;
+    color: #fff;
+}
+
+.account-page-avatar svg {
+    width: 60%;
+    height: 60%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
 }
 
 .account-page.account-page-auth {
