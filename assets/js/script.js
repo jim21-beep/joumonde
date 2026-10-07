@@ -541,9 +541,9 @@ function updateAllPrices() {
             const symbol = currencySymbols[currentCurrency];
             
             if (currentCurrency === 'CHF') {
-                priceEl.innerHTML = `<span class="old-price">${symbol} ${convertedOriginal.toFixed(2)}</span> ${symbol} ${convertedPrice.toFixed(2)}`;
+                priceEl.innerHTML = `<span class="old-price">${symbol} ${convertedOriginal.toFixed(2)}</span> <span class="current-price">${symbol} ${convertedPrice.toFixed(2)}</span>`;
             } else {
-                priceEl.innerHTML = `<span class="old-price">${symbol}${convertedOriginal.toFixed(2)}</span> ${symbol}${convertedPrice.toFixed(2)}`;
+                priceEl.innerHTML = `<span class="old-price">${symbol}${convertedOriginal.toFixed(2)}</span> <span class="current-price">${symbol}${convertedPrice.toFixed(2)}</span>`;
             }
         } else {
             priceEl.textContent = formatPrice(basePrice);
