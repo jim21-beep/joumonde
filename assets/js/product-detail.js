@@ -392,12 +392,6 @@ window.updateProductDetailContent = function updateProductDetailContent(productD
         if (submitButton) submitButton.textContent = t('reviewSubmit');
     }
 
-    const relatedTitle = document.querySelector('.related-products-section .section-title');
-    const relatedProductTitle = document.querySelector('.related-products-section .product-info h3');
-    if (relatedTitle) relatedTitle.textContent = t('similarProducts');
-    if (relatedProductTitle) relatedProductTitle.textContent = t('poloShirt');
-    const relatedAddButton = document.querySelector('.related-products-section .add-to-cart-btn');
-    if (relatedAddButton) relatedAddButton.textContent = t('addToCart');
 };
 
 // Product Detail Page JavaScript

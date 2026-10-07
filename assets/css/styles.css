@@ -5546,11 +5546,6 @@ button.loading {
     color: #1a1a1a;
 }
 
-/* Related Products */
-.related-products-section {
-    padding: 4rem 0;
-}
-
 /* Responsive */
 @media (max-width: 968px) {
     .product-detail-content {

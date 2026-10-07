@@ -1023,7 +1023,7 @@ function viewProductDetail(productName, price, description, colors, sizes) {
     const imageMap = {
         'Klassischer Blazer': 'assets/images/klassischer_blazer.png',
         'Ledergürtel': 'assets/images/Ledergürtel.jpg',
-        'Kaschmirpullover': 'assets/images/kashmir_pullover.png',
+        'Kaschmirpullover': 'assets/images/Kaschmirpullover.jpg',
         'Oxford Hemd': 'assets/images/oxford_hemd.png',
         'Wollmantel': 'assets/images/Wollmantel.jpg',
         'Polo Hemd': 'assets/images/Polo.jpg',
