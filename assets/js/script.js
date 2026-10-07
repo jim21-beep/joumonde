@@ -217,7 +217,7 @@ function selectBlazerColor(color) {
         case 'burgundy': colorName = 'Burgundy'; break;
         case 'camel': colorName = 'Camel'; break;
     }
-    colorLabel.textContent = 'Farbe: ' + colorName;
+    colorLabel.textContent = `${t('filterColor')}: ${translateColorName(colorName)}`;
     window.selectedBlazerColor = colorName;
 }
 // Elegante Farbauswahl für Hoodie (Streetwear)
@@ -242,37 +242,37 @@ function selectHoodieColor(color, btn) {
         case 'white':
             colorName = 'Weiß';
             bg = 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)';
-            img = 'assets/images/hoodie-mockup-white.png';
+            img = 'assets/images/hoodie-mockup.png';
             descText = 'Entspannter Baumwoll-Hoodie – urban cool';
             break;
         case 'gray':
             colorName = 'Grau';
             bg = 'linear-gradient(135deg, #808080 0%, #b0b0b0 100%)';
-            img = 'assets/images/hoodie-mockup-gray.png';
+            img = 'assets/images/hoodie-mockup.png';
             descText = 'Entspannter Baumwoll-Hoodie – urban cool';
             break;
         case 'navy':
             colorName = 'Navy';
             bg = 'linear-gradient(135deg, #001f3f 0%, #3a3a60 100%)';
-            img = 'assets/images/hoodie-mockup-navy.png';
+            img = 'assets/images/hoodie-mockup.png';
             descText = 'Entspannter Baumwoll-Hoodie – urban cool';
             break;
         case 'olive':
             colorName = 'Olive';
             bg = 'linear-gradient(135deg, #556B2F 0%, #8FBC8F 100%)';
-            img = 'assets/images/hoodie-mockup-olive.png';
+            img = 'assets/images/hoodie-mockup.png';
             descText = 'Entspannter Baumwoll-Hoodie – urban cool';
             break;
         case 'beige':
             colorName = 'Beige';
             bg = 'linear-gradient(135deg, #f5f5dc 0%, #e9e4c9 100%)';
-            img = 'assets/images/hoodie-mockup-beige.png';
+            img = 'assets/images/hoodie-mockup.png';
             descText = 'Entspannter Baumwoll-Hoodie – urban cool';
             break;
     }
     hoodieImageDiv.style.background = bg;
     hoodieImg.src = img;
-    colorLabel.textContent = 'Farbe: ' + colorName;
+    colorLabel.textContent = `${t('filterColor')}: ${translateColorName(colorName)}`;
     if (desc) desc.textContent = descText;
     window.selectedHoodieColor = colorName;
 
@@ -296,15 +296,20 @@ const PRODUCT_SIZE_OPTIONS = {
     'Polo Hemd': ['S', 'M', 'L', 'XL'],
     'Knit Zip-Polo': ['S', 'M', 'L', 'XL'],
     'Ripped Knit Zip-Polo': ['S', 'M', 'L', 'XL'],
-    'Chino Hose': ['30', '32', '34', '36'],
+    'Bundfalthose': ['30', '32', '34', '36'],
     'Elegante Weste': ['S', 'M', 'L', 'XL'],
     'Quarter Zipper': ['S', 'M', 'L', 'XL'],
     'Strickpullover': ['S', 'M', 'L', 'XL'],
+    'Kaschmirpullover': ['S', 'M', 'L', 'XL'],
+    'Oxford Hemd': ['S', 'M', 'L', 'XL'],
+    'Wollmantel': ['S', 'M', 'L', 'XL'],
     'Leinenhose': ['30', '32', '34', '36'],
     'Oversized Hoodie': ['S', 'M', 'L', 'XL'],
     'T-Shirt': ['S', 'M', 'L', 'XL'],
     'Cargo Pants': ['30', '32', '34', '36'],
-    'Trainerhose': ['S', 'M', 'L', 'XL']
+    'Jeans': ['30', '32', '34', '36'],
+    'Trainerhose': ['S', 'M', 'L', 'XL'],
+    'Ledergürtel': ['One Size']
 };
 
 function getAvailableSizesForProduct(productName) {
@@ -446,6 +451,47 @@ function t(key) {
         || key;
 }
 
+const productNameTranslationKeys = {
+    'Klassischer Blazer': 'classicBlazer',
+    'Polo Hemd': 'poloShirt',
+    'Knit Zip-Polo': 'rippedKnitPolo',
+    'Bundfalthose': 'pleatedTrousers',
+    'Elegante Weste': 'elegantVest',
+    'Quarter Zipper': 'quarterZipPullover',
+    'Strickpullover': 'knitSweater',
+    'Kaschmirpullover': 'cashmereSweater',
+    'Oxford Hemd': 'oxfordShirt',
+    'Wollmantel': 'woolCoat',
+    'Leinenhose': 'linenPants',
+    'Oversized Hoodie': 'oversizedHoodie',
+    'T-Shirt': 'graphicTee',
+    'Cargo Pants': 'cargoPants',
+    'Jeans': 'jeans',
+    'Trainerhose': 'trackPants',
+    'Ledergürtel': 'leatherBelt'
+};
+
+function translateProductName(name) {
+    const key = productNameTranslationKeys[name];
+    return key ? t(key) : name;
+}
+
+const colorNameTranslationKeys = {
+    Schwarz: 'colorBlack',
+    Weiß: 'colorWhite',
+    Navy: 'colorNavy',
+    Grau: 'colorGray',
+    Beige: 'colorBeige',
+    Burgundy: 'colorBurgundy',
+    Camel: 'colorCamel',
+    Olive: 'colorOlive'
+};
+
+function translateColorName(name) {
+    const key = colorNameTranslationKeys[name];
+    return key ? t(key) : name;
+}
+
 // Format price with currency
 function formatPrice(price) {
     // Wenn Preis 0 ist, zeige 0.00
@@ -527,6 +573,20 @@ function updatePageContent() {
         const keys = ['home', 'oldMoney', 'streetwear', 'about', 'contact'];
         if (keys[i]) link.textContent = t(keys[i]);
     });
+
+    const collectionsTrigger = document.querySelector('.nav-dropdown-trigger');
+    const collectionsLabel = collectionsTrigger && Array.from(collectionsTrigger.childNodes).find(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
+    if (collectionsLabel) collectionsLabel.textContent = ` ${t('navCollections')} `;
+    const collectionKeys = ['collectionAccessories', 'collectionEssentials', 'collectionSeasonal', 'collectionGiftSets'];
+    document.querySelectorAll('.nav-dropdown-item').forEach((item, index) => {
+        const label = Array.from(item.childNodes).find(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
+        const badge = item.querySelector('.nav-soon-badge');
+        if (label && collectionKeys[index]) label.textContent = `${t(collectionKeys[index])} `;
+        if (badge) badge.textContent = t('soon');
+    });
+    document.querySelector('.search-btn')?.setAttribute('aria-label', t('searchAria'));
+    document.querySelector('.wishlist-btn')?.setAttribute('aria-label', t('wishlistAria'));
+    document.querySelector('.mobile-menu-btn')?.setAttribute('aria-label', t('mobileMenuAria'));
     
     // Hero
     const heroTitle = document.querySelector('.hero h2');
@@ -547,15 +607,21 @@ function updatePageContent() {
     const streetwearSubtitle = document.querySelector('#streetwear .section-subtitle');
     if (streetwearTitle) streetwearTitle.textContent = t('streetwearTitle');
     if (streetwearSubtitle) streetwearSubtitle.textContent = t('streetwearSubtitle');
+    const accessoriesTitle = document.querySelector('#accessories .section-title');
+    const accessoriesSubtitle = document.querySelector('#accessories .section-subtitle');
+    if (accessoriesTitle) accessoriesTitle.textContent = t('collectionAccessories');
+    if (accessoriesSubtitle) accessoriesSubtitle.textContent = t('accessoriesSubtitle');
     
     // Products
     const productTitles = [
-        'classicBlazer', 'poloShirt', 'rippedKnitPolo', 'chinosPants', 'elegantVest', 'quarterZipPullover', 'knitSweater', 'linenPants',
-        'oversizedHoodie', 'graphicTee', 'cargoPants', 'trackPants'
+        'classicBlazer', 'poloShirt', 'rippedKnitPolo', 'pleatedTrousers', 'elegantVest', 'quarterZipPullover', 'knitSweater', 'linenPants',
+        'cashmereSweater', 'oxfordShirt', 'woolCoat',
+        'oversizedHoodie', 'graphicTee', 'cargoPants', 'jeans', 'trackPants', 'leatherBelt'
     ];
     const productDescs = [
-        'blazerDesc', 'poloDesc', 'rippedKnitPoloDesc', 'chinosDesc', 'vestDesc', 'quarterZipDesc', 'sweaterDesc',
-        'linenDesc', 'hoodieDesc', 'teeDesc', 'cargoDesc', 'trackDesc'
+        'blazerDesc', 'poloDesc', 'rippedKnitPoloDesc', 'pleatedTrousersDesc', 'vestDesc', 'quarterZipDesc', 'sweaterDesc',
+        'linenDesc', 'cashmereSweaterDesc', 'oxfordShirtDesc', 'woolCoatDesc',
+        'hoodieDesc', 'teeDesc', 'cargoDesc', 'jeansDesc', 'trackDesc', 'leatherBeltDesc'
     ];
     
     document.querySelectorAll('.product-info h3').forEach((title, i) => {
@@ -712,8 +778,47 @@ function updatePageContent() {
     });
 
     // Filter sections (position-based: Price, Size, Color)
+    const filterToggleButton = document.querySelector('.filter-toggle-btn');
+    if (filterToggleButton) {
+        const labelNode = Array.from(filterToggleButton.childNodes).find(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
+        if (labelNode) labelNode.textContent = ` ${t('filterToggle')}`;
+    }
+    document.querySelectorAll('#minPrice, #minPriceStreet').forEach(input => {
+        input.placeholder = t('priceMinimum');
+        input.setAttribute('aria-label', t('minPriceAria'));
+    });
+    document.querySelectorAll('#maxPrice, #maxPriceStreet').forEach(input => {
+        input.placeholder = t('priceMaximum');
+        input.setAttribute('aria-label', t('maxPriceAria'));
+    });
+    const colorFilterKeys = {
+        black: 'colorBlack', white: 'colorWhite', navy: 'colorNavy', gray: 'colorGray',
+        beige: 'colorBeige', burgundy: 'colorBurgundy', camel: 'colorCamel', olive: 'colorOlive'
+    };
+    document.querySelectorAll('.color-checkbox input').forEach(input => {
+        const key = colorFilterKeys[input.value];
+        const label = input.closest('.color-checkbox');
+        if (key && label) {
+            label.title = t(key);
+            input.setAttribute('aria-label', t(key));
+        }
+    });
+    const blazerColorLabel = document.getElementById('blazer-color-label');
+    const hoodieColorLabel = document.getElementById('hoodie-color-selected-label');
+    if (blazerColorLabel) blazerColorLabel.textContent = `${t('filterColor')}: ${translateColorName(window.selectedBlazerColor || 'Schwarz')}`;
+    if (hoodieColorLabel) hoodieColorLabel.textContent = `${t('filterColor')}: ${translateColorName(window.selectedHoodieColor || 'Schwarz')}`;
+    document.querySelectorAll('.price-range input[type="range"]').forEach(input => {
+        input.setAttribute('aria-label', t('priceLimitAria'));
+    });
+    document.querySelectorAll('.range-value').forEach(label => {
+        if (label.firstChild && label.firstChild.nodeType === Node.TEXT_NODE) {
+            label.firstChild.textContent = `${t('upTo')} `;
+        }
+    });
     document.querySelectorAll('.filter-sidebar').forEach(sidebar => {
+        const heading = sidebar.querySelector('.filter-header h3');
         const groups = sidebar.querySelectorAll('.filter-group h4');
+        if (heading) heading.textContent = t('filterToggle');
         if (groups[0]) groups[0].textContent = t('filterPrice');
         if (groups[1]) groups[1].textContent = t('filterSize');
         if (groups[2]) groups[2].textContent = t('filterColor');
@@ -736,6 +841,141 @@ function updatePageContent() {
     const applyDiscountBtn = document.querySelector('.apply-discount-btn');
     if (discountInput && !discountInput.disabled) discountInput.placeholder = t('discountCodePlaceholder');
     if (applyDiscountBtn && !applyDiscountBtn.disabled) applyDiscountBtn.textContent = t('applyDiscount');
+
+    const subtotalLabel = document.querySelector('.subtotal-row > span:first-child');
+    const discountCodeLabel = document.querySelector('.discount-row > span:first-child');
+    const totalLabel = document.querySelector('.total-row > span:first-child');
+    if (subtotalLabel) subtotalLabel.textContent = t('subtotal');
+    if (discountCodeLabel) {
+        const labelStart = discountCodeLabel.firstChild;
+        const labelEnd = discountCodeLabel.lastChild;
+        if (labelStart?.nodeType === Node.TEXT_NODE) labelStart.textContent = `${t('discountLabel')} (`;
+        if (labelEnd?.nodeType === Node.TEXT_NODE) labelEnd.textContent = '):';
+    }
+    if (totalLabel) totalLabel.textContent = t('total');
+
+    const wishlistTitle = document.querySelector('.wishlist-sidebar .cart-header h2');
+    const wishlistEmpty = document.querySelector('.wishlist-sidebar .empty-cart p');
+    if (wishlistTitle) wishlistTitle.textContent = t('accountWishlist');
+    if (wishlistEmpty) wishlistEmpty.textContent = t('wishlistEmpty');
+
+    const contactModal = document.getElementById('contact-modal');
+    if (contactModal) {
+        const title = contactModal.querySelector('.contact-modal-content h2');
+        if (title) title.textContent = t('contactFormTitle');
+        const fields = {
+            name: 'nameRequired',
+            email: 'emailRequired',
+            phone: 'phoneOptional',
+            subject: 'subjectRequired',
+            message: 'messageRequired'
+        };
+        Object.entries(fields).forEach(([name, key]) => {
+            const field = contactModal.querySelector(`[name="${name}"]`);
+            if (field) field.placeholder = t(key);
+        });
+    }
+
+    const accountModal = document.getElementById('account-modal');
+    if (accountModal) {
+        const accountText = {
+            '#tab-login': 'accountLogin',
+            '#tab-register': 'accountRegister',
+            '#login-form .auth-greeting': 'accountWelcomeBack',
+            '#register-form .auth-greeting': 'accountCreate',
+            '#login-form .auth-checkbox-label span': 'accountRemember',
+            '#login-form .auth-link': 'accountForgotPassword',
+            '#login-form .auth-submit-btn': 'accountLogin',
+            '#register-form .auth-submit-btn': 'accountCreate'
+        };
+        Object.entries(accountText).forEach(([selector, key]) => {
+            const element = accountModal.querySelector(selector);
+            if (element) element.textContent = t(key);
+        });
+        accountModal.querySelector('.auth-modal-close')?.setAttribute('aria-label', t('accountModalClose'));
+
+        const accountFields = [
+            ['#login-form input[type="email"]', 'accountEmail', 'accountEmail'],
+            ['#login-form input[type="password"]', 'accountPassword', null],
+            ['#register-form input[name="lastName"]', 'lastName', 'accountLastNameExample'],
+            ['#register-form input[name="firstName"]', 'firstName', 'accountFirstNameExample'],
+            ['#register-form input[name="email"]', 'accountEmail', 'accountEmail'],
+            ['#register-form input[name="password"]', 'accountPassword', 'accountPasswordMin'],
+            ['#register-form input[name="passwordConfirm"]', 'accountConfirmPassword', null]
+        ];
+        accountFields.forEach(([selector, labelKey, placeholderKey]) => {
+            const input = accountModal.querySelector(selector);
+            const label = input?.closest('.auth-field')?.querySelector('.auth-label');
+            if (label) label.textContent = t(labelKey);
+            if (input && placeholderKey) input.placeholder = t(placeholderKey);
+        });
+    }
+
+    const sizeGuide = document.getElementById('size-guide-modal');
+    if (sizeGuide) {
+        const title = sizeGuide.querySelector('.contact-modal-content h2');
+        const headers = sizeGuide.querySelectorAll('.size-table thead th');
+        if (title) title.textContent = t('sizeGuideTitle');
+        ['sizeGuideSize', 'sizeGuideChest', 'sizeGuideWaist', 'sizeGuideHip'].forEach((key, index) => {
+            if (headers[index]) headers[index].textContent = t(key);
+        });
+        const hint = sizeGuide.querySelector('.size-guide-content > p');
+        const hintTextNodes = hint ? Array.from(hint.childNodes).filter(node => node.nodeType === Node.TEXT_NODE) : [];
+        if (hintTextNodes[0]) hintTextNodes[0].textContent = `${t('sizeGuideMissingPrefix')} `;
+        if (hintTextNodes[1]) hintTextNodes[1].textContent = ` ${t('sizeGuideMissingSuffix')}`;
+        const requestLink = hint?.querySelector('a');
+        if (requestLink) requestLink.textContent = t('sizeGuideRequestLink');
+        sizeGuide.querySelector('.contact-close')?.setAttribute('aria-label', t('accountModalClose'));
+    }
+
+    const cookieBanner = document.getElementById('cookie-banner');
+    if (cookieBanner) {
+        const heading = cookieBanner.querySelector('.cookie-text h3');
+        const paragraphs = cookieBanner.querySelectorAll('.cookie-text p');
+        if (heading) heading.textContent = t('cookieTitle');
+        if (paragraphs[0]) paragraphs[0].textContent = t('cookieBannerIntro');
+        const details = paragraphs[1];
+        if (details) {
+            const detailsText = Array.from(details.childNodes).find(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
+            const policyLink = details.querySelector('a');
+            if (detailsText) detailsText.textContent = `${t('cookieBannerDetails')} `;
+            if (policyLink) policyLink.textContent = t('cookiePolicy');
+        }
+        ['cookieAcceptAll', 'cookieSettingsButton', 'cookieOnlyNecessary'].forEach((key, index) => {
+            const button = cookieBanner.querySelectorAll('.cookie-buttons button')[index];
+            if (button) button.textContent = t(key);
+        });
+    }
+
+    const cookieSettings = document.getElementById('cookie-settings-modal');
+    if (cookieSettings) {
+        const title = cookieSettings.querySelector('.cookie-settings-content h2');
+        const intro = cookieSettings.querySelector('.cookie-settings-content > p');
+        if (title) title.textContent = t('cookieSettingsTitle');
+        if (intro) intro.textContent = t('cookieSettingsIntro');
+        const categories = cookieSettings.querySelectorAll('.cookie-category');
+        const categoryKeys = [
+            ['cookieNecessary', 'cookieNecessaryDescription'],
+            ['cookieAnalytics', 'cookieAnalyticsDescription'],
+            ['cookieMarketing', 'cookieMarketingDescription']
+        ];
+        categories.forEach((category, index) => {
+            const [titleKey, descriptionKey] = categoryKeys[index] || [];
+            const categoryTitle = category.querySelector('.category-header h3');
+            const requiredBadge = categoryTitle?.querySelector('.required-badge');
+            const description = category.querySelector('p');
+            if (categoryTitle && categoryTitle.firstChild && titleKey) categoryTitle.firstChild.textContent = `${t(titleKey)} `;
+            if (requiredBadge) requiredBadge.textContent = t('cookieRequired');
+            if (description && descriptionKey) description.textContent = t(descriptionKey);
+        });
+        const settingsButtons = cookieSettings.querySelectorAll('.settings-buttons button');
+        if (settingsButtons[0]) settingsButtons[0].textContent = t('cookieSaveSelection');
+        if (settingsButtons[1]) settingsButtons[1].textContent = t('cookieAcceptAll');
+        const policyLinks = cookieSettings.querySelectorAll('a');
+        if (policyLinks[0]) policyLinks[0].textContent = t('cookiePolicy');
+        if (policyLinks[1]) policyLinks[1].textContent = t('privacyPolicy');
+        cookieSettings.querySelector('.close-settings')?.setAttribute('aria-label', t('accountModalClose'));
+    }
 }
 
 // Toggle Cart Sidebar
@@ -748,22 +988,30 @@ function toggleCart() {
 // Navigate to Product Detail Page
 function viewProductDetail(productName, price, description, colors, sizes) {
     // Fixed name → image mapping (never use array index)
+    const streetwearProducts = new Set(['Oversized Hoodie', 'T-Shirt', 'Cargo Pants', 'Jeans', 'Trainerhose']);
+    const accessoryProducts = new Set(['Ledergürtel']);
     const imageMap = {
         'Klassischer Blazer': 'assets/images/klassischer_blazer.png',
-        'Polo Hemd': 'assets/images/polo.png',
-        'Ripped Knit Zip-Polo': 'assets/images/ripped-knit-polo.png',
-        'Chino Hose': 'assets/images/chino_hose.png',
+        'Ledergürtel': 'assets/images/Ledergürtel.jpg',
+        'Kaschmirpullover': 'assets/images/kashmir_pullover.png',
+        'Oxford Hemd': 'assets/images/oxford_hemd.png',
+        'Wollmantel': 'assets/images/Wollmantel.jpg',
+        'Polo Hemd': 'assets/images/Polo.jpg',
+        'Knit Zip-Polo': 'assets/images/ripped knit zip-polo.jpg',
+        'Strickpullover': 'assets/images/Strickpullover.jpg',
+        'Bundfalthose': 'assets/images/Bundfalthose.jpg',
         'Elegante Weste': 'assets/images/weste.png',
-        'Quarter Zipper': 'assets/images/quarter_zipper.png',
-        'Strickpullover': 'assets/images/strickpullover.png',
-        'Leinenhose': 'assets/images/leinen.png',
+        'Quarter Zipper': 'assets/images/Quarter Zipper.jpg',
+        'Leinenhose': 'assets/images/Leinenhose.jpg',
         'Oversized Hoodie': 'assets/images/hoodie-mockup.png',
-        'Trainerhose': 'assets/images/trainerhose.png'
+        'T-Shirt': 'assets/images/T-Shirt.jpg',
+        'Trainerhose': 'assets/images/Trainerhose.jpg'
     };
 
     // Store product data in sessionStorage
     const productData = {
         name: productName,
+        collection: streetwearProducts.has(productName) ? 'streetwear' : accessoryProducts.has(productName) ? 'collectionAccessories' : 'oldMoney',
         price: price,
         description: description,
         colors: colors || [],
@@ -876,15 +1124,15 @@ function updateCart() {
     cartItemsContainer.innerHTML = cart.map((item, index) => `
         <div class="cart-item">
             <div class="cart-item-info">
-                <h4>${item.name}</h4>
+                <h4>${translateProductName(item.name)}</h4>
                 <div class="cart-item-meta">
-                    <label>${t('size')}:</label>
+                    <label>${t('size')}</label>
                     <select class="cart-size-select" onchange="updateCartItemSize(${index}, this.value)">
                         ${getAvailableSizesForProduct(item.name).map(size => `
                             <option value="${size}" ${item.size === size ? 'selected' : ''}>${size}</option>
                         `).join('')}
                     </select>
-                    ${item.color ? `<span class="cart-item-color">Color: ${item.color}</span>` : ''}
+                    ${item.color ? `<span class="cart-item-color">${t('filterColor')}: ${translateColorName(item.color)}</span>` : ''}
                 </div>
                 <p class="cart-item-price">${formatPrice(item.price)}</p>
                 <div class="cart-item-quantity">
@@ -948,9 +1196,7 @@ function updateCart() {
         total -= comboDiscount;
     }
     
-    // Update total with label
-    const totalLabel = document.querySelector('.cart-total span:first-child');
-    if (totalLabel) totalLabel.textContent = t('total');
+    // Update total
     cartTotalElement.textContent = formatPrice(total);
 }
 
@@ -1158,12 +1404,8 @@ function toggleNavDropdown() {
 }
 
 function showNavComingSoon(collection) {
-    const msgs = {
-        de: `${collection} – Bald verfügbar! Wir arbeiten bereits daran.`,
-        en: `${collection} – Coming soon! We're already working on it.`,
-        fr: `${collection} – Bientôt disponible ! Nous y travaillons déjà.`
-    };
-    showNotification(msgs[currentLanguage] || msgs['de']);
+    const message = t('collectionSoonMessage').replace('{collection}', t(collection));
+    showNotification(message);
     const dropdown = document.getElementById('nav-dropdown-kollektionen');
     if (dropdown) dropdown.classList.remove('open');
 }
@@ -1227,15 +1469,20 @@ function toggleSearch() {
         { name: 'Klassischer Blazer', price: 79.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Blazer', section: 'old-money', status: 'live' },
         { name: 'Polo Hemd', price: 34.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Shirts & Polos', section: 'old-money', status: 'live' },
         { name: 'Knit Zip-Polo', price: 44.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Shirts & Polos', section: 'old-money', status: 'live' },
-        { name: 'Chino Hose', price: 51.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'old-money', status: 'live' },
+        { name: 'Bundfalthose', price: 51.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'old-money', status: 'live' },
         { name: 'Elegante Weste', price: 69.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Westen', section: 'old-money', status: 'live' },
         { name: 'Quarter Zipper', price: 79.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Knitwear', section: 'old-money', status: 'live' },
         { name: 'Strickpullover', price: 89.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Knitwear', section: 'old-money', status: 'live' },
+        { name: 'Kaschmirpullover', price: 149.90, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Knitwear', section: 'old-money', status: 'live' },
+        { name: 'Oxford Hemd', price: 59.90, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Shirts & Polos', section: 'old-money', status: 'live' },
+        { name: 'Wollmantel', price: 249.90, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Mäntel', section: 'old-money', status: 'live' },
         { name: 'Leinenhose', price: 54.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'old-money', status: 'live' },
-        { name: 'Oversized Hoodie', price: 49.99, collection: 'Streetwear', mainCategory: 'Bekleidung', subCategory: 'Hoodies', section: 'streetwear', status: 'live' },
-        { name: 'T-Shirt', price: 24.99, collection: 'Streetwear', mainCategory: 'Bekleidung', subCategory: 'Tees', section: 'streetwear', status: 'live' },
-        { name: 'Cargo Pants', price: 59.99, collection: 'Streetwear', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'streetwear', status: 'live' },
-        { name: 'Trainerhose', price: 44.99, collection: 'Streetwear', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'streetwear', status: 'live' },
+        { name: 'Oversized Hoodie', price: 49.99, collection: 'Casual', mainCategory: 'Bekleidung', subCategory: 'Hoodies', section: 'streetwear', status: 'live' },
+        { name: 'T-Shirt', price: 24.99, collection: 'Casual', mainCategory: 'Bekleidung', subCategory: 'Tees', section: 'streetwear', status: 'live' },
+        { name: 'Cargo Pants', price: 59.99, collection: 'Casual', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'streetwear', status: 'live' },
+        { name: 'Jeans', price: 59.99, collection: 'Casual', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'streetwear', status: 'live' },
+        { name: 'Trainerhose', price: 44.99, collection: 'Casual', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'streetwear', status: 'live' },
+        { name: 'Ledergürtel', price: 39.90, collection: 'Accessories', mainCategory: 'Accessoires', subCategory: 'Gürtel', section: 'accessories', status: 'live' },
 
         // Planned expansion (categorized)
         { name: 'Custom made AirPods Cases', price: null, collection: 'Accessories', mainCategory: 'Tech-Accessoires', subCategory: 'Cases', section: null, status: 'planned' },
@@ -1253,7 +1500,6 @@ function toggleSearch() {
         { name: 'Schal', price: null, collection: 'Seasonal', mainCategory: 'Seasonal Accessoires', subCategory: 'Schals', section: null, status: 'planned' },
         { name: 'Handschuhe', price: null, collection: 'Seasonal', mainCategory: 'Seasonal Accessoires', subCategory: 'Handschuhe', section: null, status: 'planned' },
         { name: 'Badehosen', price: null, collection: 'Seasonal', mainCategory: 'Resortwear', subCategory: 'Swimwear', section: null, status: 'planned' },
-        { name: 'Gürtel', price: null, collection: 'Accessories', mainCategory: 'Formal-Accessoires', subCategory: 'Gürtel', section: null, status: 'planned' },
         { name: 'Sonnenbrille', price: null, collection: 'Accessories', mainCategory: 'Eyewear', subCategory: 'Sonnenbrillen', section: null, status: 'planned' },
         { name: 'Geschenkboxen', price: null, collection: 'Gift & Sets', mainCategory: 'Packaging', subCategory: 'Gift Boxes', section: null, status: 'planned' },
         { name: 'Nécessaire', price: null, collection: 'Accessories', mainCategory: 'Taschen & Lederwaren', subCategory: 'Travel', section: null, status: 'planned' }
@@ -1307,15 +1553,20 @@ function scrollToProduct(productName) {
         'Klassischer Blazer': 'old-money',
         'Polo Hemd': 'old-money',
         'Knit Zip-Polo': 'old-money',
-        'Chino Hose': 'old-money',
+        'Bundfalthose': 'old-money',
         'Elegante Weste': 'old-money',
         'Quarter Zipper': 'old-money',
         'Strickpullover': 'old-money',
+        'Kaschmirpullover': 'old-money',
+        'Oxford Hemd': 'old-money',
+        'Wollmantel': 'old-money',
         'Leinenhose': 'old-money',
         'Oversized Hoodie': 'streetwear',
         'T-Shirt': 'streetwear',
         'Cargo Pants': 'streetwear',
-        'Trainerhose': 'streetwear'
+        'Jeans': 'streetwear',
+        'Trainerhose': 'streetwear',
+        'Ledergürtel': 'accessories'
     };
     const section = sectionMap[productName];
     if (section && document.getElementById(section)) {
@@ -1340,7 +1591,6 @@ function handleSearchResultClick(productName) {
         'Schal',
         'Handschuhe',
         'Badehosen',
-        'Gürtel',
         'Sonnenbrille',
         'Geschenkboxen',
         'Nécessaire'
@@ -1454,25 +1704,25 @@ function openCheckout() {
     checkoutModal.innerHTML = `
         <div class="checkout-content">
             <button class="checkout-close" onclick="document.querySelector('.checkout-modal').remove(); document.body.classList.remove('modal-open')">&times;</button>
-            <h2>${currentLanguage === 'de' ? 'Kasse' : currentLanguage === 'en' ? 'Checkout' : 'Caisse'}</h2>
+            <h2>${t('checkoutTitle')}</h2>
             
             <div class="checkout-sections">
                 <div class="checkout-section">
-                    <h3>${currentLanguage === 'de' ? 'Bestellübersicht' : currentLanguage === 'en' ? 'Order Summary' : 'Récapitulatif'}</h3>
+                    <h3>${t('checkoutOrderSummary')}</h3>
                     <div class="checkout-items">
                         ${cart.map(item => `
                             <div class="checkout-item">
                                 <span>
-                                    ${item.name} x${item.quantity}
+                                    ${translateProductName(item.name)} x${item.quantity}
                                     <small style="display:block; opacity:0.75; margin-top:2px;">
-                                        ${t('size')}: ${item.size || getPreferredSizeForProduct(item.name)}${item.color ? ` • Farbe: ${item.color}` : ''}
+                                        ${t('size')} ${item.size || getPreferredSizeForProduct(item.name)}${item.color ? ` • ${t('filterColor')}: ${translateColorName(item.color)}` : ''}
                                     </small>
                                 </span>
                                 <span>${formatPrice(item.price * item.quantity)}</span>
                             </div>
                         `).join('')}
                         <div class="checkout-addons-block">
-                            <div class="checkout-addons-title">${currentLanguage === 'de' ? 'Noch dazu einpacken' : currentLanguage === 'en' ? 'Add to your order' : 'Ajouter a la commande'}</div>
+                            <div class="checkout-addons-title">${t('checkoutAddOnsTitle')}</div>
                             ${checkoutAddOnProducts.map(addOn => `
                                 <div class="checkout-addon-item">
                                     <label>
@@ -1504,22 +1754,22 @@ function openCheckout() {
                 </div>
                 
                 <div class="checkout-section">
-                    <h3>${currentLanguage === 'de' ? 'Lieferadresse' : currentLanguage === 'en' ? 'Shipping Address' : 'Adresse de livraison'}</h3>
+                    <h3>${t('shippingAddress')}</h3>
                     <form class="checkout-form" onsubmit="submitOrder(event)">
                         <div class="form-row">
-                            <input type="text" placeholder="${currentLanguage === 'de' ? 'Vorname' : currentLanguage === 'en' ? 'First Name' : 'Prénom'}">
-                            <input type="text" placeholder="${currentLanguage === 'de' ? 'Nachname' : currentLanguage === 'en' ? 'Last Name' : 'Nom'}">
+                            <input type="text" placeholder="${t('firstName')}">
+                            <input type="text" placeholder="${t('lastName')}">
                         </div>
-                        <input type="email" placeholder="Email" required>
-                        <input type="tel" placeholder="${currentLanguage === 'de' ? 'Telefon' : currentLanguage === 'en' ? 'Phone' : 'Téléphone'}">
-                        <input type="text" placeholder="${currentLanguage === 'de' ? 'Straße & Hausnummer' : currentLanguage === 'en' ? 'Street & Number' : 'Rue & Numéro'}">
+                        <input type="email" placeholder="${t('email')}" required>
+                        <input type="tel" placeholder="${t('phone')}">
+                        <input type="text" placeholder="${t('streetAddress')}">
                         <div class="form-row">
-                            <input type="text" placeholder="${currentLanguage === 'de' ? 'PLZ' : currentLanguage === 'en' ? 'ZIP' : 'NPA'}">
-                            <input type="text" placeholder="${currentLanguage === 'de' ? 'Stadt' : currentLanguage === 'en' ? 'City' : 'Ville'}">
+                            <input type="text" placeholder="${t('postalCode')}">
+                            <input type="text" placeholder="${t('city')}">
                         </div>
-                        <input type="text" placeholder="${currentLanguage === 'de' ? 'Land' : currentLanguage === 'en' ? 'Country' : 'Pays'}" value="Schweiz">
+                        <input type="text" placeholder="${t('country')}" value="${t('switzerland')}">
                         
-                        <h3>${currentLanguage === 'de' ? 'Zahlungsmethode' : currentLanguage === 'en' ? 'Payment Method' : 'Mode de paiement'}</h3>
+                        <h3>${t('paymentMethod')}</h3>
                         <div class="payment-methods">
                             <label class="payment-option">
                                 <input type="radio" name="payment" value="card" checked>
@@ -1528,7 +1778,7 @@ function openCheckout() {
                                         <img src="assets/images/payments/visa.svg" alt="Visa" class="payment-logo">
                                         <img src="assets/images/payments/mastercard.svg" alt="Mastercard" class="payment-logo">
                                     </div>
-                                    <span class="payment-label">${currentLanguage === 'de' ? 'Kreditkarte' : currentLanguage === 'en' ? 'Credit Card' : 'Carte de credit'}</span>
+                                    <span class="payment-label">${t('creditCard')}</span>
                                 </div>
                             </label>
                             <label class="payment-option">
@@ -1552,7 +1802,7 @@ function openCheckout() {
                         </div>
                         
                         <button type="submit" class="submit-order-btn">
-                            ${currentLanguage === 'de' ? 'Kostenpflichtig bestellen' : currentLanguage === 'en' ? 'Place Order' : 'Commander'} <span id="checkoutSubmitAmount">${formatPrice(total)}</span>
+                            ${t('placeOrder')} <span id="checkoutSubmitAmount">${formatPrice(total)}</span>
                         </button>
                     </form>
                 </div>
@@ -1628,7 +1878,7 @@ async function submitOrder(e) {
     // Show loading state
     if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.textContent = currentLanguage === 'en' ? 'Processing…' : 'Wird verarbeitet…';
+        submitBtn.textContent = t('processingOrder');
     }
 
     // Single checkout path for test orders:
@@ -1639,21 +1889,25 @@ async function submitOrder(e) {
 
     if (email) {
         try {
+            const sessionResult = window.supabaseClient?.auth
+                ? await window.supabaseClient.auth.getSession()
+                : null;
+            const accessToken = sessionResult?.data?.session?.access_token;
+            const requestHeaders = { 'Content-Type': 'application/json' };
+            if (accessToken) requestHeaders.Authorization = `Bearer ${accessToken}`;
             const res = await fetch(`${window.__ENV__?.SUPABASE_URL}/functions/v1/send-newsletter-confirmation`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: requestHeaders,
                 body: JSON.stringify({
                     type: 'order-confirmation',
                     email,
                     firstName,
-                    userId: (typeof window.getCurrentUserId === 'function' ? window.getCurrentUserId() : null),
                     orderId,
                     items: orderItems,
                     total,
                     currency: currentCurrency || 'CHF',
                     persistOrder: true,
                     paymentMethod: effectivePaymentMethod,
-                    paymentStatus: 'paid',
                     shippingAddress,
                     orderDate: new Date().toLocaleString('de-DE')
                 })
@@ -1675,30 +1929,20 @@ async function submitOrder(e) {
     }
 
     if (!emailSent) {
-        const errorMsg = currentLanguage === 'de'
-            ? 'Bestellbestätigung konnte nicht gesendet werden. Bitte versuche es erneut.'
-            : currentLanguage === 'en'
-            ? 'The order confirmation email could not be sent. Please try again.'
-            : 'L\'email de confirmation n\'a pas pu etre envoye. Veuillez reessayer.';
-        showNotification(errorMsg, 'error');
+        showNotification(t('orderConfirmationError'), 'error');
         if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.textContent = `${currentLanguage === 'de' ? 'Kostenpflichtig bestellen' : currentLanguage === 'en' ? 'Place Order' : 'Commander'} ${formatPrice(total)}`;
+            submitBtn.textContent = `${t('placeOrder')} ${formatPrice(total)}`;
         }
         return;
     }
 
     if (!orderPersisted) {
         console.warn('Order could not be persisted via edge function.');
-        const errorMsg = currentLanguage === 'de'
-            ? 'Bestellung konnte aktuell nicht gespeichert werden. Bitte versuche es erneut.'
-            : currentLanguage === 'en'
-            ? 'Your order could not be saved right now. Please try again.'
-            : 'La commande n\'a pas pu etre enregistree. Veuillez reessayer.';
-        showNotification(errorMsg, 'error');
+        showNotification(t('orderPersistenceError'), 'error');
         if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.textContent = `${currentLanguage === 'de' ? 'Kostenpflichtig bestellen' : currentLanguage === 'en' ? 'Place Order' : 'Commander'} ${formatPrice(total)}`;
+            submitBtn.textContent = `${t('placeOrder')} ${formatPrice(total)}`;
         }
         return;
     }
@@ -1708,13 +1952,7 @@ async function submitOrder(e) {
         trackPurchase(orderId, orderItems, total, discount);
     }
     
-    const successMsg = currentLanguage === 'de' 
-        ? 'Vielen Dank für deine Bestellung! Du erhältst eine Bestätigung per Email.'
-        : currentLanguage === 'en'
-        ? 'Thank you for your order! You will receive a confirmation email.'
-        : 'Merci pour votre commande! Vous recevrez un email de confirmation.';
-    
-    showNotification(successMsg);
+    showNotification(t('orderSuccess'));
     document.querySelector('.checkout-modal').remove();
     document.body.classList.remove('modal-open');
     cart = [];
@@ -1958,20 +2196,12 @@ async function sendChatMessage() {
             return;
         }
 
-        const unavailableMsg = currentLanguage === 'en'
-            ? 'Nexara is currently not reachable. Please try again in a moment.'
-            : currentLanguage === 'fr'
-            ? 'Nexara est momentanement indisponible. Reessaie dans un instant.'
-            : 'Nexara ist gerade nicht erreichbar. Bitte versuche es gleich noch einmal.';
+        const unavailableMsg = t('chatUnavailable');
         addChatMessage(unavailableMsg, 'bot');
         nexaraChatHistory.push({ role: 'assistant', content: unavailableMsg });
     } catch {
         removeTypingIndicator();
-        const errorMsg = currentLanguage === 'en'
-            ? 'Connection issue. Please try again in a few seconds.'
-            : currentLanguage === 'fr'
-            ? 'Probleme de connexion. Reessaie dans quelques secondes.'
-            : 'Verbindungsproblem. Bitte versuche es in ein paar Sekunden erneut.';
+        const errorMsg = t('chatConnectionError');
         addChatMessage(errorMsg, 'bot');
         nexaraChatHistory.push({ role: 'assistant', content: errorMsg });
     }
@@ -2151,12 +2381,12 @@ function generateBotResponse(userMessage) {
     else if (containsAny(['streetwear', 'hoodie', 'sneaker', 'urban', 'cargo', 'trainerhose', 'jogger',
                      'street', 'oversized', 'graphic', 'print', 'tee', 'shirt', 'sporty', 'casual'])) {
         wasResolved = true;
-        response = '🔥 Streetwear Collection:\n\nUnsere Streetwear kombiniert urbanen Style mit Premium-Qualität:\n\n• Oversized Hoodies aus 100% Baumwolle\n• Exklusive Graphic Tees (Limited Edition)\n• Cargo Pants mit Multi-Pocket Design\n• Premium Sneakers\n\nFür alle, die Statement setzen wollen!\n\nZur Kollektion: Scrollen Sie zu "Streetwear Collection"';
+        response = 'Casual Collection:\n\nUnsere Casual Styles verbinden Komfort mit Premium-Qualität:\n\n• Oversized Hoodies aus 100% Baumwolle\n• Exklusive Graphic Tees (Limited Edition)\n• Cargo Pants mit Multi-Pocket Design\n• Premium Sneakers\n\nFür alle, die Statement setzen wollen!\n\nZur Kollektion: Scrollen Sie zu "Casual Collection"';
     }
     // Price questions - new
     else if (containsAny(['preis', 'kosten', 'teuer', 'billig', 'gunstig', 'price', 'kostet', 'viel', 'wert'])) {
         wasResolved = true;
-        response = '💰 Unsere Preise:\n\nOld Money Collection: CHF 79.90 - CHF 89.90\nStreetwear Collection: CHF 24.90 - CHF 79.90\n\n✓ Premium Qualität zu fairen Preisen\n✓ Kostenloser Versand ab CHF 50\n✓ 10% Newsletter-Rabatt für Neukunden\n\nAlle Preise sind bereits in CHF, EUR oder USD verfügbar (siehe Währungsauswahl oben rechts).';
+        response = '💰 Unsere Preise:\n\nOld Money Collection: CHF 79.90 - CHF 89.90\nCasual Collection: CHF 24.90 - CHF 79.90\n\n✓ Premium Qualität zu fairen Preisen\n✓ Kostenloser Versand ab CHF 50\n✓ 10% Newsletter-Rabatt für Neukunden\n\nAlle Preise sind bereits in CHF, EUR oder USD verfügbar (siehe Währungsauswahl oben rechts).';
     }
     // Contact - expanded
     else if (containsAny(['kontakt', 'email', 'telefon', 'erreichen', 'anruf', 'contact', 'mail',
@@ -2180,7 +2410,7 @@ function generateBotResponse(userMessage) {
     else if (containsAny(['material', 'qualitat', 'stoff', 'baumwolle', 'cotton', 'wolle', 'leder',
                      'herstellung', 'produziert', 'gemacht', 'fabric', 'quality'])) {
         wasResolved = true;
-        response = '✨ Qualität & Materialien:\n\n• Premium-Materialien aus Europa\n• Old Money: Italienische Wolle, Ägyptische Baumwolle, Kaschmir\n• Streetwear: 100% Baumwolle, nachhaltige Produktion\n• Fair Trade zertifiziert\n• Langlebig & pflegeleicht\n\nWir setzen auf höchste Qualität für maximale Zufriedenheit!';
+        response = '✨ Qualität & Materialien:\n\n• Premium-Materialien aus Europa\n• Old Money: Italienische Wolle, Ägyptische Baumwolle, Kaschmir\n• Casual: 100% Baumwolle, nachhaltige Produktion\n• Fair Trade zertifiziert\n• Langlebig & pflegeleicht\n\nWir setzen auf höchste Qualität für maximale Zufriedenheit!';
     }
     // Thanks - expanded
     else if (containsAny(['danke', 'vielen dank', 'super', 'perfekt', 'toll', 'thanks', 'thank',
@@ -2274,8 +2504,10 @@ document.addEventListener('DOMContentLoaded', async function() {
     await loadLanguage(currentLanguage);
 
     // Set saved language and currency
-    document.getElementById('language-selector').value = currentLanguage;
-    document.getElementById('currency-selector').value = currentCurrency;
+    const languageSelector = document.getElementById('language-selector');
+    if (languageSelector) languageSelector.value = currentLanguage;
+    const currencySelector = document.getElementById('currency-selector');
+    if (currencySelector) currencySelector.value = currentCurrency;
     
     // Apply saved preferences
     applyPreferredSizeToProductSelectors();
@@ -2528,7 +2760,7 @@ const cookieConsent = {
         this.savePreferences();
         this.hideBanner();
         this.initializeTracking();
-        showNotification('Alle Cookies akzeptiert', 'success');
+        showNotification(t('cookieAcceptedMessage'), 'success');
     },
     
     acceptNecessary() {
@@ -2544,7 +2776,7 @@ const cookieConsent = {
             });
         }
         
-        showNotification('Nur notwendige Cookies werden verwendet', 'info');
+        showNotification(t('cookieNecessaryMessage'), 'info');
     },
     
     saveCustomPreferences() {
@@ -2558,7 +2790,7 @@ const cookieConsent = {
         this.hideBanner();
         this.hideSettings();
         this.initializeTracking();
-        showNotification('Cookie-Einstellungen gespeichert', 'success');
+        showNotification(t('cookiePreferencesSavedMessage'), 'success');
     },
     
     hideBanner() {
@@ -3291,4 +3523,3 @@ document.addEventListener('keydown', function(e) {
         btn.classList.toggle('visible', window.scrollY > 400);
     }, { passive: true });
 })();
-

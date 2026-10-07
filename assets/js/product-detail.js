@@ -67,12 +67,12 @@ const productDatabase = {
             'Bei niedriger Temperatur bügeln'
         ]
     },
-    'Chino Hose': {
-        description: 'Die klassische Chino-Hose ist ein zeitloser Staple für den modernen Gentleman. Aus hochwertigem Baumwoll-Mix gefertigt, bietet sie den perfekten Mix aus Komfort und Eleganz. Ihre Vielseitigkeit macht sie zum idealen Begleiter für Business-Casual bis Freizeit.',
+    'Bundfalthose': {
+        description: 'Die klassische Bundfalthose verbindet zeitlose Eleganz mit hohem Tragekomfort. Der hochwertige Baumwoll-Mix und die präzise gearbeiteten Bundfalten machen sie zum vielseitigen Begleiter für Business und Freizeit.',
         features: [
-            'Slim-Fit Schnitt mit modernem Aussehen',
+            'Klassische Bundfalten für eine elegante Silhouette',
             'Verstärkte Nähte für Langlebigkeit',
-            'Tiefe Taschen mit Münzfach',
+            'Seitliche Eingrifftaschen',
             'Klassischer Knopfverschluss und Reißverschluss',
             'Verstellbare Innenbundweite für perfekte Passform',
             'Moderne, zeitlose Farbpalette'
@@ -267,6 +267,140 @@ const productDatabase = {
     }
 };
 
+window.updateProductDetailContent = function updateProductDetailContent(productData, localeData = {}) {
+    if (!productData) return;
+
+    const productName = typeof translateProductName === 'function'
+        ? translateProductName(productData.name)
+        : productData.name;
+    const streetwearNames = new Set(['Oversized Hoodie', 'T-Shirt', 'Cargo Pants', 'Jeans', 'Trainerhose']);
+    const accessoryNames = new Set(['Ledergürtel']);
+    const collectionKey = productData.collection || (streetwearNames.has(productData.name) ? 'streetwear' : accessoryNames.has(productData.name) ? 'collectionAccessories' : 'oldMoney');
+    const productInfo = localeData.productDescriptions?.[productData.name] || productDatabase[productData.name];
+
+    document.title = `${productName} - Joumonde`;
+    const title = document.querySelector('.product-detail-title');
+    const subtitle = document.querySelector('.product-detail-subtitle');
+    if (title) title.textContent = productName;
+    if (subtitle) subtitle.textContent = productInfo?.description || productData.description || '';
+
+    const breadcrumb = document.querySelector('.breadcrumb');
+    const breadcrumbLinks = breadcrumb?.querySelectorAll('a');
+    if (breadcrumbLinks?.[0]) breadcrumbLinks[0].textContent = t('productHome');
+    if (breadcrumbLinks?.[1]) {
+        breadcrumbLinks[1].textContent = t(collectionKey);
+        const collectionAnchor = collectionKey === 'streetwear' ? 'streetwear' : collectionKey === 'collectionAccessories' ? 'accessories' : 'old-money';
+        breadcrumbLinks[1].href = `shop.html#${collectionAnchor}`;
+    }
+    const breadcrumbProduct = breadcrumb?.querySelector('span:last-child');
+    if (breadcrumbProduct) breadcrumbProduct.textContent = productName;
+
+    const priceNote = document.querySelector('.price-vat');
+    if (priceNote) priceNote.textContent = t('productPriceVat');
+    const sizeLabel = document.querySelector('.product-detail-size label');
+    if (sizeLabel?.firstChild?.nodeType === Node.TEXT_NODE) sizeLabel.firstChild.textContent = `${t('productSizeLabel')} `;
+    const sizeGuideLink = document.querySelector('.size-guide-link-detail');
+    if (sizeGuideLink) sizeGuideLink.textContent = t('productSizeGuide');
+    const colorLabel = document.querySelector('.product-detail-color label');
+    if (colorLabel?.firstChild?.nodeType === Node.TEXT_NODE) colorLabel.firstChild.textContent = `${t('productColorLabel')} `;
+    const quantityLabel = document.querySelector('.product-detail-quantity label');
+    if (quantityLabel) quantityLabel.textContent = t('productQuantityLabel');
+    document.querySelector('.zoom-btn')?.setAttribute('aria-label', t('productZoom'));
+    const quantityButtons = document.querySelectorAll('.quantity-selector button');
+    if (quantityButtons[0]) quantityButtons[0].setAttribute('aria-label', t('productDecreaseQuantity'));
+    if (quantityButtons[1]) quantityButtons[1].setAttribute('aria-label', t('productIncreaseQuantity'));
+    const addToCartButton = document.querySelector('.btn-add-to-cart');
+    const addToCartText = addToCartButton && Array.from(addToCartButton.childNodes).find(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
+    if (addToCartText) addToCartText.textContent = `\n                            ${t('addToCart')}\n                        `;
+    document.querySelector('.btn-add-to-wishlist')?.setAttribute('aria-label', t('wishlistAria'));
+
+    const mainImage = document.querySelector('#mainImage img');
+    if (mainImage) mainImage.alt = productName;
+    const firstThumbnailImage = document.querySelector('.thumbnail.active img');
+    if (firstThumbnailImage) firstThumbnailImage.alt = productName;
+    document.querySelectorAll('.thumbnail .product-placeholder').forEach((placeholder, index) => {
+        placeholder.textContent = t('productImageLabel').replace('{number}', String(index + 1));
+    });
+    const mainImagePlaceholder = document.querySelector('#mainImage .product-placeholder');
+    if (mainImagePlaceholder) mainImagePlaceholder.textContent = t('productMainImagePlaceholder');
+
+    const selectedColor = document.getElementById('selectedColor');
+    if (selectedColor && typeof translateColorName === 'function') selectedColor.textContent = translateColorName(selectedColor.textContent);
+    document.querySelectorAll('.color-option').forEach(option => {
+        const color = option.getAttribute('title');
+        if (color && typeof translateColorName === 'function') {
+            const translatedColor = translateColorName(color);
+            option.title = translatedColor;
+            option.setAttribute('aria-label', `${t('productColorLabel')} ${translatedColor}`);
+        }
+    });
+
+    const featureKeys = ['productFeatureShipping', 'productFeatureReturns', 'productFeaturePayment'];
+    document.querySelectorAll('.product-features .feature-item span').forEach((feature, index) => {
+        if (featureKeys[index]) feature.textContent = t(featureKeys[index]);
+    });
+    const accordionKeys = ['productDescriptionTitle', 'productMaterialsCareTitle', 'productShippingReturnsTitle'];
+    document.querySelectorAll('.product-details-accordion .accordion-header span').forEach((heading, index) => {
+        if (accordionKeys[index]) heading.textContent = t(accordionKeys[index]);
+    });
+    const materialLabel = document.querySelector('#product-material-list')?.previousElementSibling?.querySelector('strong');
+    const careLabel = document.querySelector('#product-care-list')?.previousElementSibling?.querySelector('strong');
+    if (materialLabel) materialLabel.textContent = t('productMaterialLabel');
+    if (careLabel) careLabel.textContent = t('productCareLabel');
+    const shippingPolicyText = document.getElementById('shippingPolicyText');
+    const shippingPolicyLink = document.getElementById('shippingPolicyLink');
+    if (shippingPolicyText) shippingPolicyText.textContent = t('productShippingPolicyText');
+    if (shippingPolicyLink) shippingPolicyLink.textContent = t('productShippingPolicyLink');
+
+    if (productInfo) {
+        const renderList = (selector, items) => {
+            const list = document.querySelector(selector);
+            if (!list || !Array.isArray(items)) return;
+            list.replaceChildren(...items.map(text => {
+                const item = document.createElement('li');
+                item.textContent = text;
+                return item;
+            }));
+        };
+        const description = document.getElementById('product-main-description');
+        if (description) description.textContent = productInfo.description;
+        renderList('#product-features-list', productInfo.features);
+        renderList('#product-material-list', productInfo.materials);
+        renderList('#product-care-list', productInfo.care);
+    }
+
+    const reviewsTitle = document.querySelector('#reviews .section-title');
+    const reviewsEmpty = document.getElementById('reviewsEmpty');
+    const reviewEligibility = document.getElementById('reviewEligibility');
+    const writeReviewButton = document.getElementById('writeReviewButton');
+    if (reviewsTitle) reviewsTitle.textContent = t('reviewsTitle');
+    if (reviewsEmpty) reviewsEmpty.textContent = t('reviewsEmpty');
+    if (reviewEligibility) reviewEligibility.textContent = t('reviewAfterVerifiedDelivery');
+    if (writeReviewButton) writeReviewButton.textContent = t('reviewButton');
+    const reviewModal = document.getElementById('review-modal');
+    if (reviewModal) {
+        const modalTitle = reviewModal.querySelector('h2');
+        const ratingLabel = reviewModal.querySelector('.review-form .form-group > label');
+        const titleInput = reviewModal.querySelector('input[name="title"]');
+        const reviewInput = reviewModal.querySelector('textarea[name="reviewText"]');
+        const submitButton = reviewModal.querySelector('button[type="submit"]');
+        if (modalTitle) modalTitle.textContent = t('reviewFormTitle');
+        if (ratingLabel) ratingLabel.textContent = t('reviewRatingLabel');
+        if (titleInput) titleInput.placeholder = t('reviewTitlePlaceholder');
+        if (reviewInput) reviewInput.placeholder = t('reviewTextPlaceholder');
+        if (submitButton) submitButton.textContent = t('reviewSubmit');
+    }
+
+    const relatedTitle = document.querySelector('.related-products-section .section-title');
+    const relatedProductTitle = document.querySelector('.related-products-section .product-info h3');
+    const relatedDescription = document.querySelector('.related-products-section .product-description');
+    if (relatedTitle) relatedTitle.textContent = t('similarProducts');
+    if (relatedProductTitle) relatedProductTitle.textContent = t('poloShirt');
+    if (relatedDescription) relatedDescription.textContent = t('productReviewRelatedDescription');
+    const relatedAddButton = document.querySelector('.related-products-section .add-to-cart-btn');
+    if (relatedAddButton) relatedAddButton.textContent = t('addToCart');
+};
+
 // Product Detail Page JavaScript
 
 // Gallery Images
@@ -382,8 +516,13 @@ function decreaseQuantity() {
 }
 
 // Add to Cart from Detail Page
+function getCanonicalDetailProductName() {
+    const productData = JSON.parse(sessionStorage.getItem('selectedProduct') || 'null');
+    return productData?.name || document.querySelector('.product-detail-title')?.textContent || '';
+}
+
 function addToCartFromDetail() {
-    const productName = document.querySelector('.product-detail-title').textContent;
+    const productName = getCanonicalDetailProductName();
     const price = parseFloat(document.querySelector('.current-price').getAttribute('data-price'));
     const quantity = parseInt(document.getElementById('quantity').value);
     
@@ -419,7 +558,7 @@ function showAddToCartFeedback() {
 let isInWishlist = false;
 function toggleWishlistFromDetail() {
     const button = document.querySelector('.btn-add-to-wishlist');
-    const productName = document.querySelector('.product-detail-title').textContent;
+    const productName = getCanonicalDetailProductName();
     const price = parseFloat(document.querySelector('.current-price').getAttribute('data-price'));
     const gradient = galleryImages[0].background;
     
@@ -463,8 +602,128 @@ function toggleAccordion(button) {
     button.classList.toggle('active');
 }
 
-// Review Form
+let eligibleReviewOrderId = null;
+
+function getDetailProductName() {
+    const selectedProduct = JSON.parse(sessionStorage.getItem('selectedProduct') || 'null');
+    return selectedProduct?.name || document.querySelector('.product-detail-title')?.textContent.trim() || '';
+}
+
+function getReviewLocale() {
+    return { de: 'de-CH', en: 'en-GB', fr: 'fr-CH' }[currentLanguage] || 'de-CH';
+}
+
+async function invokeProductReviews(body) {
+    if (!window.supabaseClient?.functions) return { data: null, error: new Error('review_service_unavailable') };
+    return window.supabaseClient.functions.invoke('product-reviews', { body });
+}
+
+function setReviewEligibilityMessage(key) {
+    const message = document.getElementById('reviewEligibility');
+    if (message) message.textContent = t(key);
+}
+
+async function loadReviewEligibility(productName) {
+    const button = document.getElementById('writeReviewButton');
+    eligibleReviewOrderId = null;
+    if (button) {
+        button.hidden = true;
+        button.style.display = 'none';
+    }
+
+    const client = window.supabaseClient;
+    if (!client?.auth) {
+        setReviewEligibilityMessage('reviewEligibilityUnavailable');
+        return;
+    }
+
+    const { data: sessionData } = await client.auth.getSession();
+    if (!sessionData?.session) {
+        setReviewEligibilityMessage('reviewSignInRequired');
+        return;
+    }
+
+    const { data, error } = await invokeProductReviews({ action: 'eligibility', productName });
+    if (error) {
+        setReviewEligibilityMessage('reviewEligibilityUnavailable');
+        return;
+    }
+
+    eligibleReviewOrderId = data?.eligibleOrderIds?.[0] || null;
+    if (eligibleReviewOrderId && button) {
+        button.hidden = false;
+        button.style.display = '';
+        setReviewEligibilityMessage('reviewEligible');
+    } else {
+        setReviewEligibilityMessage('reviewAfterVerifiedDelivery');
+    }
+}
+
+async function loadReviews() {
+    const reviewList = document.getElementById('reviewList');
+    const summary = document.getElementById('reviewSummary');
+    const emptyState = document.getElementById('reviewsEmpty');
+    const productName = getDetailProductName();
+    if (!reviewList || !productName) return;
+
+    await loadLanguage(currentLanguage);
+    const { data, error } = await invokeProductReviews({ action: 'list', productName });
+    const reviews = error ? [] : (data?.reviews || []);
+    reviewList.replaceChildren(...reviews.map(createReviewElement));
+
+    if (summary) {
+        summary.replaceChildren();
+        summary.hidden = reviews.length === 0;
+        summary.style.display = reviews.length ? '' : 'none';
+        if (reviews.length) {
+            const average = reviews.reduce((total, review) => total + Number(review.rating), 0) / reviews.length;
+            const stars = document.createElement('div');
+            stars.className = 'stars-large';
+            stars.textContent = '★'.repeat(Math.round(average)) + '☆'.repeat(5 - Math.round(average));
+            const score = document.createElement('div');
+            score.className = 'average-rating';
+            score.textContent = average.toFixed(1);
+            const count = document.createElement('p');
+            count.textContent = t('reviewCount').replace('{count}', String(reviews.length));
+            summary.append(score, stars, count);
+        }
+    }
+    if (emptyState) {
+        emptyState.hidden = reviews.length > 0;
+        emptyState.textContent = error ? t('reviewListUnavailable') : t('reviewsEmpty');
+    }
+
+    await loadReviewEligibility(productName);
+}
+
+function createReviewElement(review) {
+    const reviewDiv = document.createElement('article');
+    reviewDiv.className = 'review-item verified';
+    const safeName = escapeHtml(review.display_name || '');
+    const stars = '★'.repeat(Number(review.rating)) + '☆'.repeat(5 - Number(review.rating));
+    const dateStr = new Date(review.created_at).toLocaleDateString(getReviewLocale());
+    reviewDiv.innerHTML = `
+        <div class="review-header">
+            <div class="reviewer-info">
+                <div class="reviewer-avatar">${escapeHtml(safeName.split(' ').map(part => part[0] || '').join('').toUpperCase())}</div>
+                <div>
+                    <div class="reviewer-name">${safeName}</div>
+                    <div class="review-verified">✓ ${escapeHtml(t('reviewVerifiedPurchase'))}</div>
+                </div>
+            </div>
+            <div class="review-meta">
+                <div class="review-stars">${stars}</div>
+                <div class="review-date">${dateStr}</div>
+            </div>
+        </div>
+        <h4 class="review-title">${escapeHtml(review.title || '')}</h4>
+        <p class="review-text">${escapeHtml(review.review_text || '')}</p>
+    `;
+    return reviewDiv;
+}
+
 function openReviewForm() {
+    if (!eligibleReviewOrderId) return;
     document.getElementById('review-modal').style.display = 'flex';
 }
 
@@ -472,145 +731,53 @@ function closeReviewForm() {
     document.getElementById('review-modal').style.display = 'none';
 }
 
-function submitReview(event) {
+async function submitReview(event) {
     event.preventDefault();
-    
-    // Get form data
-    const formData = new FormData(event.target);
-    const rating = formData.get('rating');
-    const title = event.target.querySelector('input[type="text"]').value;
-    const name = event.target.querySelectorAll('input[type="text"]')[1].value;
-    const email = event.target.querySelector('input[type="email"]').value;
-    const reviewText = event.target.querySelector('textarea').value;
-    
-    fetch('http://localhost:3001/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            rating,
-            title,
-            name,
-            email,
-            reviewText,
-            type: 'Produktbewertung'
-        })
-    })
-    .then(response => {
-        if (response.ok) {
-            alert('Vielen Dank für Ihre Bewertung! Sie wird nach Prüfung veröffentlicht.');
-            closeReviewForm();
-            event.target.reset();
-        } else {
-            alert('Fehler beim Senden. Bitte versuche es später erneut.');
-        }
-    })
-    .catch(() => {
-        alert('Fehler beim Senden. Bitte versuche es später erneut.');
-    });
-    
-    // Reload reviews (in production, this would fetch from server)
-    loadReviews();
-}
-
-// Load Reviews from localStorage
-function loadReviews() {
-    const reviews = JSON.parse(localStorage.getItem('productReviews')) || [];
-    const reviewList = document.getElementById('reviewList');
-    
-    // Add user reviews to the list
-    reviews.forEach(review => {
-        const reviewItem = createReviewElement(review);
-        reviewList.insertBefore(reviewItem, reviewList.firstChild);
-    });
-}
-
-function createReviewElement(review) {
-    const reviewDiv = document.createElement('div');
-    reviewDiv.className = review.verified ? 'review-item verified' : 'review-item';
-    
-    const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
-    const safeName = escapeHtml(review.name || '');
-    const initials = String(review.name || '').split(' ').map(n => n[0]).join('').toUpperCase();
-    const dateStr = new Date(review.date).toLocaleDateString('de-DE');
-    
-    reviewDiv.innerHTML = `
-        <div class="review-header">
-            <div class="reviewer-info">
-                <div class="reviewer-avatar">${escapeHtml(initials)}</div>
-                <div>
-                    <div class="reviewer-name">${safeName}</div>
-                    ${review.verified ? '<div class="review-verified">✓ Verifizierter Kauf</div>' : ''}
-                </div>
-            </div>
-            <div class="review-meta">
-                <div class="review-stars">
-                    ${stars.split('').map(s => `<span class="star ${s === '★' ? 'filled' : ''}">${s}</span>`).join('')}
-                </div>
-                <div class="review-date">${dateStr}</div>
-            </div>
-        </div>
-        <h4 class="review-title">${escapeHtml(review.title || '')}</h4>
-        <p class="review-text">${escapeHtml(review.text || '')}</p>
-        <div class="review-helpful">
-            <button onclick="markHelpful(this)">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
-                </svg>
-                Hilfreich (${review.helpful})
-            </button>
-        </div>
-    `;
-    
-    return reviewDiv;
-}
-
-// Mark Review as Helpful
-function markHelpful(button) {
-    // CSS "svg + text" never matches a plain text node, so this always falls through to the last child.
-    const countSpan = button.childNodes[button.childNodes.length - 1];
-    let count = parseInt(countSpan.textContent.match(/\d+/)[0]);
-    count++;
-    button.innerHTML = button.innerHTML.replace(/\(\d+\)/, `(${count})`);
-    button.disabled = true;
-    button.style.opacity = '0.6';
-}
-
-// Live Viewer Counter (simulated)
-function updateViewerCount() {
-    const viewerCount = document.getElementById('viewerCount');
-    if (viewerCount) {
-        // Random number between 8-20
-        const randomCount = Math.floor(Math.random() * 13) + 8;
-        viewerCount.textContent = randomCount;
+    if (!eligibleReviewOrderId) {
+        setReviewEligibilityMessage('reviewAfterVerifiedDelivery');
+        return;
     }
-}
 
-// Update viewer count every 10 seconds
-setInterval(updateViewerCount, 10000);
+    const form = event.target;
+    const formData = new FormData(form);
+    const submitButton = form.querySelector('button[type="submit"]');
+    if (submitButton) submitButton.disabled = true;
 
-// Simulate stock urgency
-function initStockUrgency() {
-    const stockStatus = document.querySelector('.stock-status');
-    const stockCount = Math.floor(Math.random() * 8) + 3; // Random 3-10
-    
-    if (stockCount <= 5) {
-        stockStatus.innerHTML = `
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="12" y1="8" x2="12" y2="12"></line>
-                <line x1="12" y1="16" x2="12.01" y2="16"></line>
-            </svg>
-            <span>Nur noch <strong>${stockCount} Stück</strong> auf Lager!</span>
-        `;
-        stockStatus.className = 'stock-status low-stock';
+    const { data, error } = await invokeProductReviews({
+        action: 'submit',
+        orderId: eligibleReviewOrderId,
+        productName: getDetailProductName(),
+        rating: Number(formData.get('rating')),
+        title: String(formData.get('title') || ''),
+        reviewText: String(formData.get('reviewText') || '')
+    });
+
+    if (submitButton) submitButton.disabled = false;
+    if (error) {
+        let errorCode = data?.error;
+        try {
+            errorCode ||= (await error.context?.clone?.().json())?.error;
+        } catch {}
+        const messageKey = errorCode === 'content_rejected'
+            ? 'reviewContentRejected'
+            : errorCode === 'review_already_submitted'
+            ? 'reviewAlreadySubmitted'
+            : errorCode === 'purchase_not_eligible'
+            ? 'reviewAfterVerifiedDelivery'
+            : 'reviewSubmitError';
+        showNotification(t(messageKey), 'error');
+        return;
     }
+
+    showNotification(t('reviewPendingModeration'), 'success');
+    form.reset();
+    closeReviewForm();
+    await loadReviews();
 }
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
     loadReviews();
-    updateViewerCount();
-    initStockUrgency();
     
     // Open first accordion by default
     const firstAccordion = document.querySelector('.accordion-header');
