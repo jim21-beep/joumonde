@@ -1556,16 +1556,17 @@ const CLOSE_SVG = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" s
 function toggleMobileMenu() {
     const navLinks = document.querySelector('.nav-links');
     const mobileBtn = document.querySelector('.mobile-menu-btn');
-    navLinks.classList.toggle('mobile-active');
-    
-    // Prevent body scroll when menu is open
-    if (navLinks.classList.contains('mobile-active')) {
+    if (!navLinks || !mobileBtn) return;
+
+    const isOpen = navLinks.classList.toggle('mobile-active');
+    mobileBtn.setAttribute('aria-expanded', String(isOpen));
+    navLinks.setAttribute('aria-hidden', String(!isOpen));
+
+    if (isOpen) {
         document.body.style.overflow = 'hidden';
-        mobileBtn.setAttribute('aria-expanded', 'true');
         mobileBtn.innerHTML = CLOSE_SVG;
     } else {
         document.body.style.overflow = '';
-        mobileBtn.setAttribute('aria-expanded', 'false');
         mobileBtn.innerHTML = HAMBURGER_SVG;
     }
 }
@@ -1573,14 +1574,18 @@ function toggleMobileMenu() {
 function toggleNavDropdown() {
     const dropdown = document.getElementById('nav-dropdown-kollektionen');
     if (!dropdown) return;
-    dropdown.classList.toggle('open');
+    const isOpen = dropdown.classList.toggle('open');
+    dropdown.querySelector('.nav-dropdown-trigger')?.setAttribute('aria-expanded', String(isOpen));
 }
 
 function showNavComingSoon(collection) {
     const message = t('collectionSoonMessage').replace('{collection}', t(collection));
     showNotification(message);
     const dropdown = document.getElementById('nav-dropdown-kollektionen');
-    if (dropdown) dropdown.classList.remove('open');
+    if (dropdown) {
+        dropdown.classList.remove('open');
+        dropdown.querySelector('.nav-dropdown-trigger')?.setAttribute('aria-expanded', 'false');
+    }
 }
 
 // Close nav dropdown when clicking outside
@@ -1588,6 +1593,7 @@ document.addEventListener('click', function(e) {
     const dropdown = document.getElementById('nav-dropdown-kollektionen');
     if (dropdown && !dropdown.contains(e.target)) {
         dropdown.classList.remove('open');
+        dropdown.querySelector('.nav-dropdown-trigger')?.setAttribute('aria-expanded', 'false');
     }
 });
 
@@ -1597,11 +1603,61 @@ document.addEventListener('click', function(event) {
     const mobileBtn = document.querySelector('.mobile-menu-btn');
     
     if (navLinks && navLinks.classList.contains('mobile-active')) {
-        if (!navLinks.contains(event.target) && !mobileBtn.contains(event.target)) {
+        if (!navLinks.contains(event.target) && !mobileBtn?.contains(event.target)) {
             toggleMobileMenu();
         }
     }
 });
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        const navLinks = document.querySelector('.nav-links');
+        if (navLinks?.classList.contains('mobile-active')) toggleMobileMenu();
+        const dropdown = document.getElementById('nav-dropdown-kollektionen');
+        if (dropdown?.classList.contains('open')) {
+            dropdown.classList.remove('open');
+            dropdown.querySelector('.nav-dropdown-trigger')?.setAttribute('aria-expanded', 'false');
+        }
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const navLinks = document.querySelector('.nav-links');
+    const mobileBtn = document.querySelector('.mobile-menu-btn');
+    if (mobileBtn) {
+        mobileBtn.setAttribute('aria-expanded', 'false');
+        mobileBtn.setAttribute('aria-controls', 'site-primary-navigation');
+    }
+    if (navLinks) navLinks.id = 'site-primary-navigation';
+    syncMobileNavigationAccessibility();
+
+    document.querySelectorAll('.nav-dropdown-trigger').forEach(trigger => {
+        trigger.setAttribute('aria-expanded', 'false');
+    });
+});
+
+function syncMobileNavigationAccessibility() {
+    const navLinks = document.querySelector('.nav-links');
+    const mobileBtn = document.querySelector('.mobile-menu-btn');
+    if (!navLinks) return;
+
+    if (window.matchMedia('(max-width: 1024px)').matches) {
+        navLinks.setAttribute('aria-hidden', String(!navLinks.classList.contains('mobile-active')));
+        return;
+    }
+
+    if (navLinks.classList.contains('mobile-active')) {
+        navLinks.classList.remove('mobile-active');
+        document.body.style.overflow = '';
+        if (mobileBtn) {
+            mobileBtn.setAttribute('aria-expanded', 'false');
+            mobileBtn.innerHTML = HAMBURGER_SVG;
+        }
+    }
+    navLinks.removeAttribute('aria-hidden');
+}
+
+window.addEventListener('resize', syncMobileNavigationAccessibility);
 
 // Close mobile menu when link is clicked
 document.addEventListener('DOMContentLoaded', function() {
