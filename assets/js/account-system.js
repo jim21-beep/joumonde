@@ -39,11 +39,14 @@ function getUserInitials(firstName, lastName) {
 }
 
 function getDashboardAvatarMarkup() {
-    const initials = getUserInitials(currentUser?.firstName, currentUser?.lastName);
     if (currentUser?.avatarUrl) {
         return `<img src="${currentUser.avatarUrl}" alt="Profilbild" class="user-avatar-large-image">`;
     }
-    return `<span>${initials}</span>`;
+    return `
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+        </svg>`;
 }
 
 // ==================== AUTHENTICATION ====================
@@ -224,17 +227,17 @@ async function sendAccountLoginCode(resend = false) {
     showAccountMessage(accountT('accountPageSendingCode', 'Anmeldecode wird gesendet …'), 'info');
 
     try {
-        const { error } = await window.supabaseClient.auth.signInWithOtp({
-            email,
-            options: {
-                shouldCreateUser: true,
-                emailRedirectTo: `${window.location.origin}${window.location.pathname}`
-            }
+        const { data, error } = await window.supabaseClient.functions.invoke('email-login-code', {
+            body: { action: 'send', email }
         });
 
         if (error) {
             console.error('Email sign-in code request failed:', error.message);
             showAccountMessage(accountT('accountPageCodeSendError', 'Der Anmeldecode konnte nicht gesendet werden. Bitte versuche es erneut.'), 'error');
+            return;
+        }
+        if (!data?.sent) {
+            showAccountMessage(accountT('accountPageRateLimited', 'Zu viele Code-Anfragen. Bitte warte einen Moment und versuche es erneut.'), 'error');
             return;
         }
 
@@ -290,9 +293,25 @@ async function verifyAccountLoginCode(event) {
 
     let focusFirstCode = false;
     try {
+        const { data: codeResult, error: codeError } = await window.supabaseClient.functions.invoke('email-login-code', {
+            body: { action: 'verify', email, code: token }
+        });
+        if (codeError) {
+            console.error('Email sign-in code verification failed:', codeError.message);
+            showAccountMessage(accountT('accountLoginUnavailable', 'Anmeldung ist momentan nicht verfügbar. Bitte lade die Seite neu und versuche es erneut.'), 'error');
+            codeInputs.forEach(input => { input.value = ''; });
+            focusFirstCode = true;
+            return;
+        }
+        if (!codeResult?.tokenHash) {
+            showAccountMessage(accountT('accountPageInvalidCode', 'Der Code ist ungültig oder abgelaufen. Bitte prüfe ihn und versuche es erneut.'), 'error');
+            codeInputs.forEach(input => { input.value = ''; });
+            focusFirstCode = true;
+            return;
+        }
+
         const { error } = await window.supabaseClient.auth.verifyOtp({
-            email,
-            token,
+            token_hash: codeResult.tokenHash,
             type: 'email'
         });
 
@@ -504,7 +523,7 @@ function showAccountDashboard() {
 
     if (pageAvatar) {
         pageAvatar.innerHTML = getDashboardAvatarMarkup();
-        pageAvatar.setAttribute('aria-label', `Profilbild ${getUserInitials(currentUser?.firstName, currentUser?.lastName)}`);
+        pageAvatar.setAttribute('aria-label', accountT('accountProfilePicture', 'Profilbild'));
     }
     
     const dashboardMarkup = `

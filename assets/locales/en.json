@@ -126,6 +126,7 @@
   "accountPageSendCode": "Send code by email",
   "accountPageSendingCode": "Sending sign-in code …",
   "accountPageCodeSendError": "We couldn't send your sign-in code. Please try again.",
+  "accountPageRateLimited": "Too many code requests. Please wait a moment and try again.",
   "accountPageEnterCodeTitle": "Enter your code",
   "accountPageCodeSent": "We sent you a sign-in code by email.",
   "accountPageCodeSentStatus": "Check your inbox for your sign-in code.",
