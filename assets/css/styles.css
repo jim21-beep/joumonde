@@ -3516,6 +3516,7 @@ body[data-shop-collection] > #streetwear {
 
 /* Submit button */
 .auth-submit-btn {
+    display: block;
     width: 100%;
     padding: 0.9rem 1rem;
     background: #89785f;
@@ -3527,6 +3528,8 @@ body[data-shop-collection] > #streetwear {
     letter-spacing: 0.06em;
     cursor: pointer;
     margin-top: 0.4rem;
+    text-align: center;
+    text-decoration: none;
     transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
     box-shadow: 0 4px 20px rgba(137, 120, 95, 0.3);
 }

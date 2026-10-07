@@ -45,6 +45,7 @@
                     </section>
                     <section>
                         <h2>Rechtliches</h2>
+                        <a href="impressum.html">Impressum</a>
                         <a href="agb.html">AGB</a>
                         <a href="cookie-policy.html">Datenschutzerklärung</a>
                     </section>
