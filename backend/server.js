@@ -1603,7 +1603,7 @@ const INJECTION_PATTERNS = [
     /(\bgroq\b.*\bkey\b|\bkey\b.*\bgroq\b)/i,
 ];
 
-const GROQ_FALLBACK_MODEL = 'llama-3.3-70b-versatile';
+const GROQ_FALLBACK_MODEL = 'openai/gpt-oss-120b';
 
 async function createNexaraCompletion(options) {
     const configuredModel = process.env.GROQ_MODEL || GROQ_FALLBACK_MODEL;
