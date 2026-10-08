@@ -6,6 +6,9 @@
         },
         casual: {
             title: 'Casual Collection | Joumonde'
+        },
+        accessories: {
+            title: 'Accessoires | Joumonde'
         }
     };
     const page = Object.prototype.hasOwnProperty.call(collectionTargets, collection)

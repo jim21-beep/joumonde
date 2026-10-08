@@ -93,7 +93,8 @@ async function loginUser(supabaseUser, isActualLogin = true) {
                 quantity:      i.quantity,
                 size:          i.size,
                 color:         i.color,
-                articleNumber: i.article_number
+                articleNumber: i.article_number,
+                isPreorder:    i.is_preorder === true
             }))
         }))
     };
@@ -661,7 +662,7 @@ function getDashboardOrders() {
             <div class="order-items">
                 ${order.items.map(item => `
                     <div class="order-item">
-                        <span>${item.name} × ${item.quantity}</span>
+                        <span>${item.name} × ${item.quantity}${item.isPreorder ? `<small class="cart-item-preorder" style="display:block;">${accountT('preorderTag', 'Vorbestellung')}</small>` : ''}</span>
                         <span>CHF ${(item.price * item.quantity).toFixed(2)}</span>
                     </div>
                 `).join('')}
@@ -1317,7 +1318,7 @@ function viewOrderDetails(orderId) {
         <div class="order-detail-row">
             <div>
                 <strong>${typeof translateProductName === 'function' ? translateProductName(item.name) : item.name}</strong>
-                <p>${accountT('accountQuantity', 'Menge')}: ${item.quantity}${item.size ? ` • ${accountT('accountOrderSize', 'Größe')}: ${item.size}` : ''}${item.color ? ` • ${item.color}` : ''}</p>
+                <p>${item.isPreorder ? `${accountT('preorderTag', 'Vorbestellung')} • ` : ''}${accountT('accountQuantity', 'Menge')}: ${item.quantity}${item.size ? ` • ${accountT('accountOrderSize', 'Größe')}: ${item.size}` : ''}${item.color ? ` • ${item.color}` : ''}</p>
             </div>
             <strong>${currency} ${(item.price * item.quantity).toFixed(2)}</strong>
         </div>
@@ -1428,25 +1429,21 @@ async function sendOrderConfirmationEmail(user, order) {
     }
 }
 
-// Send Contact Form Email (for existing contact forms)
-function sendContactEmail(name, email, message) {
-    const formData = new FormData();
-    formData.append('_subject', 'Neue Kontaktanfrage - Joumonde');
-    formData.append('_template', 'table');
-    formData.append('_captcha', 'false');
-    formData.append('Name', name);
-    formData.append('E-Mail', email);
-    formData.append('Nachricht', message);
-    formData.append('Datum', new Date().toLocaleString('de-DE'));
-    
-    fetch('https://formsubmit.co/info@joumonde.com', {
-        method: 'POST',
-        body: formData
-    }).then(() => {
-        console.log('✅ Kontaktformular-E-Mail gesendet');
-    }).catch(err => {
-        console.log('⚠️ E-Mail-Versand fehlgeschlagen:', err);
-    });
+// Send contact mail through the same verified sender as the other site emails.
+async function sendContactEmail(name, email, message) {
+    try {
+        const response = await fetch(`${window.__ENV__?.SUPABASE_URL}/functions/v1/send-newsletter-confirmation`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type: 'contact', name, email, message })
+        });
+        if (!response.ok) {
+            throw new Error(`Contact email request failed with HTTP ${response.status}`);
+        }
+    } catch (err) {
+        console.error('Contact email could not be sent:', err);
+        throw err;
+    }
 }
 
 // ==================== INITIALIZATION ====================
@@ -1538,9 +1535,13 @@ document.addEventListener('DOMContentLoaded', async function() {
                         quantity: i.quantity,
                         size: i.size,
                         color: i.color,
-                        articleNumber: i.article_number
+                        articleNumber: i.article_number,
+                        isPreorder: i.is_preorder === true
                     }))
                 }));
+                if (document.getElementById('account-page-root')) showAccountDashboard();
+            } else if (ordersErr) {
+                console.error('Could not refresh account order history:', ordersErr.message);
             }
         }
     };

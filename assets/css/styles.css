@@ -738,6 +738,39 @@ h6 {
     text-overflow: ellipsis;
 }
 
+.product-stock-status {
+    margin: 0.65rem 0 0;
+    color: #78654c;
+    font-size: 0.88rem;
+    letter-spacing: 0.02em;
+}
+
+.product-detail-stock-status {
+    margin: -0.5rem 0 1rem;
+}
+
+.cart-item-preorder {
+    margin: 0.25rem 0;
+    color: #78654c;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.preorder-checkout-note {
+    margin: 1rem 0;
+    padding: 0.85rem 1rem;
+    border-left: 3px solid #89785f;
+    background: #f7f5ef;
+    color: #514737;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.btn-add-to-cart:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
 .product-description {
     color: #666;
     margin-bottom: 1.5rem;
@@ -2583,14 +2616,20 @@ body.modal-open {
 }
 
 /* Focused category routes */
-body[data-shop-collection] > section:not([id="old-money"]):not([id="streetwear"]) {
+body:not([data-shop-collection]) > #accessories {
+    display: none;
+}
+
+body[data-shop-collection] > section:not([id="old-money"]):not([id="streetwear"]):not([id="accessories"]) {
     display: none;
 }
 
 body[data-shop-collection="old-money"] > #streetwear,
 body[data-shop-collection="old-money"] > #accessories,
 body[data-shop-collection="casual"] > #old-money,
-body[data-shop-collection="casual"] > #accessories {
+body[data-shop-collection="casual"] > #accessories,
+body[data-shop-collection="accessories"] > #old-money,
+body[data-shop-collection="accessories"] > #streetwear {
     display: none;
 }
 
