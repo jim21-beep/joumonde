@@ -310,8 +310,9 @@ window.updateProductDetailContent = function updateProductDetailContent(productD
     if (quantityButtons[0]) quantityButtons[0].setAttribute('aria-label', t('productDecreaseQuantity'));
     if (quantityButtons[1]) quantityButtons[1].setAttribute('aria-label', t('productIncreaseQuantity'));
     const addToCartButton = document.querySelector('.btn-add-to-cart');
-    const addToCartText = addToCartButton && Array.from(addToCartButton.childNodes).find(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
-    if (addToCartText) addToCartText.textContent = `\n                            ${t('addToCart')}\n                        `;
+    const addToCartLabel = addToCartButton?.querySelector('[data-add-to-cart-label]');
+    if (addToCartLabel) addToCartLabel.textContent = t('addToCart');
+    window.updateSelectedVariantStock?.();
     document.querySelector('.btn-add-to-wishlist')?.setAttribute('aria-label', t('wishlistAria'));
 
     const mainImage = document.querySelector('#mainImage img');
@@ -478,6 +479,7 @@ function selectSize(size, button) {
     // Update button states
     document.querySelectorAll('.size-option').forEach(btn => btn.classList.remove('active'));
     button.classList.add('active');
+    window.updateSelectedVariantStock?.(selectedSize, selectedColor);
 }
 
 window.applyPreferredSizeToProductDetail = function applyPreferredSizeToProductDetail() {
@@ -502,6 +504,7 @@ function selectColor(color, button) {
     // Update button states
     document.querySelectorAll('.color-option').forEach(btn => btn.classList.remove('active'));
     button.classList.add('active');
+    window.updateSelectedVariantStock?.(selectedSize, selectedColor);
 }
 
 // Quantity Selection
@@ -533,8 +536,9 @@ function addToCartFromDetail() {
     const quantity = parseInt(document.getElementById('quantity').value);
     
     // Add to cart with size and color
+    const isPreorder = document.getElementById('product-stock-status')?.dataset.preorder === 'true';
     for (let i = 0; i < quantity; i++) {
-        addToCart(productName, price, selectedColor, selectedSize);
+        addToCart(productName, price, selectedColor, selectedSize, isPreorder);
     }
     
     // Show feedback

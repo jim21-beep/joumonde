@@ -5,6 +5,19 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 const RESEND_API_KEY   = Deno.env.get('RESEND_API_KEY') ?? '';
 const SUPABASE_URL     = Deno.env.get('SUPABASE_URL') ?? '';
 const SUPABASE_SERVICE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
+const MAIL_FROM = 'Joumonde <support@joumonde.com>';
+const createOrderId = () => {
+  const randomValue = new Uint32Array(1);
+  crypto.getRandomValues(randomValue);
+  return `${new Date().toISOString().slice(0, 10).replace(/-/g, '')}${String(randomValue[0] % 1_000_000_000).padStart(9, '0')}`;
+};
+const escapeHtml = (value: unknown) => String(value ?? '').replace(/[&<>"']/g, character => ({
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+}[character]!));
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -50,7 +63,7 @@ serve(async (req) => {
       }
     }
 
-    // ── 1b. Contact form: save to DB and forward to info@joumonde.com ────────────
+    // ── 1b. Contact form: save to DB and forward to the Joumonde team ───────────
     if (type === 'contact') {
       const { name = '', subject: contactSubject = '', message = '', phone = '' } = body;
       const db = createClient(SUPABASE_URL, SUPABASE_SERVICE);
@@ -66,7 +79,7 @@ serve(async (req) => {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          from: 'Joumonde Kontakt <info@joumonde.com>',
+          from: MAIL_FROM,
           to: ['info@joumonde.com'],
           reply_to: email,
           subject: `Neue Kontaktanfrage: ${esc(contactSubject) || '(kein Betreff)'}`,
@@ -87,7 +100,7 @@ serve(async (req) => {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          from: 'Joumonde <info@joumonde.com>',
+          from: MAIL_FROM,
           to: [email],
           subject: 'Wir haben deine Nachricht erhalten – Joumonde',
           html: `
@@ -113,12 +126,16 @@ serve(async (req) => {
               <p style="color:#555;font-size:0.8rem;text-align:center;">
                 <a href="https://joumonde.com" style="color:#888;">joumonde.com</a>
                 &nbsp;|&nbsp;
-                <a href="mailto:info@joumonde.com" style="color:#888;">info@joumonde.com</a>
+                <a href="mailto:support@joumonde.com" style="color:#888;">support@joumonde.com</a>
               </p>
             </div>`,
         }),
       });
-      if (!replyRes.ok) console.error('Auto-reply error:', await replyRes.text());
+      if (!replyRes.ok) {
+        console.error('Auto-reply error:', await replyRes.text());
+        return json({ error: 'Bestätigungs-E-Mail konnte nicht gesendet werden' }, 502);
+      }
+      if (!adminRes.ok) return json({ error: 'Kontaktanfrage konnte nicht weitergeleitet werden' }, 502);
 
       return json({ success: true });
     }
@@ -133,7 +150,7 @@ serve(async (req) => {
         <p style="color:#888;font-size:0.8rem;text-align:center;margin-top:40px;">
           <a href="https://joumonde.com" style="color:#888;">joumonde.com</a>
           &nbsp;|&nbsp;
-          <a href="mailto:info@joumonde.com" style="color:#888;">info@joumonde.com</a>
+          <a href="mailto:support@joumonde.com" style="color:#888;">support@joumonde.com</a>
         </p>
       </div>`;
 
@@ -177,21 +194,38 @@ serve(async (req) => {
         total = 0,
         orderDate = '',
         currency = 'CHF',
+        shippingAddress = {},
         persistOrder = false,
         paymentMethod = 'card'
       } = body;
+      const finalOrderId = String(orderId || createOrderId());
+      const safeFirstName = escapeHtml(firstName);
+      const safeOrderDate = escapeHtml(orderDate);
+      const safeCurrency = escapeHtml(currency);
 
       if (persistOrder) {
         try {
           const db = createClient(SUPABASE_URL, SUPABASE_SERVICE);
           const normalizedPaymentMethod = ['card', 'amex', 'paypal'].includes(paymentMethod) ? paymentMethod : 'card';
           const paymentProvider = normalizedPaymentMethod === 'paypal' ? 'paypal' : 'card';
-          const finalOrderId = String(orderId || ('JM' + Date.now().toString()));
           const accessToken = req.headers.get('Authorization')?.replace(/^Bearer\s+/i, '') ?? '';
           const { data: { user: verifiedUser }, error: authError } = accessToken
             ? await db.auth.getUser(accessToken)
             : { data: { user: null }, error: null };
-          if (authError) console.warn('Could not verify optional checkout session:', authError.message);
+          if (authError) {
+            console.error('Could not verify checkout session:', authError.message);
+            return json({ error: 'Sitzung abgelaufen. Bitte melde dich erneut an.' }, 401);
+          }
+
+          if (verifiedUser?.id) {
+            const { error: profileError } = await db
+              .from('profiles')
+              .upsert({ id: verifiedUser.id }, { onConflict: 'id', ignoreDuplicates: true });
+            if (profileError) {
+              console.error('Could not ensure order profile exists:', profileError);
+              return json({ error: 'Konto konnte nicht für die Bestellung vorbereitet werden' }, 500);
+            }
+          }
 
           const orderPayload = {
             id: finalOrderId,
@@ -205,17 +239,13 @@ serve(async (req) => {
             provider_payment_id: null,
           };
 
-          let { error: orderErr } = await db.from('orders').insert(orderPayload);
-
-          if (orderErr?.code === '23503' && verifiedUser?.id) {
-            const retryPayload = { ...orderPayload, user_id: null };
-            ({ error: orderErr } = await db.from('orders').insert(retryPayload));
-          }
+          const { error: orderErr } = await db.from('orders').insert(orderPayload);
 
           if (orderErr) {
-            console.error('Order insert fallback error:', orderErr);
+            console.error('Order insert error:', orderErr);
+            return json({ error: 'Bestellung konnte nicht gespeichert werden' }, 500);
           } else {
-            const orderItems = (items as Array<{ name: string; quantity: number; price: number; size?: string; color?: string; article_number?: string }>).map(i => ({
+            const orderItems = (items as Array<{ name: string; quantity: number; price: number; size?: string; color?: string; article_number?: string; isPreorder?: boolean }>).map(i => ({
               order_id: finalOrderId,
               product_name: i.name,
               quantity: Number(i.quantity || 1),
@@ -223,12 +253,16 @@ serve(async (req) => {
               size: i.size ?? null,
               color: i.color ?? null,
               article_number: i.article_number ?? null,
+              is_preorder: i.isPreorder === true,
             }));
 
             if (orderItems.length > 0) {
               const { error: itemsErr } = await db.from('order_items').insert(orderItems);
               if (itemsErr) {
                 console.error('Order item fallback insert error:', itemsErr);
+                const { error: cleanupError } = await db.from('orders').delete().eq('id', finalOrderId);
+                if (cleanupError) console.error('Could not remove incomplete order:', cleanupError);
+                return json({ error: 'Bestellpositionen konnten nicht gespeichert werden' }, 500);
               } else {
                 orderSaved = true;
               }
@@ -237,50 +271,86 @@ serve(async (req) => {
             }
           }
         } catch (dbEx) {
-          console.error('Fallback order save failed:', dbEx);
+          console.error('Order save failed:', dbEx);
+          return json({ error: 'Bestellung konnte nicht gespeichert werden' }, 500);
         }
       }
 
-      const itemRows = (items as Array<{ name: string; quantity: number; price: number }>)
+      const preorderItems = (items as Array<{ isPreorder?: boolean }>).some(item => item.isPreorder === true);
+      const itemRows = (items as Array<{ name: string; quantity: number; price: number; isPreorder?: boolean }>)
         .map(i => `
           <tr>
-            <td style="padding:10px 8px;border-bottom:1px solid #222;">${i.name}</td>
-            <td style="padding:10px 8px;border-bottom:1px solid #222;text-align:center;">${i.quantity}</td>
-            <td style="padding:10px 8px;border-bottom:1px solid #222;text-align:right;">${currency} ${(i.price * i.quantity).toFixed(2)}</td>
+            <td style="padding:14px 12px;border-bottom:1px solid #e9e6df;color:#354138;">${escapeHtml(i.name)}${i.isPreorder ? '<br><span style="color:#8b806d;font-size:11px;">VORBESTELLUNG</span>' : ''}</td>
+            <td style="padding:14px 12px;border-bottom:1px solid #e9e6df;text-align:center;color:#74796f;">${Number(i.quantity)}</td>
+            <td style="padding:14px 12px;border-bottom:1px solid #e9e6df;text-align:right;color:#354138;white-space:nowrap;">${safeCurrency} ${(Number(i.price) * Number(i.quantity)).toFixed(2)}</td>
           </tr>`).join('');
-      subject = `Bestellbestätigung #${orderId} – Joumonde`;
-      html = `${HEADER}
-        <h2 style="color:#d4af37;">Danke für deine Bestellung, ${firstName}!</h2>
-        <p>Wir haben deine Bestellung erhalten und werden sie so schnell wie möglich bearbeiten.</p>
-        <p style="color:#aaa;font-size:0.9rem;">
-          Bestellnummer: <strong style="color:#f5f0e8;">${orderId}</strong>
-          &nbsp;|&nbsp; ${orderDate}
-        </p>
-        <p style="margin:12px 0 20px;padding:10px 14px;background:#1e1e1e;border-left:3px solid #d4af37;border-radius:4px;color:#f5f0e8;font-size:0.9rem;">
-          Status: <strong style="color:#d4af37;">In Bearbeitung</strong>
-          &nbsp;— Wir informieren dich per E-Mail, sobald deine Bestellung versendet wurde.
-        </p>
-        <table style="width:100%;border-collapse:collapse;margin:24px 0;">
-          <thead>
-            <tr style="border-bottom:1px solid #d4af37;">
-              <th style="padding:10px 8px;text-align:left;color:#d4af37;">Artikel</th>
-              <th style="padding:10px 8px;text-align:center;color:#d4af37;">Menge</th>
-              <th style="padding:10px 8px;text-align:right;color:#d4af37;">Preis</th>
-            </tr>
-          </thead>
-          <tbody>${itemRows}</tbody>
-          <tfoot>
-            <tr>
-              <td colspan="2" style="padding:12px 8px;font-weight:bold;color:#d4af37;border-top:1px solid #333;">Gesamt</td>
-              <td style="padding:12px 8px;font-weight:bold;text-align:right;color:#d4af37;border-top:1px solid #333;">${currency} ${Number(total).toFixed(2)}</td>
-            </tr>
-          </tfoot>
-        </table>
-        <p style="color:#aaa;font-size:0.9rem;">
-          Bei Fragen erreichst du uns unter
-          <a href="mailto:info@joumonde.com" style="color:#d4af37;">info@joumonde.com</a>.
-        </p>
-        ${FOOTER}`;
+      const address = shippingAddress as { firstName?: string; lastName?: string; street?: string; zip?: string; city?: string; country?: string };
+      const addressLines = [
+        [address.firstName, address.lastName].filter(Boolean).join(' '),
+        address.street,
+        [address.zip, address.city].filter(Boolean).join(' '),
+        address.country,
+      ].filter(Boolean).map(line => `<div>${escapeHtml(line)}</div>`).join('');
+      const paymentLabels: Record<string, string> = { card: 'Kreditkarte', amex: 'American Express', paypal: 'PayPal' };
+      const safePaymentMethod = escapeHtml(paymentLabels[paymentMethod] || paymentLabels.card);
+      subject = `${preorderItems ? 'Deine Vorbestellung' : 'Deine Bestellung'} ${escapeHtml(finalOrderId)} – Joumonde`;
+      html = `
+        <div style="margin:0;padding:32px 12px;background:#f2f1eb;font-family:Arial,Helvetica,sans-serif;color:#354138;">
+          <div style="max-width:620px;margin:0 auto;background:#fff;border:1px solid #e7e5dd;">
+            <div style="padding:30px 36px 24px;border-bottom:1px solid #e9e6df;text-align:center;">
+              <p style="margin:0;color:#354138;font-family:Georgia,serif;font-size:21px;letter-spacing:5px;">JOUMONDE</p>
+              <p style="margin:10px 0 0;color:#898d82;font-size:10px;letter-spacing:2px;">ZEITLOSES DESIGN. MIT LIEBE AUSGEWÄHLT.</p>
+            </div>
+            <div style="padding:36px;">
+              <p style="margin:0 0 10px;color:#8b806d;font-size:11px;font-weight:bold;letter-spacing:1.8px;">${preorderItems ? 'VORBESTELLUNG' : 'BESTELLBESTÄTIGUNG'}</p>
+              <h1 style="margin:0 0 12px;color:#354138;font-family:Georgia,serif;font-size:27px;font-weight:normal;line-height:1.3;">Danke${safeFirstName ? `, ${safeFirstName}` : ''}.</h1>
+              <p style="margin:0;color:#72776e;font-size:15px;line-height:1.7;">${preorderItems ? 'Deine Vorbestellung ist bei uns eingegangen. Es wurde noch keine Zahlung ausgelöst. Den voraussichtlichen Liefertermin bestätigen wir dir separat.' : 'Deine Bestellung ist bei uns eingegangen. Wir bereiten alles sorgfältig für dich vor und halten dich über den Versand auf dem Laufenden.'}</p>
+              <div style="margin:26px 0;padding:18px 20px;background:#f7f7f3;border:1px solid #ebeae3;">
+                <table role="presentation" style="width:100%;border-collapse:collapse;">
+                  <tr>
+                    <td style="padding:3px 0;color:#81857b;font-size:12px;">Bestellnummer</td>
+                    <td style="padding:3px 0;text-align:right;color:#354138;font-size:14px;font-weight:bold;">${escapeHtml(finalOrderId)}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:9px 0 3px;color:#81857b;font-size:12px;">Bestelldatum</td>
+                    <td style="padding:9px 0 3px;text-align:right;color:#354138;font-size:13px;">${safeOrderDate}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:9px 0 3px;color:#81857b;font-size:12px;">Status</td>
+                    <td style="padding:9px 0 3px;text-align:right;color:#526b56;font-size:13px;font-weight:bold;">In Bearbeitung</td>
+                  </tr>
+                </table>
+              </div>
+              <h2 style="margin:30px 0 10px;color:#354138;font-family:Georgia,serif;font-size:19px;font-weight:normal;">Deine Artikel</h2>
+              <table role="presentation" style="width:100%;border-collapse:collapse;font-size:13px;">
+                <thead>
+                  <tr style="border-bottom:1px solid #d9d8cf;">
+                    <th style="padding:10px 12px;text-align:left;color:#81857b;font-size:10px;font-weight:bold;letter-spacing:1px;">ARTIKEL</th>
+                    <th style="padding:10px 12px;text-align:center;color:#81857b;font-size:10px;font-weight:bold;letter-spacing:1px;">MENGE</th>
+                    <th style="padding:10px 12px;text-align:right;color:#81857b;font-size:10px;font-weight:bold;letter-spacing:1px;">PREIS</th>
+                  </tr>
+                </thead>
+                <tbody>${itemRows}</tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="2" style="padding:18px 12px 4px;color:#354138;font-size:14px;font-weight:bold;">Gesamt</td>
+                    <td style="padding:18px 12px 4px;text-align:right;color:#354138;font-size:16px;font-weight:bold;white-space:nowrap;">${safeCurrency} ${Number(total).toFixed(2)}</td>
+                  </tr>
+                </tfoot>
+              </table>
+              <div style="margin-top:30px;padding-top:22px;border-top:1px solid #e9e6df;">
+                <h2 style="margin:0 0 10px;color:#354138;font-family:Georgia,serif;font-size:17px;font-weight:normal;">Lieferung</h2>
+                <div style="color:#72776e;font-size:13px;line-height:1.7;">${addressLines || 'Die Lieferadresse findest du in deinem Kundenkonto.'}</div>
+                <p style="margin:14px 0 0;color:#72776e;font-size:13px;">Zahlungsart: ${safePaymentMethod}</p>
+              </div>
+              <p style="margin:28px 0 0;color:#72776e;font-size:13px;line-height:1.7;">Bei Fragen sind wir gerne für dich da: <a href="mailto:support@joumonde.com" style="color:#526b56;text-decoration:underline;">support@joumonde.com</a>.</p>
+            </div>
+            <div style="padding:20px 30px;background:#f7f7f3;border-top:1px solid #e9e6df;text-align:center;">
+              <p style="margin:0;color:#898d82;font-size:11px;">Mit Sorgfalt ausgewählt für deinen Alltag.</p>
+              <p style="margin:8px 0 0;color:#898d82;font-size:11px;"><a href="https://joumonde.com" style="color:#526b56;text-decoration:none;">joumonde.com</a></p>
+            </div>
+          </div>
+        </div>`;
 
     } else {
       // newsletter
@@ -316,7 +386,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Joumonde <info@joumonde.com>',
+        from: MAIL_FROM,
         to: [email],
         subject,
         html,

@@ -40,7 +40,7 @@ create table public.addresses (
 );
 
 -- ------------------------------------------------------------------
--- ORDERS (Bestellnummern wie JM1713000000)
+-- ORDERS (Bestellnummern wie 20261008123456789)
 -- ------------------------------------------------------------------
 create table public.orders (
   id         text primary key,
@@ -73,8 +73,38 @@ create table public.order_items (
   quantity       integer default 1 check (quantity > 0),
   unit_price     numeric(10,2),
   size           text,
-  color          text
+  color          text,
+  is_preorder    boolean not null default false
 );
+
+-- ------------------------------------------------------------------
+-- PRODUCTS AND INVENTORY
+-- ------------------------------------------------------------------
+create table if not exists public.products (
+  id         uuid primary key default uuid_generate_v4(),
+  name       text not null,
+  slug       text not null unique,
+  collection text not null check (collection in ('old-money', 'casual', 'accessories')),
+  price      numeric(10, 2) not null check (price >= 0),
+  is_active  boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.product_variants (
+  id             uuid primary key default uuid_generate_v4(),
+  product_id     uuid not null references public.products(id) on delete cascade,
+  size           text not null,
+  color          text not null,
+  stock_quantity integer check (stock_quantity is null or stock_quantity >= 0),
+  is_active      boolean not null default true,
+  created_at     timestamptz not null default now(),
+  updated_at     timestamptz not null default now(),
+  unique (product_id, size, color)
+);
+
+create index if not exists product_variants_product_lookup
+  on public.product_variants (product_id, is_active);
 
 -- Product reviews: only verified delivered orders may submit, and only approved rows are public.
 create table if not exists public.product_reviews (
@@ -102,6 +132,8 @@ alter table public.addresses      enable row level security;
 alter table public.orders         enable row level security;
 alter table public.order_items    enable row level security;
 alter table public.product_reviews enable row level security;
+alter table public.products enable row level security;
+alter table public.product_variants enable row level security;
 
 -- Profiles: nur eigenes Profil lesen/bearbeiten
 create policy "Eigen Profil lesen"       on public.profiles for select using (auth.uid() = id);
@@ -134,6 +166,24 @@ drop policy if exists "Eigen Bestellungen anlegen" on public.orders;
 create policy "Eigen Bestellpositionen lesen" on public.order_items for select
   using (order_id in (select id from public.orders where user_id = auth.uid()));
 drop policy if exists "Eigen Bestellpositionen anlegen" on public.order_items;
+
+drop policy if exists "Aktive Produkte öffentlich lesen" on public.products;
+create policy "Aktive Produkte öffentlich lesen" on public.products
+  for select to anon, authenticated using (is_active);
+
+drop policy if exists "Aktive Varianten öffentlicher Produkte lesen" on public.product_variants;
+create policy "Aktive Varianten öffentlicher Produkte lesen" on public.product_variants
+  for select to anon, authenticated
+  using (
+    is_active
+    and exists (
+      select 1 from public.products
+      where products.id = product_variants.product_id
+        and products.is_active
+    )
+  );
+revoke all on public.products, public.product_variants from public, anon, authenticated;
+grant select on public.products, public.product_variants to anon, authenticated;
 
 grant select on public.product_reviews to anon, authenticated;
 create policy "Freigegebene Produktbewertungen lesen" on public.product_reviews

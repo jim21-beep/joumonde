@@ -1087,7 +1087,7 @@ function viewProductDetail(productName, price, description, colors, sizes) {
 }
 
 // Add to Cart
-function addToCart(productName, price, color = null, explicitSize = null) {
+function addToCart(productName, price, color = null, explicitSize = null, isPreorder = false) {
     const size = explicitSize || getPreferredSizeForProduct(productName);
 
     // Check if item already exists in cart
@@ -1099,13 +1099,15 @@ function addToCart(productName, price, color = null, explicitSize = null) {
     
     if (existingItem) {
         existingItem.quantity += 1;
+        existingItem.isPreorder = isPreorder;
     } else {
         cart.push({
             name: productName,
             price: price,
             quantity: 1,
             size,
-            color: color || null
+            color: color || null,
+            isPreorder
         });
     }
     
@@ -1264,6 +1266,7 @@ function updateCart() {
                     <button type="button" class="remove-item-btn" onclick="removeFromCart(${index})" aria-label="${t('removeCartItem')}: ${translateProductName(item.name)}">&times;</button>
                 </div>
                 <p class="cart-item-price">${formatPrice(item.price)}</p>
+                ${item.isPreorder ? `<p class="cart-item-preorder">${t('preorderTag')}</p>` : ''}
                 <div class="cart-item-options">
                     <label>${t('size')}
                         <select class="cart-size-select" onchange="updateCartItemSize(${index}, this.value)">
@@ -1952,6 +1955,7 @@ function openCheckout() {
     
     const checkoutModal = document.createElement('div');
     checkoutModal.className = 'checkout-modal';
+    const hasPreorders = cart.some(item => item.isPreorder);
     checkoutModal.innerHTML = `
         <div class="checkout-content">
             <button class="checkout-close" onclick="document.querySelector('.checkout-modal').remove(); document.body.classList.remove('modal-open')">&times;</button>
@@ -1965,6 +1969,7 @@ function openCheckout() {
                             <div class="checkout-item">
                                 <span>
                                     ${translateProductName(item.name)} x${item.quantity}
+                                    ${item.isPreorder ? `<small style="display:block; margin-top:2px;">${t('preorderTag')}</small>` : ''}
                                     <small style="display:block; opacity:0.75; margin-top:2px;">
                                         ${t('size')} ${item.size || getPreferredSizeForProduct(item.name)}${item.color ? ` • ${t('filterColor')}: ${translateColorName(item.color)}` : ''}
                                     </small>
@@ -1998,6 +2003,7 @@ function openCheckout() {
                             </div>
                         ` : ''}
                     </div>
+                    ${hasPreorders ? `<p class="preorder-checkout-note">${t('preorderCheckoutNote')}</p>` : ''}
                     <div class="checkout-total">
                         <span>${t('total')}</span>
                         <span id="checkoutTotalAmount">${formatPrice(total)}</span>
@@ -2053,7 +2059,7 @@ function openCheckout() {
                         </div>
                         
                         <button type="submit" class="submit-order-btn">
-                            ${t('placeOrder')} <span id="checkoutSubmitAmount">${formatPrice(total)}</span>
+                            ${hasPreorders ? t('preorderSubmit') : t('placeOrder')} <span id="checkoutSubmitAmount">${formatPrice(total)}</span>
                         </button>
                     </form>
                 </div>
@@ -2090,6 +2096,8 @@ async function submitOrder(e) {
     const country = inputs[7] ? inputs[7].value.trim() : '';
     const selectedPayment = form.querySelector('input[name="payment"]:checked');
     const paymentMethod = selectedPayment ? selectedPayment.value : 'card';
+    const hasPreorders = cart.some(item => item.isPreorder);
+    const submitLabel = hasPreorders ? t('preorderSubmit') : t('placeOrder');
 
     // Calculate total before clearing cart
     const selectedAddOns = getSelectedCheckoutAddOns(form);
@@ -2105,12 +2113,13 @@ async function submitOrder(e) {
     }
     
     const total = subtotal - discount;
-    const orderId = 'JM' + Date.now().toString();
+    const orderId = `${new Date().toISOString().slice(0, 10).replace(/-/g, '')}${String(crypto.getRandomValues(new Uint32Array(1))[0] % 1_000_000_000).padStart(9, '0')}`;
 
     const orderItems = [...cart.map(item => ({
         name: item.name,
         quantity: item.quantity,
         price: item.price,
+        isPreorder: Boolean(item.isPreorder),
         size: item.size || getPreferredSizeForProduct(item.name),
         color: item.color || null
     })), ...selectedAddOns];
@@ -2183,7 +2192,7 @@ async function submitOrder(e) {
         showNotification(t('orderConfirmationError'), 'error');
         if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.textContent = `${t('placeOrder')} ${formatPrice(total)}`;
+            submitBtn.textContent = `${submitLabel} ${formatPrice(total)}`;
         }
         return;
     }
@@ -2193,7 +2202,7 @@ async function submitOrder(e) {
         showNotification(t('orderPersistenceError'), 'error');
         if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.textContent = `${t('placeOrder')} ${formatPrice(total)}`;
+            submitBtn.textContent = `${submitLabel} ${formatPrice(total)}`;
         }
         return;
     }
@@ -2203,7 +2212,7 @@ async function submitOrder(e) {
         trackPurchase(orderId, orderItems, total, discount);
     }
     
-    showNotification(t('orderSuccess'));
+    showNotification(t(hasPreorders ? 'preorderSuccess' : 'orderSuccess'));
     document.querySelector('.checkout-modal').remove();
     document.body.classList.remove('modal-open');
     cart = [];
@@ -2562,7 +2571,7 @@ function generateBotResponse(userMessage) {
     // Handle order number context
     if (chatbotContext.awaitingOrderNumber) {
         chatbotContext.awaitingOrderNumber = false;
-        const orderNumber = userMessage.match(/\d+/);
+        const orderNumber = userMessage.match(/\b(?:\d{8}-[a-f0-9]{8}|jm\d+|\d{5,})\b/i);
         if (orderNumber) {
             wasResolved = true;
             response = trackOrder(orderNumber[0]);
@@ -2586,7 +2595,7 @@ function generateBotResponse(userMessage) {
         wasResolved = true;
         chatbotContext.awaitingOrderNumber = true;
         chatbotContext.lastQuestion = 'tracking';
-        response = 'Ich helfe Ihnen gerne, Ihre Bestellung zu verfolgen! 📦\n\nBitte geben Sie Ihre Bestellnummer ein. Sie finden diese in Ihrer Bestätigungs-E-Mail (Format: z.B. JM12345).';
+        response = 'Ich helfe Ihnen gerne, Ihre Bestellung zu verfolgen! 📦\n\nBitte gib deine Bestellnummer ein. Du findest sie in deiner Bestätigungs-E-Mail (z. B. 20261008123456789).';
     }
     // Delivery issues - expanded
     else if (containsAny(['problem', 'nicht angekommen', 'fehlt', 'verspatet', 'verzoger', 'defekt', 
@@ -2692,15 +2701,15 @@ function trackOrder(orderNumber) {
     const orderStatuses = [
         {
             status: 'Zugestellt',
-            info: `✅ Bestellung #JM${orderNumber} wurde zugestellt!\n\n📍 Zustellort: An Empfänger übergeben\n📅 Zugestellt am: ${getRecentDate(1)}\n\nIhr Paket wurde erfolgreich zugestellt. Bei Problemen kontaktieren Sie uns bitte!`
+            info: `✅ Bestellung #${orderNumber} wurde zugestellt!\n\n📍 Zustellort: An Empfänger übergeben\n📅 Zugestellt am: ${getRecentDate(1)}\n\nIhr Paket wurde erfolgreich zugestellt. Bei Problemen kontaktieren Sie uns bitte!`
         },
         {
             status: 'Unterwegs',
-            info: `📦 Bestellung #JM${orderNumber} ist unterwegs!\n\n🚚 Status: In Zustellung\n📍 Aktuelle Position: Paketzentrum Berlin\n⏰ Voraussichtliche Zustellung: ${getFutureDate(1)}\n\nTracking-Link:\nwww.dhl.de/tracking?id=JM${orderNumber}\n\nIhr Paket ist auf dem Weg zu Ihnen! 🎉`
+            info: `📦 Bestellung #${orderNumber} ist unterwegs!\n\n🚚 Status: In Zustellung\n📍 Aktuelle Position: Paketzentrum Berlin\n⏰ Voraussichtliche Zustellung: ${getFutureDate(1)}\n\nTracking-Link:\nwww.dhl.de/tracking?id=${encodeURIComponent(orderNumber)}\n\nIhr Paket ist auf dem Weg zu Ihnen! 🎉`
         },
         {
             status: 'Bearbeitung',
-            info: `⏳ Bestellung #JM${orderNumber} wird bearbeitet\n\n📋 Status: In Bearbeitung\n🏭 Standort: Versandzentrum\n📅 Bestelldatum: ${getRecentDate(2)}\n⏰ Voraussichtlicher Versand: Heute\n\nIhre Bestellung wird gerade für den Versand vorbereitet. Sie erhalten eine E-Mail mit der Tracking-Nummer sobald das Paket versendet wurde!`
+            info: `⏳ Bestellung #${orderNumber} wird bearbeitet\n\n📋 Status: In Bearbeitung\n🏭 Standort: Versandzentrum\n📅 Bestelldatum: ${getRecentDate(2)}\n⏰ Voraussichtlicher Versand: Heute\n\nIhre Bestellung wird gerade für den Versand vorbereitet. Sie erhalten eine E-Mail mit der Tracking-Nummer sobald das Paket versendet wurde!`
         }
     ];
     

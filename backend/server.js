@@ -16,6 +16,9 @@ const bcrypt = require('bcrypt');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
+const MAIL_FROM_ADDRESS = 'support@joumonde.com';
+const MAIL_FROM = `Joumonde <${MAIL_FROM_ADDRESS}>`;
+const createOrderId = () => `${new Date().toISOString().slice(0, 10).replace(/-/g, '')}${String(crypto.randomInt(0, 1_000_000_000)).padStart(9, '0')}`;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -179,7 +182,7 @@ app.post('/api/request-password-reset', (req, res) => {
     // Send reset email
     const resetLink = `http://localhost:${PORT}/api/reset-password?email=${encodeURIComponent(email)}&token=${token}`;
     transporter.sendMail({
-        from: process.env.EMAIL_USER || 'your-email@gmail.com',
+        from: MAIL_FROM,
         to: email,
         subject: 'Password Reset Request',
         html: `<p>Hi,</p><p>Click the link below to reset your password:</p><a href="${resetLink}">${resetLink}</a>`
@@ -220,10 +223,12 @@ app.post('/api/reset-password', async (req, res) => {
 
 // Configure nodemailer (use your SMTP credentials)
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: process.env.SMTP_HOST || 'mail.privateemail.com',
+    port: Number(process.env.SMTP_PORT || 465),
+    secure: process.env.SMTP_SECURE !== 'false',
     auth: {
-        user: process.env.EMAIL_USER || 'your-email@gmail.com',
-        pass: process.env.EMAIL_PASS || 'your-app-password'
+        user: MAIL_FROM_ADDRESS,
+        pass: process.env.EMAIL_PASS
     }
 });
 
@@ -243,7 +248,7 @@ app.post('/api/register', async (req, res) => {
     // Send verification email
     const verificationLink = `http://localhost:${PORT}/api/verify-email?email=${encodeURIComponent(email)}&token=${token}`;
     transporter.sendMail({
-        from: process.env.EMAIL_USER || 'your-email@gmail.com',
+        from: MAIL_FROM,
         to: email,
         subject: 'Verify your email',
         html: `<p>Hi ${firstName},</p><p>Please verify your email by clicking the link below:</p><a href="${verificationLink}">${verificationLink}</a>`
@@ -371,7 +376,7 @@ app.post('/api/orders', async (req, res) => {
             verifiedEmail = user?.email || null;
         }
 
-        const finalOrderId = (orderId || ('JM' + Date.now().toString()));
+        const finalOrderId = orderId || createOrderId();
         const finalCurrency = currency || 'CHF';
         const finalEmail = (verifiedEmail || email || '').toLowerCase().trim();
         const normalizedPaymentMethod = ['card', 'amex', 'paypal'].includes(paymentMethod) ? paymentMethod : 'card';
@@ -514,7 +519,7 @@ app.patch('/api/orders/:orderId/status', async (req, res) => {
         }
         
         transporter.sendMail({
-            from: process.env.EMAIL_USER || 'your-email@gmail.com',
+            from: MAIL_FROM,
             to: order.email,
             subject,
             html: `
@@ -777,7 +782,7 @@ app.post('/api/newsletter/subscribe', async (req, res) => {
         
         try {
             await transporter.sendMail({
-                from: process.env.EMAIL_USER || 'noreply@joumonde.com',
+                from: MAIL_FROM,
                 to: email,
                 subject: 'Newsletter Anmeldung bestätigen - Joumonde',
                 html: emailContent
@@ -863,10 +868,10 @@ app.post('/api/newsletter/unsubscribe', async (req, res) => {
     await supabaseAdmin.from('newsletter_subscribers').delete().eq('email', normalizedEmail);
 
     // Send confirmation email
-    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+    if (process.env.EMAIL_PASS) {
         try {
             await transporter.sendMail({
-                from: `"Joumonde" <${process.env.EMAIL_USER}>`,
+                from: MAIL_FROM,
                 to: normalizedEmail,
                 subject: 'Newsletter-Abmeldung bestätigt',
                 html: `<p>Hallo,</p><p>du wurdest erfolgreich von unserem Newsletter abgemeldet.</p><p>Du erhältst ab sofort keine weiteren Emails von uns.</p><p>Falls du dich versehentlich abgemeldet hast, kannst du dich jederzeit wieder anmelden unter <a href="https://joumonde.ch">joumonde.ch</a>.</p><p>Freundliche Grüsse,<br>Dein Joumonde-Team</p>`
@@ -1406,11 +1411,11 @@ const NEXARA_TOOLS = [
         type: 'function',
         function: {
             name: 'get_order',
-            description: 'Holt vollständige Details einer Bestellung anhand der Bestellnummer (Format JM...).',
+            description: 'Holt vollständige Details einer Bestellung anhand ihrer Bestellnummer.',
             parameters: {
                 type: 'object',
                 properties: {
-                    order_id: { type: 'string', description: 'Bestellnummer z.B. JM1234567890' }
+                    order_id: { type: 'string', description: 'Bestellnummer aus der Bestellbestätigung' }
                 },
                 required: ['order_id']
             }
@@ -1480,7 +1485,7 @@ async function executeNexaraTool(toolName, args, verifiedUserId, userEmail) {
             case 'get_order': {
                 if (!verifiedUserId) return { error: 'Nicht eingeloggt – bitte zuerst einloggen.' };
                 const rawId = (args.order_id || '').trim();
-                // Try exact, uppercase, and lowercase to handle both UUID and JM-format IDs
+                // Try exact, uppercase, and lowercase to handle date-based and legacy order IDs
                 let order = null;
                 for (const candidate of [rawId, rawId.toUpperCase(), rawId.toLowerCase()]) {
                     const { data } = await supabaseAdmin
@@ -1525,10 +1530,10 @@ async function executeNexaraTool(toolName, args, verifiedUserId, userEmail) {
                     .update({ status: 'Retoure beantragt', updated_at: new Date().toISOString() })
                     .eq('id', orderId);
                 let emailSent = false;
-                if (userEmail && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+                if (userEmail && process.env.EMAIL_PASS) {
                     try {
                         await transporter.sendMail({
-                            from: `"Joumonde Support" <${process.env.EMAIL_USER}>`,
+                            from: MAIL_FROM,
                             to: userEmail,
                             subject: `Retoure bestätigt – ${orderId}`,
                             html: `<p>Hallo,</p><p>deine Retouranfrage für Bestellung <strong>${orderId}</strong> wurde erfolgreich erfasst.</p><p><strong>Grund:</strong> ${args.reason}</p><p>Wir melden uns innerhalb von 1–2 Werktagen mit weiteren Anweisungen bei dir.</p><p>Freundliche Grüsse,<br>Joumonde Support</p>`
@@ -1550,10 +1555,10 @@ async function executeNexaraTool(toolName, args, verifiedUserId, userEmail) {
                 if (idx !== -1) newsletterSubscribers.splice(idx, 1);
                 // Confirmation email
                 let emailSent = false;
-                if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+                if (process.env.EMAIL_PASS) {
                     try {
                         await transporter.sendMail({
-                            from: `"Joumonde" <${process.env.EMAIL_USER}>`,
+                            from: MAIL_FROM,
                             to: email,
                             subject: 'Newsletter-Abmeldung bestätigt',
                             html: `<p>Hallo,</p><p>du wurdest erfolgreich von unserem Newsletter abgemeldet.</p><p>Du erhältst ab sofort keine weiteren Emails von uns.</p><p>Falls du dich versehentlich abgemeldet hast, kannst du dich jederzeit wieder anmelden unter <a href="https://joumonde.ch">joumonde.ch</a>.</p><p>Freundliche Grüsse,<br>Dein Joumonde-Team</p>`
@@ -1569,11 +1574,11 @@ async function executeNexaraTool(toolName, args, verifiedUserId, userEmail) {
             case 'send_support_email': {
                 const to = args.to || userEmail;
                 if (!to) return { error: 'Keine Empfänger-Email bekannt. Bitte Email-Adresse angeben.' };
-                if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+                if (!process.env.EMAIL_PASS) {
                     return { error: 'Email-Versand ist noch nicht konfiguriert.' };
                 }
                 await transporter.sendMail({
-                    from: `"Joumonde Support" <${process.env.EMAIL_USER}>`,
+                    from: MAIL_FROM,
                     to,
                     subject: args.subject || 'Nachricht von Joumonde',
                     text: args.body

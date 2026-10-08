@@ -60,10 +60,10 @@ FormSubmit ist ein kostenloser Service, der keine Registrierung benötigt!
 - Newsletter: Ja
 
 ### 2. Bestellbestätigung
-**An:** info@joumonde.com  
-**Betreff:** "Neue Bestellung #JM1234567890 - Joumonde"  
+**Absender:** Joumonde <support@joumonde.com>
+**Betreff:** "Deine Bestellung 20261008123456789 – Joumonde"
 **Inhalt:**
-- Bestell-Nr: JM1234567890
+- Bestell-Nr: 20261008123456789
 - Kunde: Max Mustermann
 - E-Mail: max@example.com
 - Artikel: 
@@ -155,7 +155,7 @@ Alle E-Mail-Versände werden in der Browser-Console geloggt:
 
 ```
 ✅ Registrierungs-E-Mail gesendet an info@joumonde.com
-✅ Bestellbestätigungs-E-Mail gesendet an info@joumonde.com
+✅ Bestellbestätigungs-E-Mail gesendet an die Kundenadresse
 ```
 
 Bei Fehlern:

@@ -19,6 +19,10 @@ Das Account-System verwendet Supabase Auth für die passwortlose Anmeldung sowie
 3. Sicherstellen, dass die vorhandenen Function-Secrets `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` und `RESEND_API_KEY` für Edge Functions verfügbar sind.
 4. Danach mit einem bestehenden Konto einen neuen Code anfordern und Anmeldung sowie erneute Codeanforderung testen.
 
+Der Codeversand sowie Bestell-, Kontakt- und Newsletter-E-Mails aus den Edge Functions verwenden `Joumonde <support@joumonde.com>` als Absender. Die Absenderdomain muss bei Resend verifiziert sein.
+
+Für von Supabase Auth selbst versendete System-E-Mails (z. B. Änderungen an der E-Mail-Adresse) den SMTP-Versand separat unter **Supabase Dashboard → Authentication → SMTP Settings** konfigurieren. Für Namecheap Private Email sind die üblichen Werte `mail.privateemail.com`, Port `465` mit SSL; Benutzername ist `support@joumonde.com`. Das Mailbox-Passwort als Secret im Dashboard eintragen, nicht im Repository.
+
 Codes werden mit HMAC serverseitig geschützt gespeichert, laufen nach zehn Minuten ab, sind nur einmal verwendbar und erlauben höchstens fünf Prüfversuche. Pro E-Mail-Adresse gilt eine Versandpause von 60 Sekunden; zusätzlich werden Versand- und Prüfversuche pro IP begrenzt. Antworten auf Codeanforderungen verraten nicht, ob eine E-Mail-Adresse bereits registriert ist.
 
 Der Code wird nicht von Supabase Auth erzeugt. Änderungen an Supabase’ Magic-Link-/OTP-Mailvorlage ändern daher diesen sechsstelligen Codeversand nicht.

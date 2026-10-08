@@ -133,23 +133,14 @@ After clicking confirmation link, user sees:
 Set in `.env` file or environment:
 
 ```bash
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASS=your-app-password
+EMAIL_PASS=<Namecheap mailbox password>
+SMTP_HOST=mail.privateemail.com
+SMTP_PORT=465
+SMTP_SECURE=true
 PORT=4000
 ```
 
-### SMTP Configuration
-Uses nodemailer with Gmail by default. Edit `backend/server.js` to change provider:
-
-```javascript
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    }
-});
-```
+The backend sends all Nodemailer messages with `Joumonde <support@joumonde.com>` and uses Namecheap Private Email SMTP by default. Set the mailbox credentials in Render (or the local environment); never commit the password.
 
 ## Data Storage
 

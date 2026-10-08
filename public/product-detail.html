@@ -156,15 +156,16 @@
                             <button onclick="increaseQuantity()" aria-label="Menge erhöhen">+</button>
                         </div>
                     </div>
+                    <p class="product-stock-status product-detail-stock-status" id="product-stock-status" aria-live="polite"></p>
                     <!-- Add to Cart/Wishlist Buttons -->
                     <div class="product-detail-actions">
-                        <button class="btn-add-to-cart" onclick="addToCartFromDetail()">
+                        <button class="btn-add-to-cart" onclick="addToCartFromDetail()" disabled>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="9" cy="21" r="1"></circle>
                                 <circle cx="20" cy="21" r="1"></circle>
                                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                             </svg>
-                            In den Warenkorb
+                            <span data-add-to-cart-label>In den Warenkorb</span>
                         </button>
                         <button class="btn-add-to-wishlist" onclick="toggleWishlistFromDetail()">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -357,6 +358,7 @@
     <script src="assets/js/config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/supabase-client.js"></script>
+    <script src="assets/js/inventory-display.js"></script>
     <script src="assets/js/account-system.js"></script>
     
     <script>

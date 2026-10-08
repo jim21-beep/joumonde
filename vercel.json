@@ -3,6 +3,10 @@
     "trailingSlash": false,
     "buildCommand": "node scripts/generate-config.js",
     "outputDirectory": "public",
+    "redirects": [
+        { "source": "/index.html", "destination": "/", "permanent": true },
+        { "source": "/:path*.html", "destination": "/:path*", "permanent": true }
+    ],
     "rewrites": [
         { "source": "/api/(.*)", "destination": "https://joumonde.onrender.com/api/$1" }
     ],
