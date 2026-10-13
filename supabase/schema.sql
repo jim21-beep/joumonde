@@ -60,10 +60,7 @@ alter table public.orders
   add column if not exists payment_method text,
   add column if not exists payment_status text not null default 'pending',
   add column if not exists payment_provider text,
-  add column if not exists provider_payment_id text,
-  add column if not exists customer_email text,
-  add column if not exists shipping_address jsonb,
-  add column if not exists admin_note text;
+  add column if not exists provider_payment_id text;
 
 -- ------------------------------------------------------------------
 -- ORDER ITEMS (Positionen einer Bestellung)

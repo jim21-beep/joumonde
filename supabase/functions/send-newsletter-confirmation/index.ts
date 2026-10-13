@@ -237,8 +237,6 @@ serve(async (req) => {
             payment_status: 'pending',
             payment_provider: paymentProvider,
             provider_payment_id: null,
-            customer_email: email,
-            shipping_address: shippingAddress,
           };
 
           const { error: orderErr } = await db.from('orders').insert(orderPayload);
