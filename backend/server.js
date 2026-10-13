@@ -232,6 +232,110 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+const returnRequestAttempts = new Map();
+const validReturnReasons = new Set([
+    'Größe oder Passform',
+    'Artikel gefällt nicht',
+    'Artikel beschädigt oder fehlerhaft',
+    'Falscher Artikel erhalten',
+    'Sonstiges',
+    'Size or fit',
+    'Changed my mind',
+    'Damaged or defective item',
+    'Wrong item received',
+    'Other',
+    'Taille ou coupe',
+    "L'article ne me convient pas",
+    'Article endommage ou defectueux',
+    'Mauvais article recu',
+    'Autre'
+]);
+
+function escapeEmailHtml(value) {
+    return value.replace(/[&<>"']/g, character => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    })[character]);
+}
+
+app.post('/api/returns', async (req, res) => {
+    const now = Date.now();
+    const body = req.body || {};
+    if (typeof body.website === 'string' && body.website.trim()) {
+        return res.status(400).json({ message: 'Invalid return request.' });
+    }
+
+    const fields = {
+        name: typeof body.name === 'string' ? body.name.trim() : '',
+        email: typeof body.email === 'string' ? body.email.trim() : '',
+        orderNumber: typeof body.orderNumber === 'string' ? body.orderNumber.trim() : '',
+        item: typeof body.item === 'string' ? body.item.trim() : '',
+        reason: typeof body.reason === 'string' ? body.reason.trim() : '',
+        details: typeof body.details === 'string' ? body.details.trim() : ''
+    };
+    const emailIsValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email);
+    if (
+        !fields.name || fields.name.length > 120 ||
+        !emailIsValid || fields.email.length > 254 ||
+        !fields.orderNumber || fields.orderNumber.length > 80 || /[\r\n]/.test(fields.orderNumber) ||
+        !fields.item || fields.item.length > 200 ||
+        !validReturnReasons.has(fields.reason) ||
+        fields.details.length > 2000
+    ) {
+        return res.status(400).json({ message: 'Please check the required return request fields.' });
+    }
+
+    const requesterKey = crypto.createHash('sha256').update(fields.email.toLowerCase()).digest('hex');
+    const attempt = returnRequestAttempts.get(requesterKey);
+    if (attempt && attempt.resetAt > now && attempt.count >= 5) {
+        return res.status(429).json({ message: 'Too many return requests. Please try again later.' });
+    }
+    const nextAttempt = attempt && attempt.resetAt > now
+        ? { count: attempt.count + 1, resetAt: attempt.resetAt }
+        : { count: 1, resetAt: now + 15 * 60 * 1000 };
+    returnRequestAttempts.set(requesterKey, nextAttempt);
+
+    const escaped = Object.fromEntries(
+        Object.entries(fields).map(([key, value]) => [key, escapeEmailHtml(value)])
+    );
+    const text = [
+        'Neue Retourenanfrage',
+        '',
+        `Name: ${fields.name}`,
+        `E-Mail: ${fields.email}`,
+        `Bestellnummer: ${fields.orderNumber}`,
+        `Artikel: ${fields.item}`,
+        `Grund: ${fields.reason}`,
+        `Zusätzliche Angaben: ${fields.details || 'Keine'}`
+    ].join('\n');
+
+    try {
+        await transporter.sendMail({
+            from: MAIL_FROM,
+            to: MAIL_FROM_ADDRESS,
+            replyTo: fields.email,
+            subject: `Retourenanfrage – ${fields.orderNumber}`,
+            text,
+            html: `
+                <h2>Neue Retourenanfrage</h2>
+                <p><strong>Name:</strong> ${escaped.name}</p>
+                <p><strong>E-Mail:</strong> ${escaped.email}</p>
+                <p><strong>Bestellnummer:</strong> ${escaped.orderNumber}</p>
+                <p><strong>Artikel:</strong> ${escaped.item}</p>
+                <p><strong>Grund:</strong> ${escaped.reason}</p>
+                <p><strong>Zusätzliche Angaben:</strong><br>${escaped.details || 'Keine'}</p>
+            `
+        });
+        return res.status(200).json({ message: 'Return request sent.' });
+    } catch (error) {
+        console.error('Failed to send return request email:', error);
+        return res.status(502).json({ message: 'Could not send return request email. Please try again later.' });
+    }
+});
+
 // Register endpoint with email verification
 app.post('/api/register', async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
@@ -379,9 +483,9 @@ app.post('/api/orders', async (req, res) => {
         const finalOrderId = orderId || createOrderId();
         const finalCurrency = currency || 'CHF';
         const finalEmail = (verifiedEmail || email || '').toLowerCase().trim();
-        const normalizedPaymentMethod = ['card', 'amex', 'paypal'].includes(paymentMethod) ? paymentMethod : 'card';
+        const normalizedPaymentMethod = ['card', 'amex', 'paypal'].includes(paymentMethod) ? paymentMethod : null;
         const normalizedPaymentStatus = 'pending';
-        const paymentProvider = normalizedPaymentMethod === 'paypal' ? 'paypal' : 'card';
+        const paymentProvider = normalizedPaymentMethod === 'paypal' ? 'paypal' : normalizedPaymentMethod ? 'card' : null;
         const profileId = verifiedUserId || null;
 
         const orderPayload = {
@@ -538,6 +642,82 @@ app.patch('/api/orders/:orderId/status', async (req, res) => {
     }
     
     res.json({ message: 'Order status updated', order: updatedOrder });
+});
+
+app.post('/api/orders/:orderId/cancel', async (req, res) => {
+    const accessToken = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
+    if (!accessToken) {
+        return res.status(401).json({ message: 'Authentication required' });
+    }
+
+    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(accessToken);
+    if (authError || !user) {
+        return res.status(401).json({ message: 'A valid customer login is required' });
+    }
+
+    const orderId = (req.params.orderId || '').toUpperCase();
+    const { data: order, error: orderError } = await supabaseAdmin
+        .from('orders')
+        .select('id, user_id, status, payment_status')
+        .eq('id', orderId)
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+    if (orderError) {
+        console.error('Could not load order for customer cancellation:', orderError);
+        return res.status(500).json({ message: 'Could not verify this order' });
+    }
+    if (!order) {
+        return res.status(404).json({ message: 'Order not found for this customer' });
+    }
+    if (order.status === 'Storniert' || order.status === 'cancelled') {
+        if (!['pending', 'failed'].includes(order.payment_status)) {
+            return res.status(409).json({ message: 'A cancelled order with a recorded payment cannot be deleted' });
+        }
+        const { data: deletedOrder, error: deleteError } = await supabaseAdmin
+            .from('orders')
+            .delete()
+            .eq('id', orderId)
+            .eq('user_id', user.id)
+            .in('status', ['Storniert', 'cancelled'])
+            .in('payment_status', ['pending', 'failed'])
+            .select('id')
+            .maybeSingle();
+        if (deleteError) {
+            console.error('Could not remove previously cancelled customer order:', deleteError);
+            return res.status(500).json({ message: 'Could not remove this cancelled order' });
+        }
+        if (!deletedOrder) {
+            return res.status(409).json({ message: 'The order changed and can no longer be removed' });
+        }
+        return res.json({ message: 'Previously cancelled order deleted', order: { id: deletedOrder.id, status: 'Storniert' } });
+    }
+    if (!['Bearbeitung', 'pending', 'processing'].includes(order.status)) {
+        return res.status(409).json({ message: 'This order can no longer be cancelled because it is already being shipped or completed' });
+    }
+    if (!['pending', 'failed'].includes(order.payment_status)) {
+        return res.status(409).json({ message: 'This order has a recorded payment and cannot be automatically refunded yet' });
+    }
+
+    const { data: deletedOrder, error: cancelError } = await supabaseAdmin
+        .from('orders')
+        .delete()
+        .eq('id', orderId)
+        .eq('user_id', user.id)
+        .in('status', ['Bearbeitung', 'pending', 'processing'])
+        .in('payment_status', ['pending', 'failed'])
+        .select('id')
+        .maybeSingle();
+
+    if (cancelError) {
+        console.error('Could not cancel customer order:', cancelError);
+        return res.status(500).json({ message: 'Could not cancel this order' });
+    }
+    if (!deletedOrder) {
+        return res.status(409).json({ message: 'The order changed and can no longer be cancelled' });
+    }
+
+    return res.json({ message: 'Order cancelled and deleted', order: { id: deletedOrder.id, status: 'Storniert' } });
 });
 
 // Get orders for a user
@@ -1398,7 +1578,7 @@ function enforceOrderGrounding(reply) {
         /\bR[üu]ckgabefrist\s+bis/i,
     ];
     if (hallucinationPatterns.some(p => p.test(reply))) {
-        return 'Ich konnte leider keine vollständigen Bestellinfos abrufen. Bitte prüfe deine Bestellnummer im Account-Bereich oder schreibe uns an info@joumonde.com.';
+        return 'Ich konnte leider keine vollständigen Bestellinfos abrufen. Bitte prüfe deine Bestellnummer im Account-Bereich oder schreibe uns an support@joumonde.com.';
     }
     return reply;
 }
@@ -1654,6 +1834,16 @@ app.post('/api/chat', async (req, res) => {
             return res.json({ reply: confirmations[switchLang], action: { type: 'changeLanguage', value: switchLang } });
         }
 
+        // Always answer return-related questions with the real form link, without asking an AI model.
+        if (/(?:r[üu]ckgabe|rueckgabe|r[üu]cksend|ruecksend|retour\w*|zur[üu]ckschick|zurueckschick|zur[üu]cksend|zuruecksend|refund|returns?\b|exchange|formulaire\s+de\s+retour)/i.test(message)) {
+            const returnFormReplies = {
+                de: 'Hier ist das Retourenformular: https://joumonde.com/versand.html#return-request\nBitte fülle es aus; nach dem Absenden wird deine Anfrage an support@joumonde.com gesendet.',
+                en: 'Here is the return form: https://joumonde.com/versand.html#return-request\nFill it out and submit it to send your request to support@joumonde.com.',
+                fr: 'Voici le formulaire de retour : https://joumonde.com/versand.html#return-request\nRemplis-le et envoie-le pour transmettre ta demande à support@joumonde.com.'
+            };
+            return res.json({ reply: returnFormReplies[lang] || returnFormReplies.de });
+        }
+
         // Deterministic size advice when user provides measurements.
         if (isSizingInputMessage(message)) {
             const sizingReply = getDeterministicSizeAdvice(message, lang || 'de');
@@ -1755,6 +1945,7 @@ app.post('/api/chat', async (req, res) => {
     - Layering-Logik: Niemals Quarter Zipper ueber Hoodie empfehlen. Sinnvolle Reihenfolge ist Base-Layer -> Mid-Layer -> Outer-Layer.
     - Fokus: Berate zu Mode, Styling, Produkten sowie Support-Themen (Bestellungen, Versand, Retouren, Newsletter, Konto-Hinweise).
     - Wenn ein User nach einem Link fragt (z.B. Retoure, Shop, Kontakt, Versand), gib den passenden direkten Joumonde-Link als volle URL aus.
+    - Bei jeder Frage zur Anmeldung oder Abwicklung einer Retoure nicht behaupten, Nexara habe die Retoure erfasst. Verweise stattdessen auf das Retourenformular: https://joumonde.com/versand.html#return-request. Die Anfrage wird dort an den Support gesendet.
 
     Account-Hinweis:
     Bei Fragen zu Registrierung, Login oder Passwort: "Klick oben rechts auf das Maennchen-Symbol auf joumonde.ch - dort kannst du dich registrieren oder einloggen."
@@ -1784,13 +1975,13 @@ app.post('/api/chat', async (req, res) => {
     BESTELLDATEN - ABSOLUTE REGEL (niemals verletzen):
     - Benutze AUSSCHLIESSLICH die Daten aus get_order oder get_my_orders. Erfinde NIEMALS Preise, Mengen, Produkte, Status oder Daten.
     - Du hast KEINEN Zugriff auf Versandtracking, Lieferanten oder Carrier. Nenne niemals DHL, UPS, FedEx, Expressoption oder Lieferzeitpunkte - diese Daten existieren nicht in deinem System.
-    - Wenn get_order einen Fehler zurueckgibt, antworte exakt: "Ich konnte diese Bestellung leider nicht finden. Bitte pruefe die Bestellnummer oder schreibe uns an info@joumonde.com."
+    - Wenn get_order einen Fehler zurueckgibt, antworte exakt: "Ich konnte diese Bestellung leider nicht finden. Bitte pruefe die Bestellnummer oder schreibe uns an support@joumonde.com."
     - Wenn get_order erfolgreiche Daten zurueckgibt, zeige NUR: Bestellnummer, Status, Artikel (aus order_items), Gesamtbetrag, Datum. Nichts weiteres erfindenoder ergaenzen.
     - Moegliche Status: Bearbeitung, Versendet, Geliefert, Storniert, Retoure beantragt, Retourniert. Kein anderer Status ist gueltig.
 
     TOOL-AUFRUF REGELN:
-    - Rufe initiate_return NUR auf, wenn du BEIDE Parameter hast: eine konkrete Bestellnummer UND einen konkreten Grund vom User.
-    - Wenn der User "Retoure" oder "zurückschicken" sagt aber keine Bestellnummer nennt: Frage zuerst nach der Bestellnummer, dann nach dem Grund.
+    - Rufe initiate_return NICHT auf. Retourenanfragen laufen über https://joumonde.com/versand.html#return-request und werden vom Formular an den Support gesendet.
+    - Wenn der User "Retoure" oder "zurückschicken" sagt, gib den direkten Link zum Retourenformular aus: https://joumonde.com/versand.html#return-request.
     - Gib NIEMALS rohe Funktions-Syntax, JSON oder Platzhalter-Text an den User aus. Frage immer in natürlicher Sprache nach fehlenden Infos.`;
 
         const messages = [

@@ -274,7 +274,7 @@ function getBrowserPreferredLanguage() {
     const matchingLanguage = browserLanguages.find(language =>
         ['de', 'en', 'fr'].includes(language.split('-')[0].toLowerCase())
     );
-    return matchingLanguage ? matchingLanguage.split('-')[0].toLowerCase() : 'de';
+    return matchingLanguage ? matchingLanguage.split('-')[0].toLowerCase() : 'en';
 }
 let currentLanguage = localStorage.getItem('language') || getBrowserPreferredLanguage();
 
@@ -472,6 +472,7 @@ async function loadLanguage(lang) {
         }
     }
     currentLanguage = lang;
+    document.documentElement.lang = lang;
     return translations[lang];
 }
 
@@ -1087,7 +1088,7 @@ function viewProductDetail(productName, price, description, colors, sizes) {
 }
 
 // Add to Cart
-function addToCart(productName, price, color = null, explicitSize = null, isPreorder = false) {
+function addToCart(productName, price, color = null, explicitSize = null) {
     const size = explicitSize || getPreferredSizeForProduct(productName);
 
     // Check if item already exists in cart
@@ -1099,15 +1100,13 @@ function addToCart(productName, price, color = null, explicitSize = null, isPreo
     
     if (existingItem) {
         existingItem.quantity += 1;
-        existingItem.isPreorder = isPreorder;
     } else {
         cart.push({
             name: productName,
             price: price,
             quantity: 1,
             size,
-            color: color || null,
-            isPreorder
+            color: color || null
         });
     }
     
@@ -1266,7 +1265,6 @@ function updateCart() {
                     <button type="button" class="remove-item-btn" onclick="removeFromCart(${index})" aria-label="${t('removeCartItem')}: ${translateProductName(item.name)}">&times;</button>
                 </div>
                 <p class="cart-item-price">${formatPrice(item.price)}</p>
-                ${item.isPreorder ? `<p class="cart-item-preorder">${t('preorderTag')}</p>` : ''}
                 <div class="cart-item-options">
                     <label>${t('size')}
                         <select class="cart-size-select" onchange="updateCartItemSize(${index}, this.value)">
@@ -1916,7 +1914,7 @@ function updateCheckoutTotalsFromModal() {
     const form = modal?.querySelector('.checkout-form');
     const totalEl = document.getElementById('checkoutTotalAmount');
     const submitAmountEl = document.getElementById('checkoutSubmitAmount');
-    if (!form || !totalEl || !submitAmountEl) return;
+    if (!form || !totalEl) return;
 
     const baseSubtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const addOnTotal = getSelectedCheckoutAddOns(form).reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -1926,7 +1924,7 @@ function updateCheckoutTotalsFromModal() {
     const total = (baseSubtotal + addOnTotal) - discount;
 
     totalEl.textContent = formatPrice(total);
-    submitAmountEl.textContent = formatPrice(total);
+    if (submitAmountEl) submitAmountEl.textContent = formatPrice(total);
 }
 
 // Checkout Functionality
@@ -1955,7 +1953,6 @@ function openCheckout() {
     
     const checkoutModal = document.createElement('div');
     checkoutModal.className = 'checkout-modal';
-    const hasPreorders = cart.some(item => item.isPreorder);
     checkoutModal.innerHTML = `
         <div class="checkout-content">
             <button class="checkout-close" onclick="document.querySelector('.checkout-modal').remove(); document.body.classList.remove('modal-open')">&times;</button>
@@ -1969,7 +1966,6 @@ function openCheckout() {
                             <div class="checkout-item">
                                 <span>
                                     ${translateProductName(item.name)} x${item.quantity}
-                                    ${item.isPreorder ? `<small style="display:block; margin-top:2px;">${t('preorderTag')}</small>` : ''}
                                     <small style="display:block; opacity:0.75; margin-top:2px;">
                                         ${t('size')} ${item.size || getPreferredSizeForProduct(item.name)}${item.color ? ` • ${t('filterColor')}: ${translateColorName(item.color)}` : ''}
                                     </small>
@@ -2003,7 +1999,6 @@ function openCheckout() {
                             </div>
                         ` : ''}
                     </div>
-                    ${hasPreorders ? `<p class="preorder-checkout-note">${t('preorderCheckoutNote')}</p>` : ''}
                     <div class="checkout-total">
                         <span>${t('total')}</span>
                         <span id="checkoutTotalAmount">${formatPrice(total)}</span>
@@ -2027,39 +2022,10 @@ function openCheckout() {
                         <input type="text" placeholder="${t('country')}" value="${t('switzerland')}">
                         
                         <h3>${t('paymentMethod')}</h3>
-                        <div class="payment-methods">
-                            <label class="payment-option">
-                                <input type="radio" name="payment" value="card" checked>
-                                <div class="payment-content">
-                                    <div class="payment-brand-row payment-brand-logos">
-                                        <img src="assets/images/payments/visa.svg" alt="Visa" class="payment-logo">
-                                        <img src="assets/images/payments/mastercard.svg" alt="Mastercard" class="payment-logo">
-                                    </div>
-                                    <span class="payment-label">${t('creditCard')}</span>
-                                </div>
-                            </label>
-                            <label class="payment-option">
-                                <input type="radio" name="payment" value="amex">
-                                <div class="payment-content">
-                                    <div class="payment-brand-row payment-brand-logos">
-                                        <img src="assets/images/payments/amex.svg" alt="American Express" class="payment-logo payment-logo-wide">
-                                    </div>
-                                    <span class="payment-label">American Express</span>
-                                </div>
-                            </label>
-                            <label class="payment-option">
-                                <input type="radio" name="payment" value="paypal">
-                                <div class="payment-content">
-                                    <div class="payment-brand-row payment-brand-logos">
-                                        <img src="assets/images/payments/paypal.svg" alt="PayPal" class="payment-logo payment-logo-wide">
-                                    </div>
-                                    <span class="payment-label">PayPal</span>
-                                </div>
-                            </label>
-                        </div>
-                        
+                        <p class="checkout-payment-note">${t('checkoutPaymentNotice')}</p>
+
                         <button type="submit" class="submit-order-btn">
-                            ${hasPreorders ? t('preorderSubmit') : t('placeOrder')} <span id="checkoutSubmitAmount">${formatPrice(total)}</span>
+                            ${t('placeOrder')}
                         </button>
                     </form>
                 </div>
@@ -2094,10 +2060,7 @@ async function submitOrder(e) {
     const zip = inputs[5] ? inputs[5].value.trim() : '';
     const city = inputs[6] ? inputs[6].value.trim() : '';
     const country = inputs[7] ? inputs[7].value.trim() : '';
-    const selectedPayment = form.querySelector('input[name="payment"]:checked');
-    const paymentMethod = selectedPayment ? selectedPayment.value : 'card';
-    const hasPreorders = cart.some(item => item.isPreorder);
-    const submitLabel = hasPreorders ? t('preorderSubmit') : t('placeOrder');
+    const submitLabel = t('placeOrder');
 
     // Calculate total before clearing cart
     const selectedAddOns = getSelectedCheckoutAddOns(form);
@@ -2119,7 +2082,6 @@ async function submitOrder(e) {
         name: item.name,
         quantity: item.quantity,
         price: item.price,
-        isPreorder: Boolean(item.isPreorder),
         size: item.size || getPreferredSizeForProduct(item.name),
         color: item.color || null
     })), ...selectedAddOns];
@@ -2145,7 +2107,7 @@ async function submitOrder(e) {
     // Persist order + send confirmation email via edge function (no real charge).
     let orderPersisted = false;
     let emailSent = false;
-    const effectivePaymentMethod = paymentMethod || 'card';
+    const effectivePaymentMethod = 'unpaid';
 
     if (email) {
         try {
@@ -2192,7 +2154,7 @@ async function submitOrder(e) {
         showNotification(t('orderConfirmationError'), 'error');
         if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.textContent = `${submitLabel} ${formatPrice(total)}`;
+            submitBtn.textContent = submitLabel;
         }
         return;
     }
@@ -2202,7 +2164,7 @@ async function submitOrder(e) {
         showNotification(t('orderPersistenceError'), 'error');
         if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.textContent = `${submitLabel} ${formatPrice(total)}`;
+            submitBtn.textContent = submitLabel;
         }
         return;
     }
@@ -2212,7 +2174,7 @@ async function submitOrder(e) {
         trackPurchase(orderId, orderItems, total, discount);
     }
     
-    showNotification(t(hasPreorders ? 'preorderSuccess' : 'orderSuccess'));
+    showNotification(t('orderSuccess'));
     document.querySelector('.checkout-modal').remove();
     document.body.classList.remove('modal-open');
     cart = [];
@@ -2604,73 +2566,73 @@ function generateBotResponse(userMessage) {
         wasResolved = true;
         response = [
             'Es tut mir leid zu hören, dass es Probleme gibt. 😔 Ich helfe Ihnen gerne weiter!',
-            'Um Ihr Problem zu lösen, benötige ich folgende Informationen:\n\n1. Ihre Bestellnummer\n2. Was genau ist das Problem?\n   • Paket nicht angekommen?\n   • Falsche Artikel?\n   • Beschädigte Ware?\n\nFür dringende Fälle erreichen Sie unseren Kundenservice direkt:\n📧 info@joumonde.com\n📞 +41 44 123 45 67 (Mo-Fr 9-18 Uhr)'
+            'Um Ihr Problem zu lösen, benötige ich folgende Informationen:\n\n1. Ihre Bestellnummer\n2. Was genau ist das Problem?\n   • Paket nicht angekommen?\n   • Falsche Artikel?\n   • Beschädigte Ware?\n\nDu erreichst unseren Kundenservice unter support@joumonde.com oder 076 523 02 04.'
         ];
     }
     // Shipping & delivery time - expanded
     else if (containsAny(['versand', 'lieferung', 'lieferzeit', 'dauer', 'lange dauert', 'shipping', 
                      'delivery', 'kosten', 'gebuhren', 'porto', 'wann', 'wie lange', 'schnell'])) {
         wasResolved = true;
-        response = '📦 Versandinformationen:\n\n• Standardversand: 2-4 Werktage (kostenlos ab CHF 50)\n• Expressversand: 1-2 Werktage (CHF 8.90)\n• Versand innerhalb CH: CHF 4.90\n• Versand EU: ab CHF 9.90\n\nBestellungen bis 14 Uhr werden noch am selben Tag bearbeitet!\n\nMöchten Sie eine bestehende Bestellung verfolgen? Geben Sie einfach Ihre Bestellnummer ein!';
+        response = '📦 Versandinformationen:\n\nSchweiz: Standard CHF 7.90, kostenlos ab CHF 100; Express zusätzlich CHF 12.\nEU: Standard CHF 15.90, kostenlos ab CHF 150; Express zusätzlich CHF 12.\n\nDie Lieferzeiten und Rückgabebedingungen findest du in unserer Versandrichtlinie: www.joumonde.com/versand.html';
     }
     // Returns & exchange - expanded
     else if (containsAny(['ruckgabe', 'umtausch', 'zuruckschicken', 'zuruckgeben', 'retoure', 'return',
                      'exchange', 'zuruck', 'retour', 'nicht passen', 'passt nicht', 'gefalt nicht'])) {
         wasResolved = true;
-        response = '↩️ Rückgabe & Umtausch:\n\n✓ 30 Tage Rückgaberecht\n✓ Kostenloser Rückversand innerhalb CH\n✓ Artikel müssen ungetragen mit Etikett sein\n\nSo funktioniert\'s:\n1. Retourenschein ausfüllen (liegt jeder Sendung bei)\n2. Artikel sicher verpacken\n3. Kostenlos bei Post abgeben\n4. Rückerstattung innerhalb 5-7 Werktagen\n\nRückgabelabel erstellen: www.joumonde.com/retoure\n\nBrauchen Sie eine andere Größe? Wir tauschen gerne um!';
+        response = '↩️ Rückgabe:\n\nDu kannst Artikel innerhalb von 14 Tagen nach Erhalt zurückgeben. Sie müssen ungetragen, ungewaschen und mit Originaletiketten sein. Retouren aus der Schweiz sind kostenlos; bei internationalen Retouren trägt der Käufer die Kosten.\n\nStelle deine Retourenanfrage mit Bestellnummer über unser Formular: https://joumonde.com/versand.html#return-request';
     }
     // Payment methods - expanded
     else if (containsAny(['zahlung', 'bezahlen', 'zahlungsmethode', 'payment', 'kreditkarte', 'paypal',
                      'rechnung', 'uberweisung', 'karte', 'bezahl', 'pay'])) {
         wasResolved = true;
-        response = '💳 Zahlungsmethoden:\n\n✓ Kreditkarte (Visa, Mastercard, Amex)\n✓ PayPal\n✓ Rechnung (Klarna)\n✓ Apple Pay & Google Pay\n\nAlle Zahlungen sind SSL-verschlüsselt und sicher! 🔒';
+        response = '💳 Online-Zahlungen sind derzeit noch nicht aktiviert. Bestellungen können aktuell erfasst werden, aber es wird kein Geld eingezogen. Bitte beachte dies vor dem Absenden deiner Bestellung.';
     }
     // Sizing - expanded
     else if (containsAny(['grosse', 'passt', 'grossentabelle', 'grossenberatung', 'sizing', 'size',
                      'mass', 'ausmessen', 'welche grosse', 'fit', 'zu gross', 'zu klein', 'lang', 'kurz'])) {
         wasResolved = true;
-        response = '📏 Größenberatung:\n\nUnsere Größen fallen normal aus. Bei jedem Produkt finden Sie:\n• Detaillierte Größentabelle\n• Maßangaben (Brust, Taille, Hüfte, Länge)\n• Trageempfehlungen\n\nTipp: Bei Unsicherheit zwischen zwei Größen empfehlen wir die größere Variante.\n\nBrauchen Sie Hilfe bei einem bestimmten Artikel? Nennen Sie mir das Produkt!';
+        response = '📏 Die verfügbaren Größen und Grössenhinweise findest du direkt auf der jeweiligen Produktseite. Wenn dort Angaben fehlen oder du unsicher bist, schreib uns mit dem Produktnamen an support@joumonde.com.';
     }
     // Products - Old Money - expanded
     else if (containsAny(['old money', 'blazer', 'elegant', 'klassisch', 'chino', 'polo', 'strickpullover',
                      'business', 'formal', 'schick', 'anzug', 'hemd'])) {
         wasResolved = true;
-        response = '🎩 Old Money Collection:\n\nUnsere Old Money Kollektion steht für zeitlose Eleganz und Qualität:\n\n• Premium Blazer aus italienischer Wolle\n• Polo-Hemden aus ägyptischer Baumwolle\n• Perfekt geschnittene Chinos\n• Kaschmir-Pullover\n\nDer klassische Look, der nie aus der Mode kommt. Investieren Sie in Qualität, die bleibt!\n\nZur Kollektion: Scrollen Sie zu "Old Money Collection"';
+        response = '🎩 Entdecke die verfügbaren Styles der Old Money Kollektion im Shop. Materialien, Grössen und Produktdetails findest du jeweils auf der Produktseite.';
     }
     // Products - Streetwear - expanded
     else if (containsAny(['streetwear', 'hoodie', 'sneaker', 'urban', 'cargo', 'trainerhose', 'jogger',
                      'street', 'oversized', 'graphic', 'print', 'tee', 'shirt', 'sporty', 'casual'])) {
         wasResolved = true;
-        response = 'Casual Collection:\n\nUnsere Casual Styles verbinden Komfort mit Premium-Qualität:\n\n• Oversized Hoodies aus 100% Baumwolle\n• Exklusive Graphic Tees (Limited Edition)\n• Cargo Pants mit Multi-Pocket Design\n• Premium Sneakers\n\nFür alle, die Statement setzen wollen!\n\nZur Kollektion: Scrollen Sie zu "Casual Collection"';
+        response = 'Entdecke die verfügbaren Casual Styles im Shop. Materialien, Grössen und Produktdetails findest du jeweils auf der Produktseite.';
     }
     // Price questions - new
     else if (containsAny(['preis', 'kosten', 'teuer', 'billig', 'gunstig', 'price', 'kostet', 'viel', 'wert'])) {
         wasResolved = true;
-        response = '💰 Unsere Preise:\n\nOld Money Collection: CHF 79.90 - CHF 89.90\nCasual Collection: CHF 24.90 - CHF 79.90\n\n✓ Premium Qualität zu fairen Preisen\n✓ Kostenloser Versand ab CHF 50\n✓ 10% Newsletter-Rabatt für Neukunden\n\nAlle Preise sind bereits in CHF, EUR oder USD verfügbar (siehe Währungsauswahl oben rechts).';
+        response = '💰 Die aktuellen Preise findest du direkt bei den Produkten im Shop. Versandkosten und Gratisversand-Schwellen variieren je nach Lieferregion und stehen auf www.joumonde.com/versand.html.';
     }
     // Contact - expanded
     else if (containsAny(['kontakt', 'email', 'telefon', 'erreichen', 'anruf', 'contact', 'mail',
                      'sprechen', 'mitarbeiter', 'kunde', 'support', 'service'])) {
         wasResolved = true;
-        response = '📞 Kontakt:\n\nSie erreichen unser Team:\n\n📧 E-Mail:\n• info@joumonde.com\n• Antwort innerhalb 24h\n\n☎️ Telefon:\n• +41 44 123 45 67\n• Mo-Fr: 9:00 - 18:00 Uhr\n\n📍 Adresse:\n• Musterstrasse 123, 8000 Zürich, Schweiz\n• Termine nach Vereinbarung';
+        response = '📞 Kontakt:\n\n📧 support@joumonde.com\n☎️ 076 523 02 04';
     }
     // Stock/availability - expanded
     else if (containsAny(['verfugbar', 'lager', 'lieferbar', 'stock', 'ausverkauft', 'available',
                      'vorratig', 'sofort', 'wieder', 'nachschub'])) {
         wasResolved = true;
-        response = 'Die Verfügbarkeit sehen Sie direkt beim jeweiligen Produkt.\n\nBei ausverkauften Artikeln bieten wir:\n✓ E-Mail-Benachrichtigung bei Wiederverfügbarkeit\n✓ Alternative Produktvorschläge\n\nWelcher Artikel interessiert Sie?';
+        response = 'Die aktuelle Verfügbarkeit wird direkt auf der jeweiligen Produktseite angezeigt. Bei Fragen zu einem Artikel erreichst du uns unter support@joumonde.com.';
     }
     // Discount/promo codes - expanded
     else if (containsAny(['rabatt', 'gutschein', 'code', 'prozent', 'angebot', 'sale', 'discount',
                      'aktion', 'spar', 'reduziert', 'nachlass', 'voucher', 'coupon'])) {
         wasResolved = true;
-        response = '🎁 Aktuelle Angebote:\n\n• Newsletter-Anmeldung: 10% Rabatt auf erste Bestellung\n• Kostenloser Versand ab CHF 50\n• Combo-Angebot: Hoodie + Trainerhose = -5%\n\nGutschein-Code im Warenkorb eingeben!\n\nNewsletter abonnieren: www.joumonde.com/newsletter';
+        response = '🎁 Aktuelle Angebote und mögliche Rabatte werden direkt im Shop angezeigt. Die Versandkosten und Gratisversand-Schwellen findest du unter www.joumonde.com/versand.html.';
     }
     // Material/quality questions - new
     else if (containsAny(['material', 'qualitat', 'stoff', 'baumwolle', 'cotton', 'wolle', 'leder',
                      'herstellung', 'produziert', 'gemacht', 'fabric', 'quality'])) {
         wasResolved = true;
-        response = '✨ Qualität & Materialien:\n\n• Premium-Materialien aus Europa\n• Old Money: Italienische Wolle, Ägyptische Baumwolle, Kaschmir\n• Casual: 100% Baumwolle, nachhaltige Produktion\n• Fair Trade zertifiziert\n• Langlebig & pflegeleicht\n\nWir setzen auf höchste Qualität für maximale Zufriedenheit!';
+        response = '✨ Die Material- und Pflegeangaben findest du auf der jeweiligen Produktseite. Wenn eine Angabe fehlt, frag bitte unter support@joumonde.com nach.';
     }
     // Thanks - expanded
     else if (containsAny(['danke', 'vielen dank', 'super', 'perfekt', 'toll', 'thanks', 'thank',
@@ -2687,7 +2649,7 @@ function generateBotResponse(userMessage) {
     // Default response with helpful suggestions
     else {
         wasResolved = false;
-        response = 'Ich bin mir nicht sicher, wie ich Ihnen da helfen kann. 🤔\n\nHäufig gestellte Fragen:\n\n1️⃣ Bestellung verfolgen\n2️⃣ Rücksendung\n3️⃣ Versandkosten & -dauer\n4️⃣ Größenberatung\n5️⃣ Kontakt zum Kundenservice\n6️⃣ Preise & Angebote\n\nGeben Sie einfach ein Stichwort ein oder kontaktieren Sie uns direkt:\n📧 info@joumonde.com\n📞 +41 44 123 45 67';
+        response = 'Ich bin mir nicht sicher, wie ich dir da helfen kann. 🤔\n\nHäufige Themen: Bestellung, Rückgabe, Versand, Größen, Preise und Kontakt.\n\nDu erreichst uns unter support@joumonde.com oder 076 523 02 04.';
     }
     
     // Track analytics
@@ -2697,37 +2659,7 @@ function generateBotResponse(userMessage) {
 }
 
 function trackOrder(orderNumber) {
-    // Simulate order tracking (in real app, this would call an API)
-    const orderStatuses = [
-        {
-            status: 'Zugestellt',
-            info: `✅ Bestellung #${orderNumber} wurde zugestellt!\n\n📍 Zustellort: An Empfänger übergeben\n📅 Zugestellt am: ${getRecentDate(1)}\n\nIhr Paket wurde erfolgreich zugestellt. Bei Problemen kontaktieren Sie uns bitte!`
-        },
-        {
-            status: 'Unterwegs',
-            info: `📦 Bestellung #${orderNumber} ist unterwegs!\n\n🚚 Status: In Zustellung\n📍 Aktuelle Position: Paketzentrum Berlin\n⏰ Voraussichtliche Zustellung: ${getFutureDate(1)}\n\nTracking-Link:\nwww.dhl.de/tracking?id=${encodeURIComponent(orderNumber)}\n\nIhr Paket ist auf dem Weg zu Ihnen! 🎉`
-        },
-        {
-            status: 'Bearbeitung',
-            info: `⏳ Bestellung #${orderNumber} wird bearbeitet\n\n📋 Status: In Bearbeitung\n🏭 Standort: Versandzentrum\n📅 Bestelldatum: ${getRecentDate(2)}\n⏰ Voraussichtlicher Versand: Heute\n\nIhre Bestellung wird gerade für den Versand vorbereitet. Sie erhalten eine E-Mail mit der Tracking-Nummer sobald das Paket versendet wurde!`
-        }
-    ];
-    
-    // Randomly select a status for demo
-    const randomStatus = orderStatuses[Math.floor(Math.random() * orderStatuses.length)];
-    return randomStatus.info;
-}
-
-function getRecentDate(daysAgo) {
-    const date = new Date();
-    date.setDate(date.getDate() - daysAgo);
-    return date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
-}
-
-function getFutureDate(daysAhead) {
-    const date = new Date();
-    date.setDate(date.getDate() + daysAhead);
-    return date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    return `Der Bestellstatus kann hier derzeit nicht automatisch abgerufen werden. Bitte sende deine Bestellnummer ${orderNumber} an support@joumonde.com, damit wir dir weiterhelfen können.`;
 }
 
 // Close cart when clicking outside
@@ -3006,11 +2938,31 @@ const cookieConsent = {
     },
     
     initializeTracking() {
-        // Only initialize analytics if user consented
-        if (this.categories.analytics && typeof gtag === 'function') {
-            gtag('consent', 'update', {
-                'analytics_storage': 'granted'
-            });
+        if (!this.categories.analytics) {
+            if (typeof window.gtag === 'function') {
+                window.gtag('consent', 'update', { analytics_storage: 'denied' });
+            }
+            return;
+        }
+
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = window.gtag || function() { window.dataLayer.push(arguments); };
+        window.gtag('consent', 'default', {
+            analytics_storage: 'denied',
+            ad_storage: 'denied',
+            ad_user_data: 'denied',
+            ad_personalization: 'denied'
+        });
+        window.gtag('consent', 'update', { analytics_storage: 'granted' });
+        window.gtag('js', new Date());
+        window.gtag('config', 'G-EFD7P54PRE');
+
+        if (!document.querySelector('script[data-joumonde-analytics]')) {
+            const script = document.createElement('script');
+            script.async = true;
+            script.dataset.joumondeAnalytics = 'true';
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-EFD7P54PRE';
+            document.head.appendChild(script);
         }
     },
     
@@ -3030,11 +2982,7 @@ const cookieConsent = {
         this.hideBanner();
         
         // Disable analytics
-        if (typeof gtag === 'function') {
-            gtag('consent', 'update', {
-                'analytics_storage': 'denied'
-            });
-        }
+        this.initializeTracking();
         
         showNotification(t('cookieNecessaryMessage'), 'info');
     },

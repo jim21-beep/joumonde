@@ -83,18 +83,21 @@ async function loginUser(supabaseUser, isActualLogin = true) {
             zip: a.zip, city: a.city, country: a.country, phone: a.phone,
             isDefault: a.is_default
         })),
-        orderHistory: orders.map(o => ({
+        orderHistory: orders.filter(o => !(
+            ['Storniert', 'cancelled'].includes(o.status)
+            && ['pending', 'failed'].includes(o.payment_status)
+        )).map(o => ({
             id: o.id, date: o.created_at, status: o.status,
             total: parseFloat(o.total || 0), currency: o.currency,
             paymentMethod: o.payment_method || null,
+            paymentStatus: o.payment_status || null,
             items: (o.order_items || []).map(i => ({
                 name:          i.product_name,
                 price:         parseFloat(i.unit_price || 0),
                 quantity:      i.quantity,
                 size:          i.size,
                 color:         i.color,
-                articleNumber: i.article_number,
-                isPreorder:    i.is_preorder === true
+                articleNumber: i.article_number
             }))
         }))
     };
@@ -662,7 +665,7 @@ function getDashboardOrders() {
             <div class="order-items">
                 ${order.items.map(item => `
                     <div class="order-item">
-                        <span>${item.name} × ${item.quantity}${item.isPreorder ? `<small class="cart-item-preorder" style="display:block;">${accountT('preorderTag', 'Vorbestellung')}</small>` : ''}</span>
+                        <span>${item.name} × ${item.quantity}</span>
                         <span>CHF ${(item.price * item.quantity).toFixed(2)}</span>
                     </div>
                 `).join('')}
@@ -1313,12 +1316,15 @@ function viewOrderDetails(orderId) {
     };
     const statusLabel = statusLabels[order.status] || order.status || '—';
     const dateLocale = { de: 'de-CH', en: 'en-GB', fr: 'fr-CH' }[typeof currentLanguage !== 'undefined' ? currentLanguage : 'de'] || 'de-CH';
+    const canCancelOrder = ['Bearbeitung', 'pending', 'processing'].includes(order.status)
+        && ['pending', 'failed'].includes(order.paymentStatus);
+    const canRequestReturn = !['Versendet', 'Geliefert', 'Retoure beantragt', 'Retourniert', 'Storniert', 'cancelled'].includes(order.status);
 
     const itemsHtml = (order.items || []).map(item => `
         <div class="order-detail-row">
             <div>
                 <strong>${typeof translateProductName === 'function' ? translateProductName(item.name) : item.name}</strong>
-                <p>${item.isPreorder ? `${accountT('preorderTag', 'Vorbestellung')} • ` : ''}${accountT('accountQuantity', 'Menge')}: ${item.quantity}${item.size ? ` • ${accountT('accountOrderSize', 'Größe')}: ${item.size}` : ''}${item.color ? ` • ${item.color}` : ''}</p>
+                <p>${accountT('accountQuantity', 'Menge')}: ${item.quantity}${item.size ? ` • ${accountT('accountOrderSize', 'Größe')}: ${item.size}` : ''}${item.color ? ` • ${item.color}` : ''}</p>
             </div>
             <strong>${currency} ${(item.price * item.quantity).toFixed(2)}</strong>
         </div>
@@ -1355,7 +1361,8 @@ function viewOrderDetails(orderId) {
                 <strong>CHF ${order.total.toFixed(2)}</strong>
             </div>
             <div class="form-actions">
-                ${['Versendet', 'Geliefert', 'Retoure beantragt', 'Retourniert'].includes(order.status) ? '' : `<button type="button" class="btn-secondary" onclick="requestReturnFromModal('${order.id}'); closeOrderDetailsModal()">${accountT('accountReturnRequest', 'Retoure beantragen')}</button>`}
+                ${canCancelOrder ? `<button type="button" class="btn-secondary" onclick="cancelOrderFromModal('${order.id}')">${accountT('accountCancelOrder', 'Bestellung stornieren')}</button>` : ''}
+                ${canRequestReturn ? `<button type="button" class="btn-secondary" onclick="requestReturnFromModal('${order.id}'); closeOrderDetailsModal()">${accountT('accountReturnRequest', 'Retoure beantragen')}</button>` : ''}
                 <button type="button" class="btn-primary" onclick="closeOrderDetailsModal()">${accountT('accountClose', 'Schliessen')}</button>
             </div>
         </div>
@@ -1366,6 +1373,86 @@ function viewOrderDetails(orderId) {
 
 function closeOrderDetailsModal() {
     document.getElementById('order-details-modal')?.remove();
+}
+
+async function cancelOrderFromModal(orderId) {
+    if (document.getElementById('order-cancel-confirmation')) return;
+
+    const confirmationModal = document.createElement('div');
+    confirmationModal.className = 'address-form-modal order-cancel-confirmation';
+    confirmationModal.id = 'order-cancel-confirmation';
+    confirmationModal.setAttribute('role', 'dialog');
+    confirmationModal.setAttribute('aria-modal', 'true');
+    confirmationModal.setAttribute('aria-labelledby', 'order-cancel-confirmation-title');
+    confirmationModal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="order-cancel-confirmation-title">${accountT('accountCancelOrderTitle', 'Bestellung wirklich stornieren?')}</h3>
+                <button type="button" class="modal-close" data-cancel-dialog-close aria-label="${accountT('accountClose', 'Schließen')}">&times;</button>
+            </div>
+            <div class="modal-divider"></div>
+            <p>${accountT('accountCancelOrderConfirm', 'Möchtest du deine Bestellung wirklich stornieren?')}</p>
+            <p>${accountT('accountCancelOrderPaymentNote', 'Für diese Bestellung wurde noch keine Zahlung eingezogen. Es ist daher keine Rückerstattung nötig.')}</p>
+            <p data-cancel-error role="alert"></p>
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" data-cancel-dialog-close>${accountT('accountCancelOrderKeep', 'Nein, Bestellung behalten')}</button>
+                <button type="button" class="btn-primary" data-cancel-confirm>${accountT('accountCancelOrderConfirmAction', 'Ja, Bestellung stornieren')}</button>
+            </div>
+        </div>
+    `;
+    confirmationModal.style.zIndex = '10002';
+
+    const dismissConfirmation = () => confirmationModal.remove();
+    confirmationModal.addEventListener('click', (event) => {
+        if (event.target === confirmationModal || event.target.closest('[data-cancel-dialog-close]')) {
+            dismissConfirmation();
+        }
+    });
+    confirmationModal.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') dismissConfirmation();
+    });
+
+    const confirmButton = confirmationModal.querySelector('[data-cancel-confirm]');
+    confirmButton.addEventListener('click', () => confirmOrderCancellation(orderId, confirmationModal, confirmButton));
+    document.body.appendChild(confirmationModal);
+    confirmationModal.querySelector('[data-cancel-dialog-close]').focus();
+}
+
+async function confirmOrderCancellation(orderId, confirmationModal, confirmButton) {
+    confirmButton.disabled = true;
+    const cancellationError = confirmationModal.querySelector('[data-cancel-error]');
+    cancellationError.textContent = '';
+
+    if (!window.supabaseClient) {
+        confirmationModal.remove();
+        showNotification(accountT('accountCancelOrderError', 'Die Bestellung konnte nicht storniert werden. Bitte melde dich erneut an.'), 'error');
+        return;
+    }
+
+    try {
+        const { data, error } = await window.supabaseClient.rpc('cancel_customer_order', {
+            p_order_id: orderId
+        });
+        if (error) throw error;
+        const cancelledOrder = Array.isArray(data) ? data[0] : data;
+        if (!cancelledOrder?.cancelled_order_id) throw new Error('Cancellation returned no order');
+
+        if (currentUser) {
+            currentUser.orderHistory = currentUser.orderHistory.filter(item => item.id !== cancelledOrder.cancelled_order_id);
+        }
+        confirmationModal.remove();
+        closeOrderDetailsModal();
+        showAccountDashboard();
+        showNotification(accountT('accountCancelOrderSuccess', 'Deine Bestellung wurde storniert.'), 'success');
+    } catch (error) {
+        console.error('Could not cancel order:', error);
+        cancellationError.textContent = error?.code === '55000'
+            ? accountT('accountCancelOrderNotAllowed', 'Diese Bestellung kann nicht mehr storniert werden. Bitte aktualisiere die Seite.')
+            : error?.code === 'P0002'
+                ? accountT('accountCancelOrderNotFound', 'Die Bestellung wurde deinem Konto nicht zugeordnet gefunden. Bitte melde dich mit dem richtigen Konto an.')
+                : accountT('accountCancelOrderError', 'Die Bestellung konnte nicht storniert werden. Bitte aktualisiere die Seite und versuche es erneut.');
+        confirmButton.disabled = false;
+    }
 }
 
 function requestReturnFromModal(orderId) {
@@ -1467,6 +1554,11 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Auf Login/Logout reagieren (auch in anderen Tabs)
     supabaseClient.auth.onAuthStateChange(async (event, session) => {
         if (event === 'SIGNED_IN' && session) {
+            // Supabase re-emits SIGNED_IN when the tab regains focus; keep the current view.
+            if (currentUser && currentUser.id === session.user.id) {
+                _sessionRestored = false;
+                return;
+            }
             if (_sessionRestored) {
                 // This SIGNED_IN was triggered by the page-load session restore above – skip duplicate
                 _sessionRestored = false;
@@ -1522,21 +1614,24 @@ document.addEventListener('DOMContentLoaded', async function() {
                 .order('created_at', { ascending: false });
 
             if (!ordersErr && Array.isArray(ordersRes)) {
-                currentUser.orderHistory = ordersRes.map(o => ({
+                currentUser.orderHistory = ordersRes.filter(o => !(
+                    ['Storniert', 'cancelled'].includes(o.status)
+                    && ['pending', 'failed'].includes(o.payment_status)
+                )).map(o => ({
                     id: o.id,
                     date: o.created_at,
                     status: o.status,
                     total: parseFloat(o.total || 0),
                     currency: o.currency,
                     paymentMethod: o.payment_method || null,
+                    paymentStatus: o.payment_status || null,
                     items: (o.order_items || []).map(i => ({
                         name: i.product_name,
                         price: parseFloat(i.unit_price || 0),
                         quantity: i.quantity,
                         size: i.size,
                         color: i.color,
-                        articleNumber: i.article_number,
-                        isPreorder: i.is_preorder === true
+                        articleNumber: i.article_number
                     }))
                 }));
                 if (document.getElementById('account-page-root')) showAccountDashboard();

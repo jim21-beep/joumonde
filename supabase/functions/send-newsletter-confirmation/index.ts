@@ -196,7 +196,7 @@ serve(async (req) => {
         currency = 'CHF',
         shippingAddress = {},
         persistOrder = false,
-        paymentMethod = 'card'
+        paymentMethod = null
       } = body;
       const finalOrderId = String(orderId || createOrderId());
       const safeFirstName = escapeHtml(firstName);
@@ -206,8 +206,8 @@ serve(async (req) => {
       if (persistOrder) {
         try {
           const db = createClient(SUPABASE_URL, SUPABASE_SERVICE);
-          const normalizedPaymentMethod = ['card', 'amex', 'paypal'].includes(paymentMethod) ? paymentMethod : 'card';
-          const paymentProvider = normalizedPaymentMethod === 'paypal' ? 'paypal' : 'card';
+          const normalizedPaymentMethod = ['card', 'amex', 'paypal'].includes(paymentMethod) ? paymentMethod : null;
+          const paymentProvider = normalizedPaymentMethod === 'paypal' ? 'paypal' : normalizedPaymentMethod ? 'card' : null;
           const accessToken = req.headers.get('Authorization')?.replace(/^Bearer\s+/i, '') ?? '';
           const { data: { user: verifiedUser }, error: authError } = accessToken
             ? await db.auth.getUser(accessToken)
@@ -245,7 +245,7 @@ serve(async (req) => {
             console.error('Order insert error:', orderErr);
             return json({ error: 'Bestellung konnte nicht gespeichert werden' }, 500);
           } else {
-            const orderItems = (items as Array<{ name: string; quantity: number; price: number; size?: string; color?: string; article_number?: string; isPreorder?: boolean }>).map(i => ({
+            const orderItems = (items as Array<{ name: string; quantity: number; price: number; size?: string; color?: string; article_number?: string }>).map(i => ({
               order_id: finalOrderId,
               product_name: i.name,
               quantity: Number(i.quantity || 1),
@@ -253,7 +253,7 @@ serve(async (req) => {
               size: i.size ?? null,
               color: i.color ?? null,
               article_number: i.article_number ?? null,
-              is_preorder: i.isPreorder === true,
+              is_preorder: false,
             }));
 
             if (orderItems.length > 0) {
@@ -276,11 +276,10 @@ serve(async (req) => {
         }
       }
 
-      const preorderItems = (items as Array<{ isPreorder?: boolean }>).some(item => item.isPreorder === true);
-      const itemRows = (items as Array<{ name: string; quantity: number; price: number; isPreorder?: boolean }>)
+      const itemRows = (items as Array<{ name: string; quantity: number; price: number }>)
         .map(i => `
           <tr>
-            <td style="padding:14px 12px;border-bottom:1px solid #e9e6df;color:#354138;">${escapeHtml(i.name)}${i.isPreorder ? '<br><span style="color:#8b806d;font-size:11px;">VORBESTELLUNG</span>' : ''}</td>
+            <td style="padding:14px 12px;border-bottom:1px solid #e9e6df;color:#354138;">${escapeHtml(i.name)}</td>
             <td style="padding:14px 12px;border-bottom:1px solid #e9e6df;text-align:center;color:#74796f;">${Number(i.quantity)}</td>
             <td style="padding:14px 12px;border-bottom:1px solid #e9e6df;text-align:right;color:#354138;white-space:nowrap;">${safeCurrency} ${(Number(i.price) * Number(i.quantity)).toFixed(2)}</td>
           </tr>`).join('');
@@ -292,8 +291,8 @@ serve(async (req) => {
         address.country,
       ].filter(Boolean).map(line => `<div>${escapeHtml(line)}</div>`).join('');
       const paymentLabels: Record<string, string> = { card: 'Kreditkarte', amex: 'American Express', paypal: 'PayPal' };
-      const safePaymentMethod = escapeHtml(paymentLabels[paymentMethod] || paymentLabels.card);
-      subject = `${preorderItems ? 'Deine Vorbestellung' : 'Deine Bestellung'} ${escapeHtml(finalOrderId)} – Joumonde`;
+      const safePaymentMethod = paymentLabels[paymentMethod] || 'Nicht bezahlt';
+      subject = `Deine Bestellung ${escapeHtml(finalOrderId)} – Joumonde`;
       html = `
         <div style="margin:0;padding:32px 12px;background:#f2f1eb;font-family:Arial,Helvetica,sans-serif;color:#354138;">
           <div style="max-width:620px;margin:0 auto;background:#fff;border:1px solid #e7e5dd;">
@@ -302,9 +301,9 @@ serve(async (req) => {
               <p style="margin:10px 0 0;color:#898d82;font-size:10px;letter-spacing:2px;">ZEITLOSES DESIGN. MIT LIEBE AUSGEWÄHLT.</p>
             </div>
             <div style="padding:36px;">
-              <p style="margin:0 0 10px;color:#8b806d;font-size:11px;font-weight:bold;letter-spacing:1.8px;">${preorderItems ? 'VORBESTELLUNG' : 'BESTELLBESTÄTIGUNG'}</p>
+              <p style="margin:0 0 10px;color:#8b806d;font-size:11px;font-weight:bold;letter-spacing:1.8px;">BESTELLBESTÄTIGUNG</p>
               <h1 style="margin:0 0 12px;color:#354138;font-family:Georgia,serif;font-size:27px;font-weight:normal;line-height:1.3;">Danke${safeFirstName ? `, ${safeFirstName}` : ''}.</h1>
-              <p style="margin:0;color:#72776e;font-size:15px;line-height:1.7;">${preorderItems ? 'Deine Vorbestellung ist bei uns eingegangen. Es wurde noch keine Zahlung ausgelöst. Den voraussichtlichen Liefertermin bestätigen wir dir separat.' : 'Deine Bestellung ist bei uns eingegangen. Wir bereiten alles sorgfältig für dich vor und halten dich über den Versand auf dem Laufenden.'}</p>
+              <p style="margin:0;color:#72776e;font-size:15px;line-height:1.7;">Deine Bestellung ist bei uns eingegangen. Es wurde noch keine Zahlung ausgelöst. Bitte beachte, dass die Bestellung erst nach Aktivierung einer Zahlungsmöglichkeit bezahlt werden kann.</p>
               <div style="margin:26px 0;padding:18px 20px;background:#f7f7f3;border:1px solid #ebeae3;">
                 <table role="presentation" style="width:100%;border-collapse:collapse;">
                   <tr>

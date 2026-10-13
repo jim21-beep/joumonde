@@ -1,5 +1,5 @@
 .site-footer {
-    margin-top: 0.75rem;
+    margin-top: 0;
     padding: 3.75rem max(1.5rem, calc((100vw - 1200px) / 2)) 2.5rem;
     background: #f3f0e9;
     color: #171717;

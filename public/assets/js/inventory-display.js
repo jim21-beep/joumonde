@@ -15,15 +15,12 @@
         const label = button?.querySelector('[data-add-to-cart-label]');
         if (!status) return;
 
-        status.dataset.preorder = String(state === 'preorder');
         if (button) {
             button.disabled = state === 'unavailable' || state === 'sold-out';
             if (label) {
-                label.textContent = state === 'preorder'
-                    ? translate('preorderButton', 'Vorbestellen')
-                    : state === 'sold-out'
-                        ? translate('inventorySoldOut', 'Ausverkauft')
-                        : translate('addToCart', 'In den Warenkorb');
+                label.textContent = state === 'sold-out'
+                    ? translate('inventorySoldOut', 'Ausverkauft')
+                    : translate('addToCart', 'In den Warenkorb');
             }
         }
     }
@@ -47,11 +44,11 @@
         }
 
         if (variant.stock_quantity === null) {
-            status.textContent = translate('inventoryUnknown', 'Vorverkauf');
+            status.textContent = translate('inventoryUnknown', 'Bestand nicht erfasst');
             status.removeAttribute('data-stock-quantity');
             const quantityInput = document.getElementById('quantity');
             if (quantityInput) quantityInput.max = '5';
-            setPurchaseState('preorder');
+            setPurchaseState('available');
             return;
         }
 

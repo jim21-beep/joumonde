@@ -19,6 +19,8 @@ Das Account-System verwendet Supabase Auth für die passwortlose Anmeldung sowie
 3. Sicherstellen, dass die vorhandenen Function-Secrets `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` und `RESEND_API_KEY` für Edge Functions verfügbar sind.
 4. Danach mit einem bestehenden Konto einen neuen Code anfordern und Anmeldung sowie erneute Codeanforderung testen.
 
+Für die Selbststornierung muss die aktuelle Migration `supabase/migrations/20261008233800_scope_customer_order_cancellation.sql` im Supabase SQL Editor ausgeführt werden. Sie ersetzt die Stornierungsfunktion, löscht nur die einzelne unbezahlte Bestellung des angemeldeten Kunden und bereinigt keine anderen Bestellungen.
+
 Der Codeversand sowie Bestell-, Kontakt- und Newsletter-E-Mails aus den Edge Functions verwenden `Joumonde <support@joumonde.com>` als Absender. Die Absenderdomain muss bei Resend verifiziert sein.
 
 Für von Supabase Auth selbst versendete System-E-Mails (z. B. Änderungen an der E-Mail-Adresse) den SMTP-Versand separat unter **Supabase Dashboard → Authentication → SMTP Settings** konfigurieren. Für Namecheap Private Email sind die üblichen Werte `mail.privateemail.com`, Port `465` mit SSL; Benutzername ist `support@joumonde.com`. Das Mailbox-Passwort als Secret im Dashboard eintragen, nicht im Repository.
@@ -48,6 +50,8 @@ Zeigt wichtige Statistiken:
   - 🟢 Zugestellt
 - Detailansicht jeder Bestellung
 - Datum, Artikel, Preise
+- Noch nicht versendete und unbezahlte Bestellungen können direkt in der Detailansicht storniert werden.
+- Bestellungen mit erfasster Zahlung oder Versandstatus sind nicht über diese Funktion stornierbar. Der Shop nimmt derzeit keine Online-Zahlungen an; deshalb wird bei Testbestellungen keine Erstattung ausgelöst.
 
 #### **Adressen-Tab**
 - **Mehrere Adressen speichern**
@@ -200,6 +204,12 @@ Nutzt aus `script.js`:
 → Formular ist vorausgefüllt mit Benutzerdaten
 3. Bestellung abschließen
 → Wird in "Bestellungen" gespeichert
+
+### Bestellung stornieren
+1. Mit dem Konto anmelden, mit dem die Bestellung aufgegeben wurde.
+2. Dashboard → Bestellungen → Details ansehen.
+3. Bei einer unbezahlten Bestellung im Status "In Bearbeitung" auf "Bestellung stornieren" klicken und bestätigen.
+→ Die Bestellung und ihre Positionen werden sofort aus der Datenbank gelöscht und verschwinden aus der Bestellübersicht. Bereits bezahlte oder versendete Bestellungen können darüber nicht storniert werden.
 
 ### Einstellungen ändern
 1. Dashboard → Einstellungen-Tab
