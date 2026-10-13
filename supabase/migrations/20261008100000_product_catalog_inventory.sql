@@ -52,23 +52,23 @@ create policy "Aktive Varianten öffentlicher Produkte lesen"
 
 with product_seed(name, slug, collection, price, colors, sizes) as (
   values
-    ('Klassischer Blazer', 'klassischer-blazer', 'old-money', 79.99::numeric, array['Navy', 'Schwarz', 'Grau', 'Beige', 'Burgundy', 'Camel']::text[], array['S', 'M', 'L', 'XL']::text[]),
-    ('Polo Hemd', 'polo-hemd', 'old-money', 34.99::numeric, array['Weiß', 'Navy', 'Schwarz', 'Grau', 'Camel']::text[], array['S', 'M', 'L', 'XL']::text[]),
-    ('Knit Zip-Polo', 'knit-zip-polo', 'old-money', 44.99::numeric, array['Beige', 'Weiß', 'Schwarz']::text[], array['S', 'M', 'L', 'XL']::text[]),
-    ('Bundfalthose', 'bundfalthose', 'old-money', 64.99::numeric, array['Beige', 'Camel', 'Navy', 'Grau', 'Olive']::text[], array['30', '32', '34', '36']::text[]),
-    ('Elegante Weste', 'elegante-weste', 'old-money', 69.99::numeric, array['Creme', 'Navy', 'Grau', 'Schwarz']::text[], array['S', 'M', 'L', 'XL']::text[]),
-    ('Quarter Zipper', 'quarter-zipper', 'old-money', 79.99::numeric, array['Creme', 'Navy', 'Grau', 'Schwarz']::text[], array['S', 'M', 'L', 'XL']::text[]),
-    ('Strickpullover', 'strickpullover', 'old-money', 89.99::numeric, array['Dunkelblau', 'Weiß', 'Grau', 'Beige']::text[], array['S', 'M', 'L', 'XL']::text[]),
-    ('Leinenhose', 'leinenhose', 'old-money', 54.99::numeric, array['Beige', 'Weiß', 'Hellgrau', 'Navy']::text[], array['30', '32', '34', '36']::text[]),
-    ('Kaschmirpullover', 'kaschmirpullover', 'old-money', 149.90::numeric, array['Creme', 'Dunkelblau', 'Grau']::text[], array['S', 'M', 'L', 'XL']::text[]),
-    ('Oxford Hemd', 'oxford-hemd', 'old-money', 59.90::numeric, array['Weiß', 'Hellblau']::text[], array['S', 'M', 'L', 'XL']::text[]),
-    ('Wollmantel', 'wollmantel', 'old-money', 249.90::numeric, array['Camel', 'Navy', 'Grau']::text[], array['S', 'M', 'L', 'XL']::text[]),
-    ('Oversized Hoodie', 'oversized-hoodie', 'casual', 49.99::numeric, array['Schwarz', 'Weiß', 'Grau', 'Navy', 'Olive', 'Beige']::text[], array['S', 'M', 'L', 'XL']::text[]),
-    ('T-Shirt', 't-shirt', 'casual', 24.99::numeric, array['Schwarz', 'Weiß', 'Grau', 'Navy', 'Olive', 'Beige']::text[], array['S', 'M', 'L', 'XL']::text[]),
-    ('Cargo Pants', 'cargo-pants', 'casual', 59.99::numeric, array['Schwarz', 'Weiß', 'Grau', 'Navy', 'Olive', 'Beige']::text[], array['30', '32', '34', '36']::text[]),
-    ('Jeans', 'jeans', 'casual', 59.99::numeric, array['Dunkelblau', 'Hellblau', 'Schwarz']::text[], array['30', '32', '34', '36']::text[]),
-    ('Trainerhose', 'trainerhose', 'casual', 44.99::numeric, array['Schwarz', 'Weiß', 'Grau', 'Navy', 'Olive', 'Beige']::text[], array['S', 'M', 'L', 'XL']::text[]),
-    ('Ledergürtel', 'lederguertel', 'accessories', 39.90::numeric, array['Dunkelbraun']::text[], array['One Size']::text[])
+    ('Klassischer Blazer', 'klassischer-blazer', 'old-money', 490.00::numeric, array['Navy', 'Schwarz', 'Grau', 'Beige', 'Burgundy', 'Camel']::text[], array['S', 'M', 'L', 'XL']::text[]),
+    ('Polo Hemd', 'polo-hemd', 'old-money', 109.00::numeric, array['Weiß', 'Navy', 'Schwarz', 'Grau', 'Camel']::text[], array['S', 'M', 'L', 'XL']::text[]),
+    ('Knit Zip-Polo', 'knit-zip-polo', 'old-money', 179.00::numeric, array['Beige', 'Weiß', 'Schwarz']::text[], array['S', 'M', 'L', 'XL']::text[]),
+    ('Bundfalthose', 'bundfalthose', 'old-money', 219.00::numeric, array['Beige', 'Camel', 'Navy', 'Grau', 'Olive']::text[], array['30', '32', '34', '36']::text[]),
+    ('Elegante Weste', 'elegante-weste', 'old-money', 189.00::numeric, array['Creme', 'Navy', 'Grau', 'Schwarz']::text[], array['S', 'M', 'L', 'XL']::text[]),
+    ('Quarter Zipper', 'quarter-zipper', 'old-money', 169.00::numeric, array['Creme', 'Navy', 'Grau', 'Schwarz']::text[], array['S', 'M', 'L', 'XL']::text[]),
+    ('Strickpullover', 'strickpullover', 'old-money', 249.00::numeric, array['Dunkelblau', 'Weiß', 'Grau', 'Beige']::text[], array['S', 'M', 'L', 'XL']::text[]),
+    ('Leinenhose', 'leinenhose', 'old-money', 179.00::numeric, array['Beige', 'Weiß', 'Hellgrau', 'Navy']::text[], array['30', '32', '34', '36']::text[]),
+    ('Kaschmirpullover', 'kaschmirpullover', 'old-money', 439.00::numeric, array['Creme', 'Dunkelblau', 'Grau']::text[], array['S', 'M', 'L', 'XL']::text[]),
+    ('Oxford Hemd', 'oxford-hemd', 'old-money', 159.00::numeric, array['Weiß', 'Hellblau']::text[], array['S', 'M', 'L', 'XL']::text[]),
+    ('Wollmantel', 'wollmantel', 'old-money', 890.00::numeric, array['Camel', 'Navy', 'Grau']::text[], array['S', 'M', 'L', 'XL']::text[]),
+    ('Oversized Hoodie', 'oversized-hoodie', 'casual', 169.00::numeric, array['Schwarz', 'Weiß', 'Grau', 'Navy', 'Olive', 'Beige']::text[], array['S', 'M', 'L', 'XL']::text[]),
+    ('T-Shirt', 't-shirt', 'casual', 79.00::numeric, array['Schwarz', 'Weiß', 'Grau', 'Navy', 'Olive', 'Beige']::text[], array['S', 'M', 'L', 'XL']::text[]),
+    ('Cargo Pants', 'cargo-pants', 'casual', 209.00::numeric, array['Schwarz', 'Weiß', 'Grau', 'Navy', 'Olive', 'Beige']::text[], array['30', '32', '34', '36']::text[]),
+    ('Jeans', 'jeans', 'casual', 199.00::numeric, array['Dunkelblau', 'Hellblau', 'Schwarz']::text[], array['30', '32', '34', '36']::text[]),
+    ('Trainerhose', 'trainerhose', 'casual', 139.00::numeric, array['Schwarz', 'Weiß', 'Grau', 'Navy', 'Olive', 'Beige']::text[], array['S', 'M', 'L', 'XL']::text[]),
+    ('Ledergürtel', 'lederguertel', 'accessories', 129.00::numeric, array['Dunkelbraun']::text[], array['One Size']::text[])
 ),
 inserted_products as (
   insert into public.products (name, slug, collection, price)

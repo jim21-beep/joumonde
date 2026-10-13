@@ -5,12 +5,12 @@
   "about": "Über Uns",
   "contact": "Kontakt",
   "heroTitle": "Entdecke Deinen Style",
-  "heroSubtitle": "Premium Fashion - Von klassischem Old Money bis zu lässigen Casual Styles",
+  "heroSubtitle": "Premium Fashion - Von klassischem Old Money bis zu komfortablen Casual Styles",
   "shopNow": "Jetzt Shoppen",
   "oldMoneyTitle": "Old Money Collection",
   "oldMoneySubtitle": "Zeitlose Eleganz und klassischer Luxus",
   "streetwearTitle": "Casual Collection",
-  "streetwearSubtitle": "Lässige Styles für jeden Tag",
+  "streetwearSubtitle": "Komfortable Styles für jeden Tag",
   "classicBlazer": "Klassischer Blazer",
   "poloShirt": "Polo Hemd",
   "pleatedTrousers": "Bundfalthose",
@@ -290,13 +290,13 @@
   "cookieNecessaryMessage": "Es werden nur notwendige Cookies verwendet.",
   "cookiePreferencesSavedMessage": "Cookie-Einstellungen gespeichert",
   "aboutTitle": "Über Uns",
-  "aboutText1": "Willkommen bei Joumonde - Ihrer Destination für exklusive Mode. Wir vereinen die zeitlose Eleganz des Old Money Styles mit lässiger Casual-Mode.",
+  "aboutText1": "Willkommen bei Joumonde - Ihrer Destination für exklusive Mode. Wir vereinen die zeitlose Eleganz des Old Money Styles mit komfortabler Casual-Mode.",
   "aboutText2": "Unsere Mission ist es, hochwertige Fashion für jeden Geschmack anzubieten - von klassischer Raffinesse bis zu urbaner Coolness.",
   "aboutPageTitle": "Über Joumonde",
   "aboutPageSubtitle": "Wo Eleganz auf Casual trifft",
   "ourStory": "Unsere Geschichte",
-  "ourStoryText1": "Joumonde wurde 2025 mit der Vision gegründet, zeitlose Eleganz mit lässiger Casual-Mode zu verbinden. Unser Name vereint das französische \"Jour\" (Tag) mit \"Monde\" (Welt) - jeden Tag die Welt der Mode neu interpretieren.",
-  "ourStoryText2": "Wir glauben an Qualität, Nachhaltigkeit und zeitloses Design. Jedes unserer Stücke wird sorgfältig ausgewählt und kombiniert Old Money Ästhetik mit lässigem Casual-Stil.",
+  "ourStoryText1": "Joumonde wurde 2025 mit der Vision gegründet, zeitlose Eleganz mit komfortabler Casual-Mode zu verbinden. Unser Name vereint das französische \"Jour\" (Tag) mit \"Monde\" (Welt) - jeden Tag die Welt der Mode neu interpretieren.",
+  "ourStoryText2": "Wir glauben an Qualität, Nachhaltigkeit und zeitloses Design. Jedes unserer Stücke wird sorgfältig ausgewählt und kombiniert Old Money Ästhetik mit komfortablem Casual-Stil.",
   "ourMission": "Unsere Mission",
   "ourMissionText1": "Bei Joumonde geht es nicht nur um Mode - es geht um einen Lifestyle. Wir möchten Menschen dabei helfen, ihren individuellen Stil zu finden und sich selbstbewusst zu fühlen, egal ob im Business-Meeting oder beim Street-Festival.",
   "ourMissionText2": "Unsere Kollektionen werden von den besten Manufakturen produziert, mit Fokus auf faire Arbeitsbedingungen und nachhaltige Materialien. Premium-Qualität bedeutet für uns nicht nur erstklassige Stoffe, sondern auch Verantwortung gegenüber Mensch und Umwelt.",
@@ -446,100 +446,106 @@
   "askNexara": "Nexara fragen",
   "productDescriptions": {
     "Klassischer Blazer": {
-      "description": "Dieser klassische Blazer aus hochwertiger italienischer Wolle ist das perfekte Kleidungsstück für den anspruchsvollen Gentleman. Mit seiner zeitlosen Silhouette und erstklassigen Verarbeitung verleiht er jedem Outfit eine elegante Note. Ideal für Geschäftstreffen, formelle Anlässe und alltägliche Eleganz.",
-      "features": ["Premium italienische Wolle (Super 120s)", "Klassischer 2-Knopf-Schnitt", "Innenfutter aus Viskose", "Zwei Seitentaschen mit Paspeln", "Brusttasche für Einstecktuch", "Perfekt für Business & formelle Anlässe"],
-      "materials": ["90% Schurwolle (italienisch, Super 120s)", "10% Kaschmir", "Futter: 100% Viskose"],
-      "care": ["Nur chemische Reinigung", "Nicht bleichen", "Nicht im Trockner trocknen", "Bügeln bei niedriger Temperatur", "Mit Kleiderbügel aufhängen"]
+      "description": "Die Neuerfindung des Tailorings für den modernen Alltag. Dieser Blazer verzichtet auf steife Schulterpolster und starre Einlagen, um der natürlichen Schulterlinie zu folgen. Das Ergebnis ist ein Sakko, das sich so bequem trägt wie ein Cardigan, aber die Autorität eines klassischen Massanzugs ausstrahlt. Gefertigt aus 100 % reiner Merinowolle, ist er das perfekte Fundament für den nahtlosen Übergang vom Büro zum Dinner.",
+      "features": ["Leichter Merino-Wollflanell, ganzjährig tragbar", "Unkonstruiert, ohne steife Schulterpolster", "Aufgesetzte Taschen", "Halbes Innenfutter"],
+      "materials": ["Oberstoff: 100 % leichter Merino-Wollflanell (ganzjährig tragbar)", "Konstruktion: Unkonstruiert (ohne steife Schulterpolster) für eine natürliche Silhouette", "Details: Aufgesetzte Taschen für einen entspannteren Look, halbes Innenfutter"],
+      "care": ["Chemische Reinigung empfohlen", "Nicht waschen und nicht im Tumbler trocknen", "Nach dem Tragen auslüften und auf einem Kleiderbügel aufhängen", "Bei Bedarf sanft ausbürsten", "Mit Dampf auf Abstand glätten, nicht direkt bügeln"]
     },
     "Polo Hemd": {
-      "description": "Das klassische Poloshirt aus ägyptischer Baumwolle kombiniert zeitlose Eleganz mit höchstem Tragekomfort. Die feine Verarbeitung und das Premium-Material machen es zum perfekten Begleiter für Freizeit und Business-Casual. Ein Klassiker, der niemals aus der Mode kommt.",
-      "features": ["Premium ägyptische Baumwolle", "Klassische Poloform", "Knopfleiste mit Druckknöpfen", "Kontrastfarbige Kragen- und Ärmelbiesen", "Locker geschnittenes Ärmelbündchen", "Verdickte Schulternähte für Langlebigkeit"],
-      "materials": ["100% ägyptische Baumwolle", "Grammatur: 200 g/m²", "Hochwertige Verarbeitung"],
-      "care": ["Maschinenwäsche bei 30°C", "Mit ähnlichen Farben waschen", "Im Schattentumbler trocknen", "Bei mittlerer Temperatur bügeln"]
+      "description": "Der Klassiker, befreit von lauten Logos. Unser Polo Hemd fokussiert sich rein auf Schnitt und Materialqualität. Der speziell konstruierte Kragen behält den ganzen Tag über seine Form und klappt nicht unschön zusammen. Eine makellose Passform an Schultern und Armen macht dieses Polo zur ersten Wahl für ein smartes, müheloses Auftreten.",
+      "features": ["Dicht gewebte Piqué-Baumwolle oder feiner Merino-Strick", "Nahtloser One-Piece-Kragen", "Kein gesticktes Logo", "Makellose Passform an Schultern und Armen"],
+      "materials": ["Oberstoff: Dicht gewebte Piqué-Baumwolle oder feiner Merino-Strick", "Kragen: Nahtloser Kragen (One-Piece Collar) für einen eleganten Stand", "Branding: Unsichtbarer Luxus, kein gesticktes Logo auf der Brust"],
+      "care": ["Piqué-Baumwolle: Maschinenwäsche bei 30°C, auf links waschen", "Merino-Strick: Wollwaschgang und flach trocknen", "Nicht im Tumbler trocknen", "Bei niedriger bis mittlerer Temperatur bügeln"]
     },
     "Knit Zip-Polo": {
-      "description": "Das innovative Knit Zip-Polo vereint den Charme eines klassischen Poloshirts mit der praktischen Funktionalität eines Reißverschlusses. Aus feinstem gestricktem Material gefertigt, bietet es optimale Bewegungsfreiheit und atmungsaktiven Komfort für aktive Träger.",
-      "features": ["Feinstrick-Struktur aus Premium-Baumwollmix", "Praktischer 1/4-Reißverschluss", "Figurbetonte Schnittform", "Hochwertige YKK-Reißverschlüsse", "Elastische Bund- und Ärmelabschlüsse", "Moderner, sportlicher Look"],
-      "materials": ["90% Baumwolle, 10% Polyester", "Feinstrick-Qualität", "Strapazierfähig und formstabil"],
-      "care": ["Maschinenwäsche bei 30°C (Feinwäsche)", "Innen waschen", "Flach trocknen", "Bei niedriger Temperatur bügeln"]
+      "description": "Die moderne Interpretation der \"Old Money\"-Ästhetik. Das Knit Zip-Polo schlägt die perfekte Brücke zwischen der Formalität eines Hemdes und dem Komfort eines Pullovers. Gefertigt aus extrafeiner Merinowolle, bietet es eine cleane, strukturierte Silhouette, die sich der Körpertemperatur anpasst. Der markante Metall-Reissverschluss setzt einen kühlen, architektonischen Akzent. Das ideale Piece für das Office, den Abend und alles dazwischen.",
+      "features": ["Extrafeine Merinowolle", "YKK 1/4 Metall-Reissverschluss", "Strukturierter Polokragen in Feinstrick", "Ton-in-Ton Joumonde-Stickerei"],
+      "materials": ["Oberstoff: 100 % extrafeine Merinowolle (atmungsaktiv und temperaturregulierend)", "Hardware: YKK 1/4 Metall-Reissverschluss in mattem Silber/Gunmetal-Finish", "Kragen: Strukturierter, formstabiler Polokragen in Feinstrick", "Branding: Ton-in-Ton Joumonde-Stickerei, 3 cm über dem linken Ärmelbündchen"],
+      "care": ["Wollwaschgang bei 30°C mit Wollwaschmittel", "Reissverschluss schliessen und auf links waschen", "Flach liegend trocknen", "Nicht im Tumbler trocknen", "Nicht bleichen", "Bei niedriger Temperatur bügeln"]
     },
     "Bundfalthose": {
-      "description": "Die klassische Bundfalthose verbindet zeitlose Eleganz mit hohem Tragekomfort. Der hochwertige Baumwoll-Mix und die präzise gearbeiteten Bundfalten machen sie zum vielseitigen Begleiter für Business und Freizeit.",
-      "features": ["Klassische Bundfalten für eine elegante Silhouette", "Verstärkte Nähte für Langlebigkeit", "Seitliche Eingrifftaschen", "Klassischer Knopfverschluss und Reißverschluss", "Verstellbare Innenbundweite für perfekte Passform", "Moderne, zeitlose Farbpalette"],
-      "materials": ["98% Baumwolle, 2% Elasthan", "Strapazierfähiger Twill-Stoff", "Angenehmer Griff und langlebig"],
-      "care": ["Maschinenwäsche bei 40°C", "Mit ähnlichen Farben waschen", "Tumbler auf niedriger Temperatur", "Bei Bedarf leicht ausbügeln"]
+      "description": "Die Brücke zwischen traditioneller Schneiderkunst und modernem Casual-Chic. Die doppelte Bundfalte verleiht dieser Hose nicht nur einen markanten, klassischen Charakter, sondern sorgt auch für aussergewöhnlichen Bewegungsfreiraum. Durch die seitlichen Adjusters aus Metall sitzt der Bund immer perfekt, ganz ohne Gürtel. Ein Hosen-Design, das Haltung beweist.",
+      "features": ["Doppelte Bundfalte", "Side-Adjusters statt Gürtel", "Elegant zulaufender Tapered Schnitt", "Schwerer Baumwoll-Twill oder feine Schurwolle"],
+      "materials": ["Oberstoff: Schwerer, dicht gewebter Baumwoll-Twill oder feine Schurwolle", "Bund: Side-Adjusters (seitliche Schnallen zur Weitenregulierung), kein Gürtel nötig", "Schnitt: Doppelte Bundfalte (Double Pleat) für mehr Volumen am Oberschenkel, nach unten hin elegant zulaufend (Tapered)"],
+      "care": ["Schurwolle: chemische Reinigung", "Baumwoll-Twill: Maschinenwäsche bei 30°C, auf links waschen", "Nicht im Tumbler trocknen, hängend trocknen", "Mit Dampf oder bei mittlerer Temperatur bügeln, Bundfalten nachformen"]
     },
     "Elegante Weste": {
-      "description": "Diese raffinierte Wollweste ist das Sahnestück für aufwändig zusammengestellte Outfits. Mit ihrer zierlichen Struktur und erstklassigen Verarbeitung verleiht sie dem Träger Souveränität und Stil. Perfekt als Layering-Piece für formelle und dressy-casual Gelegenheiten.",
-      "features": ["Premium Woll-Mischgewebe", "Klassischer V-Ausschnitt", "Vier Außentaschen", "Innentasche für kleine Gegenstände", "Verstellbare Rückenschnalle", "Elegante Knopfleiste mit Perlmuttknöpfen"],
-      "materials": ["85% Schurwolle, 15% Seide", "Hochwertiges Jacquard-Futter", "Premium Verarbeitung"],
-      "care": ["Nur chemische Reinigung empfohlen", "Auf Kleiderbügel lagern", "Vor starker Sonneneinstrahlung schützen", "Bei Bedarf fachgerecht reinigen"]
+      "description": "Das ultimative Layering-Piece. Diese Weste bringt architektonische Struktur in jedes Outfit. Unter dem passenden Blazer getragen, komplettiert sie den sartorialen Look; über einem schlichten Oxford-Hemd oder T-Shirt wird sie zum eigenständigen Stil-Statement. Der verstellbare Riegel am Rücken aus fliessendem Cupro garantiert eine messerscharfe, massgeschneiderte Passform.",
+      "features": ["Merino-Wollflanell, passend zum Blazer", "Rückenteil aus Cupro mit verstellbarem Riegel", "Massive Metallschnalle", "Farblich abgestimmte Hornknöpfe"],
+      "materials": ["Oberstoff Front: 100 % Merino-Wollflanell (exakt passend zum Blazer)", "Rückenteil: 100 % Cupro mit verstellbarem Riegel und massiver Metallschnalle", "Knöpfe: Farblich abgestimmte Hornknöpfe"],
+      "care": ["Chemische Reinigung empfohlen", "Nicht waschen und nicht im Tumbler trocknen", "Auf einem Kleiderbügel aufhängen", "Nicht bleichen", "Bei niedriger Temperatur mit Tuch dazwischen bügeln"]
     },
     "Quarter Zipper": {
-      "description": "Der Quarter Zipper aus luxuriösem Kaschmir-Mix ist die perfekte Brücke zwischen Eleganz und Komfort. Der praktische 1/4-Reißverschluss ermöglicht flexible Temperaturanpassung, während die Premium-Materialien ein unvergleichliches Tragegefühl bieten. Ein Investment-Piece für anspruchsvolle Träger.",
-      "features": ["Kaschmir-Baumwolle Premium-Mix", "1/4-Reißverschluss für Flexibilität", "Gerippter Rundhals", "Elastische Bund- und Ärmelabschlüsse", "Hochwertige Verarbeitung", "Zeitloses Understatement-Design"],
-      "materials": ["50% Kaschmir, 50% Baumwolle", "Ultrasoft und atmungsaktiv", "Langlebig und hochwertig"],
-      "care": ["Handwäsche oder Feinwäsche bei 30°C", "Mit mildem Waschmittel", "Flach trocknen", "Nicht bügeln - an der Luft trocknen"]
+      "description": "Die sportliche Seite des \"Old Money\"-Lifestyles. Der Quarter Zipper verbindet den Komfort von schwerem French Terry mit einem scharfen, architektonischen Kragen. Der markante Metall-Reissverschluss und der edle Leder-Puller setzen haptische Akzente, die dieses Piece von herkömmlicher Loungewear abheben. Perfekt über einem T-Shirt oder Hemd zu tragen.",
+      "features": ["450 g/m² Heavyweight French Terry", "YKK 1/4 Metall-Reissverschluss", "Echtleder-Puller", "Formstabiler Stehkragen"],
+      "materials": ["Oberstoff: 450 g/m² Heavyweight French Terry Baumwolle", "Hardware: YKK 1/4 Metall-Reissverschluss mit Echtleder-Puller", "Kragen: Formstabiler Stehkragen mit glatter Innenseite"],
+      "care": ["Maschinenwäsche bei 30°C, auf links waschen", "Reissverschluss schliessen und Leder-Puller von Nässe fernhalten", "Hängend oder flach trocknen, nicht im Tumbler", "Bei niedriger Temperatur bügeln"]
     },
     "Strickpullover": {
-      "description": "Dieser Premium-Kaschmir Pullover verkörpert zeitlose Luxus und unvergleichlichen Komfort. Das ultraweiche Material schmiegt sich sanft an den Körper an und bietet eine elegante Silhouette, die zu jedem Anlass passt. Ein Klassiker, der ein Leben lang hält.",
-      "features": ["100% Premium-Kaschmir", "Nahtlose Rückseite (nur Seitennaht)", "Gerippter Rundhals und Bündchen", "Eleganter, figurbetonte Schnitt", "Hochwertige Verarbeitung", "Perfekte Balance zwischen Eleganz und Komfort"],
-      "materials": ["100% Premium-Grade Kaschmir", "Langfaserig und weich", "Zeitlos elegant"],
-      "care": ["Handwäsche in kaltem Wasser", "Mit Kaschmir-Spezialwaschmittel", "Flach trocknen auf ebener Fläche", "Nicht auswringen oder verdrehen"]
+      "description": "Schwer, strukturiert und kompromisslos hochwertig. Dieser Strickpullover ist für die kälteren Tage konzipiert und bietet einen festen, maskulinen Fall. Die voluminöse Rippstrick-Textur verleiht dem Piece eine unglaubliche Tiefe und Haptik, während die schwere Garnmischung die Körperwärme perfekt isoliert. Ein Pullover, der sich beim Tragen wie eine schützende Rüstung aus purem Komfort anfühlt.",
+      "features": ["Heavyweight Baumwoll-Merino-Blend", "Markantes, grobes Strickmuster", "Verstärkte Rippstrick-Bündchen", "Kratzfrei und formstabil"],
+      "materials": ["Oberstoff: Heavyweight Baumwoll-Merino-Blend (kratzfrei, schwer und formstabil)", "Textur: Markantes, grobes Strickmuster (z. B. Fisherman's Rib)", "Bündchen: Verstärkte Rippstrick-Bündchen, die nicht ausleiern"],
+      "care": ["Wollwaschgang bei 30°C mit Wollwaschmittel, auf links waschen", "Nicht wringen", "Flach liegend trocknen, nicht aufhängen", "Nicht im Tumbler trocknen", "Nicht direkt bügeln, bei Bedarf mit Dampf auf Abstand glätten"]
     },
     "Leinenhose": {
-      "description": "Die leichte Leinenhose ist das perfekte Sommer-Essential für den stilbewussten Mann. Aus purem, hochwertigem Leinen gefertigt, bietet sie atemberaubende Atmungsaktivität und einen eleganten, lockeren Look. Ideal für warme Tage und entspannte Eleganz.",
-      "features": ["100% reines irisches Leinen", "Lockerer, eleganter Schnitt", "Zwei große Vordertaschen", "Verstellbare Seitenbündel", "Klassischer Knopfverschluss", "Natürliche Farbvariationen für Authentizität"],
-      "materials": ["100% irisches Leinen", "Naturbelassen und atmungsaktiv", "Umweltfreundlich"],
-      "care": ["Maschinenwäsche bei 30°C", "Mit ähnlichen Farben waschen", "Flach oder hängend trocknen", "Leicht dampfen oder mit feuchtem Tuch glätten"]
+      "description": "Komfort ohne Kompromisse bei der Ästhetik. Gefertigt aus schwerem, atmungsaktivem Leinen, ist diese Hose die perfekte Antwort auf warme Temperaturen. Das Material wurde sanft vorgewaschen, um eine sofortige Weichheit und den charakteristischen, entspannten \"Quiet Luxury\"-Faltenwurf zu garantieren. Perfekt in Kombination mit Loafern und einem lockeren Hemd.",
+      "features": ["Schweres, vorgewaschenes Leinen", "Verdeckte Knopfleiste mit echten Hornknöpfen", "Relaxed Straight Leg", "Edler, entspannter Faltenwurf"],
+      "materials": ["Oberstoff: 100 % schweres, vorgewaschenes Leinen (knittert edel, nicht unruhig)", "Verschluss: Verdeckte Knopfleiste mit echten Hornknöpfen", "Schnitt: Relaxed Straight Leg für maximale Luftzirkulation"],
+      "care": ["Maschinenwäsche bei 30°C im Schonwaschgang", "Mit ähnlichen Farben waschen", "Hängend trocknen, nicht im Tumbler", "Leinen darf knittern, bei Bedarf feucht bei hoher Temperatur bügeln"]
     },
     "Oversized Hoodie": {
-      "description": "Das Oversized Hoodie ist das urbane Kultur-Stück schlechthin. Mit seinem entspannten Schnitt und Premium-Baumwolle bietet es maximalen Komfort ohne dabei Style zu opfern. Perfekt für Streetwear-Enthusiasten, die es casual und cool mögen.",
-      "features": ["100% hochwertige Baumwolle", "Oversized, entspannter Schnitt", "Kangaroo-Frontpocket mit Reißverschluss", "Verstellbare Kordel­züge in Kapuze", "Gebürstete Innenseite für Extra-Komfort", "Langlebige Flatlock-Nähte"],
-      "materials": ["100% Bio-Baumwolle", "280 g/m² Gewicht", "Strapazierfähig und formstabil"],
-      "care": ["Maschinenwäsche bei 30°C", "Umkehren vor dem Waschen", "Tumbler auf niedriger Temperatur oder hängend trocknen", "Bei niedriger Temperatur bügeln, falls nötig"]
+      "description": "Der ultimative Heavyweight-Hoodie. Wir haben den klassischen Kapuzenpullover genommen und jedes Detail auf Premium-Niveau gehoben. Das 450-Gramm-Gewebe sorgt für einen perfekten, leicht kastigen Fall. Die doppellagige Kapuze liegt voluminös im Nacken, und das weiche Waffelstrick-Futter in der Kängurutasche ist ein Detail purer Handwerkskunst, das nur der Träger spürt.",
+      "features": ["450 g/m² Heavyweight French Terry", "Doppellagige Kapuze", "Kängurutasche mit Waffelstrick-Innenseite", "Leicht kastiger Fall"],
+      "materials": ["Oberstoff: 450 g/m² Heavyweight French Terry Baumwolle", "Kapuze: Doppellagig verarbeitet für einen massiven, formschönen Stand im Nacken", "Details: Innenseite der Kängurutasche aus weichem Waffelstrick"],
+      "care": ["Maschinenwäsche bei 30°C, auf links waschen", "Mit ähnlichen Farben waschen", "Im Tumbler bei niedriger Temperatur oder hängend trocknen", "Bei niedriger Temperatur bügeln"]
     },
     "T-Shirt": {
-      "description": "Dieses Limited-Edition Graphic T-Shirt ist mehr als nur ein Kleidungsstück – es ist ein Statement. Mit hochwertiger Baumwolle und exklusiven Design-Prints, wird es zum Favoriten in jeder Garderobe. Limitierte Stückzahlen garantieren Exklusivität.",
-      "features": ["100% hochwertige Baumwolle", "Exklusives Limited-Edition Graphic", "Klassischer Rundhalsausschnitt", "Professionelle Druckverarbeitung", "Haltbare Farben durch spezielle Druck-Techniken", "Bequeme, klassische Passform"],
-      "materials": ["100% Bio-Baumwolle", "150 g/m² Leichtgewicht", "Sanfte Hautanfühligkeit"],
-      "care": ["Maschinenwäsche bei 30°C (Schonwaschgang)", "Mit Grafik nach innen waschen", "Tumbler auf sehr niedriger Temperatur", "Nicht direkt auf der Grafik bügeln"]
+      "description": "Das perfekte T-Shirt existiert. Wir haben die Jagd nach dem idealen Basic beendet. Mit einem Gewicht von 250 g/m² fällt dieses T-Shirt schwer und strukturiert, zeichnet nichts ab und behält auch nach unzähligen Wäschen seine exakte Form. Der eng anliegende, robuste Kragen rahmt das Gesicht perfekt ein. Kein Unterhemd, sondern ein eigenständiges Statement-Piece.",
+      "features": ["250 g/m² Heavyweight Jersey", "Absolut blickdicht", "Enger Rippstrick-Kragen, der nicht ausleiert", "Schlauchware ohne störende Seitennähte"],
+      "materials": ["Oberstoff: 250 g/m² Heavyweight Jersey-Baumwolle (absolut blickdicht)", "Kragen: Dicht gewebter, enger Rippstrick-Kragen, der nicht ausleiert", "Konstruktion: Schlauchware (Tubular Knit) ohne störende Seitennähte"],
+      "care": ["Maschinenwäsche bei 30°C, auf links waschen", "Mit ähnlichen Farben waschen", "Im Tumbler bei niedriger Temperatur oder hängend trocknen", "Bei mittlerer Temperatur bügeln"]
     },
     "Cargo Pants": {
-      "description": "Die Cargo-Hose vereint Funktionalität mit modernem Streetwear-Style. Mit mehreren durchdachten Taschen bietet sie praktische Lösungen für Alltag und Abenteuer. Hochwertig verarbeitet und in zeitlosen Farben – ein Statement für den praktischen Fashionista.",
-      "features": ["Robustes Baumwoll-Canvas-Material", "Sechs funktionale Cargo-Taschen", "Verstellbare Seitenriegel für Fit", "Reißverschluss-Details an den Beinen", "Tapered Silhouette für modernen Look", "Doppelte Nähte für Langlebigkeit"],
-      "materials": ["100% Baumwoll-Canvas", "12 oz. Gewicht", "Strapazierfähig und wasserfest"],
-      "care": ["Maschinenwäsche bei 40°C", "Mit ähnlichen Farben waschen", "Tumbler oder hängend trocknen", "Ausbügeln nur bei Bedarf"]
+      "description": "Utility-Design trifft auf massgeschneiderte Eleganz. Diese Cargo Pants befreien den klassischen Workwear-Look von unnötigem Volumen. Der schwere Baumwoll-Twill sorgt für einen perfekten, geraden Fall, während die flach anliegenden, verdeckten Taschen maximale Funktionalität bei einer rasiermesserscharfen Silhouette bieten. Eine Hose, die nicht nach Aufmerksamkeit schreit, aber sofort zeigt, dass Wert auf absolute Struktur und Premium-Verarbeitung gelegt wurde.",
+      "features": ["Heavyweight Baumwoll-Twill", "Verdeckte YKK-Reissverschlüsse an den Taschen", "Flache, nahtintegrierte Cargo-Taschen", "Straight Leg mit leicht verjüngtem Beinabschluss"],
+      "materials": ["Oberstoff: Schwerer 100 % Baumwoll-Twill (Heavyweight Cotton Twill, ca. 350 g/m²)", "Hardware: Verdeckte YKK-Reissverschlüsse an den Taschen, robuster Metallknopf am Bund", "Taschen: Nahtintegrierte, flache Cargo-Taschen ohne voluminöse Klappen für eine reduzierte Silhouette", "Schnitt: Straight Leg mit leicht verjüngtem Beinabschluss"],
+      "care": ["Maschinenwäsche bei 30°C, auf links waschen", "Reissverschlüsse und Knopf vor dem Waschen schliessen", "Mit ähnlichen Farben waschen", "Im Tumbler bei niedriger Temperatur oder hängend trocknen", "Bei mittlerer Temperatur bügeln"]
     },
     "Kaschmirpullover": {
-      "description": "Weicher Kaschmir und eine klare Silhouette machen diesen Pullover zu einem zeitlosen Essential.",
-      "features": ["Weicher Kaschmir", "Zeitlose Silhouette", "Gerippte Abschlüsse"],
-      "materials": ["Kaschmir-Mix"],
-      "care": ["Schonend von Hand oder im Wollwaschgang waschen", "Flach trocknen"]
+      "description": "Ein Meisterwerk des Understatements. Dieser Pullover wird aus feinstem, zweifädigem Kaschmir gestrickt, das unvergleichliche Weichheit mit robuster Langlebigkeit kombiniert. Der Schnitt ist entspannt, aber präzise und entworfen, um elegant über einem Oxford-Hemd oder komfortabel zur Bundfaltenhose zu fallen. Ein kompromissloses Investitionsstück, das mit den Jahren nur noch charaktervoller wird. Keine sichtbaren Logos, nur fühlbarer Luxus.",
+      "features": ["Zweifädiges mongolisches Kaschmir", "Entspannter, präziser Schnitt", "Formstabile, fein gerippte Abschlüsse", "Keine sichtbaren Aussenlogos"],
+      "materials": ["Oberstoff: 100 % reines, zweifädiges mongolisches Kaschmir (2-ply Garn für maximale Langlebigkeit und minimales Pilling)", "Bündchen: Formstabile, fein gerippte Abschlüsse an Ärmeln und Saum", "Branding: Kratzfreier Joumonde-Softprint im Nacken, keine sichtbaren Aussenlogos"],
+      "care": ["Handwäsche bei 20°C oder Wollwaschgang mit mildem Wollwaschmittel", "Nicht wringen, Wasser nur sanft ausdrücken", "Flach liegend auf einem Handtuch trocknen", "Nicht im Tumbler trocknen", "Nicht bleichen", "Bei niedriger Temperatur und ohne Dampf bügeln"]
     },
     "Oxford Hemd": {
-      "description": "Das Oxford Hemd aus Baumwolle verbindet eine klare Struktur mit vielseitigem Tragekomfort – für gepflegte Alltagslooks.",
-      "features": ["Oxford-Baumwollstoff", "Klassischer Kragen", "Vielseitig kombinierbar"],
-      "materials": ["Baumwolle"],
-      "care": ["Bei niedriger Temperatur waschen", "Bei mittlerer Temperatur bügeln"]
+      "description": "Das unerschütterliche Fundament jeder Garderobe. Unser Oxford-Hemd wird aus dicker Supima-Baumwolle gefertigt, die blickdicht ist und mit jeder Wäsche weicher wird, ohne ihre Form zu verlieren. Der charakteristische Button-Down-Kragen legt sich in einem perfekten Bogen um den Hals, während die echten Perlmuttknöpfe einen dezenten, aber unübersehbaren Hauch von Luxus versprühen.",
+      "features": ["Supima-Oxford-Gewebe", "Button-Down-Kragen mit perfektem Roll", "Perlmuttknöpfe", "Blickdicht und formstabil"],
+      "materials": ["Oberstoff: Schweres, strukturvolles Supima-Oxford-Gewebe (100 % Baumwolle)", "Kragen: Klassischer Button-Down-Kragen mit perfektem \"Roll\" (Bogen)", "Knöpfe: Dicke, schimmernde Perlmuttknöpfe (Mother of Pearl)"],
+      "care": ["Maschinenwäsche bei 40°C", "Knöpfe vor dem Waschen schliessen", "Im Tumbler bei niedriger Temperatur oder hängend trocknen", "Nicht bleichen", "Leicht feucht bei hoher Temperatur bügeln"]
     },
     "Wollmantel": {
-      "description": "Wärmende Wollqualität und ein klassischer Schnitt machen diesen Mantel zum eleganten Begleiter für kühle Tage.",
-      "features": ["Wärmender Wollmix", "Klassischer Schnitt", "Zeitloses Design"],
-      "materials": ["Wollmix", "Innenfutter"],
-      "care": ["Chemische Reinigung empfohlen", "Auf einem breiten Bügel aufbewahren"]
+      "description": "Ein Mantel, der Generationen überdauert. Durch den hohen Kaschmiranteil bietet dieser Wollmantel eine unvergleichliche Wärmeisolierung bei gleichzeitig weichem, elegantem Fall. Der Schnitt ist zeitlos und strukturiert, mit einem klassischen Revers, das formelle Outfits unterstreicht und Casual-Looks sofort aufwertet. Wahre Handwerkskunst zeigt sich in den Details: von den echten Hornknöpfen bis zum fliessenden Cupro-Futter. Ein absolutes Statement der unaufgeregten Eleganz.",
+      "features": ["Schwere Schurwolle mit Kaschmir", "Fliessendes Cupro-Futter", "Echte dunkle Hornknöpfe", "Klassisches Revers"],
+      "materials": ["Oberstoff: 80 % schwere Schurwolle, 20 % Kaschmir für einen fliessenden, weichen Fall", "Futter: 100 % atmungsaktives Cupro (seidige Haptik, verhindert elektrostatisches Aufladen)", "Hardware: Echte, dunkle Hornknöpfe mit dezenter Maserung"],
+      "care": ["Nur chemische Reinigung", "Nicht waschen und nicht im Tumbler trocknen", "Nach dem Tragen auslüften und auf einem breiten Bügel aufhängen", "Bei Bedarf sanft ausbürsten", "Falten mit Dampf auf Abstand glätten, nicht direkt bügeln"]
     },
     "Ledergürtel": {
-      "description": "Ein Ledergürtel aus hochwertigem Glattleder mit dezenter Metallschließe – das vielseitige Finish für elegante und lässige Outfits.",
-      "features": ["Glattes Leder", "Dezente Metallschließe", "Vielseitig kombinierbar"],
-      "materials": ["Leder", "Metallschließe"],
-      "care": ["Mit einem weichen Tuch reinigen", "Vor Nässe und direkter Sonneneinstrahlung schützen"]
+      "description": "Ein Accessoire, das nicht für eine Saison, sondern für ein ganzes Leben gemacht ist. Gefertigt aus kompromisslosem, pflanzlich gegerbtem Vollnarbenleder, entwickelt dieser Gürtel mit jedem Tragen eine einzigartige, persönliche Patina. Die schwere, gebürstete Messingschliesse unterstreicht den puristischen \"Quiet Luxury\"-Ansatz. Kein abblätterndes Kunstleder, keine billigen Beschläge, nur ehrliches, massives Handwerk, das jedes Outfit sofort aufwertet.",
+      "features": ["Pflanzlich gegerbtes Vollnarbenleder", "Massive, gebürstete Messingschliesse", "Handpolierte und gewachste Kanten", "Keine geklebten Schichten"],
+      "materials": ["Hauptmaterial: 100 % pflanzlich gegerbtes Vollnarbenleder (Full-Grain Leather)", "Schliesse: Massive, gebürstete Messingschliesse (Solid Brass)", "Verarbeitung: Handpolierte und gewachste Kanten, keine geklebten Schichten"],
+      "care": ["Nicht waschen", "Mit einem trockenen, weichen Tuch abwischen", "Gelegentlich mit farblosem Lederpflegebalsam pflegen", "Vor Nässe, Hitze und direkter Sonne schützen", "Messingschliesse mit einem trockenen Tuch polieren"]
     },
     "Trainerhose": {
-      "description": "Die Trainerhose ist das moderne Athleisure-Essential das Komfort und Style perfekt verbindet. Mit ihrem tapered Cut und Premium-Materialien ist sie ideal für Training, Freizeit und entspannte Alltags-Eleganz. Zeitlos, vielseitig und absolut tragbar.",
-      "features": ["Premium Baumwolle-Polyester-Mix", "Tapered Schnitt mit modernem Appeal", "Zwei tiefe Vordertaschen", "Elastische Rückenseite mit Tunnelzug", "Reißverschluss-Knöcheltaschen (optional)", "Softshell-Verarbeitung für Extra-Komfort"],
-      "materials": ["80% Baumwolle, 20% Polyester", "Gewebt und gekämmt", "Atmungsaktiv und formstabil"],
-      "care": ["Maschinenwäsche bei 30°C", "Mit ähnlichen Farben waschen", "Tumbler auf niedriger Temperatur", "Leicht ausbügeln falls gewünscht"]
+      "description": "Loungewear, die den Raum dominiert. Diese Trainerhose wird aus demselben schweren Stoff gefertigt wie unser Signature Hoodie. Sie fällt durch das Gewicht der Baumwolle extrem gerade und sauber, ohne an den Knien auszubeulen. Die dicken Kordeln mit schweren Messingkappen werten das Design auf, sodass die Hose nicht nur auf der Couch, sondern auch auf der Strasse eine perfekte Figur macht.",
+      "features": ["450 g/m² Heavyweight French Terry", "Dicke Baumwollkordeln mit Messing-Enden", "Breite, elastische Rippstrick-Bündchen", "Gerader, sauberer Fall"],
+      "materials": ["Oberstoff: 450 g/m² Heavyweight French Terry (passend zum Hoodie)", "Kordeln: Gedrehte, dicke Baumwollkordeln mit massiven Messing-Enden", "Bündchen: Breite, elastische Rippstrick-Bündchen am Beinabschluss"],
+      "care": ["Maschinenwäsche bei 30°C, auf links waschen", "Mit ähnlichen Farben waschen", "Im Tumbler bei niedriger Temperatur oder hängend trocknen", "Bei niedriger Temperatur bügeln"]
+    },
+    "Jeans": {
+      "description": "Authentisches Denim-Handwerk in seiner reinsten Form. Diese Jeans verzichtet bewusst auf künstliches Elasthan und setzt stattdessen auf echten, schweren Selvedge-Denim, der sich mit der Zeit perfekt an deinen Körper und deine Bewegungen anpasst. Ein gerader, kompromissloser Schnitt, der eine extrem cleane Silhouette formt. Eine Jeans, die man eintragen muss, um sie danach nie wieder ausziehen zu wollen.",
+      "features": ["12.5 oz Rigid Selvedge Denim", "Ohne künstlichen Stretch", "Massive Kupfernieten", "Gerader, cleaner Schnitt"],
+      "materials": ["Oberstoff: 12.5 oz Rigid Selvedge Denim (100 % Baumwolle, kein künstlicher Stretch)", "Waschung: Sanfter Rinse-Wash (weichgemacht, aber farblich tief)", "Hardware: Massive Kupfernieten und gravierter Metall-Knopf"],
+      "care": ["Maschinenwäsche bei 30°C, auf links waschen", "Die ersten Wäschen separat waschen, da Selvedge-Denim abfärben kann", "Möglichst selten waschen, um Farbe und Passform zu erhalten", "Nicht im Tumbler trocknen, hängend trocknen", "Bei mittlerer Temperatur bügeln"]
     }
   }
 }

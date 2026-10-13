@@ -446,100 +446,106 @@
   "askNexara": "Ask Nexara",
   "productDescriptions": {
     "Klassischer Blazer": {
-      "description": "This classic blazer, crafted from premium Italian wool, is made for the modern gentleman. Its timeless silhouette and refined tailoring elevate any outfit with effortless elegance. Ideal for business meetings, formal occasions, and polished everyday wear.",
-      "features": ["Premium Italian wool (Super 120s)", "Classic 2-button cut", "Viscose lining", "Two side pockets with piping", "Breast pocket for handkerchief", "Perfect for business & formal occasions"],
-      "materials": ["90% pure wool (Italian, Super 120s)", "10% cashmere", "Lining: 100% viscose"],
-      "care": ["Dry cleaning only", "Do not bleach", "Do not tumble dry", "Iron at low temperature", "Hang on hanger"]
+      "description": "Tailoring reinvented for modern everyday life. This blazer forgoes stiff shoulder pads and rigid interlinings to follow the natural shoulder line. The result is a jacket that is as comfortable as a cardigan, yet carries the authority of a classic bespoke suit. Made from 100% pure merino wool, it is the perfect foundation for a seamless transition from office to dinner.",
+      "features": ["Lightweight merino wool flannel, wearable year-round", "Unstructured, without stiff shoulder pads", "Patch pockets", "Half lining"],
+      "materials": ["Outer fabric: 100% lightweight merino wool flannel (wearable year-round)", "Construction: Unstructured (without stiff shoulder pads) for a natural silhouette", "Details: Patch pockets for a more relaxed look, half lining"],
+      "care": ["Dry cleaning recommended", "Do not wash and do not tumble dry", "Air out after wearing and hang on a hanger", "Brush gently when needed", "Smooth with steam held at a distance, do not iron directly"]
     },
     "Polo Hemd": {
-      "description": "This classic polo shirt in premium Egyptian cotton blends timeless elegance with all-day comfort. Clean construction and elevated fabric make it a versatile choice for both leisure and smart casual settings. A staple that never goes out of style.",
-      "features": ["Premium Egyptian cotton", "Classic polo shape", "Button placket with snap buttons", "Contrast colored collar and sleeve binding", "Loosely cut sleeve hem", "Reinforced shoulder seams for durability"],
-      "materials": ["100% Egyptian cotton", "Weight: 200 g/m²", "High-quality workmanship"],
-      "care": ["Machine wash at 30°C", "Wash with similar colors", "Tumble dry on low heat", "Iron at medium temperature"]
+      "description": "The classic, freed from loud logos. Our Polo Shirt focuses purely on cut and material quality. The specially constructed collar keeps its shape all day and doesn't fold in unattractively. A flawless fit at the shoulders and arms makes this polo the first choice for a smart, effortless appearance.",
+      "features": ["Tightly woven piqué cotton or fine merino knit", "Seamless one-piece collar", "No embroidered logo", "Flawless fit at shoulders and arms"],
+      "materials": ["Outer fabric: Tightly woven piqué cotton or fine merino knit", "Collar: Seamless one-piece collar for an elegant stand", "Branding: Invisible luxury, no embroidered logo on the chest"],
+      "care": ["Piqué cotton: machine wash at 30°C, inside out", "Merino knit: wool cycle and dry flat", "Do not tumble dry", "Iron on low to medium heat"]
     },
     "Knit Zip-Polo": {
-      "description": "The Knit Zip-Polo combines the polish of a classic polo with the ease of a quarter-zip. Made from a fine knit fabric, it offers breathable comfort and natural freedom of movement throughout the day.",
-      "features": ["Fine knit structure made of premium cotton blend", "Practical 1/4 zipper", "Fitted cut", "High-quality YKK zippers", "Elastic binding and sleeve cuffs", "Modern, sporty look"],
-      "materials": ["90% cotton, 10% polyester", "Fine knit quality", "Durable and shape-stable"],
-      "care": ["Machine wash at 30°C (delicate cycle)", "Wash inside out", "Lay flat to dry", "Iron at low temperature"]
+      "description": "The modern interpretation of the \"Old Money\" aesthetic. The Knit Zip-Polo bridges the formality of a shirt and the comfort of a sweater. Made from extra-fine merino wool, it offers a clean, structured silhouette that adapts to your body temperature. The distinctive metal zip sets a cool, architectural accent. The ideal piece for the office, the evening and everything in between.",
+      "features": ["Extra-fine merino wool", "YKK 1/4 metal zip", "Structured fine-knit polo collar", "Tone-on-tone Joumonde embroidery"],
+      "materials": ["Outer fabric: 100% extra-fine merino wool (breathable and temperature-regulating)", "Hardware: YKK 1/4 metal zip in matte silver/gunmetal finish", "Collar: Structured, shape-retaining fine-knit polo collar", "Branding: Tone-on-tone Joumonde embroidery, 3 cm above the left sleeve cuff"],
+      "care": ["Wool cycle at 30°C with wool detergent", "Close the zip and wash inside out", "Dry flat", "Do not tumble dry", "Do not bleach", "Iron on low heat"]
     },
     "Bundfalthose": {
-      "description": "Classic pleated trousers combine timeless elegance with all-day comfort. A premium cotton blend and carefully tailored pleats make them an easy choice for both business and casual wear.",
-      "features": ["Classic pleats for an elegant silhouette", "Reinforced seams for durability", "Side entry pockets", "Classic button and zipper closure", "Adjustable inner waistband for perfect fit", "Modern, timeless color palette"],
-      "materials": ["98% cotton, 2% elastane", "Durable twill fabric", "Pleasant feel and long-lasting"],
-      "care": ["Machine wash at 40°C", "Wash with similar colors", "Tumble dry on low temperature", "Iron lightly if needed"]
+      "description": "The bridge between traditional tailoring and modern casual chic. The double pleat gives these trousers not only a distinctive, classic character, but also exceptional freedom of movement. Thanks to the metal side adjusters, the waist always fits perfectly, no belt needed. A design that shows posture.",
+      "features": ["Double pleat", "Side adjusters instead of a belt", "Elegantly tapered cut", "Heavy cotton twill or fine virgin wool"],
+      "materials": ["Outer fabric: Heavy, tightly woven cotton twill or fine virgin wool", "Waist: Side adjusters (side buckles for width regulation), no belt needed", "Cut: Double pleat for more volume at the thigh, elegantly tapering downward"],
+      "care": ["Virgin wool: dry clean", "Cotton twill: machine wash at 30°C, inside out", "Do not tumble dry, hang to dry", "Iron with steam or on medium heat, reshape the pleats"]
     },
     "Elegante Weste": {
-      "description": "This refined wool vest is the finishing touch for thoughtfully styled outfits. Its elegant structure and premium craftsmanship add confidence and character to your look. Perfect as a layering piece for formal and dressy-casual occasions.",
-      "features": ["Premium wool blend fabric", "Classic V-neckline", "Four exterior pockets", "Interior pocket for small items", "Adjustable back strap", "Elegant button placket with mother-of-pearl buttons"],
-      "materials": ["85% pure wool, 15% silk", "High-quality jacquard lining", "Premium craftsmanship"],
-      "care": ["Dry cleaning recommended", "Store on hanger", "Protect from strong sunlight", "Professional cleaning if needed"]
+      "description": "The ultimate layering piece. This waistcoat brings architectural structure to any outfit. Worn under the matching blazer, it completes the sartorial look; over a simple Oxford shirt or T-shirt, it becomes a stylish statement in its own right. The adjustable cupro strap at the back guarantees a razor-sharp, tailored fit.",
+      "features": ["Merino wool flannel, matching the blazer", "Cupro back with adjustable strap", "Solid metal buckle", "Color-matched horn buttons"],
+      "materials": ["Front fabric: 100% merino wool flannel (an exact match to the blazer)", "Back panel: 100% cupro with adjustable strap and solid metal buckle", "Buttons: Color-matched horn buttons"],
+      "care": ["Dry cleaning recommended", "Do not wash and do not tumble dry", "Hang on a hanger", "Do not bleach", "Iron on low heat with a cloth in between"]
     },
     "Quarter Zipper": {
-      "description": "This quarter-zip, made from a luxurious cashmere blend, bridges comfort and elegance with ease. The practical zip collar lets you adjust for changing temperatures, while the premium knit feels exceptionally soft against the skin. A true investment piece for a refined wardrobe.",
-      "features": ["Cashmere-cotton premium blend", "1/4 zipper for flexibility", "Ribbed crew neck", "Elastic binding and sleeve cuffs", "High-quality workmanship", "Timeless understated design"],
-      "materials": ["50% cashmere, 50% cotton", "Ultra-soft and breathable", "Durable and high-quality"],
-      "care": ["Hand wash or delicate cycle at 30°C", "Use mild detergent", "Lay flat to dry", "Do not iron - air dry"]
+      "description": "The sporty side of the \"Old Money\" lifestyle. The Quarter Zipper combines the comfort of heavy French terry with a sharp, architectural collar. The distinctive metal zip and the refined leather puller add tactile accents that set this piece apart from ordinary loungewear. Perfect over a T-shirt or shirt.",
+      "features": ["450 g/m² heavyweight French terry", "YKK 1/4 metal zip", "Genuine leather puller", "Shape-retaining stand collar"],
+      "materials": ["Outer fabric: 450 g/m² heavyweight French terry cotton", "Hardware: YKK 1/4 metal zip with genuine leather puller", "Collar: Shape-retaining stand collar with smooth inside"],
+      "care": ["Machine wash at 30°C, inside out", "Close the zip and keep the leather puller away from moisture", "Hang or dry flat, do not tumble dry", "Iron on low heat"]
     },
     "Strickpullover": {
-      "description": "This premium cashmere sweater delivers timeless luxury and exceptional comfort. Its ultra-soft handle drapes cleanly on the body for an elegant silhouette that works across occasions. A lasting classic you will reach for season after season.",
-      "features": ["100% premium cashmere", "Seamless back (side seam only)", "Ribbed crew neck and cuffs", "Elegant, figure-flattering cut", "High-quality workmanship", "Perfect balance of elegance and comfort"],
-      "materials": ["100% premium-grade cashmere", "Long-staple and soft", "Timeless elegance"],
-      "care": ["Hand wash in cold water", "Use cashmere-specific detergent", "Lay flat to dry on even surface", "Do not wring or twist"]
+      "description": "Heavy, structured and uncompromisingly high quality. This knit sweater is designed for colder days and offers a firm, masculine drape. The voluminous rib texture gives the piece incredible depth and feel, while the heavy yarn blend insulates body warmth perfectly. A sweater that feels like a protective armor of pure comfort.",
+      "features": ["Heavyweight cotton-merino blend", "Distinctive, chunky knit pattern", "Reinforced rib cuffs", "Scratch-free and shape-retaining"],
+      "materials": ["Outer fabric: Heavyweight cotton-merino blend (scratch-free, heavy and shape-retaining)", "Texture: Distinctive, chunky knit pattern (e.g. fisherman's rib)", "Cuffs: Reinforced rib cuffs that don't stretch out"],
+      "care": ["Wool cycle at 30°C with wool detergent, inside out", "Do not wring", "Dry flat, do not hang", "Do not tumble dry", "Do not iron directly, smooth with steam held at a distance if needed"]
     },
     "Leinenhose": {
-      "description": "These lightweight linen trousers are a summer essential for style-conscious men. Woven from pure premium linen, they offer excellent breathability and a relaxed yet elevated look. Perfect for warm days and understated elegance.",
-      "features": ["100% pure Irish linen", "Relaxed, elegant cut", "Two large front pockets", "Adjustable side ruffles", "Classic button closure", "Natural color variations for authenticity"],
-      "materials": ["100% Irish linen", "Natural and breathable", "Environmentally friendly"],
-      "care": ["Machine wash at 30°C", "Wash with similar colors", "Lay flat or hang dry", "Light steam or gently iron with damp cloth"]
+      "description": "Relaxed without compromising on aesthetics. Made from heavy, breathable linen, these trousers are the perfect answer to warm temperatures. The fabric has been gently pre-washed to guarantee instant softness and the characteristic, relaxed \"Quiet Luxury\" drape. Perfect with loafers and a loose shirt.",
+      "features": ["Heavy, pre-washed linen", "Concealed button fly with genuine horn buttons", "Relaxed straight leg", "Elegant, relaxed drape"],
+      "materials": ["Outer fabric: 100% heavy, pre-washed linen (wrinkles nobly, never restlessly)", "Closure: Concealed button fly with genuine horn buttons", "Cut: Relaxed straight leg for maximum air circulation"],
+      "care": ["Machine wash at 30°C on a gentle cycle", "Wash with similar colors", "Hang to dry, do not tumble dry", "Linen is meant to wrinkle, iron damp on high heat if needed"]
     },
     "Oversized Hoodie": {
-      "description": "The oversized hoodie is a true streetwear staple. Its relaxed cut and premium cotton construction deliver maximum comfort without compromising style. Perfect for everyday urban looks with a clean, effortless edge.",
-      "features": ["100% premium cotton", "Oversized, relaxed cut", "Kangaroo front pocket with zipper", "Adjustable drawstrings in hood", "Brushed interior for extra comfort", "Durable flatlock seams"],
-      "materials": ["100% organic cotton", "280 g/m² weight", "Durable and shape-stable"],
-      "care": ["Machine wash at 30°C", "Turn inside out before washing", "Tumble dry on low or hang dry", "Iron on low temperature if needed"]
+      "description": "The ultimate heavyweight hoodie. We took the classic hooded sweatshirt and raised every detail to a premium level. The 450-gram fabric gives a perfect, slightly boxy drape. The double-layered hood sits voluminously at the neck, and the soft waffle-knit lining in the kangaroo pocket is a detail of pure craftsmanship that only the wearer feels.",
+      "features": ["450 g/m² heavyweight French terry", "Double-layered hood", "Kangaroo pocket with waffle-knit inside", "Slightly boxy drape"],
+      "materials": ["Outer fabric: 450 g/m² heavyweight French terry cotton", "Hood: Double-layered for a solid, well-shaped stand at the neck", "Details: Inside of the kangaroo pocket in soft waffle knit"],
+      "care": ["Machine wash at 30°C, inside out", "Wash with similar colors", "Tumble dry on low heat or hang to dry", "Iron on low heat"]
     },
     "T-Shirt": {
-      "description": "This limited-edition graphic tee is more than just a basic, it is a statement piece. Premium cotton and exclusive artwork make it an instant favorite in any rotation. Produced in limited quantities for true exclusivity.",
-      "features": ["100% premium cotton", "Exclusive limited-edition graphic", "Classic crew neckline", "Professional print processing", "Durable colors through special printing techniques", "Comfortable, classic fit"],
-      "materials": ["100% organic cotton", "150 g/m² lightweight", "Soft skin feel"],
-      "care": ["Machine wash at 30°C (gentle cycle)", "Wash with graphic inside", "Tumble dry on very low temperature", "Do not iron directly on graphic"]
+      "description": "The perfect T-shirt exists. We have ended the hunt for the ideal basic. At 250 g/m², this T-shirt falls heavy and structured, shows nothing through, and keeps its exact shape even after countless washes. The snug, robust collar frames the face perfectly. Not an undershirt, but a statement piece in its own right.",
+      "features": ["250 g/m² heavyweight jersey", "Completely opaque", "Snug rib collar that doesn't stretch out", "Tubular knit without disruptive side seams"],
+      "materials": ["Outer fabric: 250 g/m² heavyweight jersey cotton (completely opaque)", "Collar: Tightly woven, snug rib collar that doesn't stretch out", "Construction: Tubular knit without disruptive side seams"],
+      "care": ["Machine wash at 30°C, inside out", "Wash with similar colors", "Tumble dry on low heat or hang to dry", "Iron on medium heat"]
     },
     "Cargo Pants": {
-      "description": "These cargo pants fuse practical function with contemporary streetwear style. Multiple utility pockets keep essentials close without sacrificing a clean silhouette. Built with durable construction in timeless colors for everyday wear and beyond.",
-      "features": ["Robust cotton canvas material", "Six functional cargo pockets", "Adjustable side straps for fit", "Zipper details on legs", "Tapered silhouette for modern look", "Double stitching for durability"],
-      "materials": ["100% cotton canvas", "12 oz. weight", "Durable and water-resistant"],
-      "care": ["Machine wash at 40°C", "Wash with similar colors", "Tumble dry or hang dry", "Iron only if needed"]
+      "description": "Utility design meets tailored elegance. These Cargo Pants free the classic workwear look from unnecessary volume. The heavy cotton twill gives a perfect, straight drape, while the flat, concealed pockets offer maximum functionality with a razor-sharp silhouette. Trousers that don't shout for attention, but immediately show that absolute structure and premium craftsmanship matter.",
+      "features": ["Heavyweight cotton twill", "Concealed YKK zips on the pockets", "Flat, seam-integrated cargo pockets", "Straight leg with slightly tapered hem"],
+      "materials": ["Outer fabric: Heavy 100% cotton twill (heavyweight cotton twill, approx. 350 g/m²)", "Hardware: Concealed YKK zips on the pockets, sturdy metal button at the waist", "Pockets: Seam-integrated, flat cargo pockets without bulky flaps for a reduced silhouette", "Cut: Straight leg with slightly tapered hem"],
+      "care": ["Machine wash at 30°C, inside out", "Close zips and button before washing", "Wash with similar colors", "Tumble dry on low heat or hang to dry", "Iron on medium heat"]
     },
     "Kaschmirpullover": {
-      "description": "Soft cashmere and a clean silhouette make this sweater a timeless wardrobe essential.",
-      "features": ["Soft cashmere", "Timeless silhouette", "Ribbed trims"],
-      "materials": ["Cashmere blend"],
-      "care": ["Hand wash or use a wool cycle", "Dry flat"]
+      "description": "A masterpiece of understatement. This sweater is knitted from the finest two-ply cashmere, combining incomparable softness with robust durability. The cut is relaxed yet precise, designed to drape elegantly over an Oxford shirt or casually with pleated trousers. An uncompromising investment piece that only gains character over the years. No visible logos, just tangible luxury.",
+      "features": ["Two-ply Mongolian cashmere", "Relaxed, precise cut", "Shape-retaining, finely ribbed trims", "No visible exterior logos"],
+      "materials": ["Outer fabric: 100% pure two-ply Mongolian cashmere (2-ply yarn for maximum durability and minimal pilling)", "Cuffs: Shape-retaining, finely ribbed trims on sleeves and hem", "Branding: Scratch-free Joumonde soft print at the neck, no visible exterior logos"],
+      "care": ["Hand wash at 20°C or wool cycle with mild wool detergent", "Do not wring, only press out water gently", "Dry flat on a towel", "Do not tumble dry", "Do not bleach", "Iron on low heat without steam"]
     },
     "Oxford Hemd": {
-      "description": "Cut from textured Oxford cotton, this shirt offers easy comfort and a polished look for everyday wear.",
-      "features": ["Oxford cotton fabric", "Classic collar", "Easy to style"],
-      "materials": ["Cotton"],
-      "care": ["Wash at a low temperature", "Iron at a medium setting"]
+      "description": "The unshakable foundation of every wardrobe. Our Oxford shirt is made from thick Supima cotton that is opaque and gets softer with every wash without losing its shape. The characteristic button-down collar rolls in a perfect arc around the neck, while the genuine mother-of-pearl buttons add a subtle but unmistakable touch of luxury.",
+      "features": ["Supima Oxford weave", "Button-down collar with a perfect roll", "Mother-of-pearl buttons", "Opaque and shape-retaining"],
+      "materials": ["Outer fabric: Heavy, textured Supima Oxford weave (100% cotton)", "Collar: Classic button-down collar with a perfect \"roll\"", "Buttons: Thick, shimmering mother-of-pearl buttons"],
+      "care": ["Machine wash at 40°C", "Close buttons before washing", "Tumble dry on low heat or hang to dry", "Do not bleach", "Iron slightly damp on high heat"]
     },
     "Wollmantel": {
-      "description": "Warm wool and a classic cut make this coat an elegant companion for cooler days.",
-      "features": ["Warm wool blend", "Classic cut", "Timeless design"],
-      "materials": ["Wool blend", "Lining"],
-      "care": ["Dry cleaning recommended", "Store on a wide hanger"]
+      "description": "A coat that outlasts generations. Thanks to its high cashmere content, this wool coat offers incomparable thermal insulation with a soft, elegant drape. The cut is timeless and structured, with a classic lapel that underlines formal outfits and instantly elevates casual looks. True craftsmanship shows in the details: from the genuine horn buttons to the flowing cupro lining. An absolute statement of understated elegance.",
+      "features": ["Heavy virgin wool with cashmere", "Flowing cupro lining", "Genuine dark horn buttons", "Classic lapel"],
+      "materials": ["Outer fabric: 80% heavy virgin wool, 20% cashmere for a flowing, soft drape", "Lining: 100% breathable cupro (silky feel, prevents static)", "Hardware: Genuine dark horn buttons with subtle grain"],
+      "care": ["Dry clean only", "Do not wash and do not tumble dry", "Air out after wearing and hang on a wide hanger", "Brush gently when needed", "Smooth creases with steam held at a distance, do not iron directly"]
     },
     "Ledergürtel": {
-      "description": "A leather belt in smooth leather with a discreet metal buckle, designed to finish both polished and casual outfits.",
-      "features": ["Smooth leather", "Discreet metal buckle", "Easy to style"],
-      "materials": ["Leather", "Metal buckle"],
-      "care": ["Clean with a soft cloth", "Keep away from moisture and direct sunlight"]
+      "description": "An accessory made not for a season, but for a lifetime. Crafted from uncompromising vegetable-tanned full-grain leather, this belt develops a unique, personal patina with every wear. The heavy, brushed brass buckle underlines the purist \"Quiet Luxury\" approach. No peeling faux leather, no cheap fittings, just honest, solid craftsmanship that instantly elevates any outfit.",
+      "features": ["Vegetable-tanned full-grain leather", "Solid, brushed brass buckle", "Hand-polished and waxed edges", "No glued layers"],
+      "materials": ["Main material: 100% vegetable-tanned full-grain leather", "Buckle: Solid, brushed brass", "Finish: Hand-polished and waxed edges, no glued layers"],
+      "care": ["Do not wash", "Wipe with a dry, soft cloth", "Occasionally treat with colorless leather balm", "Protect from moisture, heat and direct sunlight", "Polish the brass buckle with a dry cloth"]
     },
     "Trainerhose": {
-      "description": "These track pants are a modern athleisure essential that balance comfort and style. The tapered fit and premium fabric make them ideal for training, downtime, and elevated everyday looks. Timeless, versatile, and made to be worn on repeat.",
-      "features": ["Premium cotton-polyester blend", "Tapered cut with modern appeal", "Two deep front pockets", "Elastic back with drawstring", "Zipper ankle pockets (optional)", "Softshell processing for extra comfort"],
-      "materials": ["80% cotton, 20% polyester", "Woven and combed", "Breathable and shape-stable"],
-      "care": ["Machine wash at 30°C", "Wash with similar colors", "Tumble dry on low temperature", "Lightly iron if desired"]
+      "description": "Loungewear that dominates the room. These sweatpants are made from the same heavy fabric as our signature hoodie. Thanks to the weight of the cotton, they fall extremely straight and clean, without bagging at the knees. The thick drawcords with heavy brass tips elevate the design, so the pants look great not only on the couch but also on the street.",
+      "features": ["450 g/m² heavyweight French terry", "Thick cotton drawcords with brass tips", "Wide, elastic rib cuffs", "Straight, clean drape"],
+      "materials": ["Outer fabric: 450 g/m² heavyweight French terry (matching the hoodie)", "Drawcords: Twisted, thick cotton cords with solid brass tips", "Cuffs: Wide, elastic rib cuffs at the hem"],
+      "care": ["Machine wash at 30°C, inside out", "Wash with similar colors", "Tumble dry on low heat or hang to dry", "Iron on low heat"]
+    },
+    "Jeans": {
+      "description": "Authentic denim craftsmanship in its purest form. These jeans deliberately forgo artificial elastane and rely on genuine, heavy selvedge denim that adapts perfectly to your body and movements over time. A straight, uncompromising cut that forms an extremely clean silhouette. Jeans you have to break in, only to never want to take them off again.",
+      "features": ["12.5 oz rigid selvedge denim", "No artificial stretch", "Solid copper rivets", "Straight, clean cut"],
+      "materials": ["Outer fabric: 12.5 oz rigid selvedge denim (100% cotton, no artificial stretch)", "Wash: Gentle rinse wash (softened, but deep in color)", "Hardware: Solid copper rivets and engraved metal button"],
+      "care": ["Machine wash at 30°C, inside out", "Wash separately the first few times, as selvedge denim may bleed", "Wash as rarely as possible to preserve color and fit", "Do not tumble dry, hang to dry", "Iron on medium heat"]
     }
   }
 }
