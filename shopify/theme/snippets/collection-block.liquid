@@ -82,7 +82,8 @@
         <div class="filter-group">
           <h4>Größe</h4>
           <div class="filter-options">
-            {%- for s in 'XS,S,M,L,XL,XXL' split: ',' -%}
+            {%- assign size_list = 'XS,S,M,L,XL,XXL' | split: ',' -%}
+            {%- for s in size_list -%}
             <label class="filter-checkbox"><input type="checkbox" data-size value="{{ s }}"><span>{{ s }}</span></label>
             {%- endfor -%}
           </div>

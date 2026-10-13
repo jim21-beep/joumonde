@@ -12,8 +12,8 @@
           <input type="hidden" name="contact[tags]" value="newsletter">
           <input type="email" name="contact[email]" placeholder="E-Mail" aria-label="E-Mail" required>
           <button type="submit" aria-label="Zum Newsletter anmelden">&rsaquo;</button>
+          {%- if form.posted_successfully? -%}<p class="site-footer-legal-note">Danke, du bist angemeldet.</p>{%- endif -%}
         {%- endform -%}
-        {%- if form.posted_successfully? -%}<p class="site-footer-legal-note">Danke, du bist angemeldet.</p>{%- endif -%}
         <p class="site-footer-legal-note">Mit deiner Anmeldung stimmst du den <a href="/pages/agb">AGB</a> und der <a href="/pages/cookie-policy">Datenschutzerklärung</a> zu.</p>
       </section>
       {%- endif -%}
