@@ -1,0 +1,28 @@
+<section class="page-wrap">
+  <header class="page-head"><h1>Suche</h1></header>
+  <form action="{{ routes.search_url }}" method="get" class="search-form" role="search">
+    <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="Was suchst du?" aria-label="Suche">
+    <input type="hidden" name="type" value="product">
+    <button type="submit" class="btn">Suchen</button>
+  </form>
+
+  {% if search.performed %}
+    {% paginate search.results by 24 %}
+      <p class="toolbar">{{ search.results_count }} Ergebnisse für "{{ search.terms | escape }}"</p>
+      <div class="product-grid">
+        {% for item in search.results %}
+          {% if item.object_type == 'product' %}
+            {% render 'product-card', product: item %}
+          {% endif %}
+        {% endfor %}
+      </div>
+      {% render 'pagination', paginate: paginate %}
+    {% endpaginate %}
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Suche"
+}
+{% endschema %}

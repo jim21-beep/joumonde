@@ -1,0 +1,16 @@
+<section class="statement">
+  <p><strong>{{ section.settings.highlight }}</strong> {{ section.settings.text }}</p>
+  <p class="statement-sub">{{ section.settings.sub }}</p>
+</section>
+
+{% schema %}
+{
+  "name": "Statement",
+  "settings": [
+    { "type": "text", "id": "highlight", "label": "Hervorgehoben", "default": "Joumonde" },
+    { "type": "text", "id": "text", "label": "Text", "default": "ist, wo Luxus auf Attitude trifft, für Persönlichkeiten, die Standards setzen statt ihnen zu folgen." },
+    { "type": "text", "id": "sub", "label": "Unterzeile", "default": "Klassischer Chic vereint mit komfortablem Casual Style. Jedes Stück ein Statement deiner Klasse." }
+  ],
+  "presets": [{ "name": "Statement" }]
+}
+{% endschema %}

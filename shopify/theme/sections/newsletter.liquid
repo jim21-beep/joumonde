@@ -1,0 +1,22 @@
+<section class="newsletter-section">
+  <h2>{{ section.settings.title }}</h2>
+  <p>{{ section.settings.text }}</p>
+  {% form 'customer', class: 'newsletter-form newsletter-form-large' %}
+    <input type="hidden" name="contact[tags]" value="newsletter">
+    <input type="email" name="contact[email]" placeholder="Deine E-Mail-Adresse" aria-label="Deine E-Mail-Adresse" required>
+    <button type="submit" class="btn">Anmelden</button>
+    {% if form.posted_successfully? %}<p class="form-ok">Danke, du bist angemeldet.</p>{% endif %}
+  {% endform %}
+  <p class="legal-note">Mit deiner Anmeldung stimmst du den <a href="/pages/agb">AGB</a> und der <a href="/pages/cookie-policy">Datenschutzerklärung</a> zu.</p>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titel", "default": "Bleib auf dem Laufenden" },
+    { "type": "text", "id": "text", "label": "Text", "default": "Melde dich an und erfahre als Erstes von neuen Produkten und exklusiven Angeboten." }
+  ],
+  "presets": [{ "name": "Newsletter" }]
+}
+{% endschema %}

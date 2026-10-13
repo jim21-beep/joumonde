@@ -1,0 +1,70 @@
+{% assign current_variant = product.selected_or_first_available_variant %}
+<section class="page-wrap product-page" data-product data-currency="{{ cart.currency.iso_code }}">
+  <div class="product-layout">
+    <div class="product-gallery">
+      <div class="gallery-main">
+        {% if product.images.size > 0 %}
+          <img src="{{ product.images.first | image_url: width: 1400 }}" alt="{{ product.images.first.alt | default: product.title | escape }}" width="1400" data-gallery-main>
+        {% else %}
+          <div class="placeholder"></div>
+        {% endif %}
+      </div>
+      {% if product.images.size > 1 %}
+        <div class="gallery-thumbs">
+          {% for image in product.images %}
+            <button type="button" class="thumb{% if forloop.first %} is-active{% endif %}" data-thumb="{{ image | image_url: width: 1400 }}" aria-label="Bild {{ forloop.index }}">
+              <img src="{{ image | image_url: width: 200 }}" alt="" loading="lazy" width="200">
+            </button>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="product-info">
+      <p class="eyebrow">{{ product.type }}</p>
+      <h1>{{ product.title }}</h1>
+      <p class="price product-price" data-price>{{ current_variant.price | money }}</p>
+      <p class="tax-note">Inkl. MwSt., zzgl. <a href="/pages/versand">Versand</a></p>
+
+      {% form 'product', product, class: 'product-form', data-product-form: '' %}
+        <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id>
+
+        {% unless product.has_only_default_variant %}
+          {% for option in product.options_with_values %}
+            <fieldset class="option-group">
+              <legend>{{ option.name }}</legend>
+              <div class="option-values">
+                {% for value in option.values %}
+                  <label class="option-pill">
+                    <input type="radio" name="option-{{ option.position }}" value="{{ value | escape }}" data-option-index="{{ forloop.parentloop.index0 }}"{% if option.selected_value == value %} checked{% endif %}>
+                    <span>{{ value }}</span>
+                  </label>
+                {% endfor %}
+              </div>
+            </fieldset>
+          {% endfor %}
+        {% endunless %}
+
+        <button type="submit" class="btn btn-block" data-add-button{% unless current_variant.available %} disabled{% endunless %}>
+          {% if current_variant.available %}In den Warenkorb{% else %}Ausverkauft{% endif %}
+        </button>
+      {% endform %}
+
+      <script type="application/json" data-variants>{{ product.variants | json }}</script>
+
+      <div class="rte product-description">{{ product.description }}</div>
+
+      <ul class="trust-list">
+        <li>Kostenloser Versand in der Schweiz ab CHF 100</li>
+        <li>14 Tage Rückgaberecht</li>
+        <li>Sichere Zahlung</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Produkt"
+}
+{% endschema %}

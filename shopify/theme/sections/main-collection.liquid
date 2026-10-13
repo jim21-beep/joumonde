@@ -1,0 +1,35 @@
+<section class="page-wrap">
+  <header class="page-head">
+    <h1>{{ collection.title }}</h1>
+    {% if collection.description != blank %}<div class="rte">{{ collection.description }}</div>{% endif %}
+  </header>
+
+  {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
+  <div class="toolbar">
+    <span>{{ collection.products_count }} Produkte</span>
+    <label>Sortieren
+      <select data-sort-select>
+        {% for option in collection.sort_options %}
+          <option value="{{ option.value }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+  </div>
+
+  {% paginate collection.products by 24 %}
+    <div class="product-grid">
+      {% for product in collection.products %}
+        {% render 'product-card', product: product %}
+      {% else %}
+        <p>In dieser Kollektion sind noch keine Produkte.</p>
+      {% endfor %}
+    </div>
+    {% render 'pagination', paginate: paginate %}
+  {% endpaginate %}
+</section>
+
+{% schema %}
+{
+  "name": "Kollektion"
+}
+{% endschema %}

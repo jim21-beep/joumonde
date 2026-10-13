@@ -1,0 +1,25 @@
+<header class="site-header">
+  <div class="header-inner">
+    <button class="nav-toggle" type="button" aria-label="Menü öffnen" aria-expanded="false" data-nav-toggle>
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="{{ routes.root_url }}">Joumonde</a>
+    <nav class="main-nav" data-nav aria-label="Hauptnavigation">
+      <a href="{{ routes.all_products_collection_url }}">Shop</a>
+      <a href="/collections/old-money">Old Money</a>
+      <a href="/collections/casual">Casual</a>
+      <a href="/pages/about">Über Joumonde</a>
+    </nav>
+    <div class="header-actions">
+      <a href="{{ routes.search_url }}">Suche</a>
+      {% if shop.customer_accounts_enabled %}<a href="{{ routes.account_url }}">Konto</a>{% endif %}
+      <a href="{{ routes.cart_url }}" class="cart-link">Warenkorb <span class="cart-count" data-cart-count>{{ cart.item_count }}</span></a>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header"
+}
+{% endschema %}

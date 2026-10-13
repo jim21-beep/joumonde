@@ -1,0 +1,48 @@
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <a class="footer-brand" href="{{ routes.root_url }}">Joumonde</a>
+      <div class="footer-newsletter">
+        <p class="eyebrow">Jetzt anmelden und keine News verpassen</p>
+        <p>Sei der Erste, der von neuen Produkten und exklusiven Angeboten erfährt.</p>
+        {% form 'customer', class: 'newsletter-form' %}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <input type="email" name="contact[email]" placeholder="E-Mail" aria-label="E-Mail" required>
+          <button type="submit" aria-label="Zum Newsletter anmelden">&rsaquo;</button>
+          {% if form.posted_successfully? %}<p class="form-ok">Danke, du bist angemeldet.</p>{% endif %}
+        {% endform %}
+        <p class="legal-note">Mit deiner Anmeldung stimmst du den <a href="/pages/agb">AGB</a> und der <a href="/pages/cookie-policy">Datenschutzerklärung</a> zu.</p>
+      </div>
+    </div>
+    <div class="footer-links">
+      <section>
+        <h2>Kontakt</h2>
+        <a href="mailto:support@joumonde.com">support@joumonde.com</a>
+      </section>
+      <section>
+        <h2>Shop</h2>
+        <a href="/collections/old-money">Old Money</a>
+        <a href="/collections/casual">Casual</a>
+      </section>
+      <section>
+        <h2>Kundenservice</h2>
+        <a href="/pages/versand">Versand &amp; Retouren</a>
+        <a href="/pages/faq">FAQ</a>
+        <a href="/pages/about">Über Joumonde</a>
+      </section>
+      <section>
+        <h2>Rechtliches</h2>
+        <a href="/pages/impressum">Impressum</a>
+        <a href="/pages/agb">AGB</a>
+        <a href="/pages/cookie-policy">Datenschutzerklärung</a>
+      </section>
+    </div>
+    <div class="footer-bottom">&copy; {{ 'now' | date: '%Y' }} Joumonde. Alle Rechte vorbehalten.</div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer"
+}
+{% endschema %}

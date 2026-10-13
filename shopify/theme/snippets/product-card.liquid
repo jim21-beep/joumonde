@@ -1,0 +1,12 @@
+<a class="product-card" href="{{ product.url }}">
+  <div class="product-card-media">
+    {% if product.featured_image %}
+      <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.featured_image.alt | default: product.title | escape }}" loading="lazy" width="800">
+    {% else %}
+      <div class="placeholder"></div>
+    {% endif %}
+    {% unless product.available %}<span class="badge">Ausverkauft</span>{% endunless %}
+  </div>
+  <h3>{{ product.title }}</h3>
+  <p class="price">{% if product.price_varies %}ab {% endif %}{{ product.price | money }}</p>
+</a>
