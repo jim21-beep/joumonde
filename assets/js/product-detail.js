@@ -246,7 +246,8 @@ const productDatabase = {
             'Mit ähnlichen Farben waschen',
             'Im Tumbler bei niedriger Temperatur oder hängend trocknen',
             'Bei niedriger Temperatur bügeln'
-        ],
+        ]
+    },
     'Jeans': {
         description: 'Authentisches Denim-Handwerk in seiner reinsten Form. Diese Jeans verzichtet bewusst auf künstliches Elasthan und setzt stattdessen auf echten, schweren Selvedge-Denim, der sich mit der Zeit perfekt an deinen Körper und deine Bewegungen anpasst. Ein gerader, kompromissloser Schnitt, der eine extrem cleane Silhouette formt. Eine Jeans, die man eintragen muss, um sie danach nie wieder ausziehen zu wollen.',
         features: [
