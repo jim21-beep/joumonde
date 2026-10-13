@@ -446,100 +446,106 @@
   "askNexara": "Demander à Nexara",
   "productDescriptions": {
     "Klassischer Blazer": {
-      "description": "Ce blazer classique, confectionné en laine italienne haut de gamme, s'adresse au gentleman moderne. Sa silhouette intemporelle et sa coupe soignée apportent une élégance naturelle à chaque tenue. Idéal pour les réunions professionnelles, les occasions formelles et un quotidien raffiné.",
-      "features": ["Laine italienne premium (Super 120s)", "Coupe classique à 2 boutons", "Doublure en viscose", "Deux poches latérales avec passepoil", "Poche poitrine pour mouchoir", "Parfait pour le business et les occasions formelles"],
-      "materials": ["90% laine peignée (italienne, Super 120s)", "10% cachemire", "Doublure: 100% viscose"],
-      "care": ["Nettoyage à sec uniquement", "Ne pas javelliser", "Ne pas sécher à la machine", "Repasser à basse température", "Suspendre sur cintre"]
+      "description": "Le tailoring réinventé pour le quotidien moderne. Ce blazer renonce aux épaulettes rigides et aux entoilages raides pour suivre la ligne naturelle des épaules. Le résultat est une veste aussi confortable qu'un cardigan, mais avec l'autorité d'un costume sur mesure classique. Réalisé en laine mérinos 100 % pure, il est la base idéale pour passer sans transition du bureau au dîner.",
+      "features": ["Flanelle de laine mérinos légère, portable toute l'année", "Déstructuré, sans épaulettes rigides", "Poches plaquées", "Demi-doublure"],
+      "materials": ["Tissu extérieur : 100 % flanelle de laine mérinos légère (portable toute l'année)", "Construction : déstructurée (sans épaulettes rigides) pour une silhouette naturelle", "Détails : poches plaquées pour un look plus décontracté, demi-doublure"],
+      "care": ["Nettoyage à sec recommandé", "Ne pas laver et ne pas sécher au sèche-linge", "Aérer après le port et suspendre sur un cintre", "Brosser délicatement si nécessaire", "Lisser à la vapeur à distance, ne pas repasser directement"]
     },
     "Polo Hemd": {
-      "description": "Ce polo classique en coton égyptien premium allie élégance intemporelle et confort absolu. Sa confection soignée et sa matière de qualité en font une pièce idéale pour les looks casual chic comme pour les moments de détente. Un essentiel qui traverse les saisons.",
-      "features": ["Coton égyptien premium", "Forme polo classique", "Patte de boutonnage avec boutons-pression", "Bord de col et manche de couleur contrastante", "Ourlet de manche coupé lâche", "Coutures d'épaule renforcées pour la durabilité"],
-      "materials": ["100% coton égyptien", "Poids: 200 g/m²", "Savoir-faire de haute qualité"],
-      "care": ["Laver à la machine à 30°C", "Laver avec des couleurs similaires", "Sécher à basse température", "Repasser à température moyenne"]
+      "description": "Le classique, libéré des logos criards. Notre polo se concentre uniquement sur la coupe et la qualité du matériau. Le col spécialement construit garde sa forme toute la journée et ne se replie pas de façon disgracieuse. Un ajustement impeccable aux épaules et aux bras fait de ce polo le premier choix pour une allure soignée et naturelle.",
+      "features": ["Coton piqué serré ou maille mérinos fine", "Col une pièce sans couture", "Aucun logo brodé", "Ajustement impeccable aux épaules et aux bras"],
+      "materials": ["Tissu extérieur : coton piqué serré ou maille mérinos fine", "Col : col une pièce sans couture (one-piece collar) pour une tenue élégante", "Marque : luxe invisible, aucun logo brodé sur la poitrine"],
+      "care": ["Coton piqué : lavage en machine à 30 °C, à l'envers", "Maille mérinos : cycle laine et séchage à plat", "Ne pas sécher au sèche-linge", "Repasser à température basse à moyenne"]
     },
     "Knit Zip-Polo": {
-      "description": "Le Knit Zip-Polo associe l'allure d'un polo classique à la praticité d'un col zippé. Confectionné dans une maille fine, il offre une excellente liberté de mouvement et un confort respirant au quotidien.",
-      "features": ["Structure fine en mélange coton premium", "Fermeture éclair pratique 1/4", "Coupe ajustée", "Fermetures éclair YKK de haute qualité", "Bandes élastiques et ourlets de manche", "Aspect sportif et moderne"],
-      "materials": ["90% coton, 10% polyester", "Qualité maille fine", "Durable et stable en forme"],
-      "care": ["Laver à la machine à 30°C (cycle délicat)", "Laver à l'envers", "Sécher à plat", "Repasser à basse température"]
+      "description": "L'interprétation moderne de l'esthétique « Old Money ». Le Knit Zip-Polo fait le pont entre la formalité d'une chemise et le confort d'un pull. Réalisé en laine mérinos extra-fine, il offre une silhouette nette et structurée qui s'adapte à la température du corps. Le zip métallique marquant apporte une touche froide et architecturale. La pièce idéale pour le bureau, la soirée et tout ce qui se trouve entre les deux.",
+      "features": ["Laine mérinos extra-fine", "Zip métallique YKK 1/4", "Col polo structuré en maille fine", "Broderie Joumonde ton sur ton"],
+      "materials": ["Tissu extérieur : 100 % laine mérinos extra-fine (respirante et thermorégulatrice)", "Quincaillerie : zip métallique YKK 1/4 finition argent mat/gunmetal", "Col : col polo structuré et stable en maille fine", "Marque : broderie Joumonde ton sur ton, à 3 cm au-dessus du poignet gauche"],
+      "care": ["Cycle laine à 30 °C avec un détergent pour laine", "Fermer le zip et laver à l'envers", "Sécher à plat", "Ne pas sécher au sèche-linge", "Ne pas utiliser d'eau de Javel", "Repasser à basse température"]
     },
     "Bundfalthose": {
-      "description": "Ce pantalon à pinces classique allie élégance intemporelle et confort au quotidien. Son mélange de coton premium et ses pinces soigneusement travaillées en font une pièce idéale pour le bureau comme pour les loisirs.",
-      "features": ["Pinces classiques pour une silhouette élégante", "Coutures renforcées pour la durabilité", "Poches latérales", "Fermeture classique à bouton et fermeture éclair", "Ceinture intérieure ajustable pour un ajustement parfait", "Palette de couleurs moderne et intemporelle"],
-      "materials": ["98% coton, 2% élasthane", "Tissu twill durable", "Sensation agréable et durable"],
-      "care": ["Laver à la machine à 40°C", "Laver avec des couleurs similaires", "Sécher à basse température", "Repasser légèrement si nécessaire"]
+      "description": "Le pont entre la couture traditionnelle et le chic décontracté moderne. Le double pli à la taille donne à ce pantalon non seulement un caractère marqué et classique, mais aussi une liberté de mouvement exceptionnelle. Grâce aux adjusters métalliques latéraux, la taille s'ajuste toujours parfaitement, sans ceinture. Un design qui a de la tenue.",
+      "features": ["Double pli à la taille", "Adjusters latéraux au lieu d'une ceinture", "Coupe fuselée élégante", "Twill de coton épais ou laine vierge fine"],
+      "materials": ["Tissu extérieur : twill de coton épais et serré ou laine vierge fine", "Taille : adjusters latéraux (boucles latérales pour régler le tour de taille), aucune ceinture nécessaire", "Coupe : double pli pour plus de volume sur la cuisse, s'affinant élégamment vers le bas"],
+      "care": ["Laine vierge : nettoyage à sec", "Twill de coton : lavage en machine à 30 °C, à l'envers", "Ne pas sécher au sèche-linge, sécher sur cintre", "Repasser à la vapeur ou à température moyenne, remodeler les plis"]
     },
     "Elegante Weste": {
-      "description": "Ce gilet en laine raffiné apporte la touche finale aux tenues les plus soignées. Sa structure élégante et sa fabrication premium donnent immédiatement du caractère à la silhouette. Parfait en superposition pour les occasions formelles et les looks chic décontractés.",
-      "features": ["Tissu mélange laine premium", "Encolure classique en V", "Quatre poches extérieures", "Poche intérieure pour les petits objets", "Sangle arrière ajustable", "Patte de boutons élégante avec boutons en nacre"],
-      "materials": ["85% laine peignée, 15% soie", "Doublure jacquard de haute qualité", "Fabrication premium"],
-      "care": ["Nettoyage à sec recommandé", "Ranger sur cintre", "Protéger du soleil intense", "Nettoyage professionnel si nécessaire"]
+      "description": "La pièce de layering par excellence. Ce gilet apporte une structure architecturale à chaque tenue. Porté sous le blazer assorti, il complète le look sartorial ; porté sur une simple chemise Oxford ou un t-shirt, il devient une déclaration de style à part entière. La sangle réglable au dos en cupro fluide garantit une coupe tranchante et parfaitement ajustée.",
+      "features": ["Flanelle de laine mérinos, assortie au blazer", "Dos en cupro avec sangle réglable", "Boucle métallique massive", "Boutons en corne assortis"],
+      "materials": ["Tissu avant : 100 % flanelle de laine mérinos (parfaitement assortie au blazer)", "Dos : 100 % cupro avec sangle réglable et boucle métallique massive", "Boutons : boutons en corne assortis à la couleur"],
+      "care": ["Nettoyage à sec recommandé", "Ne pas laver et ne pas sécher au sèche-linge", "Suspendre sur un cintre", "Ne pas utiliser d'eau de Javel", "Repasser à basse température avec un tissu intermédiaire"]
     },
     "Quarter Zipper": {
-      "description": "Ce quarter zip en mélange cachemire luxueux crée l'équilibre parfait entre élégance et confort. Son col zippé permet de moduler facilement la tenue selon la température, tandis que la maille premium offre un toucher exceptionnel. Une pièce d'investissement pour une garde-robe exigeante.",
-      "features": ["Mélange cachemire-coton premium", "Fermeture éclair 1/4 pour la flexibilité", "Col ras du cou côtelé", "Bandes élastiques et ourlets de manche", "Savoir-faire de haute qualité", "Design intemporel et discret"],
-      "materials": ["50% cachemire, 50% coton", "Ultra-doux et respirant", "Durable et de haute qualité"],
-      "care": ["Lavage à la main ou cycle délicat à 30°C", "Utiliser un détergent doux", "Sécher à plat", "Ne pas repasser - sécher à l'air"]
+      "description": "Le côté sportif du style de vie « Old Money ». Le Quarter Zipper allie le confort d'un épais French terry à un col net et architectural. Le zip métallique marquant et le tirant en cuir raffiné apportent des accents tactiles qui distinguent cette pièce d'un vêtement d'intérieur ordinaire. Parfait par-dessus un t-shirt ou une chemise.",
+      "features": ["French terry épais 450 g/m²", "Zip métallique YKK 1/4", "Tirant en cuir véritable", "Col montant stable"],
+      "materials": ["Tissu extérieur : coton French terry épais 450 g/m²", "Quincaillerie : zip métallique YKK 1/4 avec tirant en cuir véritable", "Col : col montant stable à l'intérieur lisse"],
+      "care": ["Lavage en machine à 30 °C, à l'envers", "Fermer le zip et tenir le tirant en cuir à l'écart de l'humidité", "Sécher sur cintre ou à plat, ne pas sécher au sèche-linge", "Repasser à basse température"]
     },
     "Strickpullover": {
-      "description": "Ce pull en cachemire premium incarne un luxe discret et un confort exceptionnel. Sa matière ultra-douce tombe parfaitement et dessine une silhouette élégante en toutes circonstances. Un classique durable à porter année après année.",
-      "features": ["100% cachemire premium", "Dos sans couture (couture latérale uniquement)", "Col ras du cou côtelé et poignets", "Coupe élégante et flatteuse", "Savoir-faire de haute qualité", "Équilibre parfait entre l'élégance et le confort"],
-      "materials": ["100% cachemire de qualité premium", "À longue fibre et doux", "Élégance intemporelle"],
-      "care": ["Lavage à la main à l'eau froide", "Utiliser un détergent spécifique cachemire", "Sécher à plat sur une surface plane", "Ne pas tordre ni serrer"]
+      "description": "Lourd, structuré et d'une qualité sans compromis. Ce pull en maille est conçu pour les jours plus froids et offre une tombée ferme et masculine. La texture côtelée volumineuse donne à la pièce une profondeur et un toucher incroyables, tandis que le mélange de fils épais isole parfaitement la chaleur du corps. Un pull qui donne l'impression de porter une armure protectrice de pur confort.",
+      "features": ["Mélange coton-mérinos épais", "Motif de maille marqué et grossier", "Poignets côtelés renforcés", "Sans irritation et stable"],
+      "materials": ["Tissu extérieur : mélange coton-mérinos épais (sans irritation, lourd et stable)", "Texture : motif de maille marqué et grossier (p. ex. fisherman's rib)", "Poignets : poignets côtelés renforcés qui ne se détendent pas"],
+      "care": ["Cycle laine à 30 °C avec un détergent pour laine, à l'envers", "Ne pas essorer", "Sécher à plat, ne pas suspendre", "Ne pas sécher au sèche-linge", "Ne pas repasser directement, lisser si besoin à la vapeur à distance"]
     },
     "Leinenhose": {
-      "description": "Ce pantalon en lin léger est une pièce clé de l'été pour l'homme soucieux de son style. Réalisé en lin pur de qualité supérieure, il offre une excellente respirabilité et une allure à la fois décontractée et élégante. Idéal pour les journées chaudes.",
-      "features": ["100% lin pur irlandais", "Coupe décontractée et élégante", "Deux grandes poches avant", "Volants latéraux ajustables", "Fermeture classique à bouton", "Variations de couleur naturelles pour l'authenticité"],
-      "materials": ["100% lin irlandais", "Naturel et respirant", "Respectueux de l'environnement"],
-      "care": ["Laver à la machine à 30°C", "Laver avec des couleurs similaires", "Sécher à plat ou suspendu", "Vaporiser légèrement ou repasser avec un chiffon humide"]
+      "description": "La décontraction sans compromis sur l'esthétique. Réalisé en lin épais et respirant, ce pantalon est la réponse idéale aux températures chaudes. Le tissu a été délicatement prélavé pour garantir une douceur immédiate et le drapé détendu caractéristique du « Quiet Luxury ». Parfait avec des mocassins et une chemise ample.",
+      "features": ["Lin épais prélavé", "Braguette à boutons dissimulée avec véritables boutons en corne", "Coupe droite relaxed", "Drapé élégant et détendu"],
+      "materials": ["Tissu extérieur : 100 % lin épais prélavé (se froisse avec noblesse, jamais de façon brouillonne)", "Fermeture : braguette à boutons dissimulée avec véritables boutons en corne", "Coupe : droite relaxed pour une circulation d'air maximale"],
+      "care": ["Lavage en machine à 30 °C, cycle délicat", "Laver avec des couleurs similaires", "Sécher sur cintre, ne pas sécher au sèche-linge", "Le lin est fait pour se froisser, repasser humide à haute température si besoin"]
     },
     "Oversized Hoodie": {
-      "description": "Ce hoodie oversize est un incontournable du vestiaire streetwear. Sa coupe ample et son coton premium garantissent un confort maximal sans compromis sur le style. Parfait pour des looks urbains casual au quotidien.",
-      "features": ["100% coton premium", "Coupe oversize et décontractée", "Poche kangourou avant avec fermeture éclair", "Cordons de serrage ajustables dans la capuche", "Intérieur brossé pour un confort supplémentaire", "Coutures flatlock durables"],
-      "materials": ["100% coton biologique", "Poids 280 g/m²", "Durable et stable en forme"],
-      "care": ["Laver à la machine à 30°C", "Retourner avant le lavage", "Sécher à basse température ou suspendre", "Repasser à basse température si nécessaire"]
+      "description": "Le hoodie épais par excellence. Nous avons pris le sweat à capuche classique et élevé chaque détail au niveau premium. Le tissu de 450 grammes assure une tombée parfaite, légèrement carrée. La capuche doublée tombe avec volume dans la nuque, et la doublure douce en gaufré dans la poche kangourou est un détail d'artisanat pur que seul celui qui le porte ressent.",
+      "features": ["French terry épais 450 g/m²", "Capuche à double épaisseur", "Poche kangourou à l'intérieur en maille gaufrée", "Tombée légèrement carrée"],
+      "materials": ["Tissu extérieur : coton French terry épais 450 g/m²", "Capuche : double épaisseur pour une tenue massive et harmonieuse dans la nuque", "Détails : intérieur de la poche kangourou en maille gaufrée douce"],
+      "care": ["Lavage en machine à 30 °C, à l'envers", "Laver avec des couleurs similaires", "Sèche-linge à basse température ou séchage sur cintre", "Repasser à basse température"]
     },
     "T-Shirt": {
-      "description": "Ce t-shirt graphique en édition limitée est bien plus qu'une pièce basique, c'est une véritable signature. Son coton premium et son visuel exclusif en font un favori immédiat du vestiaire. Produit en quantité limitée pour préserver son caractère unique.",
-      "features": ["100% coton premium", "Graphique exclusif en édition limitée", "Encolure ras du cou classique", "Traitement d'impression professionnel", "Couleurs durables grâce aux techniques d'impression spéciales", "Ajustement confortable et classique"],
-      "materials": ["100% coton biologique", "150 g/m² léger", "Sensation douce sur la peau"],
-      "care": ["Laver à la machine à 30°C (cycle délicat)", "Laver le graphique vers l'intérieur", "Sécher à très basse température", "Ne pas repasser directement sur le graphique"]
+      "description": "Le t-shirt parfait existe. Nous avons mis fin à la quête du basique idéal. Avec un poids de 250 g/m², ce t-shirt tombe de façon lourde et structurée, ne laisse rien transparaître et garde sa forme exacte après d'innombrables lavages. Le col côtelé ajusté et robuste encadre parfaitement le visage. Pas un sous-vêtement, mais une pièce forte à part entière.",
+      "features": ["Jersey épais 250 g/m²", "Totalement opaque", "Col côtelé ajusté qui ne se détend pas", "Maille tubulaire sans coutures latérales gênantes"],
+      "materials": ["Tissu extérieur : jersey de coton épais 250 g/m² (totalement opaque)", "Col : col côtelé ajusté et serré qui ne se détend pas", "Construction : maille tubulaire (tubular knit) sans coutures latérales gênantes"],
+      "care": ["Lavage en machine à 30 °C, à l'envers", "Laver avec des couleurs similaires", "Sèche-linge à basse température ou séchage sur cintre", "Repasser à température moyenne"]
     },
     "Cargo Pants": {
-      "description": "Ce pantalon cargo associe fonctionnalité et esthétique streetwear contemporaine. Ses multiples poches utilitaires sont pensées pour le quotidien sans alourdir la ligne. Une construction solide et des coloris intemporels pour une pièce aussi pratique que stylée.",
-      "features": ["Matériau solide en toile coton", "Six poches cargo fonctionnelles", "Bandes latérales ajustables pour l'ajustement", "Détails de fermeture éclair sur les jambes", "Silhouette effilée pour un look moderne", "Couture double pour la durabilité"],
-      "materials": ["100% toile coton", "Poids 12 oz", "Durable et résistant à l'eau"],
-      "care": ["Laver à la machine à 40°C", "Laver avec des couleurs similaires", "Sécher à la machine ou suspendre", "Repasser uniquement si nécessaire"]
+      "description": "Le design utilitaire rencontre l'élégance sur mesure. Ce pantalon cargo libère le look workwear classique de tout volume inutile. Le twill de coton épais assure une tombée parfaitement droite, tandis que les poches plates et dissimulées offrent un maximum de fonctionnalité avec une silhouette tranchante. Un pantalon qui ne réclame pas l'attention, mais montre immédiatement l'importance accordée à la structure et à une finition premium.",
+      "features": ["Twill de coton épais", "Zips YKK dissimulés sur les poches", "Poches cargo plates intégrées aux coutures", "Coupe droite avec bas de jambe légèrement fuselé"],
+      "materials": ["Tissu extérieur : twill de coton 100 % épais (heavyweight cotton twill, env. 350 g/m²)", "Quincaillerie : zips YKK dissimulés sur les poches, bouton métallique robuste à la taille", "Poches : poches cargo plates intégrées aux coutures, sans rabats volumineux pour une silhouette épurée", "Coupe : droite avec bas de jambe légèrement fuselé"],
+      "care": ["Lavage en machine à 30 °C, à l'envers", "Fermer les zips et le bouton avant le lavage", "Laver avec des couleurs similaires", "Sèche-linge à basse température ou séchage sur cintre", "Repasser à température moyenne"]
     },
     "Kaschmirpullover": {
-      "description": "Le cachemire doux et la silhouette épurée font de ce pull un essentiel intemporel.",
-      "features": ["Cachemire doux", "Silhouette intemporelle", "Finitions côtelées"],
-      "materials": ["Mélange cachemire"],
-      "care": ["Laver à la main ou en cycle laine", "Sécher à plat"]
+      "description": "Un chef-d'œuvre de discrétion. Ce pull est tricoté dans le cachemire à deux fils le plus fin, qui allie une douceur incomparable à une grande durabilité. La coupe est décontractée mais précise, pensée pour tomber avec élégance sur une chemise Oxford ou avec désinvolture sur un pantalon à pinces. Un investissement sans compromis qui gagne en caractère avec les années. Aucun logo visible, seulement un luxe que l'on ressent.",
+      "features": ["Cachemire mongol à deux fils", "Coupe décontractée et précise", "Finitions côtelées fines et stables", "Aucun logo visible à l'extérieur"],
+      "materials": ["Tissu extérieur : 100 % cachemire mongol pur à deux fils (fil 2-ply pour une durabilité maximale et un boulochage minimal)", "Poignets : finitions côtelées fines et stables aux manches et à l'ourlet", "Marque : impression douce Joumonde sans irritation dans la nuque, aucun logo visible à l'extérieur"],
+      "care": ["Lavage à la main à 20 °C ou cycle laine avec un détergent doux pour laine", "Ne pas essorer, presser l'eau délicatement", "Sécher à plat sur une serviette", "Ne pas sécher au sèche-linge", "Ne pas utiliser d'eau de Javel", "Repasser à basse température, sans vapeur"]
     },
     "Oxford Hemd": {
-      "description": "Confectionnée en coton Oxford texturé, cette chemise associe confort et allure soignée au quotidien.",
-      "features": ["Tissu coton Oxford", "Col classique", "Facile à assortir"],
-      "materials": ["Coton"],
-      "care": ["Laver à basse température", "Repasser à température moyenne"]
+      "description": "Le socle inébranlable de toute garde-robe. Notre chemise Oxford est réalisée en coton Supima épais, opaque et qui s'adoucit à chaque lavage sans perdre sa forme. Le col boutonné caractéristique s'enroule en un arc parfait autour du cou, tandis que les véritables boutons en nacre apportent une touche de luxe discrète mais indéniable.",
+      "features": ["Tissage Oxford en Supima", "Col boutonné au roulé parfait", "Boutons en nacre", "Opaque et stable"],
+      "materials": ["Tissu extérieur : tissage Oxford Supima épais et structuré (100 % coton)", "Col : col boutonné classique au « roulé » parfait", "Boutons : boutons en nacre épais et chatoyants"],
+      "care": ["Lavage en machine à 40 °C", "Fermer les boutons avant le lavage", "Sèche-linge à basse température ou séchage sur cintre", "Ne pas utiliser d'eau de Javel", "Repasser légèrement humide à haute température"]
     },
     "Wollmantel": {
-      "description": "Une laine chaude et une coupe classique font de ce manteau un compagnon élégant pour les journées fraîches.",
-      "features": ["Mélange de laine chaud", "Coupe classique", "Style intemporel"],
-      "materials": ["Mélange de laine", "Doublure"],
-      "care": ["Nettoyage à sec recommandé", "Ranger sur un cintre large"]
+      "description": "Un manteau qui traverse les générations. Grâce à sa forte teneur en cachemire, ce manteau en laine offre une isolation thermique incomparable avec une tombée douce et élégante. La coupe est intemporelle et structurée, avec un revers classique qui souligne les tenues formelles et valorise aussitôt les looks décontractés. Le vrai savoir-faire se voit dans les détails : des véritables boutons en corne à la doublure fluide en cupro. Une véritable déclaration d'élégance discrète.",
+      "features": ["Laine vierge épaisse avec cachemire", "Doublure fluide en cupro", "Véritables boutons en corne foncée", "Revers classique"],
+      "materials": ["Tissu extérieur : 80 % laine vierge épaisse, 20 % cachemire pour une tombée fluide et douce", "Doublure : 100 % cupro respirant (toucher soyeux, évite l'électricité statique)", "Quincaillerie : véritables boutons en corne foncée à la veinure discrète"],
+      "care": ["Nettoyage à sec uniquement", "Ne pas laver et ne pas sécher au sèche-linge", "Aérer après le port et suspendre sur un cintre large", "Brosser délicatement si nécessaire", "Lisser les plis à la vapeur à distance, ne pas repasser directement"]
     },
     "Ledergürtel": {
-      "description": "Une ceinture en cuir lisse avec une boucle métallique discrète, idéale pour compléter une tenue élégante ou décontractée.",
-      "features": ["Cuir lisse", "Boucle métallique discrète", "Facile à assortir"],
-      "materials": ["Cuir", "Boucle métallique"],
-      "care": ["Nettoyer avec un chiffon doux", "Protéger de l'humidité et du soleil direct"]
+      "description": "Un accessoire conçu non pas pour une saison, mais pour toute une vie. Réalisée en cuir pleine fleur tanné végétal, cette ceinture développe à chaque port une patine unique et personnelle. La lourde boucle en laiton brossé souligne l'approche puriste du « Quiet Luxury ». Pas de similicuir qui s'écaille, pas de ferrures bon marché, seulement un savoir-faire honnête et massif qui valorise immédiatement chaque tenue.",
+      "features": ["Cuir pleine fleur tanné végétal", "Boucle en laiton massif brossé", "Bords polis à la main et cirés", "Aucune couche collée"],
+      "materials": ["Matériau principal : 100 % cuir pleine fleur tanné végétal", "Boucle : laiton massif brossé", "Finition : bords polis à la main et cirés, aucune couche collée"],
+      "care": ["Ne pas laver", "Essuyer avec un chiffon doux et sec", "Nourrir de temps en temps avec un baume pour cuir incolore", "Protéger de l'humidité, de la chaleur et du soleil direct", "Polir la boucle en laiton avec un chiffon sec"]
     },
     "Trainerhose": {
-      "description": "Ce pantalon de survêtement est un essentiel athleisure moderne qui combine confort et style. Sa coupe fuselée et sa matière premium le rendent idéal pour l'entraînement, les moments de détente et les tenues casual soignées. Intemporel, polyvalent et facile à porter.",
-      "features": ["Mélange coton-polyester premium", "Coupe effilée avec un attrait moderne", "Deux poches avant profondes", "Dos élastique avec cordon de serrage", "Poches à fermeture éclair à la cheville (facultatif)", "Traitement Softshell pour un confort supplémentaire"],
-      "materials": ["80% coton, 20% polyester", "Tissé et peigné", "Respirant et stable en forme"],
-      "care": ["Laver à la machine à 30°C", "Laver avec des couleurs similaires", "Sécher à basse température", "Repasser légèrement si désiré"]
+      "description": "Un vêtement d'intérieur qui domine la pièce. Ce pantalon de jogging est réalisé dans le même tissu épais que notre hoodie signature. Grâce au poids du coton, il tombe de façon extrêmement droite et nette, sans former de poches aux genoux. Les gros cordons à lourds embouts en laiton subliment le design : le pantalon fait belle figure non seulement sur le canapé, mais aussi dans la rue.",
+      "features": ["French terry épais 450 g/m²", "Gros cordons en coton avec embouts en laiton", "Larges poignets côtelés élastiques", "Tombée droite et nette"],
+      "materials": ["Tissu extérieur : French terry épais 450 g/m² (assorti au hoodie)", "Cordons : cordons de coton torsadés et épais avec embouts en laiton massif", "Bas de jambe : larges poignets côtelés élastiques"],
+      "care": ["Lavage en machine à 30 °C, à l'envers", "Laver avec des couleurs similaires", "Sèche-linge à basse température ou séchage sur cintre", "Repasser à basse température"]
+    },
+    "Jeans": {
+      "description": "L'artisanat authentique du denim dans sa forme la plus pure. Ce jean renonce volontairement à l'élasthanne artificiel et mise sur un véritable denim selvedge épais qui s'adapte parfaitement à votre corps et à vos mouvements avec le temps. Une coupe droite et sans compromis qui dessine une silhouette extrêmement nette. Un jean qu'il faut faire vieillir pour ne plus jamais vouloir l'enlever.",
+      "features": ["Denim selvedge rigide 12,5 oz", "Sans stretch artificiel", "Rivets en cuivre massif", "Coupe droite et nette"],
+      "materials": ["Tissu extérieur : denim selvedge rigide 12,5 oz (100 % coton, sans stretch artificiel)", "Délavage : rinse wash doux (assoupli, mais à la couleur profonde)", "Quincaillerie : rivets en cuivre massif et bouton métallique gravé"],
+      "care": ["Lavage en machine à 30 °C, à l'envers", "Laver séparément les premières fois, car le denim selvedge peut déteindre", "Laver le plus rarement possible pour préserver la couleur et la coupe", "Ne pas sécher au sèche-linge, sécher sur cintre", "Repasser à température moyenne"]
     }
   }
 }

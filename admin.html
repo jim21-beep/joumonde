@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin - Joumonde</title>
+    <link rel="icon" type="image/png" href="assets/images/joumonde-logo.png">
+    <link rel="stylesheet" href="assets/css/admin.css?v=1">
+    <script src="assets/js/config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/supabase-client.js"></script>
+</head>
+<body>
+    <header class="admin-header">
+        <h1>JOUMONDE <span>Admin</span></h1>
+        <div class="admin-header-actions" id="admin-actions" hidden>
+            <button type="button" id="admin-refresh">Aktualisieren</button>
+            <button type="button" id="admin-logout">Abmelden</button>
+        </div>
+    </header>
+
+    <main class="admin-main">
+        <section id="admin-login" class="admin-card admin-login">
+            <h2>Anmelden</h2>
+            <form id="admin-email-form">
+                <label for="admin-email">E-Mail</label>
+                <input id="admin-email" type="email" autocomplete="email" required>
+                <button type="submit">Code senden</button>
+            </form>
+            <form id="admin-code-form" hidden>
+                <label for="admin-code">6-stelliger Code aus der E-Mail</label>
+                <input id="admin-code" type="text" inputmode="numeric" pattern="\d{6}" maxlength="6" autocomplete="one-time-code" required>
+                <button type="submit">Anmelden</button>
+            </form>
+            <p id="admin-login-message" class="admin-message" role="status"></p>
+        </section>
+
+        <section id="admin-app" hidden>
+            <div class="admin-toolbar">
+                <input id="admin-search" type="search" placeholder="Suche nach Nummer, Name, E-Mail, Produkt">
+                <select id="admin-filter-status">
+                    <option value="">Alle Status</option>
+                    <option value="Bearbeitung">Bearbeitung</option>
+                    <option value="Versendet">Versendet</option>
+                    <option value="Geliefert">Geliefert</option>
+                    <option value="Storniert">Storniert</option>
+                </select>
+                <select id="admin-filter-payment">
+                    <option value="">Alle Zahlungen</option>
+                    <option value="pending">Offen</option>
+                    <option value="paid">Bezahlt</option>
+                    <option value="failed">Fehlgeschlagen</option>
+                    <option value="refunded">Rückerstattet</option>
+                </select>
+            </div>
+            <div class="admin-stats" id="admin-stats"></div>
+            <p id="admin-message" class="admin-message" role="status"></p>
+            <div class="admin-card admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Datum</th>
+                            <th>Bestellung</th>
+                            <th>Kunde</th>
+                            <th>Total</th>
+                            <th>Zahlung</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-orders"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div class="admin-modal" id="admin-modal" hidden>
+        <div class="admin-modal-box" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title">
+            <button type="button" class="admin-modal-close" id="admin-modal-close" aria-label="Schliessen">&times;</button>
+            <h2 id="admin-modal-title"></h2>
+            <div id="admin-modal-body"></div>
+        </div>
+    </div>
+
+    <script src="assets/js/admin.js"></script>
+</body>
+</html>

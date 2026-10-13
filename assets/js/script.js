@@ -1,4 +1,4 @@
-﻿// Dropdown-Logik für alle Old Money Produkte
+// Dropdown-Logik für alle Old Money Produkte
 function toggleBlazerColorDropdown(e) { if (e) e.stopPropagation();
     const btn = document.getElementById('blazer-color-dropdown-btn');
     const list = document.getElementById('blazer-color-dropdown-list');
@@ -1718,23 +1718,23 @@ function toggleSearch() {
     
     const products = [
         // Live products
-        { name: 'Klassischer Blazer', price: 79.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Blazer', section: 'old-money', status: 'live' },
-        { name: 'Polo Hemd', price: 34.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Shirts & Polos', section: 'old-money', status: 'live' },
-        { name: 'Knit Zip-Polo', price: 44.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Shirts & Polos', section: 'old-money', status: 'live' },
-        { name: 'Bundfalthose', price: 64.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'old-money', status: 'live' },
-        { name: 'Elegante Weste', price: 69.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Westen', section: 'old-money', status: 'live' },
-        { name: 'Quarter Zipper', price: 79.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Knitwear', section: 'old-money', status: 'live' },
-        { name: 'Strickpullover', price: 89.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Knitwear', section: 'old-money', status: 'live' },
-        { name: 'Kaschmirpullover', price: 149.90, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Knitwear', section: 'old-money', status: 'live' },
-        { name: 'Oxford Hemd', price: 59.90, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Shirts & Polos', section: 'old-money', status: 'live' },
-        { name: 'Wollmantel', price: 249.90, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Mäntel', section: 'old-money', status: 'live' },
-        { name: 'Leinenhose', price: 54.99, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'old-money', status: 'live' },
-        { name: 'Oversized Hoodie', price: 49.99, collection: 'Casual', mainCategory: 'Bekleidung', subCategory: 'Hoodies', section: 'streetwear', status: 'live' },
-        { name: 'T-Shirt', price: 24.99, collection: 'Casual', mainCategory: 'Bekleidung', subCategory: 'Tees', section: 'streetwear', status: 'live' },
-        { name: 'Cargo Pants', price: 59.99, collection: 'Casual', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'streetwear', status: 'live' },
-        { name: 'Jeans', price: 59.99, collection: 'Casual', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'streetwear', status: 'live' },
-        { name: 'Trainerhose', price: 44.99, collection: 'Casual', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'streetwear', status: 'live' },
-        { name: 'Ledergürtel', price: 39.90, collection: 'Accessories', mainCategory: 'Accessoires', subCategory: 'Gürtel', section: 'accessories', status: 'live' },
+        { name: 'Klassischer Blazer', price: 490.00, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Blazer', section: 'old-money', status: 'live' },
+        { name: 'Polo Hemd', price: 109.00, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Shirts & Polos', section: 'old-money', status: 'live' },
+        { name: 'Knit Zip-Polo', price: 179.00, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Shirts & Polos', section: 'old-money', status: 'live' },
+        { name: 'Bundfalthose', price: 219.00, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'old-money', status: 'live' },
+        { name: 'Elegante Weste', price: 189.00, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Westen', section: 'old-money', status: 'live' },
+        { name: 'Quarter Zipper', price: 169.00, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Knitwear', section: 'old-money', status: 'live' },
+        { name: 'Strickpullover', price: 249.00, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Knitwear', section: 'old-money', status: 'live' },
+        { name: 'Kaschmirpullover', price: 439.00, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Knitwear', section: 'old-money', status: 'live' },
+        { name: 'Oxford Hemd', price: 159.00, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Shirts & Polos', section: 'old-money', status: 'live' },
+        { name: 'Wollmantel', price: 890.00, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Mäntel', section: 'old-money', status: 'live' },
+        { name: 'Leinenhose', price: 179.00, collection: 'Old Money', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'old-money', status: 'live' },
+        { name: 'Oversized Hoodie', price: 169.00, collection: 'Casual', mainCategory: 'Bekleidung', subCategory: 'Hoodies', section: 'streetwear', status: 'live' },
+        { name: 'T-Shirt', price: 79.00, collection: 'Casual', mainCategory: 'Bekleidung', subCategory: 'Tees', section: 'streetwear', status: 'live' },
+        { name: 'Cargo Pants', price: 209.00, collection: 'Casual', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'streetwear', status: 'live' },
+        { name: 'Jeans', price: 199.00, collection: 'Casual', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'streetwear', status: 'live' },
+        { name: 'Trainerhose', price: 139.00, collection: 'Casual', mainCategory: 'Bekleidung', subCategory: 'Hosen', section: 'streetwear', status: 'live' },
+        { name: 'Ledergürtel', price: 129.00, collection: 'Accessories', mainCategory: 'Accessoires', subCategory: 'Gürtel', section: 'accessories', status: 'live' },
 
         // Planned expansion (categorized)
         { name: 'Custom made AirPods Cases', price: null, collection: 'Accessories', mainCategory: 'Tech-Accessoires', subCategory: 'Cases', section: null, status: 'planned' },
