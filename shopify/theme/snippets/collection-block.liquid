@@ -1,0 +1,116 @@
+{%- comment -%}
+  Params: collection, block_id (optional), show_logo (optional), title (optional), subtitle (optional), limit (optional)
+{%- endcomment -%}
+{%- liquid
+  assign is_casual = false
+  if collection.handle == 'casual'
+    assign is_casual = true
+  endif
+  assign max_items = limit | default: 48
+  assign section_id = block_id
+  if section_id == blank
+    if is_casual
+      assign section_id = 'streetwear'
+    else
+      assign section_id = 'old-money'
+    endif
+  endif
+  assign heading = title | default: collection.title
+  assign sub = subtitle
+  if sub == blank
+    if is_casual
+      assign sub = 'Urban Fashion mit Attitude'
+    elsif collection.handle == 'old-money'
+      assign sub = 'Zeitlose Eleganz und klassischer Luxus'
+    else
+      assign sub = collection.description | strip_html | truncate: 120
+    endif
+  endif
+-%}
+<section id="{{ section_id }}" class="collection-section{% if is_casual %} streetwear-section{% endif %}" data-collection-block>
+  <div class="container">
+    {%- if show_logo -%}<span class="section-logo brand-logo"><span class="brand-logo-text">Joumonde</span></span>{%- endif -%}
+    <h2 class="section-title">{{ heading }}</h2>
+    {%- if sub != blank -%}<p class="section-subtitle">{{ sub }}</p>{%- endif -%}
+
+    <div class="filter-section">
+      <div class="filter-controls">
+        <button class="filter-toggle-btn" type="button" data-filter-toggle>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="4" y1="21" x2="4" y2="14"></line>
+            <line x1="4" y1="10" x2="4" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12" y2="3"></line>
+            <line x1="20" y1="21" x2="20" y2="16"></line>
+            <line x1="20" y1="12" x2="20" y2="3"></line>
+            <line x1="1" y1="14" x2="7" y2="14"></line>
+            <line x1="9" y1="8" x2="15" y2="8"></line>
+            <line x1="17" y1="16" x2="23" y2="16"></line>
+          </svg>
+          Filter
+        </button>
+        <select class="sort-select" data-sort aria-label="Sortieren">
+          <option value="">Sortieren nach</option>
+          <option value="price-asc">Preis: Niedrig → Hoch</option>
+          <option value="price-desc">Preis: Hoch → Niedrig</option>
+          <option value="name-asc">Name: A → Z</option>
+          <option value="newest">Neueste zuerst</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="collection-content">
+      <aside class="filter-sidebar" data-filter-sidebar>
+        <div class="filter-header">
+          <h3>Filter</h3>
+          <button class="filter-close-btn" type="button" data-filter-toggle>✕</button>
+        </div>
+
+        <div class="filter-group">
+          <h4>Preis (CHF)</h4>
+          <div class="price-inputs">
+            <input type="number" data-min placeholder="Min" min="0" aria-label="Mindestpreis in CHF">
+            <span>-</span>
+            <input type="number" data-max placeholder="Max" min="0" aria-label="Höchstpreis in CHF">
+          </div>
+          <div class="price-range">
+            <input type="range" data-range min="0" max="1000" value="1000" aria-label="Preisobergrenze">
+            <span class="range-value">bis <span data-range-value>1000</span> CHF</span>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <h4>Größe</h4>
+          <div class="filter-options">
+            {%- for s in 'XS,S,M,L,XL,XXL' split: ',' -%}
+            <label class="filter-checkbox"><input type="checkbox" data-size value="{{ s }}"><span>{{ s }}</span></label>
+            {%- endfor -%}
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <h4>Farbe</h4>
+          <div class="color-options">
+            <label class="color-checkbox" title="Schwarz"><input type="checkbox" data-color value="schwarz" aria-label="Schwarz"><span class="color-swatch" style="background: #000000;"></span></label>
+            <label class="color-checkbox" title="Weiß"><input type="checkbox" data-color value="weiß" aria-label="Weiß"><span class="color-swatch" style="background: #ffffff; border: 1px solid #ddd;"></span></label>
+            <label class="color-checkbox" title="Navy"><input type="checkbox" data-color value="navy" aria-label="Navy"><span class="color-swatch" style="background: #001f3f;"></span></label>
+            <label class="color-checkbox" title="Grau"><input type="checkbox" data-color value="grau" aria-label="Grau"><span class="color-swatch" style="background: #808080;"></span></label>
+            <label class="color-checkbox" title="Beige"><input type="checkbox" data-color value="beige" aria-label="Beige"><span class="color-swatch" style="background: #f5f5dc;"></span></label>
+            <label class="color-checkbox" title="Burgundy"><input type="checkbox" data-color value="burgundy" aria-label="Burgundy"><span class="color-swatch" style="background: #800020;"></span></label>
+            <label class="color-checkbox" title="Camel"><input type="checkbox" data-color value="camel" aria-label="Camel"><span class="color-swatch" style="background: #C19A6B;"></span></label>
+          </div>
+        </div>
+
+        <button class="filter-reset-btn" type="button" data-filter-reset>Alle Filter zurücksetzen</button>
+      </aside>
+
+      <div class="product-grid" data-product-grid>
+        {%- for product in collection.products limit: max_items -%}
+          {%- render 'product-card', product: product -%}
+        {%- else -%}
+          <p class="jm-empty">In dieser Kollektion sind noch keine Produkte.</p>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>

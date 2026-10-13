@@ -1,20 +1,24 @@
 <footer class="site-footer">
-  <div class="footer-inner">
-    <div class="footer-top">
-      <a class="footer-brand" href="{{ routes.root_url }}">Joumonde</a>
-      <div class="footer-newsletter">
-        <p class="eyebrow">Jetzt anmelden und keine News verpassen</p>
+  <div class="site-footer-inner">
+    {%- assign show_newsletter = false -%}
+    {%- if template.name == 'index' %}{% assign show_newsletter = true %}{% endif -%}
+    <div class="site-footer-top{% unless show_newsletter %} site-footer-top-no-newsletter{% endunless %}">
+      <a class="site-footer-brand" href="{{ routes.root_url }}">Joumonde</a>
+      {%- if show_newsletter -%}
+      <section class="site-footer-newsletter" aria-labelledby="site-footer-newsletter-title">
+        <p class="site-footer-eyebrow" id="site-footer-newsletter-title">JETZT ANMELDEN UND KEINE NEWS VERPASSEN</p>
         <p>Sei der Erste, der von neuen Produkten und exklusiven Angeboten erfährt.</p>
-        {% form 'customer', class: 'newsletter-form' %}
+        {%- form 'customer', class: 'site-footer-newsletter-form' -%}
           <input type="hidden" name="contact[tags]" value="newsletter">
           <input type="email" name="contact[email]" placeholder="E-Mail" aria-label="E-Mail" required>
           <button type="submit" aria-label="Zum Newsletter anmelden">&rsaquo;</button>
-          {% if form.posted_successfully? %}<p class="form-ok">Danke, du bist angemeldet.</p>{% endif %}
-        {% endform %}
-        <p class="legal-note">Mit deiner Anmeldung stimmst du den <a href="/pages/agb">AGB</a> und der <a href="/pages/cookie-policy">Datenschutzerklärung</a> zu.</p>
-      </div>
+        {%- endform -%}
+        {%- if form.posted_successfully? -%}<p class="site-footer-legal-note">Danke, du bist angemeldet.</p>{%- endif -%}
+        <p class="site-footer-legal-note">Mit deiner Anmeldung stimmst du den <a href="/pages/agb">AGB</a> und der <a href="/pages/cookie-policy">Datenschutzerklärung</a> zu.</p>
+      </section>
+      {%- endif -%}
     </div>
-    <div class="footer-links">
+    <div class="site-footer-links">
       <section>
         <h2>Kontakt</h2>
         <a href="mailto:support@joumonde.com">support@joumonde.com</a>
@@ -37,7 +41,9 @@
         <a href="/pages/cookie-policy">Datenschutzerklärung</a>
       </section>
     </div>
-    <div class="footer-bottom">&copy; {{ 'now' | date: '%Y' }} Joumonde. Alle Rechte vorbehalten.</div>
+    <div class="site-footer-bottom">
+      &copy; {{ 'now' | date: '%Y' }} Joumonde. Alle Rechte vorbehalten.
+    </div>
   </div>
 </footer>
 

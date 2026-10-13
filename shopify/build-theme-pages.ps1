@@ -19,7 +19,6 @@ foreach ($name in 'agb','faq','versand','impressum','cookie-policy') {
   if (-not $m.Success) { Write-Warning "$name : kein main"; continue }
   $c = $m.Groups[1].Value
   $c = [regex]::Replace($c, '<script.*?</script>', '', 'Singleline')
-  $c = [regex]::Replace($c, '<h1[^>]*>.*?</h1>', '', 'Singleline')
   $c = [regex]::Replace($c, '<form.*?</form>', '<p>Für Retouren schreibe uns an <a href="mailto:support@joumonde.com">support@joumonde.com</a> mit deiner Bestellnummer.</p>', 'Singleline')
   foreach ($k in $linkMap.Keys) { $c = $c.Replace("href=""$k", "href=""$($linkMap[$k])") }
   $c = $c -replace '\sstyle="[^"]*"', ''
@@ -33,6 +32,8 @@ foreach ($name in 'agb','faq','versand','impressum','cookie-policy') {
 
 $about = @'
 {% raw %}
+<header class="site-info-hero"><h1>Über Joumonde</h1><p>Wo Eleganz auf Komfort trifft</p></header>
+<div class="site-info-content">
 <h2>Wo Eleganz auf Komfort trifft</h2>
 <h3>Unsere Geschichte</h3>
 <p>Joumonde wurde 2025 mit der Vision gegründet, zeitlose Eleganz mit komfortabler Casual-Mode zu verbinden. Unser Name vereint das französische "Jour" (Tag) mit "Monde" (Welt): jeden Tag die Welt der Mode neu interpretieren.</p>
@@ -49,6 +50,7 @@ $about = @'
 </ul>
 <h3>Folge uns auf Instagram</h3>
 <p>Entdecke unsere neuesten Styles und werde Teil der Joumonde Community: <a href="https://instagram.com/joumonde" target="_blank" rel="noopener">@joumonde</a></p>
+</div>
 {% endraw %}
 '@
 [IO.File]::WriteAllText((Join-Path $snip 'page-about.liquid'), $about, $utf8)

@@ -1,0 +1,21 @@
+{%- liquid
+  if section.settings.collection != blank
+    assign col = section.settings.collection
+  else
+    assign col = collections.all
+  endif
+-%}
+{% render 'collection-block', collection: col, show_logo: section.settings.show_logo, title: section.settings.title, subtitle: section.settings.subtitle %}
+
+{% schema %}
+{
+  "name": "Kollektion (Startseite)",
+  "settings": [
+    { "type": "collection", "id": "collection", "label": "Kollektion" },
+    { "type": "text", "id": "title", "label": "Titel", "default": "Old Money Collection" },
+    { "type": "text", "id": "subtitle", "label": "Untertitel" },
+    { "type": "checkbox", "id": "show_logo", "label": "Joumonde-Logo über dem Titel", "default": false }
+  ],
+  "presets": [{ "name": "Kollektion (Startseite)" }]
+}
+{% endschema %}

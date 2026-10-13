@@ -1,12 +1,23 @@
-<a class="product-card" href="{{ product.url }}">
-  <div class="product-card-media">
+{%- liquid
+  assign sizes = ''
+  assign colors = ''
+  for option in product.options_with_values
+    assign oname = option.name | downcase
+    if oname == 'größe' or oname == 'grösse' or oname == 'size'
+      assign sizes = option.values | join: ','
+    elsif oname == 'farbe' or oname == 'color'
+      assign colors = option.values | join: ','
+    endif
+  endfor
+-%}
+<a class="product-card" href="{{ product.url }}" data-price="{{ product.price | divided_by: 100.0 }}" data-sizes="{{ sizes | escape }}" data-colors="{{ colors | escape }}" data-created="{{ product.created_at | date: '%s' }}" data-title="{{ product.title | escape }}">
+  <div class="product-image" style="background: #f5f5f5;">
     {% if product.featured_image %}
-      <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.featured_image.alt | default: product.title | escape }}" loading="lazy" width="800">
-    {% else %}
-      <div class="placeholder"></div>
+      <img src="{{ product.featured_image | image_url: width: 900 }}" alt="{{ product.featured_image.alt | default: product.title | escape }}" loading="lazy" width="900" style="width: 100%; height: 100%; object-fit: cover;">
     {% endif %}
-    {% unless product.available %}<span class="badge">Ausverkauft</span>{% endunless %}
   </div>
-  <h3>{{ product.title }}</h3>
-  <p class="price">{% if product.price_varies %}ab {% endif %}{{ product.price | money }}</p>
+  <div class="product-info">
+    <h3>{{ product.title }}</h3>
+    <p class="product-price">{% if product.price_varies %}ab {% endif %}{{ product.price | money }}</p>
+  </div>
 </a>

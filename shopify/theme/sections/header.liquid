@@ -1,22 +1,54 @@
-<header class="site-header">
-  <div class="header-inner">
-    <button class="nav-toggle" type="button" aria-label="Menü öffnen" aria-expanded="false" data-nav-toggle>
-      <span></span><span></span><span></span>
+<nav class="navbar" aria-label="Hauptnavigation">
+  <div class="container">
+    <div class="logo">
+      <a class="brand-logo" href="{{ routes.root_url }}" style="text-decoration:none"><span class="brand-logo-text">Joumonde</span></a>
+    </div>
+    <button class="mobile-menu-btn" aria-label="Menü" aria-expanded="false" data-mobile-menu>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
     </button>
-    <a class="brand" href="{{ routes.root_url }}">Joumonde</a>
-    <nav class="main-nav" data-nav aria-label="Hauptnavigation">
-      <a href="{{ routes.all_products_collection_url }}">Shop</a>
-      <a href="/collections/old-money">Old Money</a>
-      <a href="/collections/casual">Casual</a>
-      <a href="/pages/about">Über Joumonde</a>
-    </nav>
-    <div class="header-actions">
-      <a href="{{ routes.search_url }}">Suche</a>
-      {% if shop.customer_accounts_enabled %}<a href="{{ routes.account_url }}">Konto</a>{% endif %}
-      <a href="{{ routes.cart_url }}" class="cart-link">Warenkorb <span class="cart-count" data-cart-count>{{ cart.item_count }}</span></a>
+    <ul class="nav-links" data-nav-links>
+      <li><a href="{{ routes.root_url }}"{% if template.name == 'index' %} class="active"{% endif %}>Startseite</a></li>
+      <li><a href="/collections/old-money"{% if collection.handle == 'old-money' %} class="active"{% endif %}>Old Money</a></li>
+      <li><a href="/collections/casual"{% if collection.handle == 'casual' %} class="active"{% endif %}>Casual</a></li>
+      <li class="nav-dropdown" id="nav-dropdown-kollektionen">
+        <button class="nav-dropdown-trigger" type="button" data-nav-dropdown>Kollektionen <span class="nav-dropdown-chevron">▾</span></button>
+        <div class="nav-dropdown-menu">
+          <a class="nav-dropdown-item" href="/collections/accessories" style="text-decoration: none;">Accessoires</a>
+          <div class="nav-dropdown-item">Essentials <span class="nav-soon-badge">Soon</span></div>
+          <div class="nav-dropdown-item">Seasonal <span class="nav-soon-badge">Soon</span></div>
+          <div class="nav-dropdown-item">Gift &amp; Sets <span class="nav-soon-badge">Soon</span></div>
+        </div>
+      </li>
+    </ul>
+    <div class="nav-icons">
+      <a class="search-btn" href="{{ routes.search_url }}" aria-label="Suche">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </a>
+      {%- if shop.customer_accounts_enabled -%}
+      <a class="account-btn" href="{{ routes.account_url }}" aria-label="Konto">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </a>
+      {%- endif -%}
+      <a class="cart-btn" href="{{ routes.cart_url }}" aria-label="Warenkorb">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 8h14l1 13H4L5 8Z"></path>
+          <path d="M9 8V6a3 3 0 0 1 6 0v2"></path>
+        </svg>
+        <span class="cart-count">{{ cart.item_count }}</span>
+      </a>
     </div>
   </div>
-</header>
+</nav>
 
 {% schema %}
 {

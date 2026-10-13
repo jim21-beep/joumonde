@@ -1,12 +1,8 @@
-<section class="hero">
+<section id="home" class="hero">
   <div class="hero-content">
-    <div class="eyebrow">{{ section.settings.eyebrow }}</div>
-    <h1 class="hero-title">{{ section.settings.title }}</h1>
-    <p class="hero-tagline">{{ section.settings.tagline }}</p>
-    <div class="divider"></div>
-    {% if section.settings.button_label != blank %}
-      <a class="btn" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label }}</a>
-    {% endif %}
+    <h2>{{ section.settings.title }}</h2>
+    <p>{{ section.settings.text }}</p>
+    <button class="cta-btn" type="button" data-scroll-to="#old-money">{{ section.settings.button }}</button>
   </div>
 </section>
 
@@ -14,11 +10,9 @@
 {
   "name": "Hero",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Kleiner Titel", "default": "Premium Fashion House" },
-    { "type": "text", "id": "title", "label": "Titel", "default": "Joumonde" },
-    { "type": "text", "id": "tagline", "label": "Untertitel", "default": "Wo zeitlose Eleganz auf urbane Attitude trifft." },
-    { "type": "text", "id": "button_label", "label": "Button Text", "default": "Kollektion entdecken" },
-    { "type": "url", "id": "button_link", "label": "Button Link" }
+    { "type": "text", "id": "title", "label": "Titel", "default": "Entdecke Deinen Style" },
+    { "type": "text", "id": "text", "label": "Text", "default": "Premium Fashion - Von klassischem Old Money bis zu komfortablen Casual Styles" },
+    { "type": "text", "id": "button", "label": "Button", "default": "Jetzt Shoppen" }
   ],
   "presets": [{ "name": "Hero" }]
 }
