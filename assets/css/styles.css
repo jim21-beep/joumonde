@@ -511,7 +511,6 @@ h6 {
 .streetwear-section {
     background: linear-gradient(180deg, #1a1a1a 0%, #0f0f0f 100%);
     position: relative;
-    overflow: hidden;
 }
 
 .streetwear-section::before {
@@ -721,8 +720,12 @@ h6 {
 }
 
 .product-info {
-    padding: 2.5rem;
+    padding: 40px 40px;
     background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+}
+
+.product-card .product-price {
+    margin-bottom: 0;
 }
 
 .product-info h3 {
@@ -749,14 +752,7 @@ h6 {
     margin: -0.5rem 0 1rem;
 }
 
-.cart-item-preorder {
-    margin: 0.25rem 0;
-    color: #78654c;
-    font-size: 0.82rem;
-    font-weight: 600;
-}
-
-.preorder-checkout-note {
+.checkout-payment-note {
     margin: 1rem 0;
     padding: 0.85rem 1rem;
     border-left: 3px solid #89785f;
@@ -2530,7 +2526,7 @@ body.modal-open {
     }
 
     .product-info {
-        padding: 1rem;
+        padding: calc(1rem - 2px) 1rem;
     }
 
     .product-info h3 {
@@ -4172,7 +4168,11 @@ body[data-shop-collection] > #streetwear {
     display: flex;
     gap: 2rem;
     max-width: 100%;
-    overflow-x: hidden;
+}
+
+.collection-section > .container,
+.streetwear-section > .container {
+    overflow: visible;
 }
 
 .filter-sidebar {
@@ -4193,7 +4193,6 @@ body[data-shop-collection] > #streetwear {
 .product-grid {
     flex: 1;
     min-width: 0;
-    overflow-x: hidden;
 }
 
 .filter-header {
@@ -4997,11 +4996,15 @@ button.loading {
     position: sticky;
     top: 100px;
     height: fit-content;
+    display: grid;
+    grid-template-columns: minmax(64px, 0.2fr) minmax(0, 1fr);
+    gap: 1rem;
 }
 
 .gallery-main {
     position: relative;
-    margin-bottom: 1rem;
+    grid-column: 2;
+    grid-row: 1;
 }
 
 .main-image {
@@ -5038,30 +5041,54 @@ button.loading {
 }
 
 .gallery-thumbnails {
+    grid-column: 1;
+    grid-row: 1;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1fr;
     gap: 0.75rem;
+    align-content: start;
 }
 
 .thumbnail {
+    width: 100%;
     aspect-ratio: 1;
     border-radius: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0;
     border: 2px solid transparent;
+    background-color: #f5f5f5;
+    color: inherit;
+    font: inherit;
     transition: all 0.3s ease;
     opacity: 0.6;
 }
 
-.thumbnail:hover {
+.thumbnail:not(:disabled):hover {
     opacity: 0.8;
 }
 
 .thumbnail.active {
     opacity: 1;
     border-color: var(--gold);
+}
+
+.thumbnail:disabled {
+    cursor: default;
+}
+
+.thumbnail:focus-visible {
+    outline: 3px solid var(--gold);
+    outline-offset: 2px;
+}
+
+.thumbnail img {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    object-fit: cover;
 }
 
 /* Image Zoom Overlay */
@@ -5329,8 +5356,8 @@ button.loading {
 }
 
 .color-option.active {
-    border-color: var(--gold);
-    box-shadow: 0 0 0 2px white, 0 0 0 4px var(--gold);
+    border: 3px solid var(--gold) !important;
+    box-shadow: none;
 }
 
 /* Quantity Selector */
@@ -5846,6 +5873,22 @@ button.loading {
     .product-gallery {
         position: relative;
         top: 0;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1rem;
+    }
+
+    .gallery-main,
+    .gallery-thumbnails {
+        grid-column: 1;
+    }
+
+    .gallery-main {
+        grid-row: 1;
+    }
+
+    .gallery-thumbnails {
+        grid-row: 2;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
     .review-summary {
@@ -8201,7 +8244,7 @@ button.loading::after {
     }
 
     .product-info {
-        padding: 0.75rem;
+        padding: calc(0.75rem - 2px) 0.75rem;
     }
 
     .product-info h3 {
@@ -8339,7 +8382,7 @@ button.loading::after {
 
     /* Product card compact */
     .product-info {
-        padding: 1rem;
+        padding: calc(1rem - 2px) 1rem;
     }
 
     .product-info h3 {
@@ -8393,7 +8436,7 @@ button.loading::after {
     }
 
     .product-info {
-        padding: 0.75rem;
+        padding: calc(0.75rem - 2px) 0.75rem;
     }
 
     .btn {
@@ -9354,7 +9397,7 @@ body *:focus-visible {
 }
 
 @media (hover: hover) and (pointer: fine) {
-    body :is(button, input[type="button"], input[type="submit"], [role="button"]):hover {
+    body :is(button, input[type="button"], input[type="submit"], [role="button"]):not(.color-option):hover {
         border-color: #b9aa91 !important;
         background-image: none !important;
         background-color: #e8e2d6 !important;
@@ -9370,7 +9413,7 @@ body *:focus-visible {
         box-shadow: 0 6px 18px rgba(54, 43, 30, 0.12) !important;
     }
 
-    body :is(a, .product-card, .contact-item, .payment-option, .testimonial-card, .faq-item, .about-card, .filter-checkbox, .size-option, .color-option, .dashboard-tab, .stat-card, .quick-action-btn, .order-card, .address-card, .settings-card-compact, .preference-row, .mini-preview-card):hover {
+    body :is(a, .product-card, .contact-item, .payment-option, .testimonial-card, .faq-item, .about-card, .filter-checkbox, .size-option, .dashboard-tab, .stat-card, .quick-action-btn, .order-card, .address-card, .settings-card-compact, .preference-row, .mini-preview-card):hover {
         border-color: #b9aa91 !important;
         box-shadow: 0 8px 24px rgba(54, 43, 30, 0.12) !important;
     }
@@ -9709,6 +9752,7 @@ body .contact-item:hover::before {
         width: 22px;
         height: 22px;
         flex: 0 0 22px;
+        pointer-events: none;
     }
 
     .navbar .logo {

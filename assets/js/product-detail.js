@@ -419,6 +419,7 @@ function changeMainImage(index) {
     // Update active thumbnail
     thumbnails.forEach((thumb, i) => {
         thumb.classList.toggle('active', i === index);
+        thumb.setAttribute('aria-pressed', String(i === index));
     });
 }
 
@@ -536,9 +537,8 @@ function addToCartFromDetail() {
     const quantity = parseInt(document.getElementById('quantity').value);
     
     // Add to cart with size and color
-    const isPreorder = document.getElementById('product-stock-status')?.dataset.preorder === 'true';
     for (let i = 0; i < quantity; i++) {
-        addToCart(productName, price, selectedColor, selectedSize, isPreorder);
+        addToCart(productName, price, selectedColor, selectedSize);
     }
     
     // Show feedback

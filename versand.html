@@ -6,14 +6,7 @@
     <title>Versand & Retouren - Joumonde</title>
     <meta name="description" content="Versandinformationen, Lieferzeiten und Rückgaberecht bei Joumonde. Schnelle Lieferung in die Schweiz und nach Europa.">
     <link rel="icon" type="image/png" href="assets/images/joumonde-logo.png">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EFD7P54PRE"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-EFD7P54PRE');
-    </script>
-    <link rel="stylesheet" href="assets/css/styles.css?v=20261007-mobile-nav-3">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20261012-mobile-nav-4">
     <style>
         .legal-page {
             padding: 8rem 0 6rem;
@@ -104,6 +97,62 @@
             margin-bottom: 2.5rem;
         }
         .back-link:hover { text-decoration: underline; }
+        .return-request-form {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .return-request-form .form-field {
+            display: grid;
+            gap: 0.4rem;
+        }
+        .return-request-form label {
+            font-weight: 600;
+            color: #302a22;
+        }
+        .return-request-form input,
+        .return-request-form select,
+        .return-request-form textarea {
+            width: 100%;
+            padding: 0.8rem 0.9rem;
+            border: 1px solid #d8cdbb;
+            border-radius: 2px;
+            background: #fffdf8;
+            color: #302a22;
+            font: inherit;
+        }
+        .return-request-form textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .return-request-form button {
+            justify-self: start;
+            padding: 0.85rem 1.5rem;
+            border: 0;
+            border-radius: 2px;
+            background: #78654c;
+            color: #fffdf8;
+            font: inherit;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .return-request-form button:disabled {
+            opacity: 0.65;
+            cursor: wait;
+        }
+        .return-request-status {
+            min-height: 1.5em;
+            margin: 0;
+        }
+        .return-request-status[data-state="error"] { color: #a12626; }
+        .return-request-status[data-state="success"] { color: #28613a; }
+        .return-request-honeypot {
+            position: absolute;
+            left: -10000px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
     </style>
     <link rel="stylesheet" href="assets/css/site-footer.css">
     <link rel="stylesheet" href="assets/css/site-pages.css">
@@ -195,12 +244,10 @@
                     Lieferzeiten
                 </h2>
                 <ul>
-                    <li><strong>Schweiz Standard:</strong> 1–3 Werktage</li>
-                    <li><strong>Schweiz Express:</strong> 24 Stunden (Bestellung vor 12 Uhr)</li>
-                    <li><strong>EU Standard:</strong> 5–7 Werktage</li>
-                    <li><strong>EU Express:</strong> 2–3 Werktage</li>
+                    <li><strong>Schweiz:</strong> Die voraussichtliche Lieferzeit wird vor dem Verkaufsstart ergänzt.</li>
+                    <li><strong>EU:</strong> Die voraussichtliche Lieferzeit wird vor dem Verkaufsstart ergänzt.</li>
                 </ul>
-                <p style="margin-top:1rem; font-size:0.9rem; color:#888;">Bestellungen, die werktags bis 14 Uhr eingehen, werden noch am selben Tag versendet. Lieferzeiten beginnen nach Zahlungseingang.</p>
+                <p style="margin-top:1rem; font-size:0.9rem; color:#888;">Verbindliche Lieferzeiten und Versandabläufe werden vor dem Verkaufsstart veröffentlicht.</p>
             </div>
 
             <!-- Versandpartner -->
@@ -231,17 +278,60 @@
             <div class="legal-section">
                 <h2>Retourenprozess</h2>
                 <ol style="padding-left:1.2rem; color:#444; line-height:2;">
-                    <li>Schreibe uns eine E-Mail an <strong>info@joumonde.com</strong> mit Bestellnummer und Grund der Rückgabe.</li>
-                    <li>Du erhältst innerhalb von 24 Stunden eine Bestätigung und das Retourenlabel (CH).</li>
-                    <li>Verpacke die Ware sorgfältig und bringe das Paket zur Post.</li>
-                    <li>Nach Eingang und Prüfung der Ware erfolgt die Rückerstattung auf dein Zahlungsmittel.</li>
+                    <li>Stelle deine Anfrage innerhalb von 14 Tagen nach Erhalt über das <a href="#return-request">Retourenformular</a>.</li>
+                    <li>Wir melden uns unter <a href="mailto:support@joumonde.com">support@joumonde.com</a> mit den nächsten Schritten.</li>
+                    <li>Verpacke die Ware sorgfältig und sende sie nach unserer Rückmeldung zurück.</li>
+                    <li>Nach Eingang und Prüfung der Ware erfolgt die Rückerstattung gemäss unseren Rückgabebedingungen.</li>
                 </ol>
             </div>
 
             <!-- Kontakt -->
             <div class="legal-section">
                 <h2>Fragen zum Versand?</h2>
-                <p>Schreib uns jederzeit: <a href="mailto:info@joumonde.com" style="color:#89785f;">info@joumonde.com</a> | <strong>+41 44 123 45 67</strong></p>
+                <p>Schreib uns jederzeit: <a href="mailto:support@joumonde.com" style="color:#89785f;">support@joumonde.com</a> | <a href="tel:+41765230204" style="color:#89785f;">076 523 02 04</a></p>
+            </div>
+            <div class="legal-section" id="return-request">
+                <h2>Retoure anmelden</h2>
+                <p>Nutze dieses Formular, um deine Rückgabe anzufragen. Wir stimmen die Rücksendung anschließend per E-Mail mit dir ab.</p>
+                <form class="return-request-form" data-return-form>
+                    <div class="return-request-honeypot" aria-hidden="true">
+                        <label for="return-website-de">Website</label>
+                        <input id="return-website-de" name="website" type="text" tabindex="-1" autocomplete="off">
+                    </div>
+                    <div class="form-field">
+                        <label for="return-name-de">Vor- und Nachname *</label>
+                        <input id="return-name-de" name="name" type="text" maxlength="120" autocomplete="name" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="return-email-de">E-Mail-Adresse *</label>
+                        <input id="return-email-de" name="email" type="email" maxlength="254" autocomplete="email" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="return-order-de">Bestellnummer *</label>
+                        <input id="return-order-de" name="orderNumber" type="text" maxlength="80" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="return-item-de">Artikel *</label>
+                        <input id="return-item-de" name="item" type="text" maxlength="200" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="return-reason-de">Grund der Rückgabe *</label>
+                        <select id="return-reason-de" name="reason" required>
+                            <option value="">Bitte auswählen</option>
+                            <option value="Größe oder Passform">Größe oder Passform</option>
+                            <option value="Artikel gefällt nicht">Artikel gefällt nicht</option>
+                            <option value="Artikel beschädigt oder fehlerhaft">Artikel beschädigt oder fehlerhaft</option>
+                            <option value="Falscher Artikel erhalten">Falscher Artikel erhalten</option>
+                            <option value="Sonstiges">Sonstiges</option>
+                        </select>
+                    </div>
+                    <div class="form-field">
+                        <label for="return-details-de">Zusätzliche Angaben</label>
+                        <textarea id="return-details-de" name="details" maxlength="2000"></textarea>
+                    </div>
+                    <button type="submit">Retourenanfrage senden</button>
+                    <p class="return-request-status" data-return-status aria-live="polite"></p>
+                </form>
             </div>
         </div>
     </main>
@@ -249,9 +339,46 @@
     <!-- Footer -->
     <div data-site-footer></div>
 
-    <script src="assets/js/analytics.js"></script>
     <script src="assets/js/script.js?v=20261007-mobile-nav-3"></script>
     <script>
+        document.addEventListener('submit', async function(event) {
+            const form = event.target.closest('[data-return-form]');
+            if (!form) return;
+            event.preventDefault();
+            if (!form.reportValidity()) return;
+
+            const submitButton = form.querySelector('button[type="submit"]');
+            const status = form.querySelector('[data-return-status]');
+            const language = document.getElementById('language-selector')?.value || 'de';
+            const messages = {
+                de: { sending: 'Wird gesendet …', success: 'Deine Retourenanfrage wurde an unseren Support gesendet.', error: 'Die Anfrage konnte nicht gesendet werden. Bitte versuche es erneut oder schreibe an support@joumonde.com.' },
+                en: { sending: 'Sending …', success: 'Your return request has been sent to our support team.', error: 'The request could not be sent. Please try again or email support@joumonde.com.' },
+                fr: { sending: 'Envoi en cours …', success: 'Votre demande de retour a ete envoyee a notre service client.', error: 'La demande n’a pas pu etre envoyee. Reessayez ou ecrivez a support@joumonde.com.' }
+            };
+            const text = messages[language] || messages.de;
+            submitButton.disabled = true;
+            status.dataset.state = '';
+            status.textContent = text.sending;
+
+            try {
+                const response = await fetch('https://joumonde.onrender.com/api/returns', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                    body: JSON.stringify(Object.fromEntries(new FormData(form).entries()))
+                });
+                if (!response.ok) throw new Error(`Return request failed (${response.status})`);
+                status.dataset.state = 'success';
+                status.textContent = text.success;
+                form.reset();
+            } catch (error) {
+                console.error('Could not submit return request.', error);
+                status.dataset.state = 'error';
+                status.textContent = text.error;
+            } finally {
+                submitButton.disabled = false;
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', async function() {
             const legalContainer = document.querySelector('.legal-page .container');
             const originalHtml = legalContainer ? legalContainer.innerHTML : '';
@@ -295,12 +422,10 @@
                             Delivery Times
                         </h2>
                         <ul>
-                            <li><strong>Switzerland Standard:</strong> 1-3 business days</li>
-                            <li><strong>Switzerland Express:</strong> 24 hours (order before 12:00)</li>
-                            <li><strong>EU Standard:</strong> 5-7 business days</li>
-                            <li><strong>EU Express:</strong> 2-3 business days</li>
+                            <li><strong>Switzerland:</strong> Estimated delivery times will be added before sales begin.</li>
+                            <li><strong>EU:</strong> Estimated delivery times will be added before sales begin.</li>
                         </ul>
-                        <p style="margin-top:1rem; font-size:0.9rem; color:#888;">Orders received on business days before 14:00 are shipped the same day. Delivery times start after payment is received.</p>
+                        <p style="margin-top:1rem; font-size:0.9rem; color:#888;">Confirmed delivery times and shipping procedures will be published before sales begin.</p>
                     </div>
 
                     <div class="legal-section">
@@ -328,16 +453,30 @@
                     <div class="legal-section">
                         <h2>Return Process</h2>
                         <ol style="padding-left:1.2rem; color:#444; line-height:2;">
-                            <li>Send us an email at <strong>info@joumonde.com</strong> with your order number and reason for return.</li>
-                            <li>You will receive confirmation and your return label (CH) within 24 hours.</li>
-                            <li>Pack the items carefully and drop off the parcel at the post office.</li>
-                            <li>After inspection, the refund is issued to your original payment method.</li>
+                            <li>Submit your request within 14 days of receipt using the <a href="#return-request">return form</a>.</li>
+                            <li>We will contact you at <a href="mailto:support@joumonde.com">support@joumonde.com</a> with the next steps.</li>
+                            <li>Pack the items carefully and send them back after we have replied.</li>
+                            <li>After inspection, any refund will be handled in accordance with our return policy.</li>
                         </ol>
                     </div>
 
                     <div class="legal-section">
                         <h2>Shipping Questions?</h2>
-                        <p>Write to us anytime: <a href="mailto:info@joumonde.com" style="color:#89785f;">info@joumonde.com</a> | <strong>+41 44 123 45 67</strong></p>
+                        <p>Write to us anytime: <a href="mailto:support@joumonde.com" style="color:#89785f;">support@joumonde.com</a> | <a href="tel:+41765230204" style="color:#89785f;">076 523 02 04</a></p>
+                    </div>
+                    <div class="legal-section" id="return-request">
+                        <h2>Request a return</h2>
+                        <p>Use this form to request a return. We will coordinate the return with you by email.</p>
+                        <form class="return-request-form" data-return-form>
+                            <div class="return-request-honeypot" aria-hidden="true"><label for="return-website-en">Website</label><input id="return-website-en" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+                            <div class="form-field"><label for="return-name-en">Full name *</label><input id="return-name-en" name="name" type="text" maxlength="120" autocomplete="name" required></div>
+                            <div class="form-field"><label for="return-email-en">Email address *</label><input id="return-email-en" name="email" type="email" maxlength="254" autocomplete="email" required></div>
+                            <div class="form-field"><label for="return-order-en">Order number *</label><input id="return-order-en" name="orderNumber" type="text" maxlength="80" required></div>
+                            <div class="form-field"><label for="return-item-en">Item *</label><input id="return-item-en" name="item" type="text" maxlength="200" required></div>
+                            <div class="form-field"><label for="return-reason-en">Reason for return *</label><select id="return-reason-en" name="reason" required><option value="">Please select</option><option value="Size or fit">Size or fit</option><option value="Changed my mind">Changed my mind</option><option value="Damaged or defective item">Damaged or defective item</option><option value="Wrong item received">Wrong item received</option><option value="Other">Other</option></select></div>
+                            <div class="form-field"><label for="return-details-en">Additional details</label><textarea id="return-details-en" name="details" maxlength="2000"></textarea></div>
+                            <button type="submit">Send return request</button><p class="return-request-status" data-return-status aria-live="polite"></p>
+                        </form>
                     </div>
                 `,
                 fr: `
@@ -379,12 +518,10 @@
                             Delais de livraison
                         </h2>
                         <ul>
-                            <li><strong>Suisse Standard :</strong> 1-3 jours ouvrables</li>
-                            <li><strong>Suisse Express :</strong> 24 heures (commande avant 12h00)</li>
-                            <li><strong>UE Standard :</strong> 5-7 jours ouvrables</li>
-                            <li><strong>UE Express :</strong> 2-3 jours ouvrables</li>
+                            <li><strong>Suisse :</strong> Les delais de livraison estimes seront ajoutes avant le debut des ventes.</li>
+                            <li><strong>UE :</strong> Les delais de livraison estimes seront ajoutes avant le debut des ventes.</li>
                         </ul>
-                        <p style="margin-top:1rem; font-size:0.9rem; color:#888;">Les commandes recues les jours ouvrables avant 14h00 sont expediees le jour meme. Les delais commencent apres reception du paiement.</p>
+                        <p style="margin-top:1rem; font-size:0.9rem; color:#888;">Les delais confirmes et les modalites d'expedition seront publies avant le debut des ventes.</p>
                     </div>
 
                     <div class="legal-section">
@@ -412,16 +549,30 @@
                     <div class="legal-section">
                         <h2>Processus de retour</h2>
                         <ol style="padding-left:1.2rem; color:#444; line-height:2;">
-                            <li>Envoyez-nous un e-mail a <strong>info@joumonde.com</strong> avec votre numero de commande et le motif du retour.</li>
-                            <li>Vous recevez une confirmation et le label de retour (CH) sous 24 heures.</li>
-                            <li>Emballez soigneusement les articles et deposez le colis a la poste.</li>
-                            <li>Apres controle des articles, le remboursement est effectue sur votre moyen de paiement initial.</li>
+                            <li>Envoyez votre demande dans les 14 jours suivant la reception via le <a href="#return-request">formulaire de retour</a>.</li>
+                            <li>Nous vous contacterons a <a href="mailto:support@joumonde.com">support@joumonde.com</a> pour vous indiquer la suite.</li>
+                            <li>Emballez soigneusement les articles et renvoyez-les apres notre reponse.</li>
+                            <li>Apres controle, tout remboursement sera traite conformement a notre politique de retour.</li>
                         </ol>
                     </div>
 
                     <div class="legal-section">
                         <h2>Des questions sur la livraison ?</h2>
-                        <p>Ecrivez-nous a tout moment : <a href="mailto:info@joumonde.com" style="color:#89785f;">info@joumonde.com</a> | <strong>+41 44 123 45 67</strong></p>
+                        <p>Ecrivez-nous a tout moment : <a href="mailto:support@joumonde.com" style="color:#89785f;">support@joumonde.com</a> | <a href="tel:+41765230204" style="color:#89785f;">076 523 02 04</a></p>
+                    </div>
+                    <div class="legal-section" id="return-request">
+                        <h2>Demander un retour</h2>
+                        <p>Utilisez ce formulaire pour demander un retour. Nous conviendrons ensuite des modalites par e-mail.</p>
+                        <form class="return-request-form" data-return-form>
+                            <div class="return-request-honeypot" aria-hidden="true"><label for="return-website-fr">Site web</label><input id="return-website-fr" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+                            <div class="form-field"><label for="return-name-fr">Nom et prenom *</label><input id="return-name-fr" name="name" type="text" maxlength="120" autocomplete="name" required></div>
+                            <div class="form-field"><label for="return-email-fr">Adresse e-mail *</label><input id="return-email-fr" name="email" type="email" maxlength="254" autocomplete="email" required></div>
+                            <div class="form-field"><label for="return-order-fr">Numero de commande *</label><input id="return-order-fr" name="orderNumber" type="text" maxlength="80" required></div>
+                            <div class="form-field"><label for="return-item-fr">Article *</label><input id="return-item-fr" name="item" type="text" maxlength="200" required></div>
+                            <div class="form-field"><label for="return-reason-fr">Motif du retour *</label><select id="return-reason-fr" name="reason" required><option value="">Veuillez choisir</option><option value="Taille ou coupe">Taille ou coupe</option><option value="L'article ne me convient pas">L'article ne me convient pas</option><option value="Article endommage ou defectueux">Article endommage ou defectueux</option><option value="Mauvais article recu">Mauvais article recu</option><option value="Autre">Autre</option></select></div>
+                            <div class="form-field"><label for="return-details-fr">Informations complementaires</label><textarea id="return-details-fr" name="details" maxlength="2000"></textarea></div>
+                            <button type="submit">Envoyer la demande de retour</button><p class="return-request-status" data-return-status aria-live="polite"></p>
+                        </form>
                     </div>
                 `
             };

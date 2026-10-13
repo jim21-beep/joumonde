@@ -30,7 +30,7 @@
                 <div class="site-footer-links">
                     <section>
                         <h2>Kontakt</h2>
-                        <a href="mailto:info@joumonde.com">info@joumonde.com</a>
+                        <a href="mailto:support@joumonde.com">support@joumonde.com</a>
                     </section>
                     <section>
                         <h2>Shop</h2>
